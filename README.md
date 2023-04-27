@@ -15,6 +15,10 @@ It steal everything in under 2 seconds
 
 - Usage 🚀
 
+- Fake Error ❌
+
+- Screenshot 📸
+
 
 Replace the webhook in the file with your own.
 Done ✅
