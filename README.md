@@ -18,8 +18,6 @@ Fix a bug where fake error is still here even in startup
 
 - Grabs special files 📂
 
-- Usage 🚀
-
 - Fake Error ❌
 
 - Screenshot 📸
