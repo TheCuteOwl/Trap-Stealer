@@ -5,6 +5,7 @@ Trap Stealer is a Python script that can steal Discord tokens, phone numbers, em
 It steal everything in under 4 seconds
 
 New update added:
+V1.2. Added Anti Debug
 
 V1.1. Fixed Startup glitch and make it a little bit better
 
@@ -13,6 +14,7 @@ Fix a bug where fake error is still here even in startup
 
 
 ## Features ✨
+- Anti debugging 👁️
 
 - Runs on startup 💻
 
