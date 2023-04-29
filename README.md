@@ -14,6 +14,9 @@ Fix a bug where fake error is still here even in startup
 
 
 ## Features ✨
+
+- Steam session stealer 🎮
+
 - Anti debugging 👁️
 
 - Runs on startup 💻
