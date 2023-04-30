@@ -19,6 +19,7 @@ V1. Added Startup, Grabs, Injection, Fake Error, Screenshot.
 Fix a bug where fake error is still here even in startup.
 
 ## <a id="features"></a>🔰・Features
+```
 - Steal Browsers password 🌕
 - Clipboard Copy 📋
 - Steam session stealer 🎮
@@ -29,8 +30,10 @@ Fix a bug where fake error is still here even in startup.
 - Grabs special files 📂
 - Fake Error ❌
 - Screenshot 📸
+```
 
 ## <a id="explanation"></a>👁️・Features Explanation
+```
 - Steal Browsers password: Steals passwords saved on popular browsers
 - Clipboard Copy: Copies whatever is in the target's clipboard
 - Steam session stealer: Steals active Steam sessions
@@ -41,6 +44,7 @@ Fix a bug where fake error is still here even in startup.
 - Grabs special files: Finds and steals sensitive files
 - Fake Error: Displays a fake error message to the target
 - Screenshot: Takes a screenshot of the target's screen
+```
 
 ## <a id="changelog"></a>📝・Changelog
 - V1.5. Better file stealer
