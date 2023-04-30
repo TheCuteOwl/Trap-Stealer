@@ -1,52 +1,56 @@
+## 🌐 〢 Content
+- [🔰・Features](#features)
+- [👁️・Features Explanation](#explanation)
+- [📝・Changelog](#changelog)
+- [💼・Term](#terms)
+
 ## 🔒 Trap Stealer 🔍
+Trap Stealer is a Python script that can steal Discord tokens, phone numbers, emails, and HQ friends. It also has the ability to inject itself into Discord and grab special files. That's bypass some type of token protection 🔓. It steals everything in under 4 seconds.
 
-Trap Stealer is a Python script that can steal Discord tokens, phone numbers, emails, and HQ friends. It also has the ability to inject itself into Discord and grab special files. That's bypass some type of token protection 🔓
-
-It steal everything in under 4 seconds
-
-New update added :
+New update added:
 
 V1.5. Better file stealer.
+V1.4. Chrome Password and more Stealer.
+V1.3. Clipboard Stealer.
+V1.2. Added Anti Debug.
+V1.1. Fixed Startup glitch and made it a little bit better.
+V1. Added Startup, Grabs, Injection, Fake Error, Screenshot.
 
-V1.4. Chrome Password and more Stealer
+Fix a bug where fake error is still here even in startup.
 
-V1.3. Clipboard Stealer
-
-V1.2. Added Anti Debug
-
-V1.1. Fixed Startup glitch and make it a little bit better
-
-V1. Added Startup, Grabs, Injection, Fake Error, Screenshot
-Fix a bug where fake error is still here even in startup
-
-
-## Features ✨
-
+## <a id="features"></a>🔰・Features
 - File Stealer 📁
-
 - Steal Browsers password 🌕
-
 - Clipboard Copy 📋
-
 - Steam session stealer 🎮
-
 - Anti debugging 👁️
-
 - Runs on startup 💻
-
 - Grabs Discord token, phone number, email, and HQ friends 📱📧👥
-
 - Discord injection 📥
-
 - Grabs special files 📂
-
 - Fake Error ❌
-
 - Screenshot 📸
 
+## <a id="explanation"></a>👁️・Features Explanation
+- File Stealer: Steals files on target machine
+- Steal Browsers password: Steals passwords saved on popular browsers
+- Clipboard Copy: Copies whatever is in the target's clipboard
+- Steam session stealer: Steals active Steam sessions
+- Anti debugging: Makes it harder for target to detect running processes
+- Runs on startup: Starts up whenever the target machine does
+- Grabs Discord token, phone number, email, and HQ friends: Retrieves personal information of the target
+- Discord injection: Injects the script itself into Discord
+- Grabs special files: Finds and steals sensitive files
+- Fake Error: Displays a fake error message to the target
+- Screenshot: Takes a screenshot of the target's screen
 
-Replace the webhook in the file with your own.
-Done ✅
+## <a id="changelog"></a>📝・Changelog
+- V1.5. Better file stealer
+- V1.4. Chrome Password and more Stealer
+- V1.3. Clipboard Stealer
+- V1.2. Added Anti Debug
+- V1.1. Fixed Startup glitch and made it a little bit better
+- V1. Added Startup, Grabs, Injection, Fake Error, Screenshot. Fixed a bug where fake error is still here even in startup.
 
-## Disclaimer ⚠️
+## <a id="terms"></a>💼・Terms
 This script is for educational purposes only. Use it at your own risk. The developer is not responsible for any damage caused by the misuse of this script.
