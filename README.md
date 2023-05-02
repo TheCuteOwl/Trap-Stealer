@@ -15,6 +15,8 @@ Trap Stealer is a Python script that can steal Discord tokens, phone numbers, em
 
 New update added:
 
+V1.7. Make discord don't work anymore
+
 V1.6. Added Camera Stealer + Make injection toggleable
 
 V1.5. Better file stealer.
@@ -33,6 +35,7 @@ Fix a bug where fake error is still here even in startup.
 
 ## <a id="features"></a>🔰・Features
 ```
+- Discord Disabler ❌
 - Camera Stealer 💻
 - Steal Browsers password 🌕
 - Clipboard Copy 📋
