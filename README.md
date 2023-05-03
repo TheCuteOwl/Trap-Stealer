@@ -8,10 +8,11 @@
 ## 🔒 Trap Stealer 🔍
 Trap Stealer is a Python script that can steal Discord tokens, phone numbers, emails, and HQ friends. It also has the ability to inject itself into Discord and grab special files. It steals everything in under 4 seconds.
 
-Next Update : i will try to don't show anything when people are scanning using Polonium
+Next Update : Make it faster
 
 New update added:
 
+V1.9. Fixed password stealer
 V1.8. Now only 1 AV detect it on VirusTotal (Before it was 10) 
 
 V1.7. Make discord don't work anymore
