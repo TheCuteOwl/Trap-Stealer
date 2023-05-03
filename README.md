@@ -3,17 +3,16 @@
 - [👁️・Features Explanation](#explanation)
 - [📝・Changelog](#changelog)
 - [💼・Term](#terms)
-
-## How to make it FUD
-
-Use any good obfuscator Hyperion/Some other 
-
-Make it into EXE don't use PYINSTALLER/auto-py-to-exe
+- [🔎・Detection](#Detection)
 
 ## 🔒 Trap Stealer 🔍
 Trap Stealer is a Python script that can steal Discord tokens, phone numbers, emails, and HQ friends. It also has the ability to inject itself into Discord and grab special files. That's bypass some type of token protection 🔓. It steals everything in under 4 seconds.
 
+Next Update : i will try to don't show anything when people are scanning using Polonium
+
 New update added:
+
+V1.8. Now only 1 AV detect it on VirusTotal (Before it was 10) 
 
 V1.7. Make discord don't work anymore
 
@@ -70,6 +69,16 @@ Fix a bug where fake error is still here even in startup.
 - V1.2. Added Anti Debug
 - V1.1. Fixed Startup glitch and made it a little bit better
 - V1. Added Startup, Grabs, Injection, Fake Error, Screenshot. Fixed a bug where fake error is still here even in startup.
+
+## <a id="Detection"></a>🔎・Detection
+
+![image](https://user-images.githubusercontent.com/114611129/235854017-9e8315bc-1786-47d8-a457-79a14b6ed272.png)
+
+Soonly at 0 let'shope
+
+## How to make it FUD
+Use any good obfuscator Hyperion/Some other 
+Make it into EXE don't use PYINSTALLER/auto-py-to-exe
 
 ## <a id="terms"></a>💼・Terms
 This script is for educational purposes only. Use it at your own risk. The developer is not responsible for any damage caused by the misuse of this script.
