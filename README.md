@@ -77,7 +77,7 @@ Fix a bug where fake error is still here even in startup.
 Soonly at 0 let'shope
 
 ## How to make it FUD
-Use any good obfuscator Hyperion/Some other 
+Use any good obfuscator
 Make it into EXE don't use PYINSTALLER/auto-py-to-exe
 
 ## <a id="terms"></a>💼・Terms
