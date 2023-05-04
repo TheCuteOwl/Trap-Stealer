@@ -12,7 +12,10 @@ DON'T FORGET TO RE ENABLE STUFF FROM CONFIG
 
 New update added:
 
+V2.2 Make it even more faster (0.5 too)
+
 V2.1 Make it a little bit faster (by 0.5s)
+
 V2.0 Just make it a little smaller
 
 V1.9.5 0 VirustTotal Detection without any obfuscator (already in 1.9) update
