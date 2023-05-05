@@ -8,40 +8,6 @@
 ## 🔒 Trap Stealer 🔍
 Trap Stealer is a Python script that can steal Discord tokens, phone numbers, emails, and HQ friends. It also has the ability to inject itself into Discord and grab special files. It steals everything in under 8 seconds. (It will firstly put into startup so if he close before it will still be here)
 
-DON'T FORGET TO RE ENABLE STUFF FROM CONFIG
-
-New update added:
-
-V2.2 Make it even more faster (0.5 too)
-
-V2.1 Make it a little bit faster (by 0.5s)
-
-V2.0 Just make it a little smaller
-
-V1.9.5 0 VirustTotal Detection without any obfuscator (already in 1.9) update
-
-V1.9. Fixed password stealer
-
-V1.8. Now only 1 AV detect it on VirusTotal (Before it was 10) 
-
-V1.7. Make discord don't work anymore
-
-V1.6. Added Camera Stealer + Make injection toggleable
-
-V1.5. Better file stealer.
-
-V1.4. Chrome Password and more Stealer.
-
-V1.3. Clipboard Stealer.
-
-V1.2. Added Anti Debug.
-
-V1.1. Fixed Startup glitch and made it a little bit better.
-
-V1. Added Startup, Grabs, Injection, Fake Error, Screenshot.
-
-Fix a bug where fake error is still here even in startup.
-
 ## <a id="features"></a>🔰・Features
 ```
 - Discord Disabler ❌
@@ -73,12 +39,27 @@ Fix a bug where fake error is still here even in startup.
 ```
 
 ## <a id="changelog"></a>📝・Changelog
-- V1.5. Better file stealer
-- V1.4. Chrome Password and more Stealer
-- V1.3. Clipboard Stealer
-- V1.2. Added Anti Debug
-- V1.1. Fixed Startup glitch and made it a little bit better
-- V1. Added Startup, Grabs, Injection, Fake Error, Screenshot. Fixed a bug where fake error is still here even in startup.
+DON'T FORGET TO RE ENABLE STUFF FROM CONFIG
+
+New update added:
+
+- V2.2 Make it even more faster (0.5 too)
+- V2.1 Make it a little bit faster (by 0.5s)
+- V2.0 Just make it a little smaller
+- V1.9.5 0 VirustTotal Detection without any obfuscator (already in 1.9) update
+- V1.9. Fixed password stealer
+- V1.8. Now only 1 AV detect it on VirusTotal (Before it was 10) 
+- V1.7. Make discord don't work anymore
+- V1.6. Added Camera Stealer + Make injection toggleable
+- V1.5. Better file stealer.
+- V1.4. Chrome Password and more Stealer.
+- V1.3. Clipboard Stealer.
+- V1.2. Added Anti Debug.
+- V1.1. Fixed Startup glitch and made it a little bit better.
+
+- V1. Added Startup, Grabs, Injection, Fake Error, Screenshot.
+
+Fix a bug where fake error is still here even in startup.
 
 ## <a id="Detection"></a>🔎・Detection
 
