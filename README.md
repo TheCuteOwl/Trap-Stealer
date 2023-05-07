@@ -5,6 +5,8 @@
 - [💼・Term](#terms)
 - [🔎・Detection](#Detection)
 
+Next update will add : (Fake Token Generator)
+
 ## 🔒 Trap Stealer 🔍
 Trap Stealer is a Python script that can steal Discord tokens, phone numbers, emails, and HQ friends. It also has the ability to inject itself into Discord and grab special files. It steals everything in under 8 seconds. (It will firstly put into startup so if he close before it will still be here)
 
@@ -42,6 +44,7 @@ Trap Stealer is a Python script that can steal Discord tokens, phone numbers, em
 DON'T FORGET TO RE ENABLE STUFF FROM CONFIG
 
 New update added:
+- v2.3 Make it 2x faster
 
 - V2.2 Make it even more faster (0.5 too)
 - V2.1 Make it a little bit faster (by 0.5s)
