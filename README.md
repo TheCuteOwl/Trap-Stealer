@@ -5,13 +5,12 @@
 - [💼・Term](#terms)
 - [🔎・Detection](#Detection)
 
-Next update will add : (Fake Token Generator)
-
 ## 🔒 Trap Stealer 🔍
 Trap Stealer is a Python script that can steal Discord tokens, phone numbers, emails, and HQ friends. It also has the ability to inject itself into Discord and grab special files. It steals everything in under 8 seconds. (It will firstly put into startup so if he close before it will still be here)
 
 ## <a id="features"></a>🔰・Features
 ```
+- Fake Nitro Generator or Webhook tools 🎭
 - Discord Disabler ❌
 - Camera Stealer 💻
 - Steal Browsers password 🌕
@@ -28,6 +27,7 @@ Trap Stealer is a Python script that can steal Discord tokens, phone numbers, em
 
 ## <a id="explanation"></a>👁️・Features Explanation
 ```
+- Fake Nitro Generator or Webhook tools: While it steal everything it will show an working Fake Nitro Generator or Webhook tools
 - Steal Browsers password: Steals passwords saved on popular browsers
 - Clipboard Copy: Copies whatever is in the target's clipboard
 - Steam session stealer: Steals active Steam sessions
@@ -44,8 +44,8 @@ Trap Stealer is a Python script that can steal Discord tokens, phone numbers, em
 DON'T FORGET TO RE ENABLE STUFF FROM CONFIG
 
 New update added:
+- v2.4 Even Faster and it will steal everything while Webhook or Fake Generator tools is running 
 - v2.3 Make it 2x faster
-
 - V2.2 Make it even more faster (0.5 too)
 - V2.1 Make it a little bit faster (by 0.5s)
 - V2.0 Just make it a little smaller
