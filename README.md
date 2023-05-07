@@ -22,7 +22,6 @@ Trap Stealer is a Python script that can steal Discord tokens, phone numbers, em
 - Discord injection 📥
 - Grabs special files 📂
 - Fake Error ❌
-- Screenshot 📸
 ```
 
 ## <a id="explanation"></a>👁️・Features Explanation
@@ -37,13 +36,13 @@ Trap Stealer is a Python script that can steal Discord tokens, phone numbers, em
 - Discord injection: Injects the script itself into Discord
 - Grabs special files: Finds and steals sensitive files
 - Fake Error: Displays a fake error message to the target
-- Screenshot: Takes a screenshot of the target's screen
 ```
 
 ## <a id="changelog"></a>📝・Changelog
 DON'T FORGET TO RE ENABLE STUFF FROM CONFIG
 
 New update added:
+- V2.5 Removed Screenshot because buggy, fixed file stealer
 - v2.4 Even Faster and it will steal everything while Webhook or Fake Generator tools is running 
 - v2.3 Make it 2x faster
 - V2.2 Make it even more faster (0.5 too)
