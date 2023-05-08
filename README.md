@@ -44,7 +44,7 @@ Trap Stealer is a Python script that can steal Discord tokens, phone numbers, em
 DON'T FORGET TO RE ENABLE STUFF FROM CONFIG
 
 New update added:
-- V2.5.6 
+- V2.5.6 Removed some detection by Polonium
 - V2.5.5 Added Screenshot back because not buggy anymore 
 - V2.5 Removed Screenshot because buggy, fixed file stealer
 - v2.4 Even Faster and it will steal everything while Webhook or Fake Generator tools is running 
