@@ -1,3 +1,5 @@
+## Next update in 2/3 (Will add an undetectable obfuscation + Builder)
+
 ## 🌐 〢 Content
 - [🔰・Features](#features)
 - [👁️・Features Explanation](#explanation)
