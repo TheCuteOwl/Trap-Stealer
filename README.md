@@ -1,4 +1,4 @@
-## Next update in 2/3 (Will add an undetectable obfuscation + Builder)
+## Next update Today or Tomorrow (Will add an undetectable obfuscation + Builder)
 
 ## 🌐 〢 Content
 - [🔰・Features](#features)
