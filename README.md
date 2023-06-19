@@ -1,4 +1,3 @@
-## Next update Today or Tomorrow (Will add an undetectable obfuscation + Builder)
 
 ## 🌐 〢 Content
 - [🔰・Features](#features)
@@ -11,6 +10,8 @@
 Trap Stealer is a Python script that can steal Discord tokens, phone numbers, emails, and HQ friends. It also has the ability to inject itself into Discord and grab special files. It steals everything in under 8 seconds. (It will firstly put into startup so if he close before it will still be here)
 
 It steal everything in ~4 Seconds
+
+If you have any idea of what i could add, open a pull requests or an issues ^^
 
 Trap Stealer use some W4sp Stealer code and some custom one aswell 
 ## <a id="features"></a>🔰・Features
@@ -49,6 +50,7 @@ Trap Stealer use some W4sp Stealer code and some custom one aswell
 DON'T FORGET TO RE ENABLE STUFF FROM CONFIG
 
 New update added:
+- V2.6 Added the builder + obfuscator to get FUD
 - V2.5.6 Removed some detection by Polonium
 - V2.5.5 Added Screenshot back because not buggy anymore 
 - V2.5 Removed Screenshot because buggy, fixed file stealer
@@ -70,10 +72,8 @@ New update added:
 
 - V1. Added Startup, Grabs, Injection, Fake Error, Screenshot.
 
-Fix a bug where fake error is still here even in startup.
-
 ## <a id="Detection"></a>🔎・Detection
 
-There is 0 detection, try to use an obfuscator that will still give 0 detection and don't use auto-py-to-exe/pyinstaller
+There is 0 detection, try to use an obfuscator or the built in one, that will still give 0 detection and don't use auto-py-to-exe/pyinstaller
 ## <a id="terms"></a>💼・Terms
 This script is for educational purposes only. Use it at your own risk. The developer is not responsible for any damage caused by the misuse of this script.
