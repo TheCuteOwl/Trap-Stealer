@@ -58,5 +58,4 @@ while True:
         else:
             print('Invalid input. Please enter Y or N.')
             
-    shutil.rmtree('./Build/Trap-Stl-Building.py')
     exit()
