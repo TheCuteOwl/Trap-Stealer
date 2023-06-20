@@ -38,7 +38,7 @@ def parse_args():
 
 def main():
     args = parse_args()
-    print(f'[+] Encoding {args.input}')
+    print(f'[+] Encoding {args.input} Please be patient...')
     if not args.r:
         print('[!] You have not selected recursion mode.')
     with open(args.input, encoding='utf-8') as input_file:
@@ -49,6 +49,7 @@ def main():
     with open(args.output, 'w') as output:
         output.write(f"try:\n\t{encoded}\nexcept KeyboardInterrupt:\n\tpass")
     print(f'[+] Encoding successful!\nSaved as {args.output}')
+    input('Press Any key to quit')
 
 
 if __name__ == '__main__':
