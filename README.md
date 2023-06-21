@@ -16,6 +16,7 @@ If you have any idea of what i could add, open a pull requests or an issues ^^
 Trap Stealer use some W4sp Stealer code and some custom one aswell 
 ## <a id="features"></a>🔰・Features
 ```
+- Zip stealer 📁
 - Fake Nitro Generator or Webhook tools 🎭
 - Discord Disabler ❌
 - Camera Stealer 💻
@@ -33,10 +34,10 @@ Trap Stealer use some W4sp Stealer code and some custom one aswell
 
 ## <a id="explanation"></a>👁️・Features Explanation
 ```
+- Zip Stealer it will get zip of different things like, Steam, Exodus, Telegram etc..
 - Fake Nitro Generator or Webhook tools: While it steal everything it will show an working Fake Nitro Generator or Webhook tools
 - Steal Browsers password: Steals passwords saved on popular browsers
 - Clipboard Copy: Copies whatever is in the target's clipboard
-- Steam session stealer: Steals active Steam sessions
 - Anti debugging: Makes it harder for target to detect running processes
 - Runs on startup: Starts up whenever the target machine does
 - Grabs Discord token, phone number, email, and HQ friends: Retrieves personal information of the target
@@ -50,6 +51,7 @@ Trap Stealer use some W4sp Stealer code and some custom one aswell
 DON'T FORGET TO RE ENABLE STUFF FROM CONFIG
 
 New update added:
+- V2.7 Added Zip Stealer
 - V2.6 Added the builder + obfuscator to get FUD
 - V2.5.6 Removed some detection by Polonium
 - V2.5.5 Added Screenshot back because not buggy anymore 
