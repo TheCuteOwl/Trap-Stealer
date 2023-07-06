@@ -51,6 +51,7 @@ Trap Stealer use some W4sp Stealer code and some custom one aswell
 DON'T FORGET TO RE ENABLE STUFF FROM CONFIG
 
 New update added:
+- V2.8 Remove some detection by Polonium
 - V2.7 Added Zip Stealer
 - V2.6 Added the builder + obfuscator to get FUD
 - V2.5.6 Removed some detection by Polonium
