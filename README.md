@@ -1,6 +1,4 @@
-If you have any idea of what i could add, open a pull requests or an issues ^^, everything still work well
 
-Working on : Polonium bypass
 ## 🌐 〢 Content
 - [🔰・Features](#features)
 - [👁️・Features Explanation](#explanation)
@@ -51,6 +49,7 @@ Trap Stealer use some W4sp Stealer code and some custom one aswell
 DON'T FORGET TO RE ENABLE STUFF FROM CONFIG
 
 New update added:
+- V2.9 Remove most of the detected keyword by Polonium
 - V2.8 Remove some detection by Polonium and fixed package installer
 - V2.7 Added Zip Stealer
 - V2.6 Added the builder + obfuscator to get FUD
