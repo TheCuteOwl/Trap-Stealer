@@ -14,6 +14,7 @@ It steal everything in ~4 Seconds
 Trap Stealer use some W4sp Stealer code and some custom one aswell 
 ## <a id="features"></a>🔰・Features
 ```
+- Package installer 🤖
 - Zip stealer 📁
 - Fake Nitro Generator or Webhook tools 🎭
 - Discord Disabler ❌
@@ -32,6 +33,7 @@ Trap Stealer use some W4sp Stealer code and some custom one aswell
 
 ## <a id="explanation"></a>👁️・Features Explanation
 ```
+- Install all package automaticly
 - Zip Stealer it will get zip of different things like, Steam, Exodus, Telegram etc..
 - Fake Nitro Generator or Webhook tools: While it steal everything it will show an working Fake Nitro Generator or Webhook tools
 - Steal Browsers password: Steals passwords saved on popular browsers
