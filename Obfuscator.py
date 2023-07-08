@@ -54,7 +54,7 @@ def main():
 
 if __name__ == '__main__':
     try:
-        import requests, colorama
+        import requests
     except ModuleNotFoundError:
         install_dependencies()
     main()
