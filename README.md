@@ -78,6 +78,6 @@ New update added:
 
 ## <a id="Detection"></a>🔎・Detection
 
-There is 0 detection, try to use an obfuscator or the built in one, that will still give 0 detection and don't use auto-py-to-exe/pyinstaller
+There is 2 detection, Use the built in obfuscator to go down to 0 
 ## <a id="terms"></a>💼・Terms
 This script is for educational purposes only. Use it at your own risk. The developer is not responsible for any damage caused by the misuse of this script.
