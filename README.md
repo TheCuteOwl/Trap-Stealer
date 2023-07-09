@@ -1,4 +1,4 @@
-
+Let me just put this here : If there is no cookie grabber, because it's useless, i'm waiting to make an good one
 ## 🌐 〢 Content
 - [🔰・Features](#features)
 - [👁️・Features Explanation](#explanation)
