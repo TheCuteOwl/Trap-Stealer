@@ -60,7 +60,7 @@ New update added:
 - V2.9 Remove most of the detected keyword by Polonium
 - V2.8 Remove some detection by Polonium and fixed package installer
 - V2.7 Added Zip Stealer
-- V2.6 Added the builder + obfuscator to get FUD
+- V2.6 Added the builder + obfuscator to get FUD (You don't need it but you can use it)
 - V2.5.6 Removed some detection by Polonium
 - V2.5.5 Added Screenshot back because not buggy anymore 
 - V2.5 Removed Screenshot because buggy, fixed file stealer
