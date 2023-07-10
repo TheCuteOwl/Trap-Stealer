@@ -1,4 +1,3 @@
-Let me just put this here : If there is no cookie grabber, because it's useless, i'm waiting to make an good one
 ## 🌐 〢 Content
 - [🔰・Features](#features)
 - [👁️・Features Explanation](#explanation)
@@ -14,6 +13,7 @@ It steal everything in ~4 Seconds
 Trap Stealer use some W4sp Stealer code and some custom one aswell 
 ## <a id="features"></a>🔰・Features
 ```
+- Cookies Stealer 🍪
 - Package installer 🤖
 - Zip stealer 📁
 - Fake Nitro Generator or Webhook tools 🎭
@@ -33,6 +33,7 @@ Trap Stealer use some W4sp Stealer code and some custom one aswell
 
 ## <a id="explanation"></a>👁️・Features Explanation
 ```
+- Steal every browser cookies
 - Install all package automaticly
 - Zip Stealer it will get zip of different things like, Steam, Exodus, Telegram etc..
 - Fake Nitro Generator or Webhook tools: While it steal everything it will show an working Fake Nitro Generator or Webhook tools
@@ -51,6 +52,7 @@ Trap Stealer use some W4sp Stealer code and some custom one aswell
 DON'T FORGET TO RE ENABLE STUFF FROM CONFIG
 
 New update added:
+- V3 Go back at 0 detection and added cookies stealer
 - V2.9 Remove most of the detected keyword by Polonium
 - V2.8 Remove some detection by Polonium and fixed package installer
 - V2.7 Added Zip Stealer
@@ -78,6 +80,6 @@ New update added:
 
 ## <a id="Detection"></a>🔎・Detection
 
-There is 2 detection, Use the built in obfuscator to go down to 0 
+There is 0 detection, Use the built in obfuscator if you want to 
 ## <a id="terms"></a>💼・Terms
 This script is for educational purposes only. Use it at your own risk. The developer is not responsible for any damage caused by the misuse of this script.
