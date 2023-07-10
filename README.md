@@ -1,3 +1,5 @@
+V3 RELEASED
+
 ## 🌐 〢 Content
 - [🔰・Features](#features)
 - [👁️・Features Explanation](#explanation)
