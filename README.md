@@ -10,7 +10,8 @@ Trap Stealer is a windows Python script that can steal Discord tokens, phone num
 
 It steal everything in ~4 Seconds
 
-Trap Stealer use some W4sp Stealer code and some custom one aswell 
+Trap Stealer uses some W4sp Stealer code and some custom code as well. At least I don't try to say "I have coded everything" and I give credit.
+
 ## <a id="features"></a>🔰・Features
 ```
 - Cookies Stealer 🍪
