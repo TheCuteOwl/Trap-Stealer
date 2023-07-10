@@ -1,4 +1,4 @@
-V3 RELEASED
+V3.0.1 RELEASED
 
 ## 🌐 〢 Content
 - [🔰・Features](#features)
@@ -55,6 +55,7 @@ Trap Stealer uses some W4sp Stealer code and some custom code as well. At least 
 DON'T FORGET TO RE ENABLE STUFF FROM CONFIG
 
 New update added:
+- V3.0.1 Added some file stealer keyword and path
 - V3 Go back at 0 detection and added cookies stealer
 - V2.9 Remove most of the detected keyword by Polonium
 - V2.8 Remove some detection by Polonium and fixed package installer
