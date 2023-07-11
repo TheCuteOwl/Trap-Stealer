@@ -10,7 +10,8 @@ Any idea of what can i add, open a issues ^^
 - [🔎・Detection](#Detection)
 
 ## 🔒 Trap Stealer 🔍
-Trap Stealer is a windows Python script that can steal Discord tokens, phone numbers, emails, and HQ friends. It also has the ability to inject itself into Discord and grab special files. It steals everything in under 8 seconds. (It will firstly put into startup so if he close before it will still be here)
+Trap Stealer is a windows (So if you have macOS or any Linux distribution don't ask why it don't work ^^) 
+Python script that can steal Discord tokens, phone numbers, emails, and HQ friends. It also has the ability to inject itself into Discord and grab special files. It steals everything in under 8 seconds. (It will firstly put into startup so if he close before it will still be here)
 
 It steal everything in ~4 Seconds
 
