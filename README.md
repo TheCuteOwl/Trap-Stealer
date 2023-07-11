@@ -1,5 +1,7 @@
 V3.0.1 RELEASED
 
+Any idea of what can i add, open a issues ^^
+
 ## 🌐 〢 Content
 - [🔰・Features](#features)
 - [👁️・Features Explanation](#explanation)
