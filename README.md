@@ -1,4 +1,4 @@
-V3.0.2 RELEASED
+V3.2 RELEASED
 
 Any idea of what can i add, open a issues ^^
 
@@ -58,6 +58,7 @@ Trap Stealer uses some W4sp Stealer code and some custom code as well. At least 
 DON'T FORGET TO RE ENABLE STUFF FROM CONFIG
 
 New update added:
+- V3.2 Fixed Password + Cookie stealer, fixed obfuscation
 - V3.1 Fixed wrong input in Builder, and fixed stealer thread so it takes everything
 - V3.0.1 Added some file stealer keyword and path
 - V3 Go back at 0 detection and added cookies stealer
