@@ -105,10 +105,15 @@ except {encryptstring('__import__("lzma").LZMAError', func= True)}:...
         self.code = f'import base64, lzma; exec(compile(lzma.decompress(base64.b64decode({data})), "<string>", "exec"))'.encode()
 
     def finalize(self):
-        if os.path.dirname(self.outpath).strip() != "":
-            os.makedirs(os.path.dirname(self.outpath), exist_ok= True)
-        with open(self.outpath, "w") as e:
-            e.write(self.code.decode())
+        build_folder = "build"
+        if not os.path.exists(build_folder):
+            os.makedirs(build_folder)
+
+        out_file_path = os.path.join(build_folder, os.path.basename(self.outpath))
+        with open(out_file_path, "w", encoding="utf-8") as file:
+            file.write(self.code.decode())
+
+        print(f"Obfuscated file saved to: {out_file_path}")
 
 if __name__ == "__main__":
     if not os.path.isfile(src := sys.argv[1]):
