@@ -1,12 +1,12 @@
-import random, string, base64, codecs, argparse, os, sys
+import string, base64, codecs, os, sys, random
 from textwrap import wrap
 from lzma import compress
 from marshal import dumps
 
 class Obfuscator:
-    def __init__(self, code, outputpath):
+    def __init__(self, code, outpath):
         self.code = code.encode()
-        self.outpath = outputpath
+        self.outpath = outpath
         self.varlen = 3
         self.vars = {}
 
@@ -14,7 +14,7 @@ class Obfuscator:
         self.encrypt1()
         self.encrypt2()
         self.finalize()
-    
+
     def generate(self, name):
         res = self.vars.get(name)
         if res is None:
@@ -22,8 +22,8 @@ class Obfuscator:
             self.varlen += 1
             self.vars[name] = res
         return res
-    
-    def encryptstring(self, string, config= {}, func= False):
+
+    def encryptstring(self, string, config={}, func=False):
         b64 = list(b"base64")
         b64decode = list(b"b64decode")
         __import__ = config.get("__import__", "__import__")
@@ -31,7 +31,7 @@ class Obfuscator:
         bytes = config.get("bytes", "bytes")
         eval = config.get("eval", "eval")
         if not func:
-            return f'{getattr}({__import__}({bytes}({b64}).decode()), {bytes}({b64decode}).decode())({bytes}({list(base64.b64encode(string.encode()))})).decode()'
+            return f'{getattr}({__import__}({bytes}({b64}).decode()),{bytes}({b64decode}).decode())({bytes}({list(base64.b64encode(string.encode()))})).decode()'
         else:
             attrs = string.split(".")
             base = self.encryptstring(attrs[0], config)
@@ -39,25 +39,25 @@ class Obfuscator:
             newattr = ""
             for i, val in enumerate(attrs):
                 if i == 0:
-                    newattr = f'{getattr}({eval}({base}), {val})'
+                    newattr = f'{getattr}({eval}({base}),{val})'
                 else:
-                    newattr = f'{getattr}({newattr}, {val})'
+                    newattr = f'{getattr}({newattr},{val})'
             return newattr
-            
+
     def encryptor(self, config):
-        def func_(string, func= False):
+        def func_(string, func=False):
             return self.encryptstring(string, config, func)
         return func_
-    
+
     def compress(self):
         self.code = compress(self.code)
-    
+
     def marshal(self):
         self.code = dumps(compile(self.code, "<string>", "exec"))
-    
+
     def encrypt1(self):
         code = base64.b64encode(self.code).decode()
-        partlen = int(len(code)/4)
+        partlen = int(len(code) / 4)
         code = wrap(code, partlen)
         var1 = self.generate("a")
         var2 = self.generate("b")
@@ -70,7 +70,7 @@ class Obfuscator:
         self.code = f'''
 {init};__import__({self.encryptstring("builtins")}).exec(__import__({self.encryptstring("marshal")}).loads(__import__({self.encryptstring("base64")}).b64decode(__import__({self.encryptstring("codecs")}).decode({var1}, __import__({self.encryptstring("base64")}).b64decode("{base64.b64encode(b'rot13').decode()}").decode())+{var2}+{var3}[::-1]+{var4})))
 '''.strip().encode()
-    
+
     def encrypt2(self):
         self.compress()
         var1 = self.generate("e")
@@ -90,7 +90,7 @@ class Obfuscator:
             "bytes" : var9
         }
         encryptstring = self.encryptor(conf)
-        
+
         self.code = f'''
 {var3} = eval({self.encryptstring("eval")});{var4} = {var3}({self.encryptstring("getattr")});{var8} = {var3}({self.encryptstring("__import__")});{var9} = {var3}({self.encryptstring("bytes")});{var5} = lambda {var7}: {var3}({encryptstring("compile")})({var7}, {encryptstring("<string>")}, {encryptstring("exec")});{var1} = {self.code}
 {var2} = {encryptstring('__import__("builtins").list', func= True)}({var1})
@@ -109,23 +109,18 @@ except {encryptstring('__import__("lzma").LZMAError', func= True)}:...
             os.makedirs(os.path.dirname(self.outpath), exist_ok= True)
         with open(self.outpath, "w") as e:
             e.write(self.code.decode())
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser(prog= sys.argv[0], description= "Obfuscates python program to make it harder to read")
-    parser.add_argument("FILE", help= "Path to the file containing the python code")
-    parser.add_argument("-o", type= str, help= 'Output file path [Default: "Obfuscated_<FILE>.py"]', dest= "path")
-    args = parser.parse_args()
 
-    if not os.path.isfile(sourcefile := args.FILE):
-        print(f'No such file!')
+if __name__ == "__main__":
+    if not os.path.isfile(src := sys.argv[1]):
+        print('No such file!')
         os._exit(1)
-    elif not sourcefile.endswith((".py", ".pyw")):
-        print('The file does not have a valid python script extention!')
+    elif not src.endswith((".py", ".pyw")):
+        print('The file does not have a valid python script extension!')
         os._exit(1)
-    
-    if args.path is None:
-        args.path = "Obfuscated_" + os.path.basename(sourcefile)
-    
-    with open(sourcefile, encoding='utf8') as sourcefile:
+
+    outpath = "Obfuscated_" + os.path.basename(src) if len(sys.argv) < 3 else sys.argv[2]
+
+    with open(src, encoding='utf8') as sourcefile:
         code = sourcefile.read()
-    
-    Obfuscator(code, args.path)
+
+    Obfuscator(code, outpath)
