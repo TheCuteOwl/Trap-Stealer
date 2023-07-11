@@ -50,8 +50,7 @@ while True:
     Obfuscation = Obfuscation.lower()
     while True:
         if Obfuscation in ['y', 'yes']:
-            strength = input('How strong do you want the obfuscation to be (Recommended: 100): ')
-            subprocess.run(['python', 'Obfuscator.py', '-r', '-i', './Build/Trap-Stl-Building.py', '-o', './Build/Trap-Stl-Builted-Obf.py', '-s', strength])
+            subprocess.run(['python', 'Obfuscator.py', './Build/Trap-Stealer-Built.py'])
             break
         elif Obfuscation in ['n', 'no']:
             with open('./Build/Trap-Stealer-Built.py', 'w', encoding='utf-8') as file:
