@@ -50,7 +50,7 @@ while True:
     Obfuscation = Obfuscation.lower()
     while True:
         if Obfuscation in ['y', 'yes']:
-            subprocess.run(['python', 'Obfuscator.py', './Build/Trap-Stealer-Built.py'])
+            subprocess.run(['python', 'Obfuscator.py', f'./Build/{name}.py'])
             break
         elif Obfuscation in ['n', 'no']:
             with open(f'./Build/{name}.py', 'w', encoding='utf-8') as file:
