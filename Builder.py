@@ -54,9 +54,10 @@ while True:
             subprocess.run(['python', 'Obfuscator.py', f'./Build/{name}.py'])
             break
         elif Obfuscation in ['n', 'no']:
-            with open('./Build/Trap-Stealer-Built.py', 'w', encoding='utf-8') as file:
+            name = input('How do you want the file to be named? : (do not put the extension)')
+            with open(f'./Build/{name}.py', 'w', encoding='utf-8') as file:
                 file.write(new_content)
-                print('[+] File Created Trap-Stealer-Built.py')
+                print(f'[+] File Created {name}.py')
                 input('Press any key to quit...')
                 break
         else:
