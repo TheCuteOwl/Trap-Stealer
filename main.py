@@ -834,9 +834,9 @@ def upload_files_to_discord():
                         urls.append((os.path.basename(file_path), url))
                     else:
                         pass
+            except:pass
             finally:
                 executor.shutdown(wait=True)
-        except:pass
 
 
     if urls:
