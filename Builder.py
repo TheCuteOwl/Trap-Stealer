@@ -39,7 +39,7 @@ while True:
     new_content = new_content.replace("'%Startup%'", str(Startup))
     new_content = new_content.replace("'%No_Debug%'", str(No_Debug))
     new_content = new_content.replace("'%Close%'", str(Close))
-    name = input('Enter how you want the file to be named (Do not put the extension) :')
+    name = input('Enter how you want the file to be named (Do not put the extension) : ')
     with open(f'./Build/{name}.py', 'w', encoding='utf-8') as file:
         file.write(new_content)
     clear_console()
