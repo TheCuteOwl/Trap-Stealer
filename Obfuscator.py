@@ -122,10 +122,12 @@ if __name__ == "__main__":
     elif not src.endswith((".py", ".pyw")):
         print('The file does not have a valid python script extension!')
         os._exit(1)
-
-    outpath = "Obfuscated_" + os.path.basename(src) if len(sys.argv) < 3 else sys.argv[2]
+    name = input('Enter how you want the file to be named (Do not put the extension) : ')
+    outpath = name+".py"
 
     with open(src, encoding='utf8') as sourcefile:
         code = sourcefile.read()
 
     Obfuscator(code, outpath)
+    
+    input('Succesfully Obfuscated !')
