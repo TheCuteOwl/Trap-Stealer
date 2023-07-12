@@ -39,8 +39,8 @@ while True:
     new_content = new_content.replace("'%Startup%'", str(Startup))
     new_content = new_content.replace("'%No_Debug%'", str(No_Debug))
     new_content = new_content.replace("'%Close%'", str(Close))
-    # Write the modified content to the new file
-    with open('./Build/Trap-Stealer-Built.py', 'w', encoding='utf-8') as file:
+    name = input('Enter how you want the file to be named (Do not put the extension) :')
+    with open(f'./Build/{name}.py', 'w', encoding='utf-8') as file:
         file.write(new_content)
     clear_console()
     print('Created [+]')
@@ -50,17 +50,16 @@ while True:
     Obfuscation = Obfuscation.lower()
     while True:
         if Obfuscation in ['y', 'yes']:
-            name = input('How do you want the file to be named? : (do not put the extension) ')
-            subprocess.run(['python', 'Obfuscator.py', f'./Build/{name}.py'])
+            subprocess.run(['python', 'Obfuscator.py', './Build/Trap-Stealer-Built.py'])
             break
         elif Obfuscation in ['n', 'no']:
-            name = input('How do you want the file to be named? : (do not put the extension) ')
             with open(f'./Build/{name}.py', 'w', encoding='utf-8') as file:
                 file.write(new_content)
                 print(f'[+] File Created {name}.py')
                 input('Press any key to quit...')
                 break
         else:
-            print('Invalid input. Please enter Y or N.')
+            input('Invalid input. Please enter Y or N.')
+            break
             
     exit()
