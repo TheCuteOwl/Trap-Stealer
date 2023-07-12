@@ -824,6 +824,7 @@ def upload_files_to_discord():
         urls = []
     
         with concurrent.futures.ThreadPoolExecutor() as executor:
+            time.sleep(0.1)
             futures = []
             try:
                 for file_path in file_paths:
