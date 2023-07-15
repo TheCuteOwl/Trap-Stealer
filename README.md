@@ -1,6 +1,6 @@
 V3.3 RELEASED
 
-Any idea of what can i add, open a issues ^^
+Any idea of what can i add, open a issues ^^ (i have no idea)
 
 ## 🌐 〢 Content
 - [🔰・Features](#features)
