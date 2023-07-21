@@ -2,7 +2,7 @@ V3.3 RELEASED
 
 Any idea of what can i add, open a issues ^^ (i have no idea)
 
-Thank you very much for the stars
+Thank you very much for the stars, wow 10 stars !
 ## 🌐 〢 Content
 - [🔰・Features](#features)
 - [👁️・Features Explanation](#explanation)
