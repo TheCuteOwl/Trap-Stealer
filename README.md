@@ -94,3 +94,5 @@ New update added:
 There is 0 detection, Use the built in obfuscator if you want to 
 ## <a id="terms"></a>💼・Terms
 This script is for educational purposes only. Use it at your own risk. The developer is not responsible for any damage caused by the misuse of this script.
+
+[![Star History Chart](https://api.star-history.com/svg?repos=TheCuteOwl/Trap-Stealer&type=Date)](https://star-history.com/#TheCuteOwl/Trap-Stealer&Date)
