@@ -1,6 +1,6 @@
 V3.3 RELEASED
 
-Any idea of what can i add, open a issues ^^ (i have no idea) please
+Any idea of what can i add, open a issues ^^ (i have no idea) please tell me some, i'm bored
 
 Thank you very much for the stars, wow 10 stars !
 ## 🌐 〢 Content
