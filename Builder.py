@@ -1,4 +1,6 @@
 import os, platform, subprocess, shutil
+
+
 while True:
     os.makedirs('./Build', exist_ok=True)
     shutil.copy('main.py', './Build/Trap-Stl-Building.py')
