@@ -1,6 +1,6 @@
 V3.3 RELEASED
 2 Detection, But use the obfuscator to go at 0 detection :3
-Any idea of what can i add, open a issues ^^ (i have no idea) please tell me some, i'm bored
+Any idea of what can i add, open a issues ^^ (i have no idea) please tell me some, i'm bored 
 
 Thank you very much for the stars, wow 10 stars !
 ## 🌐 〢 Content
