@@ -1,4 +1,4 @@
-V3.3 RELEASED
+V3.4 RELEASED
 2 Detection, But use the obfuscator to go at 0 detection :3
 Searching for new idea ;3 try to suggests some :3
 
@@ -36,6 +36,7 @@ Same for the Obfuscator who is for Blank Grabber, just maked smaller and with le
 - Grabs special files 📂
 - Fake Error ❌
 - Screenshot 📸
+- Browser History Stealer 🪐
 ```
 
 ## <a id="explanation"></a>👁️・Features Explanation
@@ -53,6 +54,7 @@ Same for the Obfuscator who is for Blank Grabber, just maked smaller and with le
 - Grabs special files: Finds and steals sensitive files
 - Fake Error: Displays a fake error message to the target
 - Screenshot: Takes a screenshot of the target's screen
+- Browser History Stealer: WIll steal browser history of multiple browser (Chrome, OperaGX, Firefox)
 ```
 
 ## <a id="changelog"></a>📝・Changelog
