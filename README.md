@@ -61,6 +61,7 @@ Same for the Obfuscator who is for Blank Grabber, just maked smaller and with le
 DON'T FORGET TO RE ENABLE STUFF FROM CONFIG
 
 New update added:
+- V3.4 Added Browser History Stealer
 - V3.3 Fixed obfuscator + builder
 - V3.2.5 Removed unworking camera stealer
 - V3.2 Fixed Password + Cookie stealer, fixed obfuscation
