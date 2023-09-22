@@ -49,7 +49,7 @@ while True:
     Obfuscation = Obfuscation.lower()
     while True:
         if Obfuscation in ['y', 'yes']:
-            subprocess.run(['python', 'Obfuscator.py', f'./Build/temp.py'])
+            subprocess.run(['python', 'obfuscator.py', f'./Build/temp.py'])
             break
         elif Obfuscation in ['n', 'no']:
             name = input('Enter how you want the file to be named (Do not put the extension) : ')
