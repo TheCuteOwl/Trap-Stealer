@@ -35,7 +35,6 @@ requirements = [
     ["requests", "requests"],
     ["Crypto.Cipher", "pycryptodome"],
     ["win32clipboard", "pywin32"],
-    ["Pillow", "Pillow"],
     ["pypiwin32","pypiwin32"]
 ]
 
