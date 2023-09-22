@@ -1,66 +1,53 @@
-V3.4 RELEASED
-2 Detection, But use the obfuscator to go at 0 detection :3
-Searching for new idea ;3 try to suggests some :3
+<p align="center">
+  <a href="https://github.com/TheCuteOwl/TrapStealer"><img src="https://media.discordapp.net/attachments/846529693884874772/1154814707039998002/trapstealer.png" alt="FemboyAccess" width="256" /></a> 
+</p>
+<p align="center">
+  TrapStealer is a Windows stealer for Discord and much more. Steal Time: ~4 seconds.
+</p>
 
-Thank you very much for the stars, wow 10 stars !
-## 🌐 〢 Content
-- [🔰・Features](#features)
-- [👁️・Features Explanation](#explanation)
+## 🌐 〢 Summary
+
+- [✨・Features](#features)
 - [📝・Changelog](#changelog)
-- [💼・Term](#terms)
-- [🔎・Detection](#Detection)
+- [💼・Terms](#terms)
 
-## 🔒 Trap Stealer 🔍
-Trap Stealer is a windows (So if you have macOS or any Linux distribution don't ask why it don't work ^^) 
-Python script that can steal Discord tokens, phone numbers, emails, and HQ friends. It also has the ability to inject itself into Discord and grab special files. It steals everything in under 4 seconds. (It will firstly put into startup so if he close before it will still be here)
-
-It steal everything in ~4 Seconds
-
-Trap Stealer uses some W4sp Stealer code and some custom code as well. At least I don't try to say "I have coded everything" and I give credit.
-Same for the Obfuscator who is for Blank Grabber, just maked smaller and with less thing
-
-## <a id="features"></a>🔰・Features
+## <a id="features"></a>✨・Features
 ```
-- Cookies Stealer 🍪
-- Package installer 🤖
-- Zip stealer 📁
-- Fake Nitro Generator or Webhook tools 🎭
-- Discord Disabler ❌
-- Steal Browsers password 🌕
-- Clipboard Copy 📋
-- Steam session stealer 🎮
-- Anti debugging 👁️
-- Runs on startup 💻
-- Grabs Discord token, phone number, email, and HQ friends 📱📧👥
-- Discord injection 📥
-- Grabs special files 📂
-- Fake Error ❌
-- Screenshot 📸
-- Browser History Stealer 🪐
-```
+🍪 - Cookie Stealer: Steals cookies of any browser
 
-## <a id="explanation"></a>👁️・Features Explanation
-```
-- Steal every browser cookies
-- Install all package automaticly
-- Zip Stealer it will get zip of different things like, Steam, Exodus, Telegram etc..
-- Fake Nitro Generator or Webhook tools: While it steal everything it will show an working Fake Nitro Generator or Webhook tools
-- Steal Browsers password: Steals passwords saved on popular browsers
-- Clipboard Copy: Copies whatever is in the target's clipboard
-- Anti debugging: Makes it harder for target to detect running processes
-- Runs on startup: Starts up whenever the target machine does
-- Grabs Discord token, phone number, email, and HQ friends: Retrieves personal information of the target
-- Discord injection: Injects the script itself into Discord
-- Grabs special files: Finds and steals sensitive files
-- Fake Error: Displays a fake error message to the target
-- Screenshot: Takes a screenshot of the target's screen
-- Browser History Stealer: WIll steal browser history of multiple browser (Chrome, OperaGX, Firefox)
+🤖 - Package Installer: Automatically install necessary packages
+
+📁 - ZIP Stealer: Compresses various application files
+
+🎭 - Fake Disguise: Can disguise in a fake Discord Nitro generator or a webhook tool
+
+❌ - Discord Disabler: This one is straight-forward
+
+🌕 - Password Stealer: Steals passwords saved on popular browsers
+
+📋 - Clipboard Copy: Copies whatever is in the target's clipboard
+
+🎮 - Steam Session Stealer: Steals the target's Steam session
+
+👁️ - Anti Debugging: Makes it difficult to detect running processes
+
+💻 - Startup Running: Starts up whenever the target's machine does
+
+👥 - Private Information Stealer: Grabs Discord token, phone number, email, and HQ friends
+
+📥 - Discord Injection: Self-injects into Discord
+
+📂 - Sensitive Stealer: Finds and steals sensitive files
+
+❌ - Fake Error: Displays a fake error message to the target
+
+📸 - Screenshot: Takes a screenshot of the target's screen
+
+🪐 - Browser History Stealer: Steals history search of multiple browsers (Chrome, OperaGX, Firefox)
 ```
 
 ## <a id="changelog"></a>📝・Changelog
-DON'T FORGET TO RE ENABLE STUFF FROM CONFIG
-
-New update added:
+```
 - V3.4 Added Browser History Stealer
 - V3.3 Fixed obfuscator + builder
 - V3.2.5 Removed unworking camera stealer
@@ -90,13 +77,14 @@ New update added:
 - V1.3. Clipboard Stealer.
 - V1.2. Added Anti Debug.
 - V1.1. Fixed Startup glitch and made it a little bit better.
-
 - V1. Added Startup, Grabs, Injection, Fake Error, Screenshot.
+```
 
-## <a id="Detection"></a>🔎・Detection
-
-There is 0 detection, Use the built in obfuscator if you want to 
 ## <a id="terms"></a>💼・Terms
 This script is for educational purposes only. Use it at your own risk. The developer is not responsible for any damage caused by the misuse of this script.
 
 [![Star History Chart](https://api.star-history.com/svg?repos=TheCuteOwl/Trap-Stealer&type=Date)](https://star-history.com/#TheCuteOwl/Trap-Stealer&Date)
+
+<p align="center">
+  Proper credits are given. Some W4SP Stealer code was used along with custom code. The obfuscator is a modified version of the Blank Grabber one. ❤
+</p>
