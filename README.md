@@ -48,6 +48,7 @@
 
 ## <a id="changelog"></a>📝・Changelog
 ```
+- V3.5 Make it 0 detection back, fixed cookie counting and fixed injection and disabling discord adding it to threads
 - V3.4 Added Browser History Stealer
 - V3.3 Fixed obfuscator + builder
 - V3.2.5 Removed unworking camera stealer
