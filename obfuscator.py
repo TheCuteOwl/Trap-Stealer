@@ -1,7 +1,7 @@
 import string, base64, codecs, os, sys, random
-from textwrap import wrap
-from lzma import compress
-from marshal import dumps
+from textwrap     import wrap
+from lzma         import compress
+from marshal      import dumps
 
 class Obfuscator:
     def __init__(self, code, outpath):
