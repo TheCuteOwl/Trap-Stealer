@@ -1,4 +1,3 @@
-# Import dont mind
 import sys, time, random, threading, ctypes, shutil
 import os, re, socket, json, sqlite3, zipfile, subprocess
 import urllib.request, winreg, base64, getpass, platform
