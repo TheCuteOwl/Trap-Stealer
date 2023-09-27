@@ -4,7 +4,10 @@
 <p align="center">
   TrapStealer is a Windows stealer for Discord and much more. Steal Time: ~4 seconds.
 </p>
-
+<p align="center">
+  https://discord.gg/SKGjXfmFga
+</p>
+  
 ## 🌐 〢 Summary
 
 - [✨・Features](#features)
