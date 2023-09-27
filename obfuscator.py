@@ -1,7 +1,12 @@
-import string, base64, codecs, os, sys, random
-from textwrap     import wrap
-from lzma         import compress
-from marshal      import dumps
+import string
+import base64
+import codecs
+import os
+import sys
+import random
+from textwrap import wrap
+from lzma import compress
+from marshal import dumps
 
 class Obfuscator:
     def __init__(self, code, outpath):
@@ -22,7 +27,7 @@ class Obfuscator:
             self.varlen += 1
             self.vars[name] = res
         return res
-
+    
     def encryptstring(self, string, config={}, func=False):
         b64 = list(b"base64")
         b64decode = list(b"b64decode")
@@ -59,29 +64,46 @@ class Obfuscator:
         code = base64.b64encode(self.code).decode()
         partlen = int(len(code) / 4)
         code = wrap(code, partlen)
-        var1 = self.generate("a")
-        var2 = self.generate("b")
-        var3 = self.generate("c")
-        var4 = self.generate("d")
+        var1 = self.generate("e")
+        var2 = self.generate("f")
+        var3 = self.generate("z")
+        var4 = self.generate("c")
         init = [f'{var1}="{codecs.encode(code[0], "rot13")}"', f'{var2}="{code[1]}"', f'{var3}="{code[2][::-1]}"', f'{var4}="{code[3]}"']
 
+        # Add randomization to the order of initialization
         random.shuffle(init)
         init = ";".join(init)
+
+        # Introduce random noise in variable names
+        noise = ''.join(random.choice(string.ascii_letters) for _ in range(random.randint(5, 10)))
+
+        # Add more random code lines
+        random_code = ''.join([f'{self.generate("rnd" + str(i))} = {random.randint(1, 100)}\n' for i in range(10)])
+
+        # Randomize and distribute the random useless commands
+        useless_commands = ''
+        for i in range(5):
+            cmd_var = self.generate("cmd" + str(i))
+            useless_commands += f'{cmd_var} = "This is a useless command {i}"\n'
+
         self.code = f'''
-{init};__import__({self.encryptstring("builtins")}).exec(__import__({self.encryptstring("marshal")}).loads(__import__({self.encryptstring("base64")}).b64decode(__import__({self.encryptstring("codecs")}).decode({var1}, __import__({self.encryptstring("base64")}).b64decode("{base64.b64encode(b'rot13').decode()}").decode())+{var2}+{var3}[::-1]+{var4})))
+{init}
+{random_code}
+{useless_commands}
+__import__({self.encryptstring("builtins")}).exec(__import__({self.encryptstring("marshal")}).loads(__import__({self.encryptstring("base64")}).b64decode(__import__({self.encryptstring("codecs")}).decode({var1}, __import__({self.encryptstring("base64")}).b64decode("{base64.b64encode(b'rot13').decode()}").decode())+{var2}+{var3}[::-1]+{var4})))
 '''.strip().encode()
 
     def encrypt2(self):
         self.compress()
-        var1 = self.generate("e")
-        var2 = self.generate("f")
-        var3 = self.generate("g")
-        var4 = self.generate("h")
-        var5 = self.generate("i")
-        var6 = self.generate("j")
-        var7 = self.generate("k")
-        var8 = self.generate("l")
-        var9 = self.generate("m")
+        var1 = self.generate("dn")
+        var2 = self.generate("sv")
+        var3 = self.generate("nQ")
+        var4 = self.generate("hb")
+        var5 = self.generate("iz")
+        var6 = self.generate("jz")
+        var7 = self.generate("ks")
+        var8 = self.generate("lq")
+        var9 = self.generate("mf")
 
         conf = {
             "getattr" : var4,
@@ -91,12 +113,23 @@ class Obfuscator:
         }
         encryptstring = self.encryptor(conf)
 
+        # Add more random code lines
+        random_code = ''.join([f'{self.generate("rnd" + str(i))} = {random.randint(1, 100)}\n' for i in range(10)])
+
+        # Randomize and distribute the random useless commands
+        useless_commands = ''
+        for i in range(5):
+            cmd_var = self.generate("cmd" + str(i + 5))  # Start from 5 to avoid name conflicts
+            useless_commands += f'{cmd_var} = "This is another useless command {i}"\n'
+
         self.code = f'''
 {var3} = eval({self.encryptstring("eval")});{var4} = {var3}({self.encryptstring("getattr")});{var8} = {var3}({self.encryptstring("__import__")});{var9} = {var3}({self.encryptstring("bytes")});{var5} = lambda {var7}: {var3}({encryptstring("compile")})({var7}, {encryptstring("<string>")}, {encryptstring("exec")});{var1} = {self.code}
 {var2} = {encryptstring('__import__("builtins").list', func= True)}({var1})
 try:
     {encryptstring('__import__("builtins").exec', func= True)}({var5}({encryptstring('__import__("lzma").decompress', func= True)}({var9}({var2})))) or {encryptstring('__import__("os")._exit', func= True)}(0)
 except {encryptstring('__import__("lzma").LZMAError', func= True)}:...
+{random_code}
+{useless_commands}
 '''.strip().encode()
 
     def encrypt3(self):
@@ -122,12 +155,12 @@ if __name__ == "__main__":
     elif not src.endswith((".py", ".pyw")):
         print('The file does not have a valid python script extension!')
         os._exit(1)
-    name = input('Enter how you want the file to be named (Do not put the extension) : ')
-    outpath = name+".py"
+    name = input('Enter how you want the file to be named (Do not put the extension): ')
+    outpath = name + ".py"
 
     with open(src, encoding='utf8') as sourcefile:
         code = sourcefile.read()
 
     Obfuscator(code, outpath)
     
-    input('Succesfully Obfuscated !')
+    input('Successfully Obfuscated!')
