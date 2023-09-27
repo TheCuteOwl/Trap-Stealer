@@ -1,133 +1,86 @@
-import string, base64, codecs, os, sys, random
-from textwrap import wrap
-from lzma import compress
-from marshal import dumps
+import zlib
+import base64
+from cryptography.fernet import Fernet
+import random
+import os
+import string
 
-class Obfuscator:
-    def __init__(self, code, outpath):
-        self.code = code.encode()
-        self.outpath = outpath
-        self.varlen = 3
-        self.vars = {}
+key = Fernet.generate_key()
 
-        self.marshal()
-        self.encrypt1()
-        self.encrypt2()
-        self.finalize()
+ss = input('Enter the filename without the extension : ')
+ss += '.py'
+with open("encryption_key.txt", "wb") as key_file:
+    key_file.write(key)
 
-    def generate(self, name):
-        res = self.vars.get(name)
-        if res is None:
-            res = "_" + "".join(["_" for _ in range(self.varlen)])
-            self.varlen += 1
-            self.vars[name] = res
-        return res
+with open("encryption_key.txt", "rb") as key_file:
+    key = key_file.read()
 
-    def encryptstring(self, string, config={}, func=False):
-        b64 = list(b"base64")
-        b64decode = list(b"b64decode")
-        __import__ = config.get("__import__", "__import__")
-        getattr = config.get("getattr", "getattr")
-        bytes = config.get("bytes", "bytes")
-        eval = config.get("eval", "eval")
-        if not func:
-            return f'{getattr}({__import__}({bytes}({b64}).decode()),{bytes}({b64decode}).decode())({bytes}({list(base64.b64encode(string.encode()))})).decode()'
-        else:
-            attrs = string.split(".")
-            base = self.encryptstring(attrs[0], config)
-            attrs = list(map(lambda x: self.encryptstring(x, config, False), attrs[1:]))
-            newattr = ""
-            for i, val in enumerate(attrs):
-                if i == 0:
-                    newattr = f'{getattr}({eval}({base}),{val})'
-                else:
-                    newattr = f'{getattr}({newattr},{val})'
-            return newattr
+cipher_suite = Fernet(key)
 
-    def encryptor(self, config):
-        def func_(string, func=False):
-            return self.encryptstring(string, config, func)
-        return func_
+with open("./Build/temp.py", "rb") as code_file:
+    code = code_file.read()
 
-    def compress(self):
-        self.code = compress(self.code)
+encrypted_code = cipher_suite.encrypt(zlib.compress(code))
+encoded_code = base64.b64encode(encrypted_code).decode('utf-8')
 
-    def marshal(self):
-        self.code = dumps(compile(self.code, "<string>", "exec"))
+fake_vars = {}
+for i in range(10):  
+    fake_name = ''.join(random.choice(string.ascii_letters) + random.choice(string.ascii_letters + string.digits) for _ in range(19))
+    fake_value = random.randint(1000000, 100000000)
+    fake_vars[fake_name] = fake_value
 
-    def encrypt1(self):
-        code = base64.b64encode(self.code).decode()
-        partlen = int(len(code) / 4)
-        code = wrap(code, partlen)
-        var1 = self.generate("a")
-        var2 = self.generate("b")
-        var3 = self.generate("c")
-        var4 = self.generate("d")
-        init = [f'{var1}="{codecs.encode(code[0], "rot13")}"', f'{var2}="{code[1]}"', f'{var3}="{code[2][::-1]}"', f'{var4}="{code[3]}"']
+fake_code = [f'{fake_name} = {fake_value}' for fake_name, fake_value in fake_vars.items()]
 
-        random.shuffle(init)
-        init = ";".join(init)
-        self.code = f'''
-{init};__import__({self.encryptstring("builtins")}).exec(__import__({self.encryptstring("marshal")}).loads(__import__({self.encryptstring("base64")}).b64decode(__import__({self.encryptstring("codecs")}).decode({var1}, __import__({self.encryptstring("base64")}).b64decode("{base64.b64encode(b'rot13').decode()}").decode())+{var2}+{var3}[::-1]+{var4})))
-'''.strip().encode()
+def random_function_name():
+    return ''.join(random.choice(string.ascii_letters) + random.choice(string.ascii_letters + string.digits) for _ in range(25))
 
-    def encrypt2(self):
-        self.compress()
-        var1 = self.generate("e")
-        var2 = self.generate("f")
-        var3 = self.generate("g")
-        var4 = self.generate("h")
-        var5 = self.generate("i")
-        var6 = self.generate("j")
-        var7 = self.generate("k")
-        var8 = self.generate("l")
-        var9 = self.generate("m")
+fake_functions = {}
+for _ in range(15):  # Increase the number of fake functions
+    func_name = random_function_name()
+    func_code = "\n".join([f'{fake_name} = {fake_value}' for fake_name, fake_value in fake_vars.items()])
+    fake_functions[func_name] = func_code
 
-        conf = {
-            "getattr" : var4,
-            "eval" : var3,
-            "__import__" : var8,
-            "bytes" : var9
-        }
-        encryptstring = self.encryptor(conf)
+def random_class_name():
+    return ''.join(random.choice(string.ascii_letters) + random.choice(string.ascii_letters + string.digits) for _ in range(19))
 
-        self.code = f'''
-{var3} = eval({self.encryptstring("eval")});{var4} = {var3}({self.encryptstring("getattr")});{var8} = {var3}({self.encryptstring("__import__")});{var9} = {var3}({self.encryptstring("bytes")});{var5} = lambda {var7}: {var3}({encryptstring("compile")})({var7}, {encryptstring("<string>")}, {encryptstring("exec")});{var1} = {self.code}
-{var2} = {encryptstring('__import__("builtins").list', func= True)}({var1})
-try:
-    {encryptstring('__import__("builtins").exec', func= True)}({var5}({encryptstring('__import__("lzma").decompress', func= True)}({var9}({var2})))) or {encryptstring('__import__("os")._exit', func= True)}(0)
-except {encryptstring('__import__("lzma").LZMAError', func= True)}:...
-'''.strip().encode()
+fake_classes = {}
+for _ in range(10): 
+    class_name = random_class_name()
+    class_code = "\n".join([f'{fake_name} = {fake_value}' for fake_name, fake_value in fake_vars.items()])
+    fake_classes[class_name] = class_code
 
-    def encrypt3(self):
-        self.compress()
-        data = base64.b64encode(self.code)
-        self.code = f'import base64, lzma; exec(compile(lzma.decompress(base64.b64decode({data})), "<string>", "exec"))'.encode()
+fake_code_str = "\n".join(fake_code)
 
-    def finalize(self):
-        build_folder = "build"
-        if not os.path.exists(build_folder):
-            os.makedirs(build_folder)
+fake_functions_str = "\n".join([f'def {func_name}():\n    {func_code}' for func_name, func_code in fake_functions.items()])
 
-        out_file_path = os.path.join(build_folder, os.path.basename(self.outpath))
-        with open(out_file_path, "w", encoding="utf-8") as file:
-            file.write(self.code.decode())
+fake_classes_str = "\n".join([f'class {class_name}:\n    {class_code}' for class_name, class_code in fake_classes.items()])
 
-        print(f"Obfuscated file saved to: {out_file_path}")
+fake_code_list = [fake_code_str, fake_functions_str, fake_classes_str]
+random.shuffle(fake_code_list)
+all_fake_code = "\n".join(fake_code_list)
+e = random_class_name()
+obfuscated_code = f'''
+{all_fake_code}
+import zlib
+import base64
+{all_fake_code}
+import cryptography
+from cryptography.fernet import Fernet
+encoded_code = "{encoded_code}"
+{e} = exec
+encrypted_code = base64.b64decode(encoded_code)
+{all_fake_code}
+decrypted_code = Fernet(b'{key.decode("utf-8")}').decrypt(encrypted_code)
+{all_fake_code}
+decompressed_code = zlib.decompress(decrypted_code).decode('utf-8')
+{e}(decompressed_code)
+{all_fake_code}
+'''
 
-if __name__ == "__main__":
-    if not os.path.isfile(src := sys.argv[1]):
-        print('No such file!')
-        os._exit(1)
-    elif not src.endswith((".py", ".pyw")):
-        print('The file does not have a valid python script extension!')
-        os._exit(1)
-    name = input('Enter how you want the file to be named (Do not put the extension) : ')
-    outpath = name+".py"
+s = base64.b64encode(obfuscated_code.encode('utf-8'))
 
-    with open(src, encoding='utf8') as sourcefile:
-        code = sourcefile.read()
+with open(f'.\\build\{ss}', "wb") as obfu_file:
+    obfu_file.write(f"{all_fake_code};import base64,subprocess\ntry:from cryptography.fernet import Fernet\nexcept:subprocess.run('python -m pip install cryptography', shell=True)\n{all_fake_code}\n{e} = exec\n{all_fake_code}\nb={s}.decode('utf-8')\n{e}(base64.b64decode(b))\n{all_fake_code}".encode("utf-8"))   
+os.remove("encryption_key.txt")
 
-    Obfuscator(code, outpath)
-    
-    input('Succesfully Obfuscated !')
+print(f"The code has been encrypted, Filename: .\\build\{ss}")
