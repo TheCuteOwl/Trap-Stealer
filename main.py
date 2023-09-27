@@ -36,7 +36,6 @@ requirements = [
     ["requests", "requests"],
     ["Crypto.Cipher", "pycryptodome"],
     ["win32clipboard", "pywin32"],
-    ["win32crypt", "pypiwin32"],
 ]
 
 for modl in requirements:
