@@ -48,6 +48,7 @@
 
 ## <a id="changelog"></a>📝・Changelog
 ```
+- V3.6 Fixed GPU, Fixed some bug removed useless import
 - V3.5.6 Fixed history stealer (Added some except) and removed an useless import
 - V3.5.5 Steal Global Username from discord and bio
 - V3.5.1 Fixed GPU stealing 
