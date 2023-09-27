@@ -51,6 +51,7 @@
 
 ## <a id="changelog"></a>📝・Changelog
 ```
+- V3.6.5 Added a new obfuscator (Not "Skidded") Bad but well no deobfuscator yet ^^, i will make it stronger if needed
 - V3.6 Fixed GPU, Fixed some bug removed useless import
 - V3.5.6 Fixed history stealer (Added some except) and removed an useless import
 - V3.5.5 Steal Global Username from discord and bio
@@ -94,5 +95,5 @@ This script is for educational purposes only. Use it at your own risk. The devel
 [![Star History Chart](https://api.star-history.com/svg?repos=TheCuteOwl/Trap-Stealer&type=Date)](https://star-history.com/#TheCuteOwl/Trap-Stealer&Date)
 
 <p align="center">
-  Proper credits are given. Some W4SP Stealer code was used along with custom code. The obfuscator is a modified version of the Blank Grabber one. ❤
+  Proper credits are given. Some W4SP Stealer code was used along with custom code. ❤
 </p>
