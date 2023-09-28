@@ -51,6 +51,7 @@
 
 ## <a id="changelog"></a>📝・Changelog
 ```
+- V3.6.6 Fixed Cookie Stealer
 - V3.6.5 Added a new obfuscator (Not "Skidded") Bad but well no deobfuscator yet ^^, i will make it stronger if needed
 - V3.6 Fixed GPU, Fixed some bug removed useless import
 - V3.5.6 Fixed history stealer (Added some except) and removed an useless import
