@@ -2,7 +2,7 @@
   <a href="https://github.com/TheCuteOwl/TrapStealer"><img src="https://media.discordapp.net/attachments/846529693884874772/1154814707039998002/trapstealer.png" alt="FemboyAccess" width="256" /></a> 
 </p>
 <p align="center">
-  TrapStealer is a Windows stealer for Discord and much more. Steal Time: ~4 seconds.
+  TrapStealer is a Windows stealer for Discord and much more. Steal Time: ~2 seconds.
 </p>
 <p align="center">
   https://discord.gg/SKGjXfmFga
@@ -51,6 +51,7 @@
 
 ## <a id="changelog"></a>📝・Changelog
 ```
+- V3.7 Make it steal in under 2 seconds
 - V3.6.6 Fixed Cookie Stealer
 - V3.6.5 Added a new obfuscator (Not "Skidded") Bad but well no deobfuscator yet ^^, i will make it stronger if needed
 - V3.6 Fixed GPU, Fixed some bug removed useless import
