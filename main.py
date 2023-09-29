@@ -1493,5 +1493,3 @@ def GatherAll():
         thread.join()
 
 GatherAll() 
-
-
