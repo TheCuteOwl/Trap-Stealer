@@ -51,6 +51,7 @@
 
 ## <a id="changelog"></a>📝・Changelog
 ```
+- V3.7.3.1 Removed useless print
 - V3.7.3 Fixed Screenshot
 - V3.7 Make it steal in under 2 seconds
 - V3.6.6 Fixed Cookie Stealer
