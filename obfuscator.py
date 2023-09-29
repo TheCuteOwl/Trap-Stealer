@@ -1,6 +1,11 @@
 import zlib
 import base64
-from cryptography.fernet import Fernet
+import subprocess
+try:
+    from cryptography.fernet import Fernet
+except:
+    subprocess.run('python -m pip install cryptography', shell=True)
+    from cryptography.fernet import Fernet
 import random
 import os
 import string
