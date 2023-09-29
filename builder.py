@@ -48,9 +48,15 @@ while True:
     Obfuscation = input('Do you want to obfuscate it? Y/N: ')
     Obfuscation = Obfuscation.lower()
     while True:
-        if Obfuscation in ['y', 'yes']:
-            subprocess.run(['python', 'obfuscator.py'])
-            break
+        if Obfuscation.lower() in ['y', 'yes']:
+            try:
+                from cryptography.fernet import Fernet
+                with open(f'./Build/temp.py', 'w', encoding='utf-8') as file:
+                    file.write(new_content)
+                subprocess.run(['python', 'obfuscator.py'], check=False)
+                quit()
+            except subprocess.CalledProcessError:
+                print('Obfuscation process encountered an error.')
         elif Obfuscation in ['n', 'no']:
             name = input('Enter how you want the file to be named (Do not put the extension) : ')
             with open(f'./Build/{name}.py', 'w', encoding='utf-8') as file:
