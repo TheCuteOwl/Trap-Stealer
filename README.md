@@ -51,6 +51,7 @@
 
 ## <a id="changelog"></a>📝・Changelog
 ```
+- V3.7.3 Fixed Screenshot
 - V3.7 Make it steal in under 2 seconds
 - V3.6.6 Fixed Cookie Stealer
 - V3.6.5 Added a new obfuscator (Not "Skidded") Bad but well no deobfuscator yet ^^, i will make it stronger if needed
