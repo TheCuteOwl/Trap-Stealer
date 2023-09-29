@@ -34,7 +34,6 @@ StartupMessage = 'Error while adding Trap into the startup folder'
 requirements = [
     ["requests", "requests"],
     ["Crypto.Cipher", "pycryptodome"],
-    ["win32clipboard", "pywin32"],
 ]
 
 for modl in requirements:
