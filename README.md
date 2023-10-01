@@ -46,7 +46,7 @@
 
 📸 - Screenshot: Takes a screenshot of the target's screen
 
-🪐 - Browser History Stealer: Steals history search of multiple browsers (Chrome, OperaGX, Firefox)
+🪐 - Browser History Stealer: Steals history search of multiple browsers (Chrome, Opera/GX, Firefox, Edge, Safari, Internet Explorer)
 ```
 
 ## <a id="changelog"></a>📝・Changelog
