@@ -14,12 +14,9 @@ key = Fernet.generate_key()
 
 ss = input('Enter the filename without the extension : ')
 ss += '.py'
+
 with open("encryption_key.txt", "wb") as key_file:
     key_file.write(key)
-
-with open("encryption_key.txt", "rb") as key_file:
-    key = key_file.read()
-
 cipher_suite = Fernet(key)
 
 with open("./Build/temp.py", "rb") as code_file:
