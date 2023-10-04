@@ -48,12 +48,12 @@
 
 📸 - Screenshot: Takes a screenshot of the target's screen
 
-🪐 - Browser History Stealer: Steals history search of multiple browsers (Chrome, Opera/GX, Firefox, Edge, Safari, Internet Explorer)
+🪐 - Browser History Stealer: Steals history search of multiple browsers (Chrome, Opera/GX, Firefox, Edge, Safari, Internet Explorer, Brave)
 ```
 
 ## <a id="changelog"></a>📝・Changelog
 ```
-- 3.8 Antivirus stealer (get all installed AVs) Builder with exe and new obfuscator.py
+- 3.8 Antivirus stealer (get all installed AVs) Builder with exe and new obfuscator.py and added Brave to the history stealer
 - V3.7.5 Added antivirus stealer 
 - V3.7.3.1 Removed useless print
 - V3.7.3 Fixed Screenshot
