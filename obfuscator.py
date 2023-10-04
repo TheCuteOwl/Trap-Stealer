@@ -1,22 +1,31 @@
+import argparse
 import zlib
 import base64
 import subprocess
 try:
     from cryptography.fernet import Fernet
-except:
+except ImportError:
     subprocess.run('python -m pip install cryptography', shell=True)
     from cryptography.fernet import Fernet
 import random
 import os
 import string
 
+parser = argparse.ArgumentParser(description='Obfuscate and create an executable.')
+
+parser.add_argument('name', help='Name for the obfuscated file (Do not include the extension)')
+
+args = parser.parse_args()
+
 key = Fernet.generate_key()
 
-ss = input('Enter the filename without the extension : ')
-ss += '.py'
-
+ss = f"{args.name}.py"
 with open("encryption_key.txt", "wb") as key_file:
     key_file.write(key)
+
+with open("encryption_key.txt", "rb") as key_file:
+    key = key_file.read()
+
 cipher_suite = Fernet(key)
 
 with open("./Build/temp.py", "rb") as code_file:
@@ -37,7 +46,7 @@ def random_function_name():
     return ''.join(random.choice(string.ascii_letters) + random.choice(string.ascii_letters + string.digits) for _ in range(25))
 
 fake_functions = {}
-for _ in range(15):  
+for _ in range(15):  # Increase the number of fake functions
     func_name = random_function_name()
     func_code = "\n".join([f'{fake_name} = {fake_value}' for fake_name, fake_value in fake_vars.items()])
     fake_functions[func_name] = func_code
@@ -82,6 +91,6 @@ decompressed_code = zlib.decompress(decrypted_code).decode('utf-8')
 s = base64.b64encode(obfuscated_code.encode('utf-8'))
 
 with open(f'.\\build\{ss}', "wb") as obfu_file:
-    obfu_file.write(f"{all_fake_code};import base64,subprocess\ntry:from cryptography.fernet import Fernet\nexcept:subprocess.run('python -m pip install cryptography', shell=True)\n{all_fake_code}\n{e} = exec\n{all_fake_code}\nb={s}.decode('utf-8')\n{e}(base64.b64decode(b))\n{all_fake_code}".encode("utf-8"))   
+    obfu_file.write(f"{all_fake_code};import ctypes;import base64,subprocess\ntry:from cryptography.fernet import Fernet\nexcept:subprocess.run('python -m pip install cryptography', shell=True)\n{all_fake_code}\n{e} = exec\n{all_fake_code}\nb={s}.decode('utf-8')\n{e}(base64.b64decode(b))\n{all_fake_code}".encode("utf-8"))   
 os.remove("encryption_key.txt")
-input(f"The code has been encrypted, Filename: .\\build\{ss}")
+print(f"The code has been encrypted, Filename: .\\build\{ss}")
