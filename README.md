@@ -16,7 +16,7 @@
 
 ## <a id="features"></a>✨・Features
 ```
-🖥️ - Computer Information Stealer: Steal graphic card name (and other data), cpu name (and other data) and more..
+🖥️ - Computer Information Stealer: Steal graphic card name (and other data), cpu name (and other data), Installed AVs and more..
 
 🍪 - Cookie Stealer: Steals cookies of any browser
 
@@ -53,6 +53,7 @@
 
 ## <a id="changelog"></a>📝・Changelog
 ```
+- 3.8 Antivirus stealer (get all installed AVs) Builder with exe and new obfuscator.py
 - V3.7.5 Added antivirus stealer 
 - V3.7.3.1 Removed useless print
 - V3.7.3 Fixed Screenshot
