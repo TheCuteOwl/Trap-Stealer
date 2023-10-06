@@ -53,7 +53,8 @@
 
 ## <a id="changelog"></a>📝・Changelog
 ```
-- 3.8 Antivirus stealer (get all installed AVs) Builder with exe and new obfuscator.py and added Brave to the history stealer
+- V3.8.1 Removed and added some stuff
+- V3.8 Antivirus stealer (get all installed AVs) Builder with exe and new obfuscator.py and added Brave to the history stealer
 - V3.7.5 Added antivirus stealer 
 - V3.7.3.1 Removed useless print
 - V3.7.3 Fixed Screenshot
