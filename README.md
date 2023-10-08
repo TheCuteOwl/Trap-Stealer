@@ -30,6 +30,8 @@
 
 🌕 - Password Stealer: Steals passwords saved on popular browsers
 
+📝 - Autofill Stealer: Steal autofill of all browsers
+
 📋 - Clipboard Copy: Copies whatever is in the target's clipboard
 
 🎮 - Steam Session Stealer: Steals the target's Steam session
@@ -53,6 +55,7 @@
 
 ## <a id="changelog"></a>📝・Changelog
 ```
+- V3.9 Fixed some error, added autofill stealer and some other stuff
 - V3.8.5 Added Guild stealer and some fixes
 - V3.8.1 Removed and added some stuff
 - V3.8 Antivirus stealer (get all installed AVs) Builder with exe and new obfuscator.py and added Brave to the history stealer
