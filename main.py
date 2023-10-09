@@ -888,7 +888,6 @@ def find_firefox_history_file():
             profile_path = os.path.expanduser("~/Library/Application Support/Firefox/Profiles")
         else:
             return None
-        except:pass
 
         profiles = [f for f in os.listdir(profile_path) if f.endswith('.default')]
         if not profiles:
