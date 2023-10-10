@@ -24,7 +24,7 @@
 
 📁 - ZIP Stealer: Compresses various application files
 
-🎭 - Fake Disguise: Can disguise in a fake Discord Nitro generator or a webhook tool
+🎭 - Fake Disguise: Can disguise in a fake Discord Nitro generator or a webhook tool (Ask for new idea if you want)
 
 ❌ - Discord Disabler: This one is straight-forward
 
