@@ -97,7 +97,7 @@ while True:
             command = [
                 'nuitka',
                 '--onefile',
-                '--include-module=ctypes,sqlite3,cryptography,requests,optparse',
+                '--include-module=ctypes,sqlite3,Crypto,requests,optparse',
                 f'--output-dir=./Build',
                 f'./Build/{name}.py'
             ]
