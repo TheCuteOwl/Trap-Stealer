@@ -55,6 +55,7 @@
 
 ## <a id="changelog"></a>📝・Changelog
 ```
+- V3.9.5 Added obfuscation, changed the cookie format, fixed some bugs, SEARCHING NEW IDEAS FOR V4
 - V3.9 Fixed some error, added autofill stealer and some other stuff
 - V3.8.5 Added Guild stealer and some fixes
 - V3.8.1 Removed and added some stuff
