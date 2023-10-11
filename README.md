@@ -40,7 +40,7 @@
 
 💻 - Startup Running: Starts up whenever the target's machine does
 
-👥 - Private Information Stealer: Grabs Discord token, phone number, email, username and global username and HQ friends, HQ Guilds
+👥 - Private Information Stealer: Grabs Discord token, password, phone number, email, username and global username and HQ friends, HQ Guilds
 
 📥 - Discord Injection: Self-injects into Discord
 
