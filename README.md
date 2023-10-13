@@ -1,13 +1,19 @@
 <p align="center">
   <a href="https://github.com/TheCuteOwl/TrapStealer"><img src="https://media.discordapp.net/attachments/846529693884874772/1154814707039998002/trapstealer.png" alt="FemboyAccess" width="256" /></a> 
 </p>
+
 <p align="center">
-  TrapStealer is a Windows stealer for Discord and much more. Steal Time: ~2 seconds. 0 Detection on VirusTotal, Join the discord for news about the upcoming v4
+  TrapStealer is a Windows stealer for Discord and much more. Steal Time: ~2 seconds. 0 Detection on VirusTotal 
 </p>
+
+<p align="center">
+  Join the discord for news about the upcoming v4
+</p>
+
 <p align="center">
   Support URL : https://discord.gg/SKGjXfmFga
 </p>
-  
+    
 ## 🌐 〢 Summary
 
 - [✨・Features](#features)
