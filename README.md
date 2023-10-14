@@ -7,6 +7,10 @@
 </p>
 
 <p align="center">
+  Upcoming features : Fixed nitros stealer, windows key stealer, No spamming, Melter, backup code stealer and more...
+</p>
+
+<p align="center">
   Join the discord for news about the upcoming v4
 </p>
 
