@@ -6,17 +6,18 @@
   TrapStealer is a Windows stealer for Discord and much more. Steal Time: ~2 seconds. 0 Detection on VirusTotal 
 </p>
 
-<p align="center">
-  Upcoming features : Fixed nitros stealer, windows key stealer, No spamming, Melter, backup code stealer and more...
-</p>
+## Upcoming Features
+- Fixed nitros stealer
+- Windows key stealer
+- No spamming
+- Melter
+- Backup code stealer
+- And more...
 
-<p align="center">
-  Join the discord for news about the upcoming v4
-</p>
+Join our Discord server for updates on the upcoming v4 version.
 
-<p align="center">
-  Support URL : https://discord.gg/SKGjXfmFga
-</p>
+[Discord](https://discord.gg/SKGjXfmFga)
+
     
 ## 🌐 〢 Summary
 
