@@ -55,7 +55,7 @@ Join our Discord server for updates on the upcoming v4 version.
 
 📥 - Discord Injection: Self-injects into Discord
 
-📂 - Sensitive Stealer: Finds and steals sensitive files
+📂 - Sensitive Stealer: Finds and steals sensitive files based of customizable keywords
 
 ❌ - Fake Error: Displays a fake error message to the target
 
