@@ -16,7 +16,9 @@
 
 Join our Discord server for updates on the upcoming v4 version.
 
-[Discord](https://discord.gg/SKGjXfmFga)
+<p align="center">
+  https://discord.gg/SKGjXfmFga
+</p>
 
     
 ## 🌐 〢 Summary
