@@ -14,7 +14,7 @@
 - Backup code stealer
 - And more...
 
-Join our Discord server for updates on the upcoming v4 version.
+Join our Discord server for updates on the upcoming v4 version. and for requestings new features
 
 <p align="center">
   https://discord.gg/SKGjXfmFga
