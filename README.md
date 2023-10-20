@@ -15,10 +15,10 @@
 - And more...
 
 Join our Discord server for updates on the upcoming v4 version. and for requestings new features
-
 <p align="center">
-  https://discord.gg/SKGjXfmFga
+  <a href="https://discord.gg/SKGjXfmFga" target="_blank">Discord URL</a>
 </p>
+
 
     
 ## 🌐 〢 Summary
