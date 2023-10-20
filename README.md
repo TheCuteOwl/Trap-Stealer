@@ -68,6 +68,7 @@ Join our Discord server for updates on the upcoming v4 version. and for requesti
 
 ## <a id="changelog"></a>📝・Changelog
 ```
+- V3.9.6 Fixed injection that never worked actually now it is
 - V3.9.5 Added obfuscation, changed the cookie format, fixed some bugs, SEARCHING NEW IDEAS FOR V4
 - V3.9 Fixed some error, added autofill stealer and some other stuff
 - V3.8.5 Added Guild stealer and some fixes
