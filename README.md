@@ -16,7 +16,7 @@
 
 Join our Discord server for updates on the upcoming v4 version. and for requestings new features
 <p align="center">
-  <a href="https://discord.gg/SKGjXfmFga" target="_blank">Discord URL</a>
+  <a href="https://discord.gg/SKGjXfmFga" target="_blank">Discord Support URL</a>
 </p>
 
 
