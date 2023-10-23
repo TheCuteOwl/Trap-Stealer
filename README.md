@@ -3,18 +3,11 @@
 </p>
 
 <p align="center">
-  TrapStealer is a Windows stealer for Discord and much more. Steal Time: ~2 seconds. 0 Detection on VirusTotal 
+  TrapStealer is a Windows stealer for Discord and much more. Steal Time: ~2 seconds. 0 Detection on VirusTotal (Injection too)
 </p>
 
-## Upcoming Features
-- Fixed nitros stealer
-- Windows key stealer
-- No spamming
-- Melter
-- Backup code stealer
-- And more...
+# V4 RELEASED 
 
-Join our Discord server for updates on the upcoming v4 version. and for requestings new features
 <p align="center">
   <a href="https://discord.gg/SKGjXfmFga" target="_blank">Discord Support URL</a>
 </p>
@@ -29,6 +22,8 @@ Join our Discord server for updates on the upcoming v4 version. and for requesti
 
 ## <a id="features"></a>✨・Features
 ```
+🤔 - Whatsapp Stealer
+
 🖥️ - Computer Information Stealer: Steal graphic card name (and other data), cpu name (and other data), Installed AVs and more..
 
 🍪 - Cookie Stealer: Steals cookies of any browser
@@ -53,7 +48,7 @@ Join our Discord server for updates on the upcoming v4 version. and for requesti
 
 💻 - Startup Running: Starts up whenever the target's machine does
 
-👥 - Private Information Stealer: Grabs Discord token, password, phone number, email, username and global username and HQ friends, HQ Guilds
+👥 - Private Information Stealer: Grabs Discord token, password, phone number, email, username and global username and HQ friends, HQ Guilds, user connexion
 
 📥 - Discord Injection: Self-injects into Discord
 
@@ -63,11 +58,16 @@ Join our Discord server for updates on the upcoming v4 version. and for requesti
 
 📸 - Screenshot: Takes a screenshot of the target's screen
 
+🔥 - Melter: Delete itself after stealing
+
+💻 - Windows Crasher: Make windows do a BSOD
+
 🪐 - Browser History Stealer: Steals history search of multiple browsers (Chrome, Opera/GX, Firefox, Edge, Safari, Internet Explorer, Brave)
 ```
 
 ## <a id="changelog"></a>📝・Changelog
 ```
+- V4 New Obfuscation, Fixed Obfuscation, Encoded Webhook, Fixed Injection, Computer Crasher, Automelter and even more.... (Auto Melter, Whatsapp Stealer, new 0 detections injection and even more...)
 - V3.9.6 Fixed injection that never worked actually now it is
 - V3.9.5 Added obfuscation, changed the cookie format, fixed some bugs, SEARCHING NEW IDEAS FOR V4
 - V3.9 Fixed some error, added autofill stealer and some other stuff
