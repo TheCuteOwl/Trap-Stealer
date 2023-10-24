@@ -28,7 +28,8 @@ while True:
             Webhook = input('Enter the webhook -> ')
             
             re = requests.get(Webhook)
-            if re.status_code == 200 and 'discord.com' in Webhook:
+            if re.status_code == 200 and ('discord.com' in Webhook or 'discordapp.com' in Webhook):
+
                 break
             else:
                 print('Invalid Webhook')
@@ -125,7 +126,7 @@ while True:
                 f'--distpath Build',  
                 f'./Build/{name}.py'
             ]
-            subprocess.run(command, check=True, shell=True)
+            subprocess.run(command, check=True)
             input(f'File {name}.exe successfully created press any key to quit')
             quit()
         else:
