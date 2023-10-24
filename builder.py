@@ -29,7 +29,7 @@ while True:
             
             re = requests.get(Webhook)
             if re.status_code == 200 and ('discord.com' in Webhook or 'discordapp.com' in Webhook):
-                print('\033[92mValid Webhook\033[0m')
+                print('Valid Webhook')
                 break
             else:
                 print('Invalid Webhook')
