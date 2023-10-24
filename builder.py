@@ -129,7 +129,7 @@ while True:
                 '--onefile',
                 '--distpath',
                 './Build',  
-                './Build/erg.py'
+                f'./Build/{name}.py'
             ]
             subprocess.run(command, check=True)
             input(f'File {name}.exe successfully created press any key to quit')
