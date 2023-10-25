@@ -67,6 +67,7 @@
 
 ## <a id="changelog"></a>📝・Changelog
 ```
+- V4.0.5 Fixed Startup Not Working
 - V4 New Obfuscation, Fixed Obfuscation, Encoded Webhook, Fixed Injection, Computer Crasher, Automelter and even more.... (Auto Melter, Whatsapp Stealer, new 0 detections injection and even more...)
 - V3.9.6 Fixed injection that never worked actually now it is
 - V3.9.5 Added obfuscation, changed the cookie format, fixed some bugs, SEARCHING NEW IDEAS FOR V4
