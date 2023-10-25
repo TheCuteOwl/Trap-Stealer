@@ -6,8 +6,6 @@
   TrapStealer is a Windows stealer for Discord and much more. Steal Time: ~2 seconds. 0 Detection on VirusTotal (Injection too)
 </p>
 
-# V4 RELEASED 
-
 <p align="center">
   <a href="https://discord.gg/SKGjXfmFga" target="_blank">Discord Support URL</a>
 </p>
