@@ -61,10 +61,13 @@
 💻 - Windows Crasher: Make windows do a BSOD
 
 🪐 - Browser History Stealer: Steals history search of multiple browsers (Chrome, Opera/GX, Firefox, Edge, Safari, Internet Explorer, Brave)
+
+🪟 - Hide windows: Make the command prompt dissapear
 ```
 
 ## <a id="changelog"></a>📝・Changelog
 ```
+- V4.1 Added Hide windows
 - V4.0.5 Fixed Startup Not Working
 - V4 New Obfuscation, Fixed Obfuscation, Encoded Webhook, Fixed Injection, Computer Crasher, Automelter and even more.... (Auto Melter, Whatsapp Stealer, new 0 detections injection and even more...)
 - V3.9.6 Fixed injection that never worked actually now it is
