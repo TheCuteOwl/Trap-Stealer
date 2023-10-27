@@ -20,7 +20,7 @@
 
 ## <a id="features"></a>✨・Features
 ```
-🤔 - Whatsapp Stealer
+🤔 - Whatsapp Stealer: Steal all whatsapp file on the infected computer
 
 🖥️ - Computer Information Stealer: Steal graphic card name (and other data), cpu name (and other data), Installed AVs and more..
 
@@ -62,7 +62,7 @@
 
 🪐 - Browser History Stealer: Steals history search of multiple browsers (Chrome, Opera/GX, Firefox, Edge, Safari, Internet Explorer, Brave)
 
-🪟 - Hide windows: Make the command prompt dissapear
+🪟 - Hide windows: Make the command prompt disappear.
 ```
 
 ## <a id="changelog"></a>📝・Changelog
