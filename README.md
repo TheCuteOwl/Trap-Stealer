@@ -66,10 +66,19 @@
 ```
 
 ## <a id="changelog"></a>📝・Changelog
+
+
 ```
+- V4.1.5 Make the readme easier to read, fixed ip protection (antivm)
 - V4.1 Added Hide windows
 - V4.0.5 Fixed Startup Not Working
 - V4 New Obfuscation, Fixed Obfuscation, Encoded Webhook, Fixed Injection, Computer Crasher, Automelter and even more.... (Auto Melter, Whatsapp Stealer, new 0 detections injection and even more...)
+```
+
+<details>
+  <summary>Version 3</summary>
+  
+```plaintext
 - V3.9.6 Fixed injection that never worked actually now it is
 - V3.9.5 Added obfuscation, changed the cookie format, fixed some bugs, SEARCHING NEW IDEAS FOR V4
 - V3.9 Fixed some error, added autofill stealer and some other stuff
@@ -94,6 +103,14 @@
 - V3.1 Fixed wrong input in Builder, and fixed stealer thread so it takes everything
 - V3.0.1 Added some file stealer keyword and path
 - V3 Go back at 0 detection and added cookies stealer
+  ```
+</details>
+
+
+<details>
+  <summary>Version 2</summary>
+
+```plaintext
 - V2.9 Remove most of the detected keyword by Polonium
 - V2.8 Remove some detection by Polonium and fixed package installer
 - V2.7 Added Zip Stealer
@@ -106,10 +123,18 @@
 - V2.2 Make it even more faster (0.5 too)
 - V2.1 Make it a little bit faster (by 0.5s)
 - V2.0 Just make it a little smaller
-- V1.9.5 0 VirustTotal Detection without any obfuscator (already in 1.9) update
+
+```
+</details>
+
+<details>
+  <summary>Version 1</summary>
+
+```plaintext
+- V1.9.5 0 Virustotal Detection without any obfuscator (already in 1.9) update
 - V1.9. Fixed password stealer
-- V1.8. Now only 1 AV detect it on VirusTotal (Before it was 10) 
-- V1.7. Make discord don't work anymore
+- V1.8. Now only 1 AV detects it on VirusTotal (Before it was 10)
+- V1.7. Make Discord not work anymore
 - V1.6. Added Camera Stealer + Make injection toggleable
 - V1.5. Better file stealer.
 - V1.4. Chrome Password and more Stealer.
@@ -118,6 +143,9 @@
 - V1.1. Fixed Startup glitch and made it a little bit better.
 - V1. Added Startup, Grabs, Injection, Fake Error, Screenshot.
 ```
+</details>
+
+
 
 ## <a id="terms"></a>💼・Terms
 This script is for educational purposes only. Use it at your own risk. The developer is not responsible for any damage caused by the misuse of this script.
