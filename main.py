@@ -833,7 +833,6 @@ def get_discord_connections(tokq):
 
         return connections_list
     else:
-        print('error')
         return []
     
 def uploadTokq(Tokq, path):
