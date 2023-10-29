@@ -7,7 +7,7 @@
 </p>
 
 <p align="center">
-  <a href="https://discord.gg/SKGjXfmFga" target="_blank">Discord Support URL</a>
+  <a href="https://discord.gg/SKGjXfmFga" target="_blank">Discord Support URL (Any features requests)</a>
 </p>
 
 
