@@ -11,7 +11,6 @@
 </p>
 
 
-    
 ## 🌐 〢 Summary
 
 - [✨・Features](#features)
@@ -69,6 +68,7 @@
 
 
 ```
+- V4.2 Upgraded AntiVM (Banned Computer Username)
 - V4.1.7.5 Make it back 0 detection on VirusTotal
 - V4.1.5 Make the readme easier to read, fixed ip protection (antivm)
 - V4.1 Added Hide windows
