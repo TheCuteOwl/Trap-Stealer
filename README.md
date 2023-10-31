@@ -57,7 +57,7 @@
 
 🔥 - Melter: Delete itself after stealing
 
-💻 - Windows Crasher: Make windows do a BSOD
+💻 - Windows Crasher: Make windows do a BSOD (Blue Screen of Death)
 
 🪐 - Browser History Stealer: Steals history search of multiple browsers (Chrome, Opera/GX, Firefox, Edge, Safari, Internet Explorer, Brave)
 
