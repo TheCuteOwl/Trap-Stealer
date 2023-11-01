@@ -68,6 +68,7 @@
 
 
 ```
+- V3.2.1 Smol fix
 - V4.2 Upgraded AntiVM (Banned Computer Username)
 - V4.1.7.5 Make it back 0 detection on VirusTotal
 - V4.1.5 Make the readme easier to read, fixed ip protection (antivm)
