@@ -131,7 +131,7 @@
 
 <details>
   <summary>Version 1</summary>
-
+  
 ```plaintext
 - V1.9.5 0 Virustotal Detection without any obfuscator (already in 1.9) update
 - V1.9. Fixed password stealer
@@ -153,7 +153,6 @@
 This script is for educational purposes only. Use it at your own risk. The developer is not responsible for any damage caused by the misuse of this script.
 
 [![Star History Chart](https://api.star-history.com/svg?repos=TheCuteOwl/Trap-Stealer&type=Date)](https://star-history.com/#TheCuteOwl/Trap-Stealer&Date)
-
 <p align="center">
   Proper credits are given. Some W4SP Stealer code was used along with custom code. ❤
 </p>
