@@ -51,8 +51,6 @@
 
 📂 - Sensitive Stealer: Finds and steals sensitive files based of customizable keywords
 
-❌ - Fake Error: Displays a fake error message to the target
-
 📸 - Screenshot: Takes a screenshot of the target's screen
 
 🔥 - Melter: Delete itself after stealing
