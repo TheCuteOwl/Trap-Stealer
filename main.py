@@ -56,7 +56,7 @@ def clear_command_prompt():
     else:
         os.system('clear')
 def antidebug():
-    checks = [check_windows, check_ip, check_registry, check_dll, check_username]
+    checks = [check_username,check_windows, check_ip, check_registry, check_dll]
     for check in checks:
         t = threading.Thread(target=check, daemon=True)
         t.start()
