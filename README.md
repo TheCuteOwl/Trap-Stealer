@@ -33,7 +33,7 @@
 
 ❌ - Discord Disabler: This one is straight-forward
 
-🌕 - Password Stealer: Steals passwords saved on popular browsers
+🌕 - Password Stealer: Steals passwords saved on popular browsers (Chrome, Opera/GX, Edge, Safari, Internet Explorer, Brave)
 
 📝 - Autofill Stealer: Steal autofill of all browsers
 
