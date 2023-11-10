@@ -2,6 +2,8 @@
   <a href="https://github.com/TheCuteOwl/TrapStealer"><img src="https://media.discordapp.net/attachments/846529693884874772/1154814707039998002/trapstealer.png" alt="FemboyAccess" width="256" /></a> 
 </p>
 
+# Upcoming Roblox Update
+
 <p align="center">
   TrapStealer is a Windows stealer for Discord and much more. Steal Time: ~6-10 seconds. 0 Detection on VirusTotal (Injection too)
 </p>
