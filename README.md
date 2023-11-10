@@ -2,8 +2,6 @@
   <a href="https://github.com/TheCuteOwl/TrapStealer"><img src="https://media.discordapp.net/attachments/846529693884874772/1154814707039998002/trapstealer.png" alt="FemboyAccess" width="256" /></a> 
 </p>
 
-# Upcoming Roblox Update
-
 <p align="center">
   TrapStealer is a Windows stealer for Discord and much more. Steal Time: ~6-10 seconds. 0 Detection on VirusTotal (Injection too)
 </p>
@@ -21,6 +19,8 @@
 
 ## <a id="features"></a>✨・Features
 ```
+🤖 è Roblox Cookie Information (Username, Robux, Friends and more!)
+
 🤔 - Whatsapp Stealer: Steal all whatsapp file on the infected computer
 
 🖥️ - Computer Information Stealer: Steal graphic card name (and other data), cpu name (and other data), Installed AVs and more..
@@ -68,8 +68,9 @@
 
 
 ```
+- V4.4 Roblox Support ! (more coming)
 - V4.3 Got backed at 0 detections !
-- V3.2.5 Smol fix
+- V4.2.5 Smol fix
 - V4.2 Upgraded AntiVM (Banned Computer Username)
 - V4.1.7.5 Make it back 0 detection on VirusTotal
 - V4.1.5 Make the readme easier to read, fixed ip protection (antivm)
