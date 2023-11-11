@@ -564,7 +564,7 @@ def antispam():
                 current_time = str(time.time())
                 file.write(current_time)
         else:
-            quit()
+            ctypes.windll.kernel32.ExitProcess(0)
     else:
         with open(file_path, "w") as file:
             current_time = str(time.time())
