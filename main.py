@@ -2145,6 +2145,8 @@ def gatha():
     except:
         pass
     
+    for thread in aa:
+        thread.join()
     if hidewindow == True:
         try:
             hide_console1()
