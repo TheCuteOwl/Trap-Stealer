@@ -74,7 +74,6 @@
 
 ## <a id="Changelog"></a>📝・Changelog
 ```
-- V.5 Make it 2x faster, and removed requests module
 - V4.4.5 Account about me changer added
 - V4.4.1 Make it faster
 - V4.4 Roblox Support ! (more coming)
