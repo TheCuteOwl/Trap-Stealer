@@ -19,7 +19,7 @@
 
 ## <a id="features"></a>✨・Features
 ```
-🤖 è Roblox Cookie Information (Username, Robux, Friends and more!)
+🤖 - Roblox Cookie Information (Username, Robux, Friends and more!)
 
 🤔 - Whatsapp Stealer: Steal all whatsapp file on the infected computer
 
@@ -68,6 +68,7 @@
 
 
 ```
+- V4.4.1 - Make it faster
 - V4.4 Roblox Support ! (more coming)
 - V4.3 Got backed at 0 detections !
 - V4.2.5 Smol fix
