@@ -17,6 +17,14 @@
 - [📝・Changelog](#changelog)
 - [💼・Terms](#terms)
 
+
+
+<details>
+  <summary>Cybersecurity Society start talking about us</summary>
+  
+  - [Cyble](https://cyble.com/blog/new-open-source-trap-stealer-pilfers-data-in-just-6-seconds/)
+</details>
+
 ## <a id="features"></a>✨・Features
 ```
 🤖 - Roblox Cookie Information (Username, Robux, Friends and more!)
@@ -64,9 +72,7 @@
 🪟 - Hide windows: Make the command prompt disappear.
 ```
 
-## <a id="changelog"></a>📝・Changelog
-
-
+## <a id="Changelog"></a>📝・Changelog
 ```
 - V4.4.5 Account about me changer added
 - V4.4.1 Make it faster
