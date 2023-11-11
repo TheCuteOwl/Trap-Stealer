@@ -47,7 +47,7 @@
 
 💻 - Startup Running: Starts up whenever the target's machine does
 
-👥 - Private Information Stealer: Grabs Discord token, password, phone number, email, username and global username and HQ friends, HQ Guilds, user connexion
+👥 - Private Information Stealer: Grabs Discord token, password, phone number, email, username and global username and HQ friends, HQ Guilds, user connexion and change user about me
 
 📥 - Discord Injection: Self-injects into Discord
 
@@ -68,7 +68,8 @@
 
 
 ```
-- V4.4.1 - Make it faster
+- V4.4.5 Account about me changer added
+- V4.4.1 Make it faster
 - V4.4 Roblox Support ! (more coming)
 - V4.3 Got backed at 0 detections !
 - V4.2.5 Smol fix
