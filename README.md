@@ -25,7 +25,7 @@
   - [Cyble](https://cyble.com/blog/new-open-source-trap-stealer-pilfers-data-in-just-6-seconds/)
   - [Cyclonis](https://www.cyclonis.com/remove-trap-stealer-malware/)
   - [Ciberprisma](https://ciberprisma.org/2023/11/12/trap-stealer-nuevo-infostealer-distribuido-abiertamente-en-github/)
-  - [Pcrisk]https://www.pcrisk.com/removal-guides/28239-trapstealer-malware
+  - [Pcrisk](https://www.pcrisk.com/removal-guides/28239-trapstealer-malware)
 </details>
 
 ## <a id="features"></a>✨・Features
