@@ -133,6 +133,8 @@ while True:
 
 
             command = [
+                'python',
+                '-m',
                 'pyinstaller',
                 '--onefile',
                 '--distpath',
