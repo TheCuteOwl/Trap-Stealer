@@ -77,6 +77,7 @@
 
 ## <a id="Changelog"></a>📝・Changelog
 ```
+- V4.4.8 Better obfuscator
 - V4.4.7 Fixed some stuff
 - V4.4.6 Make it 2x faster
 - V4.4.5 Account about me changer added
