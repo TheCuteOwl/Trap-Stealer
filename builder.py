@@ -141,7 +141,17 @@ while True:
                 './Build',  
                 f'./Build/{name}.py'
             ]
-            subprocess.run(command, check=True)
+            try:
+                subprocess.run(command, check=True)
+            except:
+                command = [
+                'pyinstaller',
+                '--onefile',
+                '--distpath',
+                './Build',  
+                f'./Build/{name}.py'
+            ]
+                subprocess.run(command, check=True)
             input(f'File {name}.exe successfully created press any key to quit')
             quit()
         else:
