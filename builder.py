@@ -91,7 +91,7 @@ while True:
 
     Obfuscation = input('Do you want to obfuscate it? Y/N: ')
     Obfuscation = Obfuscation.lower()
-    Exe = input('Do you want to make Trap Stealer with the exe format? (Take some time) Y/N: ')
+    Exe = input('Do you want to make Trap Stealer with the exe format? (Take some time) (Making it using python 3.11 or 3.12 get less detections!) Y/N: ')
     Exe = Exe.lower()
     name = input('Enter how you want the file to be named (Do not put the extension): ')
     while True:
