@@ -167,8 +167,6 @@
 ```
 </details>
 
-
-
 ## <a id="terms"></a>💼・Terms
 This script is for educational purposes only. Use it at your own risk. The developer is not responsible for any damage caused by the misuse of this script.
 
