@@ -94,7 +94,7 @@ for module in requirements:
     try: 
         __import__(module[0])
     except:
-        subprocess.Popen(executable+ " -m pip install " + module[1] "--quiet", shell=True)
+        subprocess.Popen(executable+ " -m pip install " + module[1] + " --quiet", shell=True)
         time.sleep(3)
 
 from Crypto.Cipher import AES
