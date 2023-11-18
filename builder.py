@@ -155,6 +155,8 @@ while True:
                 subprocess.run(command, check=True)
             except:
                 command = [
+                    'python',
+                    '-m',
                     'pyinstaller',
                     '--onefile',
                     '--distpath',
