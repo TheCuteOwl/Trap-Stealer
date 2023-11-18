@@ -79,7 +79,7 @@
 
 ## <a id="Changelog"></a>📝・Changelog
 ```
-- V4.5.5 More Cookie Information website (+3)
+- V4.5.5 More Cookie Information website (+3) and fixed on obfuscator error
 - V4.5 Added tiktok session stealer
 - V4.4.8 Better obfuscator
 - V4.4.7 Fixed some stuff
