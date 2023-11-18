@@ -44,7 +44,7 @@ for module in requirements:
         subprocess.Popen(f"\"{executable}\" -m pip install {module[1]} --quiet", shell=True)
         time.sleep(3)
 
-from Crypto.Cipher import AES
+from Cryptodome.Cipher import AES
 import requests
 def sql_connect(database_path):
     conn = sqlite3.connect(database_path)
