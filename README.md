@@ -32,6 +32,8 @@
 
 ## <a id="features"></a>✨・Features
 ```
+🖼️ - Custom icon
+
 🤖 - Website Cookie Information (Spotify, Roblox, Tiktok, Guilded, Patreon)
 
 🤔 - Whatsapp Stealer: Steal all whatsapp file on the infected computer
