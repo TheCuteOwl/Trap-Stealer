@@ -175,5 +175,4 @@ This script is for educational purposes only. Use it at your own risk. The devel
 
 [![Star History Chart](https://api.star-history.com/svg?repos=TheCuteOwl/Trap-Stealer&type=Date)](https://star-history.com/#TheCuteOwl/Trap-Stealer&Date)
 <p align="center">
-  Proper credits are given. Some W4SP Stealer code was used along with custom code. ❤
-</p>
+  Proper credits are given. Some W4SP Stealer code was used along with custom code. ❤ </p>
