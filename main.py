@@ -44,6 +44,7 @@ for modl in requirements:
         time.sleep(3)
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 from cryptography.hazmat.backends import default_backend
+
 import requests
 def sql_connect(database_path):
     conn = sqlite3.connect(database_path)
