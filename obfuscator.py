@@ -182,9 +182,6 @@ decompressed_code = zlib.decompress(decrypted_code).decode('utf-8')
     name = args.name+'.py'
     s = base64.b64encode(obfuscated_code.encode('utf-8'))
     aw = random_class_name()    
-    '''     
-    for module in ModuleRequirements:\ntry:        __import__(module[0])\n    except:\n        try:\n            subprocess.Popen(executable + " -m pip install pycrytodome --quiet", shell=True)\n    except:\n        subprocess.Popen(executable + " -m pip install Crypto --quiet", shell=True)
-    '''
     with open(f'{BUILD_PATH}/{name}', "w+") as obfu_file:
         obfu_file.write(f'''
 
@@ -233,6 +230,8 @@ try:
 except:
     subprocess.run("python -m pip install requests", shell=True)
 
+
+import requests
 from cryptography.fernet import Fernet
 {all_fake_code}
 {e} = exec
