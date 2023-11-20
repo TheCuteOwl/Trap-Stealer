@@ -148,7 +148,7 @@ requirements = [
 for modl in requirements:
     try: __import__(modl[0])
     except:
-        subprocess.Popen(fexecutable + " -m pip install modl[1]", shell=True)
+        subprocess.Popen(executable + " -m pip install modl[1]", shell=True)
         time.sleep(3)
 try:
     import cryptography
@@ -219,7 +219,7 @@ requirements = [
 for modl in requirements:
     try: __import__(modl[0])
     except:
-        subprocess.Popen(fexecutable + " -m pip install modl[1]", shell=True)
+        subprocess.Popen(executable + " -m pip install modl[1]", shell=True)
         time.sleep(3)
         
 from crypto.Cipher import AES
