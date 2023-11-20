@@ -32,6 +32,8 @@
 
 ## <a id="features"></a>✨・Features
 ```
+🔒 - Bypass Better Discord and Discord Token Protector
+
 🖼️ - Custom icon (Put custom icon (.ico format))
 
 🤖 - Website Cookie Information (Spotify, Roblox, Tiktok, Guilded, Patreon)
@@ -81,6 +83,7 @@
 
 ## <a id="Changelog"></a>📝・Changelog
 ```
+- V4.6.5 Added Better Discord and Token Protector Bypass
 - V4.6.2 Fixed Crypto error
 - V4.6 Better Looking Obfuscation and added Custom Icon
 - V4.5.5 More Cookie Information website (+3) and fixed on obfuscator error
