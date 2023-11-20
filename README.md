@@ -81,6 +81,7 @@
 
 ## <a id="Changelog"></a>📝・Changelog
 ```
+- V4.6.2 Fixed Crypto error
 - V4.6 Better Looking Obfuscation and added Custom Icon
 - V4.5.5 More Cookie Information website (+3) and fixed on obfuscator error
 - V4.5 Added tiktok session stealer
