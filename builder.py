@@ -1,4 +1,4 @@
-import os, platform, subprocess, shutil, random, requests
+import os, platform, subprocess, shutil, random, requests, shutil
 
 while True:
     os.makedirs('./Build', exist_ok=True)
@@ -95,7 +95,9 @@ while True:
     Exe = input('Do you want to make Trap Stealer with the exe format? (Take some time) Y/N: ')
     Exe = Exe.lower()
     name = input('Enter how you want the file to be named (Do not put the extension): ')
-
+    output_exe_path = f'./Build/{name}.py'
+    if os.path.exists(output_exe_path):
+        os.remove(output_exe_path)
     while True:
         if Obfuscation in ['y', 'yes']:
             try:
@@ -122,49 +124,45 @@ while True:
 
     while True:
         if Exe in ['y', 'yes']:
+            from sys import executable
             icon_path = input('Enter the path to the icon file (leave blank for no icon): ')
 
             if icon_path.strip():
                 icon_option = f'--icon={icon_path}'
             else:
                 icon_option = ''
-            from sys import executable
-
-            try:
-                __import__('Crypto')
-            except ImportError:
-                subprocess.Popen(f'"{executable}" -m pip install Crypto --quiet', shell=True)
-                subprocess.Popen(f'"{executable}" -m pip install pycryptodome --quiet', shell=True)
 
             try:
                 __import__('pyinstaller')
             except ImportError:
-                subprocess.Popen(f'"{executable}" -m pip install pyinstaller --quiet', shell=True)
+                subprocess.run([executable, '-m', 'pip', 'install', 'pyinstaller', '--quiet'], check=True)
 
-            command = [
-                'python',
-                '-m',
-                'pyinstaller',
-                '--onefile',
-                '--distpath',
-                './Build',
-                icon_option, 
-                f'./Build/{name}.py'
-            ]
-            try:
-                subprocess.run(command, check=True)
-            except:
+            if icon_option == '':
                 command = [
                     'pyinstaller',
                     '--onefile',
                     '--distpath',
                     './Build',
-                    icon_option, 
                     f'./Build/{name}.py'
                 ]
-                subprocess.run(command, check=True)
-            input(f'File {name}.exe successfully created press any key to quit')
-            quit()
+            else:
+                command = [
+                    'pyinstaller',
+                    '--onefile',
+                    '--distpath',
+                    './Build',
+                    f'{icon_option}',
+                    f'./Build/{name}.py'
+                ]
+
+            try:
+                subprocess.run(command, shell=True, check=True)
+                input(f'File {name}.exe successfully created. Press any key to quit.')
+                quit()
+            except subprocess.CalledProcessError:
+                print("Error while running PyInstaller.")
+                quit()
+        
         else:
-            input('Press any key to quit')
+            input('Press any key to quit.')
             quit()
