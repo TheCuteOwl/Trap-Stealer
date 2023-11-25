@@ -2112,7 +2112,10 @@ def paaz(filetype):
             file5 = os.getenv("TEMP") + '\winvs.txt'
             ss = [file,file5,file2,file3,file4]
             for file in ss:
-                os.remove(file)
+                try:
+                    os.remove(file)
+                except:
+                    pass
 
         except Exception as e:
             pass
