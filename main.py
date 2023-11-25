@@ -81,7 +81,7 @@ def check_username():
 
     username = os.getenv("COMPUTERNAME")
 
-    if username.lower() in blacli[::-1].lower():
+    if username in blacli[::-1]:
         exit_program('Invalid username')
         
 def check_windows():
