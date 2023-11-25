@@ -1,3 +1,2 @@
-crypto
-pycryptodome
+cryptography
 pyinstaller
