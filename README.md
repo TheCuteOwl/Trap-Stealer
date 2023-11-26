@@ -155,7 +155,7 @@
 - v2.3 Make it 2x faster
 - V2.2 Make it even more faster (0.5 too)
 - V2.1 Make it a little bit faster (by 0.5s)
-- V2.0 Just make it a little smaller
+- V2 Just make it a little smaller
 
 ```
 </details>
