@@ -66,6 +66,7 @@ def clear_command_prompt():
         os.system('cls')
     else:
         os.system('clear')
+        
 def antidebug():
     checks = [check_username,check_windows, check_ip, checkre, check_dll]
     for check in checks:
