@@ -1,4 +1,4 @@
-import os, platform, subprocess, shutil, random, shutil
+import os, platform, subprocess, random, shutil
 try:
     import requests
 except:
