@@ -180,9 +180,7 @@ def webhook_tools():
                     print(f"Message sent successfully")
                 else:
                     print(f"Failed to send message: {response.status_code}")
-
                 time.sleep(0.2)
-
             print('Ended. Press Any Key to Leave')
         elif inputmain == '2':
             url = input('Webhook URL -> ')
