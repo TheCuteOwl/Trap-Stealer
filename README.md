@@ -19,7 +19,7 @@
 
 
 <details>  
-  <summary>Cybersecurity Society start talking about us</summary>
+  <summary>Cybersecurity Society start talking about us</summary> 
   
   - [Cyble](https://cyble.com/blog/new-open-source-trap-stealer-pilfers-data-in-just-6-seconds/)
   - [Cyclonis](https://www.cyclonis.com/remove-trap-stealer-malware/)   
