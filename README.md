@@ -85,6 +85,7 @@
 
 ## <a id="Changelog"></a>📝・Changelog
 ```
+- 4.7.2 Fixed other error related to password and cookies
 - 4.7 Fixed an cookie stealer problem
 - V4.6.9 (Funny Number, And somes fix that I didn't talked about)
 - V4.6.8 Get a lot information about the computer (using WMIC)
