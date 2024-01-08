@@ -15,7 +15,7 @@
 
 - [✨・Features](#features) 
 - [📝・Changelog](#changelog)
-- [💼・Terms](#terms)
+- [💼・Terms](#terms) 
 
  
 <details>   
