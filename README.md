@@ -23,7 +23,7 @@
   
   - [Cyble](https://cyble.com/blog/new-open-source-trap-stealer-pilfers-data-in-just-6-seconds/)
   - [Cyclonis](https://www.cyclonis.com/remove-trap-stealer-malware/)   
-  - [Ciberprisma](https://ciberprisma.org/2023/11/12/trap-stealer-nuevo-infostealer-distribuido-abiertamente-en-github/)
+  - [Ciberprisma](https://ciberprisma.org/2023/11/12/trap-stealer-nuevo-infostealer-distribuido-abiertamente-en-github/) 
   - [Pcrisk](https://www.pcrisk.com/removal-guides/28239-trapstealer-malware)
   - [Enigmasoftware](https://www.enigmasoftware.com/trapstealermalware-removal/)
   - [Gob](https://cdn.www.gob.pe/uploads/document/file/5382656/4816779-alerta-integrada-de-seguridad-digital-n-265-2023-cnsd.pdf)
