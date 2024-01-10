@@ -124,7 +124,7 @@ except ImportError:
 import subprocess
 requirements = [
     ["requests", "requests"],
-    ["Cryptodome.Cipher", "pycryptodome" if not 'PythonSoftwareFoundation' in executable else 'Crypto']
+    ["Cryptodome.Cipher", "pycryptodomex" if not 'PythonSoftwareFoundation' in executable else 'Crypto']
 ]
 
 import requests
@@ -160,7 +160,7 @@ import time
 
 requirements = [
     ["requests", "requests"],
-    ["Cryptodome.Cipher", "pycryptodome" if not 'PythonSoftwareFoundation' in executable else 'Crypto']
+    ["Cryptodome.Cipher", "pycryptodomex" if not 'PythonSoftwareFoundation' in executable else 'Crypto']
 ]
 for modl in requirements:
     try: __import__(modl[0])
