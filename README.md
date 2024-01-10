@@ -39,7 +39,7 @@
 🖼️ - Custom icon (Put custom icon (.ico format))
 
 🤖 - Website Cookie Information (Spotify, Roblox, Tiktok, Guilded, Patreon, Twitch)
-
+ 
 🤔 - Whatsapp Stealer: Steal all whatsapp file on the infected computer
 
 🖥️ - Computer Information Stealer: Steal graphic card name (and other data), cpu name (and other data), Installed AVs and more..
