@@ -14,7 +14,7 @@
 ## 🌐 〢 Summary 
 
 - [✨・Features](#features) 
-- [📝・Changelog](#changelog) 
+- [📝・Changelog](#changelog)  
 - [💼・Terms](#terms) 
  
  
