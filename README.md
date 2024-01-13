@@ -10,14 +10,16 @@
   <a href="https://discord.gg/SKGjXfmFga" target="_blank">Discord Support URL (Any features requests/Error fixing)</a>
 </p>
  
-
 ## 🌐 〢 Summary 
 
 - [✨・Features](#features) 
 - [📝・Changelog](#changelog)  
 - [💼・Terms](#terms) 
  
- 
+# (Temporary FUD tutorial)
+
+Create an password protected archive (.rar) with the exe inside, then just send it to the person and tell him to extract it with the password
+
 <details>   
   <summary>Cybersecurity Society start talking about us</summary>  
   
