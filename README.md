@@ -33,7 +33,7 @@
 
 ## <a id="features"></a>✨・Features
 ```
-📁 - 4 Supported upload websites !
+📁 - 4 Supported Files Upload Websites !
 
 🔒 - Bypass Better Discord and Discord Token Protector
 
@@ -86,6 +86,7 @@
 
 ## <a id="Changelog"></a>📝・Changelog
 ```
+- V4.8.2 Added 4 Supported Files Upload Website 
 - V4.8.1 Added computer language support
 - V4.8 5/69 Exe detection update !
 - 4.7.2 Fixed other error related to password and cookies
