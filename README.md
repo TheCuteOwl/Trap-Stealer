@@ -33,6 +33,8 @@
 
 ## <a id="features"></a>✨・Features
 ```
+📁 - 4 Supported upload websites !
+
 🔒 - Bypass Better Discord and Discord Token Protector
 
 🖼️ - Custom icon (Put custom icon (.ico format))
