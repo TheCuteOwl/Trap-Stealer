@@ -32,6 +32,7 @@ Create an password protected archive (.rar) with the exe inside, then just send 
   - [I-secure](https://www.i-secure.co.th/2023/11/%E0%B9%82%E0%B8%AD%E0%B9%80%E0%B8%9E%E0%B8%99%E0%B8%8B%E0%B8%AD%E0%B8%A3%E0%B9%8C%E0%B8%AA%E0%B8%95%E0%B8%B1%E0%B8%A7%E0%B9%83%E0%B8%AB%E0%B8%A1%E0%B9%88-trap-stealer-%E0%B8%AA%E0%B8%B2%E0%B8%A1/)
   - [Alienvault](https://otx.alienvault.com/pulse/655ca9a5f73b97511566171a)
   - [Gridinsoft](https://gridinsoft.com/blogs/trojanwin32-wacatac/)
+  - [https://falconfeeds.io/](https://twitter.com/FalconFeedsio/status/1744967673950462153)
 </details>
 
 ## <a id="features"></a>✨・Features
