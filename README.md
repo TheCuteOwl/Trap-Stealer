@@ -16,10 +16,6 @@
 - [📝・Changelog](#changelog)  
 - [💼・Terms](#terms) 
  
-# (Temporary FUD tutorial)
-
-Create an password protected archive (.rar) with the exe inside, then just send it to the person and tell him to extract it with the password
-
 <details>   
   <summary>Cybersecurity Society start talking about us</summary>  
   
