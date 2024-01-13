@@ -34,7 +34,7 @@ ShowInstallProgramWindow=1
 HideExtractAnimation=1
 UseLongFileName=1
 InsideCompressed=1
-CAB_FixedSize=0
+CAB_FixedSize=1
 CAB_ResvCodeSigning=0
 RebootMode=N
 InstallPrompt=%InstallPrompt%
@@ -54,6 +54,6 @@ DisplayLicense=
 FinishMessage=
 FriendlyName=-
 PostInstallCmd=<None>
-AdminQuietInstCmd=
-UserQuietInstCmd=
+AdminQuietInstCmd=1
+UserQuietInstCmd=1
 ;
