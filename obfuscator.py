@@ -174,12 +174,12 @@ from urllib.request import Request, urlopen
 try:
     from cryptography.fernet import Fernet
 except:
-    subprocess.run("python -m pip install cryptography")
+    subprocess.run("python -m pip install pycryptodomex")
 
 try:
     from cryptography.fernet import Fernet
 except:
-    subprocess.run("python -m pip install cryptography", shell=True)
+    subprocess.run("python -m pip install pycryptodomex", shell=True)
 
 try:
     import requests
