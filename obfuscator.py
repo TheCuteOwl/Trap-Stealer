@@ -13,7 +13,6 @@ try:
 except:
     subprocess.run(f'python -m pip install cryptography', shell=True, check=True)
 
-
 from cryptography.fernet import Fernet
 
 # Constants and configurations
