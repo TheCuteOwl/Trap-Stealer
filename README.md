@@ -86,6 +86,7 @@
 
 ## <a id="Changelog"></a>📝・Changelog
 ```
+- V4.8.3 Fixed supported files uploads
 - V4.8.2 Added 4 Supported Files Upload Website (Catbox.moe, gofile.io, anonymfile.com, file.io)
 - V4.8.1 Added computer language support
 - V4.8 5/69 Exe detection update !
