@@ -18,7 +18,7 @@ from cryptography.fernet import Fernet
 
 # Constants and configurations
 BUILD_PATH = "./build"
-TEMP_FILE_PATH = "./Build/temp.py"
+TEMP_FILE_PATH = "./Build/temp.py" 
 ENCRYPTION_KEY_FILE = "encryption_key.txt"
 
 # Configure logging
