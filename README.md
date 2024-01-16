@@ -14,7 +14,7 @@
   
 - [✨・Features](#features) 
 - [📝・Changelog](#changelog)   
-- [💼・Terms](#terms)  
+- [💼・Terms](#terms)   
  
 <details>    
   <summary>Cybersecurity Society start talking about us</summary>   
