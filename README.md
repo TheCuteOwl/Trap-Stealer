@@ -86,6 +86,7 @@
 
 ## <a id="Changelog"></a>📝・Changelog
 ```
+- V4.8.4 0 Python (Without obfuscation) ! 0/60 detections
 - V4.8.3.5 Really fixed files uploads
 - V4.8.3 Fixed supported files uploads
 - V4.8.2 Added 4 Supported Files Upload Website (Catbox.moe, gofile.io, anonymfile.com, file.io)
