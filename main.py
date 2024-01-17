@@ -6,7 +6,7 @@ from shutil import copy
 import sqlite3
 from base64 import b64decode
 import winreg
-import zipfile
+import zipfile 
 from zipfile import ZipFile
 import shutil
 import tempfile
