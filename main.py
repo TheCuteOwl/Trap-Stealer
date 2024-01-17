@@ -1,6 +1,5 @@
 import sys, time, random, threading, ctypes, string
 import os, re, socket, subprocess
-import winreg
 from urllib.parse import urlparse
 from os.path import isfile, exists
 from shutil import copy
