@@ -30,7 +30,7 @@
   - [Gridinsoft](https://gridinsoft.com/blogs/trojanwin32-wacatac/)
   - [Falconfeeds](https://twitter.com/FalconFeedsio/status/1744967673950462153)
 </details>
-
+ 
 ## <a id="features"></a>✨・Features
 ```
 📁 - 4 Supported Files Upload Websites (Catbox.moe, gofile.io, anonymfile.com, file.io)
