@@ -9,7 +9,7 @@
 <p align="center">
   <a href="https://discord.gg/SKGjXfmFga" target="_blank">Discord Support URL (Any features requests/Error fixing)</a> 
 </p>
- 
+  
 ## 🌐 〢 Summary 
   
 - [✨・Features](#features) 
