@@ -10,7 +10,7 @@ import sys
 import time
 try:
     import cryptography
-except:
+except: 
     subprocess.run(f'python -m pip install cryptography', shell=True, check=True)
 
 
