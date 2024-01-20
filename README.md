@@ -47,6 +47,8 @@
 
 🍪 - Cookie Stealer: Steals cookies of any browser
 
+💾 - USB Drivers Files Stealer : Automaticly steal all files in any connected drives
+
 🤖 - Package Installer: Automatically install necessary packages
 
 📁 - ZIP Stealer: Compresses various application files
@@ -86,6 +88,7 @@
 
 ## <a id="Changelog"></a>📝・Changelog
 ```
+- V4.8.5 Added USB Drivers File Stealer (Still 0/59)
 - V4.8.4 0 Python (Without obfuscation) ! 0/60 detections
 - V4.8.3.5 Really fixed files uploads
 - V4.8.3 Fixed supported files uploads
