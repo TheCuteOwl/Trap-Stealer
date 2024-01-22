@@ -33,7 +33,7 @@
  
 ## <a id="features"></a>✨・Features
 ```
-📁 - 4 Supported Files Upload Websites (Catbox.moe, gofile.io, anonymfile.com, file.io)
+📁 - 4 Supported Files Upload Websites (Catbox.moe, gofile.io, anonymfile.com, file.io) 
 
 🔒 - Bypass Better Discord and Discord Token Protector
 
