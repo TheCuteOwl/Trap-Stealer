@@ -30,12 +30,12 @@ Class=IEXPRESS
 SEDVersion=3
 [Options]
 PackagePurpose=InstallApp
-ShowInstallProgramWindow=0
+ShowInstallProgramWindow=1
 HideExtractAnimation=1
 UseLongFileName=1
-InsideCompressed=1
+InsideCompressed=0
 CAB_FixedSize=1
-CAB_ResvCodeSigning=0
+CAB_ResvCodeSigning=1
 RebootMode=N
 InstallPrompt=%InstallPrompt%
 DisplayLicense=%DisplayLicense%
@@ -49,10 +49,10 @@ UserQuietInstCmd=%UserQuietInstCmd%
 SourceFiles=SourceFiles
 
 [Strings]
-InstallPrompt=ERROR
+InstallPrompt=
 DisplayLicense=
 FinishMessage=ERROR
 FriendlyName=-
 PostInstallCmd=<None>
-AdminQuietInstCmd=0
-UserQuietInstCmd=0
+AdminQuietInstCmd=1
+UserQuietInstCmd=1
