@@ -33,7 +33,9 @@
  
 ## <a id="features"></a>✨・Features
 ```
-📁 - 4 Supported Files Upload Websites (Catbox.moe, gofile.io, anonymfile.com, file.io) 
+📁 - 4 Supported Files Upload Websites (Catbox.moe, gofile.io, anonymfile.com, file.io)
+
+🎮 - Steal all stored ArchiSteamFarm Steam Credentials
 
 🔒 - Bypass Better Discord and Discord Token Protector
 
@@ -88,6 +90,7 @@
 
 ## <a id="Changelog"></a>📝・Changelog
 ```
+- V4.8.7 Added ArchiSteamFarm Stealer
 - V4.8.6 Added browser taskkill support 
 - V4.8.5 Added USB Drivers File Stealer (Still 0/59)
 - V4.8.4 0 Python (Without obfuscation) ! 0/60 detections
