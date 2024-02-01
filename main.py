@@ -3,7 +3,7 @@ import os, re, socket, subprocess
 import winreg
 from urllib.parse import urlparse
 from os.path import isfile, exists
-from shutil import copy
+from shutil import copy 
 import sqlite3
 from base64 import b64decode
 import winreg
