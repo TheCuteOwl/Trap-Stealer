@@ -155,6 +155,7 @@
 - V3.0.1 Added some file stealer keyword and path
 - V3 Go back at 0 detection and added cookies stealer
   ```
+
 </details>
 
 
@@ -176,6 +177,7 @@
 - V2 Just make it a little smaller
 
 ```
+
 </details>
 
 <details>
@@ -194,6 +196,7 @@
 - V1.1. Fixed Startup glitch and made it a little bit better.
 - V1. Added Startup, Grabs, Injection, Fake Error, Screenshot.
 ```
+
 </details>
 
 ## <a id="terms"></a>💼・Terms
