@@ -18,6 +18,8 @@ from pathlib import Path
 from locale import windows_locale
 from importlib import import_module
 
+# CONFIG 
+
 webhook = '%Webhook%'
 FakeWebhook = '%FakeWebhook%'
 Fakegen = '%FakeGen%' 
