@@ -39,7 +39,7 @@
 
 🔒 - Bypass Better Discord and Discord Token Protector
 
-🖼️ - Custom icon (Put custom icon (.ico format))
+🖼️ - Custom icon (Put custom icon (.ico format)) 
 
 🤖 - Website Cookie Information (Spotify, Roblox, Tiktok, Guilded, Patreon, Twitch)
  
