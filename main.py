@@ -17,7 +17,6 @@ from json import loads, dumps, load, dump
 from pathlib import Path
 from locale import windows_locale
 from importlib import import_module
-from credit_card_info_generator import generate_credit_card
 
 # CONFIG 
 
