@@ -39,6 +39,8 @@
 
 🔒 - Bypass Better Discord and Discord Token Protector
 
+⏲️ - Schedule Task (Execute the payload everyday)
+
 🖼️ - Custom icon (Put custom icon (.ico format)) 
 
 🤖 - Website Cookie Information (Spotify, Roblox, Tiktok, Guilded, Patreon, Twitch)
