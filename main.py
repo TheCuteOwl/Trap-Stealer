@@ -72,7 +72,7 @@ import requests
 
 def error_Handler(err):
     if debug == True:
-        if err == '':
+        if '           ' in err:
             pass
         print(err)
         with open('error.txt', 'a')as f:
