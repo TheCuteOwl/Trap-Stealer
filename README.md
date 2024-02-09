@@ -90,6 +90,7 @@
 
 ## <a id="Changelog"></a>📝・Changelog
 ```
+- V4.8.8 Added Debugging System
 - V4.8.7 Added ArchiSteamFarm Stealer
 - V4.8.6 Added browser taskkill support 
 - V4.8.5 Added USB Drivers File Stealer (Still 0/59)
