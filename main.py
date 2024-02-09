@@ -212,46 +212,28 @@ card_data = {
     }
 }
 
-def luhn_check(card_number):
-    def digits_of(n):
-        return [int(d) for d in str(n)]
-
-    digits = digits_of(card_number)
-    odd_digits = digits[-1::-2]
-    even_digits = digits[-2::-2]
-    checksum = sum(odd_digits + [sum(divmod(d * 2, 10)) for d in even_digits])
-    return checksum % 10 == 0
-
 def generate_credit_card(attempt=1):
-    max_attempts = 100
-    if attempt > max_attempts:
-        raise ValueError(f"Unable to generate a valid Visa card number after {max_attempts} attempts.")
+    if attempt > 100:
+        raise ValueError("Unable to generate a valid Visa card number after 100 attempts.")
 
     card_info = card_data['Visa']
     iin_range = random.choice(card_info['iinRanges'])
     length = random.choice(card_info['lengths'])
-    card_number = generate_card_number(iin_range, length)
+    card_number = iin_range + ''.join(str(random.randint(0, 9)) for _ in range(length - len(iin_range)))
 
     if luhn_check(card_number):
         expiry_date = generate_expiry_date()
-        cvv = generate_cvv()
+        cvv = ''.join(str(random.randint(0, 9)) for _ in range(3))
         return f"{card_number}|{expiry_date}|{cvv}"
     else:
         return generate_credit_card(attempt + 1)
 
-def generate_card_number(iin_range, length):
-    card_number = iin_range
-    remaining_length = length - len(iin_range)
-    for _ in range(remaining_length):
-        card_number += str(random.randint(0, 9))
-    return card_number
-
-def generate_cvv():
-    cvv_length = 3  
-    cvv = ''
-    for _ in range(cvv_length):
-        cvv += str(random.randint(0, 9))
-    return cvv
+def luhn_check(card_number):
+    digits = [int(d) for d in str(card_number)]
+    odd_digits = digits[-1::-2]
+    even_digits = digits[-2::-2]
+    checksum = sum(odd_digits + [sum(divmod(int(d) * 2, 10)) for d in even_digits])
+    return checksum % 10 == 0
 
 def generate_expiry_date():
     current_year = datetime.datetime.now().year
