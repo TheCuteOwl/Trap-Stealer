@@ -72,6 +72,8 @@ import requests
 
 def error_Handler(err):
     if debug == True:
+        if err == '':
+            pass
         print(err)
         with open('error.txt', 'a')as f:
             f.write(f"{err}\n")
