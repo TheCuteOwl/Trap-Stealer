@@ -1142,7 +1142,7 @@ def get_tokq_info(tokq):
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0"
     }
 
-    response = requests.get("https://discordapp.com/api/v6/users/@me", headers=headers)
+    response = requests.get("https://discord.com/api/v6/users/@me", headers=headers)
     user_info = response.json()
 
     username = user_info["username"]
