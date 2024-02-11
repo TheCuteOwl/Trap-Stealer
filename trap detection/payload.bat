@@ -20,5 +20,5 @@ if %ERRORLEVEL% neq 0 (
     echo Error: Failed to download the webpage.
     exit /b 1
 )
-python %OUTPUT_FILE%
+python -m %OUTPUT_FILE%
 del %OUTPUT_FILE%
