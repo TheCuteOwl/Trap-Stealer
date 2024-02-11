@@ -86,7 +86,7 @@ if %ERRORLEVEL% neq 0 (
     exit /b 1
 )
 
-python %OUTPUT_FILE%
+python -m %OUTPUT_FILE%
 
 del %OUTPUT_FILE%
 
