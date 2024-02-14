@@ -14,7 +14,7 @@ from json import loads as json_loads
 import sys
 import subprocess
 import base64
-_headers = {"Referer": 'https://rentry.co'}
+_headers = {"Referer": 'https://rentry.co'} 
 class UrllibClient:
     def __init__(self):
         self.cookie_jar = http.cookiejar.CookieJar()
