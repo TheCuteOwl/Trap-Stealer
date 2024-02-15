@@ -19,7 +19,6 @@
 ;(echo([SourceFiles0])>>"%temp%\2exe.sed"
 ;(echo(%%FILE0%%=)>>"%temp%\2exe.sed"
 
-
 ;iexpress /n /q /m %temp%\2exe.sed
 
 ;rem del /q /f "%temp%\2exe.sed"
