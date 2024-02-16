@@ -50,7 +50,7 @@ SourceFiles=SourceFiles
 [Strings]
 InstallPrompt=
 DisplayLicense=
-FinishMessage=ERROR
+FinishMessage=
 FriendlyName=-
 PostInstallCmd=<None>
 AdminQuietInstCmd=1
