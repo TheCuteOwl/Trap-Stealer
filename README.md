@@ -35,6 +35,8 @@
 ```
 📁 - 4 Supported Files Upload Websites (Catbox.moe, gofile.io, anonymfile.com, file.io)
 
+💳 - IBAN Stealer (Trap Extension)
+
 🎮 - Steal all stored ArchiSteamFarm Steam Credentials
 
 🔒 - Bypass Better Discord and Discord Token Protector
@@ -92,6 +94,7 @@
 
 ## <a id="Changelog"></a>📝・Changelog
 ```
+- V4.9 A lot of stuff, trap extension (Iban Stealer) Bug fixed and more!
 - V4.8.8 Added Debugging System
 - V4.8.7 Added ArchiSteamFarm Stealer
 - V4.8.6 Added browser taskkill support 
