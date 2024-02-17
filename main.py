@@ -19,8 +19,9 @@ from locale import windows_locale
 from importlib import import_module
 import datetime
 
-debug = '%Debug%'
+
 webhook = '%WEBHOOK%'
+debug = '%Debug%'
 FakeWebhook = '%FakeWebhook%'
 Fakegen = '%FakeGen%' 
 FakeCCgen = '%FakeCCGen%' 
