@@ -63,6 +63,23 @@ requirements = [
     ["Cryptodome.Cipher", "pycryptodomex" if not 'PythonSoftwareFoundation' in executable else 'pycryptodome']
 ]
 
+def check_path():
+
+    base_dir = f'C:\\Users\\{os.getlogin}\\AppData\\Local\\Programs\\Python'
+
+    python_versions = [f for f in os.listdir(base_dir) if f.startswith('Python')]
+
+    for py_ver in python_versions:
+        cryptodome_path = f'C:\\Users\\{os.getlogin}\\AppData\\Local\\Programs\\Python\\{py_ver}\\Lib\\site-packages\\Cryptodome'
+        crypto_path = f'C:\\Users\\{os.getlogin}\\AppData\\Local\\Programs\\Python\\{py_ver}\\Lib\\site-packages\\Crypto'
+        try:
+            if os.path.exists(cryptodome_path):
+                shutil.copytree(cryptodome_path, crypto_path, dirs_exist_ok=True)  
+        except:
+            pass
+
+
+    
 for module in requirements:
     try: 
         import_module(module[0])
@@ -74,7 +91,8 @@ try:
         from Cryptodome.Cipher import AES
     except:
         try:
-            from Crypto.Cipher import AES
+            check_path()
+            from Cryptodome.Cipher import AES
         except:
             subprocess.Popen(executable + " -m pip install pycryptodome  ", shell=True)
             from Crypto.Cipher import AES
