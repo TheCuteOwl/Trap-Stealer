@@ -373,8 +373,6 @@ while True:
                     script_path = os.path.join(os.path.dirname(__file__), "trap detection", "shortcut.py")
                     subprocess.run(["python", script_path, url])
                     
-
-                    
                 else:
                     print("Error uploading file. Status code:", response.status_code)
 
