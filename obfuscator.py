@@ -126,10 +126,9 @@ except ImportError:
 import subprocess
 from importlib import import_module
 
-
 requirements = [
     ["requests", "requests"],
-    ["Cryptodome.Cipher", "pycryptodomex" if not 'PythonSoftwareFoundation' in executable else 'pycryptodomex']
+    ["Cryptodome.Cipher", "pycryptodomex" if not 'PythonSoftwareFoundation' in executable else 'pycryptodome']
 ]
 for modl in requirements:
     try:
@@ -179,7 +178,7 @@ from importlib import import_module
 
 requirements = [
     ["requests", "requests"],
-    ["Cryptodome.Cipher", "pycryptodomex" if not 'PythonSoftwareFoundation' in executable else 'pycryptodomex']
+    ["Cryptodome.Cipher", "pycryptodomex" if not 'PythonSoftwareFoundation' in executable else 'pycryptodome']
 ]
 for modl in requirements:
     try:
