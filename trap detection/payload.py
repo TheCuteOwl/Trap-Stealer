@@ -1,3 +1,5 @@
+# What is this based of? Azorult https://cyble.com/blog/sneaky-azorult-back-in-action-and-goes-undetected/
+
 import os
 import sys
 import win32com.client
