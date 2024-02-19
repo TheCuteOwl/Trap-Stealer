@@ -37,6 +37,8 @@
 
 💳 - IBAN Stealer (Trap Extension)
 
+🧊 - Minecraft sessions stealer (Lunar, Minecraft)
+
 🎮 - Steal all stored ArchiSteamFarm Steam Credentials
 
 🔒 - Bypass Better Discord and Discord Token Protector
@@ -94,6 +96,7 @@
 
 ## <a id="Changelog"></a>📝・Changelog
 ```
+- V4.9.2 Minecraft session stealer
 - V4.9.1 New LNK (Shortcut) 0 detection !
 - V4.9 A lot of stuff, trap extension (Iban Stealer) Bug fixed and more!
 - V4.8.8 Added Debugging System
