@@ -17,16 +17,18 @@ def create_shortcut(target_path, lnk_path, icon_path, fileurl):
 
 def main():
     current_dir = os.path.dirname(os.path.abspath(__file__))
-    lnk_file_path = os.path.join(current_dir, "icon.lnk")
-
     url = sys.argv[1]
     try:
         ico_path = sys.argv[2]
     except:
         ico_path = ''
 
+    name = sys.argv[3]
+    lnk_file_path = os.path.join(current_dir, f"{name}.lnk")
+    
     create_shortcut("cmd.exe", lnk_file_path, ico_path, url)
-    input('Done! Shortcut created !')
+    
+    input('Done! Shortcut created ! in Trap Detection folder !')
 
 if __name__ == "__main__":
     main()
