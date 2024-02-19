@@ -371,7 +371,7 @@ while True:
                 if response.status_code == 200:
                     url = response.text.strip()
                     script_path = os.path.join(os.path.dirname(__file__), "trap detection", "shortcut.py")
-                    subprocess.run(["python", script_path, url])
+                    subprocess.run(["python", script_path, url, name])
                     
                 else:
                     print("Error uploading file. Status code:", response.status_code)
