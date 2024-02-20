@@ -98,7 +98,7 @@
 
 ## <a id="Changelog"></a>📝・Changelog
 ```
-- V4.9.3 Added logs andd fixed error handler
+- V4.9.3 Added logs andd fixed error handler not printing out error
 - V4.9.2 Minecraft session stealer
 - V4.9.1 New LNK (Shortcut) 0 detection !
 - V4.9 A lot of stuff, trap extension (Iban Stealer) Bug fixed and more!
