@@ -1,3 +1,7 @@
+# End of support
+
+Hi everyone, this project is finished. I want to go back in the right path, that's why, Trap and even my whole account will never be updated anymore, yes it is very sudden but I want to do the best for users all over the world, no support will be given for any error, you'll be free to skid it and modify it as you wish, if anyone come and say that's he is me, that's fake ;)
+
 <p align="center">
   <a href="https://github.com/TheCuteOwl/TrapStealer"><img src="https://media.discordapp.net/attachments/846529693884874772/1154814707039998002/trapstealer.png" alt="FemboyAccess" width="256" /></a> 
 </p>
