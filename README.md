@@ -9,7 +9,7 @@ Useless thing to know | Lockbit articles started appearing right before I stoppe
 </p>
 
 <p align="center">
-  TrapStealer is a Windows stealer for Discord and much more. Steal Time: ~4-9 seconds. 0 Detection on VirusTotal (Injection too) 96 STARS THANKS - Join discord to suggest features 
+  TrapStealer is a Windows stealer for Discord and much more. Steal Time: ~4-9 seconds. 0 Detection on VirusTotal (Injection too) 98 STARS THANKS - Join discord to suggest features 
 </p>
 
 Account Disabled so no more discord
