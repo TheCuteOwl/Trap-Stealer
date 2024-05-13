@@ -2,6 +2,8 @@
 
 Hi everyone, this project is finished. I want to go back in the right path, that's why, Trap and even my whole account will never be updated anymore, yes it is very sudden but I want to do the best for users all over the world, no support will be given for any error, you'll be free to skid it and modify it as you wish, if anyone come and say that's he is me, that's fake ;)
 
+# You can do any pull requests, i'll check them and approve or disapprove then
+
 Useless thing to know | Lockbit articles started appearing right before I stopped.
 
 <p align="center">
