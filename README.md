@@ -5,7 +5,7 @@ Hi everyone, this project is finished. I want to go back in the right path, that
 # You can do any pull requests, i'll check them and approve or disapprove then
 
 <p align="center">
-  TrapStealer is a Windows stealer for Discord and much more. Steal Time: ~4-9 seconds. 0 Detection on VirusTotal (Injection too) 110 STARS THANKS - Join discord to suggest features 
+  TrapStealer is a Windows stealer for Discord and much more. Steal Time: ~4-9 seconds. 0 Detection on VirusTotal (Injection too) 112 STARS THANKS - Join discord to suggest features 
 </p>
 
 Account Disabled so no more discord
