@@ -2,6 +2,8 @@
 
 Hi everyone, this project is finished. I want to go back in the right path, that's why, Trap and even my whole account will never be updated anymore, yes it is very sudden but I want to do the best for users all over the world, no support will be given for any error, you'll be free to skid it and modify it as you wish, if anyone come and say that's he is me, that's fake ;)
 
+because of the Article from SANS, I will update the obfuscator for a much smaller output :)
+
 # You can do any pull requests, i'll check them and approve or disapprove then
 
 <p align="center">
@@ -30,6 +32,7 @@ Account Disabled so no more discord
   - [Gridinsoft](https://gridinsoft.com/blogs/trojanwin32-wacatac/) 
   - [Falconfeeds](https://twitter.com/FalconFeedsio/status/1744967673950462153)
   - [Instant-Hack](https://instant-hack.to/threads/hacking-news-stealer-de-donn%C3%A9es-open-source-en-python-%C2%AB-trap-stealer-%C2%BB.257059/)
+  - [SANS](https://isc.sans.edu/diary/From+a+Regular+Infostealer+to+its+Obfuscated+Version/31484)
 </details>
  
 ## <a id="features"></a>✨・Features
