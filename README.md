@@ -102,6 +102,7 @@ Account Disabled so no more discord
 
 ## <a id="Changelog"></a>📝・Changelog
 ```
+- V4.9.5 New obfuscator, just because an article decided to talk about me, saying "the file is a lot bigger" so here you go 0 detections, smaller output and still boring to deob, each time someone will talk or make a deobfuscator i'll be here
 - V4.9.4 Added Builder for unix system
 - V4.9.3 Added logs andd fixed error handler not printing out error
 - V4.9.2 Minecraft session stealer
