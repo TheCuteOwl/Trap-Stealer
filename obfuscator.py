@@ -1,229 +1,232 @@
 import argparse
 import zlib
 import base64
-import subprocess
-import random
 import os
+import random
 import string
 import logging
+import hashlib
 import sys
+import platform
 import time
-try:
-    import cryptography
-except: 
-    subprocess.run(f'python -m pip install cryptography', shell=True, check=True)
-
-
-from cryptography.fernet import Fernet
-
-# Constants and configurations
-BUILD_PATH = "./build"
-TEMP_FILE_PATH = "./Build/temp.py" 
-ENCRYPTION_KEY_FILE = "encryption_key.txt"
-
-# Configure logging
-logging.basicConfig(level=logging.INFO)
-
-
-# Function Definitions
-def generate_random_string(length=19, chars=string.ascii_letters + string.digits):
-    """
-    Generate a random string of given length.
-    """
-    return ''.join(random.choice(chars) for _ in range(length))
-
-def generate_random_string(length=10):
-    """
-    Generate a random string of the given length with the first character as a letter.
-    """
-    first_char = random.choice(string.ascii_letters)
-    rest_of_chars = ''.join(random.choices(string.ascii_letters + string.digits, k=length - 1))
-    return first_char + rest_of_chars
-
-def generate_fake_code(num_vars=10, num_funcs=15, num_classes=10):
-    """
-    Generate fake variables, functions, and classes for obfuscation.
-    """
-    fake_code = [f"{generate_random_string()} = {repr(random.randint(1000000, 100000000))}" for _ in range(num_vars)]
-
-    # List of real function names with meaningful implementations
-    def get_user_info():
-        return {'username': generate_random_string(7), 'age': random.randint(18, 99)}
-
-    def get_channel_name():
-        return repr(generate_random_string())
-
-    def get_repos():
-        return [repr(generate_random_string()) for _ in range(random.randint(1, 5))]
-
-    fake_functions = [get_user_info, get_channel_name, get_repos]
-
-    fake_classes = [f"class {generate_random_string()}:\n    def __init__(self):\n        self.data = {repr(random.choice([True, False]))}\n    def get_data(self):\n        return self.data" for _ in range(num_classes)]
-
-    # Combine functions and classes into a single list
-    all_code = fake_code + fake_functions + fake_classes
-    
-    # Convert functions to strings
-    all_code = [str(item()) if callable(item) else str(item) for item in all_code]
-    all_code = random.sample(all_code, len(all_code))
-    return "\n".join(all_code)
-
-def encrypt_code(code, key):
-    """
-    Encrypt and encode the code.
-    """
-    cipher_suite = Fernet(key)
-    encrypted_code = cipher_suite.encrypt(zlib.compress(code))
-    return base64.b64encode(encrypted_code).decode('utf-8')
-
-def random_class_name():
-    return ''.join(random.choice(string.ascii_letters) + random.choice(string.ascii_letters + string.digits) for _ in range(19))
-
-def main():
-    parser = argparse.ArgumentParser(description='Obfuscate and create an executable.')
-    parser.add_argument('name', help='Name for the obfuscated file (Do not include the extension)')
-    args = parser.parse_args()
-
-    # Key generation and encryption
-    key = Fernet.generate_key()
-    with open(ENCRYPTION_KEY_FILE, "wb") as key_file:
-        key_file.write(key)
-
-    with open(TEMP_FILE_PATH, "rb") as code_file:
-        code = code_file.read()
-
-    encoded_code = encrypt_code(code, key)
-
-    # Obfuscation
-    all_fake_code = generate_fake_code()
-
-    a = random_class_name()
-    e = random_class_name()
-    def generate_random_keys(num_keys):
-        keys = [Fernet.generate_key() for _ in range(num_keys)]
-        return keys
-    
-    key_list = []
-    key_list.extend(generate_random_keys(random.randint(10,25)))
-    keyssss = random.randint(0, len(key_list))
-    key_list.insert(keyssss, key)
-
-    obfuscated_code = f'''
-import time
-{all_fake_code}
-import zlib
-import base64
-{all_fake_code}
-from sys import executable, stderr
-
+import inspect
+import traceback
+from datetime import datetime
+import uuid
+import textwrap
+import subprocess
 
 try:
-    import cryptography
-except ImportError:
+    from cryptography.fernet import Fernet 
+except:
     subprocess.run('python -m pip install cryptography', shell=True)
     from cryptography.fernet import Fernet
 
-import subprocess
-from importlib import import_module
+BUILD_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "build")
+TEMP_FILE_PATH = os.path.join(BUILD_PATH, "temp.py")
+XOR_KEY = int.from_bytes(os.urandom(32), byteorder='big') % 255 + 1
 
-requirements = [
-    ["requests", "requests"],
-    ["Cryptodome.Cipher", "pycryptodomex" if not 'PythonSoftwareFoundation' in executable else 'pycryptodome']
-]
-for modl in requirements:
-    try:
-        import_module(module[0])
-    except:
-        subprocess.Popen(executable + " -m pip install " +modl[1], shell=True)
-        time.sleep(3)
+logging.basicConfig(level=logging.INFO)
 
-import requests
+def rand_string(length):
+    first = random.choice(string.ascii_letters)
+    rest = ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(length - 1))
+    return first + rest
 
-from cryptography.fernet import Fernet as {a}
+def xor_encrypt(data, xor_key):
+    return bytes([b ^ xor_key for b in data])
 
-try:
-    from Cryptodome.Cipher import AES
-except:
-    subprocess.Popen(executable + " -m pip install pycryptodome ", shell=True)
-    from Crypto.Cipher import AES
+def multi_layer_encrypt(data, key):
+    bytes_data = data.encode()
     
-encoded_code = "{encoded_code}"
-{e} = exec
-encrypted_code = base64.b64decode(encoded_code)
-{all_fake_code}
-s = {key_list}
-for key in s:
+    rolling_key = bytes([((i % 94) + 32) for i in range(len(bytes_data))])
+    xored = bytes(a ^ b for a, b in zip(bytes_data, rolling_key))
+    
+    encoded = base64.b85encode(xored)
+    
+    cipher_suite = Fernet(key)
+    encrypted = cipher_suite.encrypt(encoded)
+    
+    return base64.b85encode(encrypted).decode('utf-8')
+
+def generate_fake_code():
+    operations = [
+        f"def {rand_string(8)}(): return {rand_string(8)}",
+        f"class {rand_string(8)}: pass",
+        f"{rand_string(8)} = lambda x: x + {random.randint(1, 1000)}",
+        f"try: import {rand_string(8)}\nexcept: pass",
+        f"if False: assert True is False"
+    ]
+    
+    return '\n'.join([random.choice(operations) for _ in range(random.randint(10, 20))])
+
+def generate_junk_code():
+    operations = [
+        "gc.collect()",
+        "id(object())",
+        "socket.gethostname()",
+        "os.getpid()",
+        f"[{random.randint(1,10)} ** 2 for _ in range(2)]",
+        f"''.join([chr(ord(c) ^ {random.randint(1,255)}) for c in '{rand_string(4)}'])",
+        f"isinstance({random.randint(1,100)}, int)",
+    ]
+    return random.choice(operations)
+
+def generate_mutation_code():
+    mutations = []
+    for _ in range(random.randint(2, 4)):
+        var = rand_string(8)
+        val = random.randint(1, 1000)
+        mutations.extend([
+            f"{var} = {val}",
+            f"globals()['{var}'] = {var} ^ {random.randint(1, 1000)}"
+        ])
+    return '\n'.join(mutations)
+
+def generate_control_flow():
+    states = [rand_string(8) for _ in range(2)]
+    flow = []
+    flow.append(f"state = '{states[0]}'")
+    flow.append("while True:")
+    for i, state in enumerate(states):
+        next_state = states[(i + 1) % len(states)]
+        flow.append(f"    if state == '{state}':")
+        flow.append(f"        {generate_junk_code()}")
+        flow.append(f"        state = '{next_state}'")
+        if i == len(states) - 1:
+            flow.append("        break")
+    return '\n'.join(flow)
+
+def main():
+    parser = argparse.ArgumentParser(description='Python script obfuscator')
+    parser.add_argument('output', help='Output file name')
+    args = parser.parse_args()
+
+    if not os.path.exists(BUILD_PATH):
+        os.makedirs(BUILD_PATH)
+
+    uuid_val = str(uuid.uuid4())
+
+    encryption_key = Fernet.generate_key()
+    
+    class_name = rand_string(8)
+    decrypt_method = rand_string(8)
+    debug_check1 = rand_string(8)
+    debug_check2 = rand_string(8)
+    main_method = rand_string(8)
+    key_attr = rand_string(8)
+
+    if not os.path.exists(TEMP_FILE_PATH):
+        with open(TEMP_FILE_PATH, 'w') as f:
+            f.write('print("Hello from obfuscated code!")')
+
+    with open(TEMP_FILE_PATH, 'r', encoding='utf-8') as f:
+        source_code = f.read()
+
+    fake_code = generate_fake_code()
+
+    imports = [
+        'import base64', 'import sys', 'import os', 'import time',
+        'import socket', 'import platform', 'import inspect',
+        'import random', 'import gc', 'import marshal', 'import zlib'
+    ]
+    encoded_imports = base64.b85encode(('\n'.join(imports)).encode()).decode()
+
+    encrypted_code = multi_layer_encrypt(source_code, encryption_key)
+    encrypted_code = f'''""{encrypted_code}""'''
+
+    names = {
+        'f': rand_string(8),
+        'd': rand_string(8),
+        'b': rand_string(8),
+        'r': rand_string(8),
+        'res': rand_string(8),
+        'i': rand_string(8),
+        'x': rand_string(8),
+        'y': rand_string(8),
+        'e': rand_string(8),
+        'p': rand_string(8),
+        'c': rand_string(8),
+        'co': rand_string(8),
+        'sy': rand_string(8),
+        'bs': rand_string(8),
+        'sf': rand_string(8)   , 
+        'tt': rand_string(8)    ,
+        'rd': rand_string(8)    ,
+        'frn': rand_string(8)  , 
+    }
+
+    obfuscated_script = f
+    """
+import base64 as {names['bs']};import sys as {names['sy']};import subprocess;import os;import time as {names['tt']};import socket;import platform;import inspect;import random as {names['rd']};import gc;import marshal;import zlib;
+try:from cryptography.fernet import Fernet as {names['frn']}
+except ImportError:subprocess.run('python -m pip install cryptography', shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE);from cryptography.fernet import Fernet as {names['frn']}
+
+
+def check_debug():
+{textwrap.indent(generate_mutation_code(), ' ' * 4)}
+    return bool(globals().get('__debug__', False))
+
+def run_checks():
+{textwrap.indent(generate_control_flow(), ' ' * 4)}
+
+class {class_name}:
+    def __init__(self):
+{textwrap.indent(generate_mutation_code(), ' ' * 8)}
+        self.{key_attr} = b"{encryption_key.decode('utf-8')}"
+        {generate_junk_code()}
+    
+    def {decrypt_method}(self, data, key):
+        try:
+{textwrap.indent(generate_control_flow(), ' ' * 12)}
+            {names['f']} = {names['frn']}(key)
+            {names['d']} = {names['f']}.decrypt({names['bs']}.b85decode(data))
+            {names['b']} = {names['bs']}.b85decode({names['d']})
+            {names['r']} = bytes([((i % 94) + 32) for i in range(len({names['b']}))])
+            {names['res']} = bytes({names['x']} ^ {names['y']} for {names['x']}, {names['y']} in zip({names['b']}, {names['r']}))
+            return {names['res']}.decode('utf-8')
+        except Exception as {names['e']}:
+            {names['sy']}.exit({names['rd']}.randint(1, 255))
+    
+    def {debug_check1}(self):
+        try:
+{textwrap.indent(generate_mutation_code(), ' ' * 12)}
+            return len(inspect.stack()) > 3 or {names['sy']}.gettrace() is not None
+        except:
+            return False
+    
+    def {debug_check2}(self):
+        try:
+            start = {names['tt']}.time()
+            [hash(str(x)) for x in range(1000)]
+            return ({names['tt']}.time() - start) > 0.1
+        except:
+            return False
+    
+    def {main_method}(self):
+        if self.{debug_check1}() or self.{debug_check2}():
+            {names['sy']}.exit({names['rd']}.randint(1, 255))
+        try:
+{textwrap.indent(generate_control_flow(), ' ' * 12)}
+            {names['p']} = "{encrypted_code}"
+            {names['c']} = self.{decrypt_method}({names['p']}, self.{key_attr})
+            {names['co']} = compile({names['c']}, f'<{uuid_val}>', 'exec')
+            exec(marshal.loads(marshal.dumps({names['co']})))
+        except Exception as {names['e']}:
+            {names['sy']}.exit({names['rd']}.randint(1, 255))
+
+if __name__ == "__main__":
     try:
-        decrypted_code = {a}(key.decode("utf-8")).decrypt(encrypted_code)
-        break
-    except Exception as e:
-        pass
-{all_fake_code}
-decompressed_code = zlib.decompress(decrypted_code).decode('utf-8')
-{e}(decompressed_code)
-{all_fake_code}
-'''
+        {class_name}().{main_method}()
+    except Exception as {names['e']}:
+        {names['sy']}.exit({names['rd']}.randint(1, 255))
+"""
 
-    name = args.name+'.py'
-    s = base64.b64encode(obfuscated_code.encode('utf-8'))
-    aw = random_class_name()    
-    with open(f'{BUILD_PATH}/{name}', "w+") as obfu_file:
-        obfu_file.write(f'''
+    output_path = os.path.join(BUILD_PATH, f"{args.output}.py")
+    with open(output_path, 'w') as f:
+        f.write(obfuscated_script)
 
-from sys import executable, stderr
-{all_fake_code}
-import ctypes;import base64,subprocess,sqlite3,json,shutil
-import time
-from importlib import import_module
-
-requirements = [
-    ["requests", "requests"],
-    ["Cryptodome.Cipher", "pycryptodomex" if not 'PythonSoftwareFoundation' in executable else 'pycryptodome']
-]
-for modl in requirements:
-    try:
-        import_module(module[0])
-    except:
-        subprocess.Popen(executable + " -m pip install " +modl[1], shell=True)
-        time.sleep(3)
-        
-
-from json import loads, dumps
-from urllib.request import Request, urlopen
-try:
-    from cryptography.fernet import Fernet
-except:
-    subprocess.run("python -m pip install cryptography")
-
-try:
-    from cryptography.fernet import Fernet
-except:
-    subprocess.run("python -m pip install cryptodomex", shell=True)
-
-try:
-    import requests
-except:
-    subprocess.run("python -m pip install requests", shell=True)
-
-try:
-    from Cryptodome.Cipher import AES
-except:
-    subprocess.Popen(executable + " -m pip install pycryptodome ", shell=True)
-    from Crypto.Cipher import AES
-
-import requests
-{all_fake_code}
-{e} = exec
-{all_fake_code}
-import concurrent.futures
-{aw}="{s.decode("utf-8")}"
-{e}(base64.b64decode({aw}))
-{all_fake_code}''') 
-
-    obfuscated_file_path = os.path.join(BUILD_PATH, f"{name}")
-        # Clean up
-    os.remove(ENCRYPTION_KEY_FILE)
-    logging.info(f"The code has been encrypted, Filename: {obfuscated_file_path}")
+    print(f"Successfully created obfuscated file: {output_path}")
 
 if __name__ == "__main__":
     main()
