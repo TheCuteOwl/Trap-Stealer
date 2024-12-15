@@ -62,6 +62,7 @@ def generate_fake_code():
 
 def generate_junk_code():
     operations = [
+        
         "gc.collect()",
         "id(object())",
         "socket.gethostname()",
@@ -97,10 +98,197 @@ def generate_control_flow():
             flow.append("        break")
     return '\n'.join(flow)
 
-def main():
+def string_encryption(text):
+    reversed_text = text[::-1]
+    
+    xor_key = random.randint(1, 255)
+    xored_text = ''.join(chr(ord(c) ^ xor_key) for c in reversed_text)
+    
+    shuffled_base64 = base64.b64encode(xored_text.encode()).decode()
+    shuffled_chars = list(shuffled_base64)
+    random.shuffle(shuffled_chars)
+    
+    return {
+        'encrypted': ''.join(shuffled_chars),
+        'xor_key': xor_key
+    }
+
+def generate_anti_debugging_code():
+    anti_debug_funcs = []
+    t = ''.join(random.choice(string.ascii_lowercase) for _ in range(12))
+    anti_debug_funcs.append(f"""
+def {t}():
+    import time;s=time.time();[hash(str(x)) for x in range(10000)];return time.time()-s>0.5
+""")
+    m = ''.join(random.choice(string.ascii_lowercase) for _ in range(12))
+    anti_debug_funcs.append(f"""
+def {m}():
+    import os;x=lambda p:p.split()[1] if len(p.split())>1 else'0';
+    try:
+        with open('/proc/self/status','r')as f:
+            return int(x(next(l for l in f if l.startswith('VmSize:'))))>100*1024
+    except:return False
+""")
+    e = ''.join(random.choice(string.ascii_lowercase) for _ in range(12))
+    anti_debug_funcs.append(f"""
+def {e}():
+    import os,sys;v=['PYCHARM_HOSTED','VSCODE_PID','DEBUGGER_PORT','PYTHONBREAKPOINT','WING_DEBUGGER'];
+    n=['gdb','lldb','windbg','ida','x64dbg'];
+    return any(x in os.environ for x in v) or any(x in sys.argv[0].lower() for x in n)
+""")
+    return '\n'.join(anti_debug_funcs)
+
+def generate_code_morphing():
+
+    morphing_techniques = []
+    
+    code_template = textwrap.dedent(f"""
+    def {{func_name}}(x):
+        transformed_x = x * {{mult1}} + {{const}}
+        
+        operations = [
+            lambda val: val + {{add1}},
+            lambda val: val * {{mult1}},
+            lambda val: val ** 2,
+            lambda val: val % {{const}} if {{const}} != 0 else val
+        ]
+        
+        selected_op = random.choice(operations)
+        return selected_op(transformed_x)
+""")
+    
+    for _ in range(random.randint(3, 7)):
+        func_name = ''.join(random.choice(string.ascii_lowercase) for _ in range(10))
+        mult1 = random.randint(1, 10)
+        const = random.randint(-100, 100)
+        add1 = random.randint(1, 50)
+        
+        modified_code = code_template.format(
+            func_name=func_name, 
+            mult1=mult1, 
+            const=const, 
+            add1=add1
+        )
+        exec(modified_code, globals())
+        morphing_techniques.append(modified_code)
+    
+    metamorph_template = textwrap.dedent(f"""
+    def {{func_name}}(data):
+        def dynamic_transformer(input_data):
+            transforms = [
+                lambda x: base64.b64encode(x.encode()).decode(),
+                lambda x: zlib.compress(x.encode()),
+                lambda x: ''.join(chr(ord(c) ^ {{xor_key}}) for c in x),
+                lambda x: x[::-1] 
+            ]
+            
+            result = input_data
+            for _ in range(random.randint(1, 3)):
+                result = random.choice(transforms)(result)
+            
+            return result
+        
+        return dynamic_transformer(data)
+""")
+    
+    for _ in range(random.randint(2, 5)):
+        func_name = ''.join(random.choice(string.ascii_lowercase) for _ in range(12))
+        xor_key = random.randint(1, 255)
+        
+        metamorph_code = metamorph_template.format(
+            func_name=func_name,
+            xor_key=xor_key
+        )
+        exec(metamorph_code, globals())
+        morphing_techniques.append(metamorph_code)
+    
+    control_flow_template = textwrap.dedent(f"""
+    def {{func_name}}(x):
+        def complex_branching(val):
+            branches = [
+                lambda v: v * {{mult1}} if v > {{threshold}} else v + {{add1}},
+                lambda v: v ** 2 if v < {{threshold}} else v - {{const}},
+                lambda v: v % {{const}} if {{const}} != 0 else v,
+                lambda v: v << 1 if v > 0 else v >> 1
+            ]
+            return random.choice(branches)(val)
+        
+        return complex_branching(x)
+""")
+    
+    for _ in range(random.randint(2, 4)):
+        func_name = ''.join(random.choice(string.ascii_lowercase) for _ in range(10))
+        mult1 = random.randint(1, 10)
+        const = random.randint(-100, 100)
+        add1 = random.randint(1, 50)
+        threshold = random.randint(0, 100)
+        
+        control_flow_code = control_flow_template.format(
+            func_name=func_name,
+            mult1=mult1,
+            const=const,
+            add1=add1,
+            threshold=threshold
+        )
+        exec(control_flow_code, globals())
+        morphing_techniques.append(control_flow_code)
+    
+    return '\n'.join(morphing_techniques)
+
+def generate_code_camouflage():
+    camouflage_templates = [
+        "def {func_name}(data):\n    try:\n        return [x for x in data if isinstance(x, (int, float)) and x > {threshold}]\n    except:\n        return data",
+        "def {func_name}(obj):\n    try:\n        return {conversion_type}(obj) if obj is not None else None\n    except (ValueError, TypeError):\n        return obj",
+        "def {func_name}(value):\n    def validate_{validation_type}(v):\n        try:\n            return {validation_logic}\n        except:\n            return False\n    return validate_{validation_type}(value)",
+        "class {class_name}:\n    def __init__(self, **kwargs):\n        self._config = {{\n            'debug': {debug_flag},\n            'timeout': {timeout},\n            'max_retries': {max_retries}\n        }}\n    def get_config(self, key=None):\n        return self._config.get(key, self._config) if key else self._config",
+        "{func_name} = lambda {args}: {lambda_expr}",
+        "class {class_name}:\n    def __enter__(self):\n        {enter_logic}\n        return self\n    def __exit__(self, exc_type, exc_val, exc_tb):\n        {exit_logic}\n        return False",
+        "def {decorator_name}(func):\n    def wrapper(*args, **kwargs):\n        {pre_call_logic}\n        result = func(*args, **kwargs)\n        {post_call_logic}\n        return result\n    return wrapper"
+    ]
+    
+    camouflage_code = []
+    for _ in range(random.randint(5, 10)):
+        template = random.choice(camouflage_templates)
+        
+        func_name = f'{rand_string(8)}'
+        class_name = f'{rand_string(6)}'
+        
+        template_params = {
+            'func_name': func_name,
+            'class_name': class_name,
+            'threshold': random.randint(0, 100),
+            'conversion_type': random.choice(['str', 'int', 'float', 'list', 'set']),
+            'validation_type': random.choice(['email', 'number', 'length', 'range']),
+            'validation_logic': random.choice([
+                'len(str(v)) > 0',
+                '0 <= v <= 100',
+                'isinstance(v, (int, float))',
+                'v.isalnum()'
+            ]),
+            'debug_flag': random.choice([True, False]),
+            'timeout': random.randint(10, 300),
+            'max_retries': random.randint(1, 5),
+            'args': ', '.join([f'arg{i}' for i in range(random.randint(1, 3))]),
+            'lambda_expr': random.choice([
+                'arg0 * arg1 if arg0 and arg1 else 0',
+                'sum([arg0, arg1]) if len([arg0, arg1]) > 0 else None',
+                'max([arg0, arg1]) if all(isinstance(x, (int, float)) for x in [arg0, arg1]) else None'
+            ]),
+            'decorator_name': f'trace_{rand_string(6)}',
+            'enter_logic': 'pass',
+            'exit_logic': 'pass',
+            'pre_call_logic': 'pass',
+            'post_call_logic': 'pass'
+        }
+        
+        camouflage_code.append(template.format(**template_params))
+    
+    return '\n\n'.join(camouflage_code)
+
+def obfuscate_file(input_file, output_file):
     parser = argparse.ArgumentParser(description='Python script obfuscator')
     parser.add_argument('output', help='Output file name')
-    args = parser.parse_args()
+    args = parser.parse_args([output_file])
 
     if not os.path.exists(BUILD_PATH):
         os.makedirs(BUILD_PATH)
@@ -116,11 +304,7 @@ def main():
     main_method = rand_string(8)
     key_attr = rand_string(8)
 
-    if not os.path.exists(TEMP_FILE_PATH):
-        with open(TEMP_FILE_PATH, 'w') as f:
-            f.write('print("Hello from obfuscated code!")')
-
-    with open(TEMP_FILE_PATH, 'r', encoding='utf-8') as f:
+    with open(input_file, 'r', encoding='utf-8') as f:
         source_code = f.read()
 
     fake_code = generate_fake_code()
@@ -130,10 +314,10 @@ def main():
         'import socket', 'import platform', 'import inspect',
         'import random', 'import gc', 'import marshal', 'import zlib'
     ]
-    encoded_imports = base64.b85encode(('\n'.join(imports)).encode()).decode()
+    encrypted_imports = string_encryption('\n'.join(imports))
 
     encrypted_code = multi_layer_encrypt(source_code, encryption_key)
-    encrypted_code = f'''""{encrypted_code}""'''
+    encrypted_code = f'''"{encrypted_code}"'''
 
     names = {
         'f': rand_string(8),
@@ -154,14 +338,26 @@ def main():
         'tt': rand_string(8)    ,
         'rd': rand_string(8)    ,
         'frn': rand_string(8)  , 
+        'obf_code': rand_string(8),
+        'exec_func': rand_string(8),
     }
 
-    obfuscated_script = f
-    """
+    anti_debug_code = generate_anti_debugging_code()
+    code_morphing = generate_code_morphing()
+    code_camouflage = generate_code_camouflage()
+    code_morphing2 = generate_code_morphing()
+    code_camouflage2 = generate_code_camouflage()
+
+    obfuscated_script = f'''
 import base64 as {names['bs']};import sys as {names['sy']};import subprocess;import os;import time as {names['tt']};import socket;import platform;import inspect;import random as {names['rd']};import gc;import marshal;import zlib;
 try:from cryptography.fernet import Fernet as {names['frn']}
 except ImportError:subprocess.run('python -m pip install cryptography', shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE);from cryptography.fernet import Fernet as {names['frn']}
 
+{anti_debug_code}
+
+{code_morphing}
+
+{code_camouflage}
 
 def check_debug():
 {textwrap.indent(generate_mutation_code(), ' ' * 4)}
@@ -208,10 +404,15 @@ class {class_name}:
             {names['sy']}.exit({names['rd']}.randint(1, 255))
         try:
 {textwrap.indent(generate_control_flow(), ' ' * 12)}
-            {names['p']} = "{encrypted_code}"
+            {names['p']} = {encrypted_code}
             {names['c']} = self.{decrypt_method}({names['p']}, self.{key_attr})
-            {names['co']} = compile({names['c']}, f'<{uuid_val}>', 'exec')
-            exec(marshal.loads(marshal.dumps({names['co']})))
+            
+            {names['co']} = compile({names['c']}, '<obfuscated>', 'exec')
+            exec_globals = {{}}
+            exec(marshal.loads(marshal.dumps({names['co']})), exec_globals)
+            
+            if 'main' in exec_globals:
+                exec_globals['main']()
         except Exception as {names['e']}:
             {names['sy']}.exit({names['rd']}.randint(1, 255))
 
@@ -220,13 +421,80 @@ if __name__ == "__main__":
         {class_name}().{main_method}()
     except Exception as {names['e']}:
         {names['sy']}.exit({names['rd']}.randint(1, 255))
-"""
 
-    output_path = os.path.join(BUILD_PATH, f"{args.output}.py")
-    with open(output_path, 'w') as f:
+def {rand_string(8)}():
+    if detect_debugger_timing() or detect_debugger_resources() or detect_debugger_environment():
+        sys.exit(random.randint(1, 255))
+
+{code_morphing2}
+
+{code_camouflage2}
+
+
+'''
+
+    with open(output_file, 'w') as f:
         f.write(obfuscated_script)
 
-    print(f"Successfully created obfuscated file: {output_path}")
+def cleanup_build_directory(output_filename, temp_filename):
+    build_path = os.path.join(os.path.dirname(__file__), 'build')
+    
+    if not os.path.exists(build_path):
+        return
+    
+    files = os.listdir(build_path)
+    
+    keep_files = {output_filename, temp_filename, 
+                  os.path.basename(temp_filename), 
+                  os.path.basename(output_filename)}
+    
+    for file in files:
+        if file not in keep_files and file.endswith('.py'):
+            file_path = os.path.join(build_path, file)
+            try:
+                os.remove(file_path)
+                print(f"Removed unnecessary file: {file}")
+            except Exception as e:
+                print(f"Could not remove {file}: {e}")
+
+# DONT USE RECURSIVE IT DOES NOT WORK AT ALL
+def main(input_file=None, output_file=None, recursive_obfuscation=None):
+    current_input = input_file or TEMP_FILE_PATH
+    
+    if recursive_obfuscation is None:
+        recursive_obfuscation = 1
+    
+    for current_iteration in range(recursive_obfuscation):
+        current_output = os.path.join(
+            BUILD_PATH, 
+            f'recursive_obfuscated_{current_iteration}.py'
+        )
+        
+        obfuscate_file(current_input, current_output)
+        
+        current_input = current_output
+            
+    if output_file:
+        if os.path.basename(output_file) == output_file:
+            output_file = os.path.join(BUILD_PATH, output_file)
+        
+        if current_output != output_file:
+            if os.path.exists(output_file):
+                os.remove(output_file)
+            os.rename(current_output, output_file)
+    
+    cleanup_build_directory(os.path.basename(output_file), os.path.basename(TEMP_FILE_PATH))
+    
+    print(f"Final output: {output_file or current_output}")
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser(description="Python Obfuscator")
+    parser.add_argument("output", help="Output file name (saved in build directory)")
+    parser.add_argument("-r", "--recursive", type=int, default=1, help="Number of recursive obfuscation iterations")
+    
+    args = parser.parse_args()
+    
+    output_filename = args.output if args.output.endswith('.py') else f"{args.output}.py"
+    output_file = os.path.join(BUILD_PATH, output_filename)
+    
+    main(TEMP_FILE_PATH, output_file, args.recursive)
