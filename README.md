@@ -6,6 +6,7 @@ because of the Article from SANS, I will update the obfuscator for a much smalle
 
 # You can do any pull requests, i'll check them and approve or disapprove then
 
+# Uncoverit.org does not seem to work because of the update, so please uncoverit team, update :3 have a nice day
 <p align="center">
   TrapStealer is a Windows stealer for Discord and much more. Steal Time: ~4-9 seconds. 0 Detection on VirusTotal (Injection too) 159 STARS THANKS Wouldn't have believe this would go so far
 </p>
