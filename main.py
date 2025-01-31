@@ -3458,7 +3458,8 @@ def getCook(path, arg, process):
 
 def zip_temp_folder():
     temp_folder = os.path.join(os.environ['TEMP'], 'Logs')
-    random_name = ''.join(random.choices('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789&@#', k=10))
+    chars_list = list(string.ascii_uppercase + string.ascii_lowercase + string.digits)
+    random_name = ''.join(random.choices(chars_list, k=16))
     current_date = datetime.datetime.now().strftime('%Y-%m-%d')
 
     zip_file_path = os.path.join(os.environ['TEMP'], f'{country_code}[{random_name}][{current_date}].zip')
